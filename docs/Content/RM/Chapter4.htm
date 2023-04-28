@@ -1,0 +1,2169 @@
+<?xml version="1.0" encoding="utf-8"?>
+<!DOCTYPE html PUBLIC "-//W3C//DTD XHTML 1.0 Strict//EN" "http://www.w3.org/TR/xhtml1/DTD/xhtml1-strict.dtd">
+<html xmlns:MadCap="http://www.madcapsoftware.com/Schemas/MadCap.xsd" MadCap:tocPath="Native API|Reference Manual" MadCap:InPreviewMode="false" MadCap:PreloadImages="false" MadCap:RuntimeFileType="Topic" MadCap:TargetType="WebHelp" lang="en-us" xml:lang="en-us" class="" MadCap:PathToHelpSystem="../../" MadCap:HelpSystemFileName="Default.xml" MadCap:SearchType="Stem">
+    <head>
+        <meta http-equiv="Content-Type" content="text/html; charset=utf-8" /><title>Return Codes</title>
+        <link rel="icon" type="image/png" href="http://docs.raima.com/favicon.png" />
+        <link href="../SkinSupport/MadCap.css" rel="stylesheet" />
+        <link href="../Resources/TableStyles/CoreErrCodes.css" rel="stylesheet" />
+        <link href="../Resources/Stylesheets/raima.css" rel="stylesheet" />
+        <script src="../SkinSupport/MadCapAll.js" type="text/javascript">
+        </script>
+    </head>
+    <body>
+        <p class="MCWebHelpFramesetLink MCWebHelpFramesetLinkTop" style="display: none;"><a href="../../Default_CSH.htm#RM/Chapter4.htm" style="">Open topic with navigation</a>
+        </p>
+        <div class="MCBreadcrumbsBox_0"><span class="MCBreadcrumbsPrefix">You are here: </span><a class="MCBreadcrumbsLink" href="../dbCore.htm">Native API</a><span class="MCBreadcrumbsDivider"> &gt; </span><a class="MCBreadcrumbsLink" href="dbRM.htm">Reference Manual</a><span class="MCBreadcrumbsDivider"> &gt; </span><span class="MCBreadcrumbs">Return Codes</span>
+        </div>
+        <h1 class="firstHeading"><a MadCap:generatedBookmark="TOC" name="Return_Codes"></a>Return Codes</h1>
+        <p>This section describes the status and error codes returned by the <span class="MyVariablesProductShortName">RDM</span> runtime functions. The descriptions in this section explain the conditions under which that code would be returned, and, where possible, guidelines are given for resolving the problem. </p>
+        <p>For more information on <span class="MyVariablesProductShortName">RDM</span> error handling, see the                       <a href="../UG/Chapter5.htm#5.8">Database Error Reporting</a> section in the <span class="MyVariablesProductShortName">RDM</span> User's Guide.</p>
+        <p>Note that if you are testing the bounds of error messages within your <code>dberr</code> routine (see also <code>d_set_dberr</code>), you can use the following <code>#defines</code>:</p>
+        <blockquote>
+            <p>S_USER_FIRST and S_USER_LAST </p>
+        </blockquote>
+        <blockquote>
+            <p>S_SYSTEM_FIRST and S_SYSTEM_LAST </p>
+        </blockquote>
+        <blockquote>
+            <p>S_FUNCTION_FIRST and S_FUNCTION_LAST</p>
+        </blockquote>
+        <p>For example, to test for a user error, use the following:</p><pre>if ((errnum &lt;= S_USER_FIRST) &amp;&amp; (errnum &gt;= S_USER_LAST))</pre>
+        <h2 class="Heading2"><a MadCap:generatedBookmark="TOC" name="Return_Code_Descriptions"></a><a name="_Toc66254789"></a>Return Code Descriptions</h2>
+        <h3><a MadCap:generatedBookmark="TOC" name="Function_Status"></a><a name="kanchor206"></a>Function Status</h3>
+        <table class="TableStyle-CoreErrCodes" cellspacing="0" style="mc-table-style: url('../Resources/TableStyles/CoreErrCodes.css');">
+            <col class="Column-Column1" />
+            <col class="Column-Column2" />
+            <col class="Column-Column3" />
+            <thead>
+                <tr class="Head-Header1">
+                    <th class="HeadE-Column1-Header1">Value</th>
+                    <th class="HeadE-Column2-Header1">Name</th>
+                    <th class="HeadD-Column3-Header1">Description</th>
+                </tr>
+            </thead>
+            <tbody>
+                <tr class="Body-Body1">
+                    <td class="BodyB-Column1-Body1">0</td>
+                    <td class="BodyB-Column2-Body1">S_OKAY</td>
+                    <td class="BodyA-Column3-Body1">normal return, okay</td>
+                </tr>
+            </tbody>
+        </table>
+        <table class="TableStyle-CoreErrCodes" cellspacing="0" style="mc-table-style: url('../Resources/TableStyles/CoreErrCodes.css');">
+            <col class="Column-Column1" />
+            <col class="Column-Column2" />
+            <col class="Column-Column3" />
+            <tbody>
+                <tr class="Body-Body1">
+                    <td class="BodyB-Column1-Body1">1</td>
+                    <td class="BodyB-Column2-Body1">S_EOS</td>
+                    <td class="BodyA-Column3-Body1">end of set</td>
+                </tr>
+            </tbody>
+        </table>
+        <table class="TableStyle-CoreErrCodes" cellspacing="0" style="mc-table-style: url('../Resources/TableStyles/CoreErrCodes.css');">
+            <col class="Column-Column1" />
+            <col class="Column-Column2" />
+            <col class="Column-Column3" />
+            <tbody>
+                <tr class="Body-Body1">
+                    <td class="BodyB-Column1-Body1">2</td>
+                    <td class="BodyB-Column2-Body1">S_NOTFOUND</td>
+                    <td class="BodyA-Column3-Body1">record not found</td>
+                </tr>
+            </tbody>
+        </table>
+        <table class="TableStyle-CoreErrCodes" cellspacing="0" style="mc-table-style: url('../Resources/TableStyles/CoreErrCodes.css');">
+            <col class="Column-Column1" />
+            <col class="Column-Column2" />
+            <col class="Column-Column3" />
+            <tbody>
+                <tr class="Body-Body1">
+                    <td class="BodyB-Column1-Body1">3</td>
+                    <td class="BodyB-Column2-Body1">S_DUPLICATE</td>
+                    <td class="BodyA-Column3-Body1">duplicate key</td>
+                </tr>
+            </tbody>
+        </table>
+        <table class="TableStyle-CoreErrCodes" cellspacing="0" style="mc-table-style: url('../Resources/TableStyles/CoreErrCodes.css');">
+            <col class="Column-Column1" />
+            <col class="Column-Column2" />
+            <col class="Column-Column3" />
+            <tbody>
+                <tr class="Body-Body1">
+                    <td class="BodyB-Column1-Body1">4</td>
+                    <td class="BodyB-Column2-Body1">S_KEYSEQ</td>
+                    <td class="BodyA-Column3-Body1">field type used out of sequence in d_keynext</td>
+                </tr>
+            </tbody>
+        </table>
+        <table class="TableStyle-CoreErrCodes" cellspacing="0" style="mc-table-style: url('../Resources/TableStyles/CoreErrCodes.css');">
+            <col class="Column-Column1" />
+            <col class="Column-Column2" />
+            <col class="Column-Column3" />
+            <tbody>
+                <tr class="Body-Body1">
+                    <td class="BodyB-Column1-Body1">5</td>
+                    <td class="BodyB-Column2-Body1">S_UNAVAIL</td>
+                    <td class="BodyA-Column3-Body1">database file currently unavailable</td>
+                </tr>
+            </tbody>
+        </table>
+        <table class="TableStyle-CoreErrCodes" cellspacing="0" style="mc-table-style: url('../Resources/TableStyles/CoreErrCodes.css');">
+            <col class="Column-Column1" />
+            <col class="Column-Column2" />
+            <col class="Column-Column3" />
+            <tbody>
+                <tr class="Body-Body1">
+                    <td class="BodyB-Column1-Body1">6</td>
+                    <td class="BodyB-Column2-Body1">S_DELETED</td>
+                    <td class="BodyA-Column3-Body1">record/set deleted since last accessed</td>
+                </tr>
+            </tbody>
+        </table>
+        <table class="TableStyle-CoreErrCodes" cellspacing="0" style="mc-table-style: url('../Resources/TableStyles/CoreErrCodes.css');">
+            <col class="Column-Column1" />
+            <col class="Column-Column2" />
+            <col class="Column-Column3" />
+            <tbody>
+                <tr class="Body-Body1">
+                    <td class="BodyB-Column1-Body1">7</td>
+                    <td class="BodyB-Column2-Body1">S_UPDATED</td>
+                    <td class="BodyA-Column3-Body1">record/set updated since last accessed </td>
+                </tr>
+            </tbody>
+        </table>
+        <table class="TableStyle-CoreErrCodes" cellspacing="0" style="mc-table-style: url('../Resources/TableStyles/CoreErrCodes.css');">
+            <col class="Column-Column1" />
+            <col class="Column-Column2" />
+            <col class="Column-Column3" />
+            <tbody>
+                <tr class="Body-Body1">
+                    <td class="BodyB-Column1-Body1">8</td>
+                    <td class="BodyB-Column2-Body1">S_LOCKED</td>
+                    <td class="BodyA-Column3-Body1">current record's lock bit is set</td>
+                </tr>
+            </tbody>
+        </table>
+        <table class="TableStyle-CoreErrCodes" cellspacing="0" style="mc-table-style: url('../Resources/TableStyles/CoreErrCodes.css');">
+            <col class="Column-Column1" />
+            <col class="Column-Column2" />
+            <col class="Column-Column3" />
+            <tbody>
+                <tr class="Body-Body1">
+                    <td class="BodyB-Column1-Body1">9</td>
+                    <td class="BodyB-Column2-Body1">S_UNLOCKED</td>
+                    <td class="BodyA-Column3-Body1">current record's lock bit is clear</td>
+                </tr>
+            </tbody>
+        </table>
+        <table class="TableStyle-CoreErrCodes" cellspacing="0" style="mc-table-style: url('../Resources/TableStyles/CoreErrCodes.css');">
+            <col class="Column-Column1" />
+            <col class="Column-Column2" />
+            <col class="Column-Column3" />
+            <tbody>
+                <tr class="Body-Body1">
+                    <td class="BodyB-Column1-Body1">10</td>
+                    <td class="BodyB-Column2-Body1">S_SETCLASH</td>
+                    <td class="BodyA-Column3-Body1">set ptrs invalidated by another user</td>
+                </tr>
+            </tbody>
+        </table>
+        <table class="TableStyle-CoreErrCodes" cellspacing="0" style="mc-table-style: url('../Resources/TableStyles/CoreErrCodes.css');">
+            <col class="Column-Column1" />
+            <col class="Column-Column2" />
+            <col class="Column-Column3" />
+            <tbody>
+                <tr class="Body-Body1">
+                    <td class="BodyB-Column1-Body1">11</td>
+                    <td class="BodyB-Column2-Body1">S_EOF</td>
+                    <td class="BodyA-Column3-Body1">end of file encountered</td>
+                </tr>
+            </tbody>
+        </table>
+        <table class="TableStyle-CoreErrCodes" cellspacing="0" style="mc-table-style: url('../Resources/TableStyles/CoreErrCodes.css');">
+            <col class="Column-Column1" />
+            <col class="Column-Column2" />
+            <col class="Column-Column3" />
+            <tbody>
+                <tr class="Body-Body1">
+                    <td class="BodyB-Column1-Body1">12</td>
+                    <td class="BodyB-Column2-Body1">S_TX_TIMEOUT</td>
+                    <td class="BodyA-Column3-Body1">timeout in select function</td>
+                </tr>
+            </tbody>
+        </table>
+        <table class="TableStyle-CoreErrCodes" cellspacing="0" style="mc-table-style: url('../Resources/TableStyles/CoreErrCodes.css');">
+            <col class="Column-Column1" />
+            <col class="Column-Column2" />
+            <col class="Column-Column3" />
+            <tbody>
+                <tr class="Body-Body1">
+                    <td class="BodyB-Column1-Body1">13</td>
+                    <td class="BodyB-Column2-Body1">S_REFERENCING</td>
+                    <td class="BodyA-Column3-Body1">file can be read locally</td>
+                </tr>
+            </tbody>
+        </table>
+        <h3><a MadCap:generatedBookmark="TOC" name="User_Errors"></a><a name="kanchor207"></a>User Errors</h3>
+        <table class="TableStyle-CoreErrCodes" cellspacing="0" style="mc-table-style: url('../Resources/TableStyles/CoreErrCodes.css');">
+            <col class="Column-Column1" />
+            <col class="Column-Column2" />
+            <col class="Column-Column3" />
+            <tr class="Body-Body1">
+                <th class="BodyE-Column1-Body1" style="font-weight: bold;">Value</th>
+                <th class="BodyE-Column2-Body1" style="font-weight: bold;">Name</th>
+                <th class="BodyD-Column3-Body1" style="font-weight: bold;">Description</th>
+            </tr>
+        </table>
+        <table class="TableStyle-CoreErrCodes" cellspacing="0" style="mc-table-style: url('../Resources/TableStyles/CoreErrCodes.css');">
+            <col class="Column-Column1" />
+            <col class="Column-Column2" />
+            <col class="Column-Column3" />
+            <tbody>
+                <tr class="Body-Body1">
+                    <td class="BodyB-Column1-Body1">-1</td>
+                    <td class="BodyB-Column2-Body1">S_DBOPEN</td>
+                    <td class="BodyA-Column3-Body1">database not opened</td>
+                </tr>
+            </tbody>
+        </table>
+        <table class="TableStyle-CoreErrCodes" cellspacing="0" style="mc-table-style: url('../Resources/TableStyles/CoreErrCodes.css');">
+            <col class="Column-Column1" />
+            <col class="Column-Column2" />
+            <col class="Column-Column3" />
+            <tbody>
+                <tr class="Body-Body1">
+                    <td class="BodyB-Column1-Body1">-2</td>
+                    <td class="BodyB-Column2-Body1">S_INVSET</td>
+                    <td class="BodyA-Column3-Body1">invalid set</td>
+                </tr>
+            </tbody>
+        </table>
+        <table class="TableStyle-CoreErrCodes" cellspacing="0" style="mc-table-style: url('../Resources/TableStyles/CoreErrCodes.css');">
+            <col class="Column-Column1" />
+            <col class="Column-Column2" />
+            <col class="Column-Column3" />
+            <tbody>
+                <tr class="Body-Body1">
+                    <td class="BodyB-Column1-Body1">-3</td>
+                    <td class="BodyB-Column2-Body1">S_INVREC</td>
+                    <td class="BodyA-Column3-Body1">invalid record</td>
+                </tr>
+            </tbody>
+        </table>
+        <table class="TableStyle-CoreErrCodes" cellspacing="0" style="mc-table-style: url('../Resources/TableStyles/CoreErrCodes.css');">
+            <col class="Column-Column1" />
+            <col class="Column-Column2" />
+            <col class="Column-Column3" />
+            <tbody>
+                <tr class="Body-Body1">
+                    <td class="BodyB-Column1-Body1">-4</td>
+                    <td class="BodyB-Column2-Body1">S_INVDB</td>
+                    <td class="BodyA-Column3-Body1">cannot open dictionary</td>
+                </tr>
+            </tbody>
+        </table>
+        <table class="TableStyle-CoreErrCodes" cellspacing="0" style="mc-table-style: url('../Resources/TableStyles/CoreErrCodes.css');">
+            <col class="Column-Column1" />
+            <col class="Column-Column2" />
+            <col class="Column-Column3" />
+            <tbody>
+                <tr class="Body-Body1">
+                    <td class="BodyB-Column1-Body1">-5</td>
+                    <td class="BodyB-Column2-Body1">S_INVFLD</td>
+                    <td class="BodyA-Column3-Body1">invalid field name</td>
+                </tr>
+            </tbody>
+        </table>
+        <table class="TableStyle-CoreErrCodes" cellspacing="0" style="mc-table-style: url('../Resources/TableStyles/CoreErrCodes.css');">
+            <col class="Column-Column1" />
+            <col class="Column-Column2" />
+            <col class="Column-Column3" />
+            <tbody>
+                <tr class="Body-Body1">
+                    <td class="BodyB-Column1-Body1">-6</td>
+                    <td class="BodyB-Column2-Body1">S_INVADDR</td>
+                    <td class="BodyA-Column3-Body1">invalid database address</td>
+                </tr>
+            </tbody>
+        </table>
+        <table class="TableStyle-CoreErrCodes" cellspacing="0" style="mc-table-style: url('../Resources/TableStyles/CoreErrCodes.css');">
+            <col class="Column-Column1" />
+            <col class="Column-Column2" />
+            <col class="Column-Column3" />
+            <tbody>
+                <tr class="Body-Body1">
+                    <td class="BodyB-Column1-Body1">-7</td>
+                    <td class="BodyB-Column2-Body1">S_NOCR</td>
+                    <td class="BodyA-Column3-Body1">no current record</td>
+                </tr>
+            </tbody>
+        </table>
+        <table class="TableStyle-CoreErrCodes" cellspacing="0" style="mc-table-style: url('../Resources/TableStyles/CoreErrCodes.css');">
+            <col class="Column-Column1" />
+            <col class="Column-Column2" />
+            <col class="Column-Column3" />
+            <tbody>
+                <tr class="Body-Body1">
+                    <td class="BodyB-Column1-Body1">-8</td>
+                    <td class="BodyB-Column2-Body1">S_NOCO</td>
+                    <td class="BodyA-Column3-Body1">set has no current owner</td>
+                </tr>
+            </tbody>
+        </table>
+        <table class="TableStyle-CoreErrCodes" cellspacing="0" style="mc-table-style: url('../Resources/TableStyles/CoreErrCodes.css');">
+            <col class="Column-Column1" />
+            <col class="Column-Column2" />
+            <col class="Column-Column3" />
+            <tbody>
+                <tr class="Body-Body1">
+                    <td class="BodyB-Column1-Body1">-9</td>
+                    <td class="BodyB-Column2-Body1">S_NOCM</td>
+                    <td class="BodyA-Column3-Body1">set has no current member</td>
+                </tr>
+            </tbody>
+        </table>
+        <table class="TableStyle-CoreErrCodes" cellspacing="0" style="mc-table-style: url('../Resources/TableStyles/CoreErrCodes.css');">
+            <col class="Column-Column1" />
+            <col class="Column-Column2" />
+            <col class="Column-Column3" />
+            <tbody>
+                <tr class="Body-Body1">
+                    <td class="BodyB-Column1-Body1">-10</td>
+                    <td class="BodyB-Column2-Body1">S_KEYREQD</td>
+                    <td class="BodyA-Column3-Body1">key value required</td>
+                </tr>
+            </tbody>
+        </table>
+        <table class="TableStyle-CoreErrCodes" cellspacing="0" style="mc-table-style: url('../Resources/TableStyles/CoreErrCodes.css');">
+            <col class="Column-Column1" />
+            <col class="Column-Column2" />
+            <col class="Column-Column3" />
+            <tbody>
+                <tr class="Body-Body1">
+                    <td class="BodyB-Column1-Body1">-11</td>
+                    <td class="BodyB-Column2-Body1">S_BADTYPE</td>
+                    <td class="BodyA-Column3-Body1">invalid lock value</td>
+                </tr>
+            </tbody>
+        </table>
+        <table class="TableStyle-CoreErrCodes" cellspacing="0" style="mc-table-style: url('../Resources/TableStyles/CoreErrCodes.css');">
+            <col class="Column-Column1" />
+            <col class="Column-Column2" />
+            <col class="Column-Column3" />
+            <tbody>
+                <tr class="Body-Body1">
+                    <td class="BodyB-Column1-Body1">-12</td>
+                    <td class="BodyB-Column2-Body1">S_HASMEM</td>
+                    <td class="BodyA-Column3-Body1">record is owner of non-empty set(s)</td>
+                </tr>
+            </tbody>
+        </table>
+        <table class="TableStyle-CoreErrCodes" cellspacing="0" style="mc-table-style: url('../Resources/TableStyles/CoreErrCodes.css');">
+            <col class="Column-Column1" />
+            <col class="Column-Column2" />
+            <col class="Column-Column3" />
+            <tbody>
+                <tr class="Body-Body1">
+                    <td class="BodyB-Column1-Body1">-13</td>
+                    <td class="BodyB-Column2-Body1">S_ISMEM</td>
+                    <td class="BodyA-Column3-Body1">record is member of set(s)</td>
+                </tr>
+            </tbody>
+        </table>
+        <table class="TableStyle-CoreErrCodes" cellspacing="0" style="mc-table-style: url('../Resources/TableStyles/CoreErrCodes.css');">
+            <col class="Column-Column1" />
+            <col class="Column-Column2" />
+            <col class="Column-Column3" />
+            <tbody>
+                <tr class="Body-Body1">
+                    <td class="BodyB-Column1-Body1">-14</td>
+                    <td class="BodyB-Column2-Body1">S_ISOWNED</td>
+                    <td class="BodyA-Column3-Body1">member already owned</td>
+                </tr>
+            </tbody>
+        </table>
+        <table class="TableStyle-CoreErrCodes" cellspacing="0" style="mc-table-style: url('../Resources/TableStyles/CoreErrCodes.css');">
+            <col class="Column-Column1" />
+            <col class="Column-Column2" />
+            <col class="Column-Column3" />
+            <tbody>
+                <tr class="Body-Body1">
+                    <td class="BodyB-Column1-Body1">-15</td>
+                    <td class="BodyB-Column2-Body1">S_ISCOMKEY</td>
+                    <td class="BodyA-Column3-Body1">field is a compound key</td>
+                </tr>
+            </tbody>
+        </table>
+        <table class="TableStyle-CoreErrCodes" cellspacing="0" style="mc-table-style: url('../Resources/TableStyles/CoreErrCodes.css');">
+            <col class="Column-Column1" />
+            <col class="Column-Column2" />
+            <col class="Column-Column3" />
+            <tbody>
+                <tr class="Body-Body1">
+                    <td class="BodyB-Column1-Body1">-16</td>
+                    <td class="BodyB-Column2-Body1">S_NOTCON</td>
+                    <td class="BodyA-Column3-Body1">record not connected to set</td>
+                </tr>
+            </tbody>
+        </table>
+        <table class="TableStyle-CoreErrCodes" cellspacing="0" style="mc-table-style: url('../Resources/TableStyles/CoreErrCodes.css');">
+            <col class="Column-Column1" />
+            <col class="Column-Column2" />
+            <col class="Column-Column3" />
+            <tbody>
+                <tr class="Body-Body1">
+                    <td class="BodyB-Column1-Body1">-17</td>
+                    <td class="BodyB-Column2-Body1">S_NOTKEY</td>
+                    <td class="BodyA-Column3-Body1">field is not a valid key</td>
+                </tr>
+            </tbody>
+        </table>
+        <table class="TableStyle-CoreErrCodes" cellspacing="0" style="mc-table-style: url('../Resources/TableStyles/CoreErrCodes.css');">
+            <col class="Column-Column1" />
+            <col class="Column-Column2" />
+            <col class="Column-Column3" />
+            <tbody>
+                <tr class="Body-Body1">
+                    <td class="BodyB-Column1-Body1">-18</td>
+                    <td class="BodyB-Column2-Body1">S_INVOWN</td>
+                    <td class="BodyA-Column3-Body1">record not legal owner of set</td>
+                </tr>
+            </tbody>
+        </table>
+        <table class="TableStyle-CoreErrCodes" cellspacing="0" style="mc-table-style: url('../Resources/TableStyles/CoreErrCodes.css');">
+            <col class="Column-Column1" />
+            <col class="Column-Column2" />
+            <col class="Column-Column3" />
+            <tbody>
+                <tr class="Body-Body1">
+                    <td class="BodyB-Column1-Body1">-19</td>
+                    <td class="BodyB-Column2-Body1">S_INVMEM</td>
+                    <td class="BodyA-Column3-Body1">record not legal member of set</td>
+                </tr>
+            </tbody>
+        </table>
+        <table class="TableStyle-CoreErrCodes" cellspacing="0" style="mc-table-style: url('../Resources/TableStyles/CoreErrCodes.css');">
+            <col class="Column-Column1" />
+            <col class="Column-Column2" />
+            <col class="Column-Column3" />
+            <tbody>
+                <tr class="Body-Body1">
+                    <td class="BodyB-Column1-Body1">-20</td>
+                    <td class="BodyB-Column2-Body1">S_SETPAGES</td>
+                    <td class="BodyA-Column3-Body1">must call d_setpages() before opening the database</td>
+                </tr>
+            </tbody>
+        </table>
+        <table class="TableStyle-CoreErrCodes" cellspacing="0" style="mc-table-style: url('../Resources/TableStyles/CoreErrCodes.css');">
+            <col class="Column-Column1" />
+            <col class="Column-Column2" />
+            <col class="Column-Column3" />
+            <tbody>
+                <tr class="Body-Body1">
+                    <td class="BodyB-Column1-Body1">-21</td>
+                    <td class="BodyB-Column2-Body1">S_INCOMPAT</td>
+                    <td class="BodyA-Column3-Body1">incompatible dictionary file</td>
+                </tr>
+            </tbody>
+        </table>
+        <table class="TableStyle-CoreErrCodes" cellspacing="0" style="mc-table-style: url('../Resources/TableStyles/CoreErrCodes.css');">
+            <col class="Column-Column1" />
+            <col class="Column-Column2" />
+            <col class="Column-Column3" />
+            <tbody>
+                <tr class="Body-Body1">
+                    <td class="BodyB-Column1-Body1">-22</td>
+                    <td class="BodyB-Column2-Body1">S_DELSYS</td>
+                    <td class="BodyA-Column3-Body1">illegal attempt to delete/add system record</td>
+                </tr>
+            </tbody>
+        </table>
+        <table class="TableStyle-CoreErrCodes" cellspacing="0" style="mc-table-style: url('../Resources/TableStyles/CoreErrCodes.css');">
+            <col class="Column-Column1" />
+            <col class="Column-Column2" />
+            <col class="Column-Column3" />
+            <tbody>
+                <tr class="Body-Body1">
+                    <td class="BodyB-Column1-Body1">-23</td>
+                    <td class="BodyB-Column2-Body1">S_NOTFREE</td>
+                    <td class="BodyA-Column3-Body1">illegal attempt to lock locked set/record</td>
+                </tr>
+            </tbody>
+        </table>
+        <table class="TableStyle-CoreErrCodes" cellspacing="0" style="mc-table-style: url('../Resources/TableStyles/CoreErrCodes.css');">
+            <col class="Column-Column1" />
+            <col class="Column-Column2" />
+            <col class="Column-Column3" />
+            <tbody>
+                <tr class="Body-Body1">
+                    <td class="BodyB-Column1-Body1">-24</td>
+                    <td class="BodyB-Column2-Body1">S_NOTLOCKED</td>
+                    <td class="BodyA-Column3-Body1">attempt to access unlocked set/record</td>
+                </tr>
+            </tbody>
+        </table>
+        <table class="TableStyle-CoreErrCodes" cellspacing="0" style="mc-table-style: url('../Resources/TableStyles/CoreErrCodes.css');">
+            <col class="Column-Column1" />
+            <col class="Column-Column2" />
+            <col class="Column-Column3" />
+            <tbody>
+                <tr class="Body-Body1">
+                    <td class="BodyB-Column1-Body1">-25</td>
+                    <td class="BodyB-Column2-Body1">S_TRANSID</td>
+                    <td class="BodyA-Column3-Body1">transaction ID not supplied</td>
+                </tr>
+            </tbody>
+        </table>
+        <table class="TableStyle-CoreErrCodes" cellspacing="0" style="mc-table-style: url('../Resources/TableStyles/CoreErrCodes.css');">
+            <col class="Column-Column1" />
+            <col class="Column-Column2" />
+            <col class="Column-Column3" />
+            <tbody>
+                <tr class="Body-Body1">
+                    <td class="BodyB-Column1-Body1">-26</td>
+                    <td class="BodyB-Column2-Body1">S_TRACTIVE</td>
+                    <td class="BodyA-Column3-Body1">transaction already active</td>
+                </tr>
+            </tbody>
+        </table>
+        <table class="TableStyle-CoreErrCodes" cellspacing="0" style="mc-table-style: url('../Resources/TableStyles/CoreErrCodes.css');">
+            <col class="Column-Column1" />
+            <col class="Column-Column2" />
+            <col class="Column-Column3" />
+            <tbody>
+                <tr class="Body-Body1">
+                    <td class="BodyB-Column1-Body1">-27</td>
+                    <td class="BodyB-Column2-Body1">S_TRNOTACT</td>
+                    <td class="BodyA-Column3-Body1">transaction not active</td>
+                </tr>
+            </tbody>
+        </table>
+        <table class="TableStyle-CoreErrCodes" cellspacing="0" style="mc-table-style: url('../Resources/TableStyles/CoreErrCodes.css');">
+            <col class="Column-Column1" />
+            <col class="Column-Column2" />
+            <col class="Column-Column3" />
+            <tbody>
+                <tr class="Body-Body1">
+                    <td class="BodyB-Column1-Body1">-28</td>
+                    <td class="BodyB-Column2-Body1">S_DBD_NONAMES</td>
+                    <td class="BodyA-Column3-Body1">incompatible legacy DBD file - does not contain record/field/set names</td>
+                </tr>
+            </tbody>
+        </table>
+        <table class="TableStyle-CoreErrCodes" cellspacing="0" style="mc-table-style: url('../Resources/TableStyles/CoreErrCodes.css');">
+            <col class="Column-Column1" />
+            <col class="Column-Column2" />
+            <col class="Column-Column3" />
+            <tbody>
+                <tr class="Body-Body1">
+                    <td class="BodyB-Column1-Body1">-29</td>
+                    <td class="BodyB-Column2-Body1">S_TRFREE</td>
+                    <td class="BodyA-Column3-Body1">cannot free locks within a transaction</td>
+                </tr>
+            </tbody>
+        </table>
+        <table class="TableStyle-CoreErrCodes" cellspacing="0" style="mc-table-style: url('../Resources/TableStyles/CoreErrCodes.css');">
+            <col class="Column-Column1" />
+            <col class="Column-Column2" />
+            <col class="Column-Column3" />
+            <tbody>
+                <tr class="Body-Body1">
+                    <td class="BodyB-Column1-Body1">-30</td>
+                    <td class="BodyB-Column2-Body1">S_DBOPENED</td>
+                    <td class="BodyA-Column3-Body1">operation not completed because the database is opened elsewhere</td>
+                </tr>
+            </tbody>
+        </table>
+        <table class="TableStyle-CoreErrCodes" cellspacing="0" style="mc-table-style: url('../Resources/TableStyles/CoreErrCodes.css');">
+            <col class="Column-Column1" />
+            <col class="Column-Column2" />
+            <col class="Column-Column3" />
+            <tbody>
+                <tr class="Body-Body1">
+                    <td class="BodyB-Column1-Body1">-31</td>
+                    <td class="BodyB-Column2-Body1">S_NOTRANS</td>
+                    <td class="BodyA-Column3-Body1">cannot update database outside a transaction</td>
+                </tr>
+            </tbody>
+        </table>
+        <table class="TableStyle-CoreErrCodes" cellspacing="0" style="mc-table-style: url('../Resources/TableStyles/CoreErrCodes.css');">
+            <col class="Column-Column1" />
+            <col class="Column-Column2" />
+            <col class="Column-Column3" />
+            <tbody>
+                <tr class="Body-Body1">
+                    <td class="BodyB-Column1-Body1">-32</td>
+                    <td class="BodyB-Column2-Body1">S_EXCLUSIVE</td>
+                    <td class="BodyA-Column3-Body1">exclusive access required</td>
+                </tr>
+            </tbody>
+        </table>
+        <table class="TableStyle-CoreErrCodes" cellspacing="0" style="mc-table-style: url('../Resources/TableStyles/CoreErrCodes.css');">
+            <col class="Column-Column1" />
+            <col class="Column-Column2" />
+            <col class="Column-Column3" />
+            <tbody>
+                <tr class="Body-Body1">
+                    <td class="BodyB-Column1-Body1">-33</td>
+                    <td class="BodyB-Column2-Body1">S_STATIC</td>
+                    <td class="BodyA-Column3-Body1">locks not allowed on static files</td>
+                </tr>
+            </tbody>
+        </table>
+        <table class="TableStyle-CoreErrCodes" cellspacing="0" style="mc-table-style: url('../Resources/TableStyles/CoreErrCodes.css');">
+            <col class="Column-Column1" />
+            <col class="Column-Column2" />
+            <col class="Column-Column3" />
+            <tbody>
+                <tr class="Body-Body1">
+                    <td class="BodyB-Column1-Body1">-34</td>
+                    <td class="BodyB-Column2-Body1">S_USERID</td>
+                    <td class="BodyA-Column3-Body1">unspecified user id</td>
+                </tr>
+            </tbody>
+        </table>
+        <table class="TableStyle-CoreErrCodes" cellspacing="0" style="mc-table-style: url('../Resources/TableStyles/CoreErrCodes.css');">
+            <col class="Column-Column1" />
+            <col class="Column-Column2" />
+            <col class="Column-Column3" />
+            <tbody>
+                <tr class="Body-Body1">
+                    <td class="BodyB-Column1-Body1">-35</td>
+                    <td class="BodyB-Column2-Body1">S_NAMELEN</td>
+                    <td class="BodyA-Column3-Body1">database path or file name too long</td>
+                </tr>
+            </tbody>
+        </table>
+        <table class="TableStyle-CoreErrCodes" cellspacing="0" style="mc-table-style: url('../Resources/TableStyles/CoreErrCodes.css');">
+            <col class="Column-Column1" />
+            <col class="Column-Column2" />
+            <col class="Column-Column3" />
+            <tbody>
+                <tr class="Body-Body1">
+                    <td class="BodyB-Column1-Body1">-36</td>
+                    <td class="BodyB-Column2-Body1">S_INVTRID</td>
+                    <td class="BodyA-Column3-Body1">invalid transaction id</td>
+                </tr>
+            </tbody>
+        </table>
+        <table class="TableStyle-CoreErrCodes" cellspacing="0" style="mc-table-style: url('../Resources/TableStyles/CoreErrCodes.css');">
+            <col class="Column-Column1" />
+            <col class="Column-Column2" />
+            <col class="Column-Column3" />
+            <tbody>
+                <tr class="Body-Body1">
+                    <td class="BodyB-Column1-Body1">-37</td>
+                    <td class="BodyB-Column2-Body1">S_NOTOPTKEY</td>
+                    <td class="BodyA-Column3-Body1">field is not an optional key field</td>
+                </tr>
+            </tbody>
+        </table>
+        <table class="TableStyle-CoreErrCodes" cellspacing="0" style="mc-table-style: url('../Resources/TableStyles/CoreErrCodes.css');">
+            <col class="Column-Column1" />
+            <col class="Column-Column2" />
+            <col class="Column-Column3" />
+            <tbody>
+                <tr class="Body-Body1">
+                    <td class="BodyB-Column1-Body1">-38</td>
+                    <td class="BodyB-Column2-Body1">S_BADFIELD</td>
+                    <td class="BodyA-Column3-Body1">field is not defined in current record type</td>
+                </tr>
+            </tbody>
+        </table>
+        <table class="TableStyle-CoreErrCodes" cellspacing="0" style="mc-table-style: url('../Resources/TableStyles/CoreErrCodes.css');">
+            <col class="Column-Column1" />
+            <col class="Column-Column2" />
+            <col class="Column-Column3" />
+            <tbody>
+                <tr class="Body-Body1">
+                    <td class="BodyB-Column1-Body1">-39</td>
+                    <td class="BodyB-Column2-Body1">S_COMKEY</td>
+                    <td class="BodyA-Column3-Body1">record/field has/in a compound key</td>
+                </tr>
+            </tbody>
+        </table>
+        <table class="TableStyle-CoreErrCodes" cellspacing="0" style="mc-table-style: url('../Resources/TableStyles/CoreErrCodes.css');">
+            <col class="Column-Column1" />
+            <col class="Column-Column2" />
+            <col class="Column-Column3" />
+            <tbody>
+                <tr class="Body-Body1">
+                    <td class="BodyB-Column1-Body1">-40</td>
+                    <td class="BodyB-Column2-Body1">S_INVNUM</td>
+                    <td class="BodyA-Column3-Body1">invalid record or set number</td>
+                </tr>
+            </tbody>
+        </table>
+        <table class="TableStyle-CoreErrCodes" cellspacing="0" style="mc-table-style: url('../Resources/TableStyles/CoreErrCodes.css');">
+            <col class="Column-Column1" />
+            <col class="Column-Column2" />
+            <col class="Column-Column3" />
+            <tbody>
+                <tr class="Body-Body1">
+                    <td class="BodyB-Column1-Body1">-41</td>
+                    <td class="BodyB-Column2-Body1">S_INVKEY</td>
+                    <td class="BodyA-Column3-Body1">invalid optional key - key cannot be used in d_setkey</td>
+                </tr>
+            </tbody>
+        </table>
+        <table class="TableStyle-CoreErrCodes" cellspacing="0" style="mc-table-style: url('../Resources/TableStyles/CoreErrCodes.css');">
+            <col class="Column-Column1" />
+            <col class="Column-Column2" />
+            <col class="Column-Column3" />
+            <tbody>
+                <tr class="Body-Body1">
+                    <td class="BodyB-Column1-Body1">-42</td>
+                    <td class="BodyB-Column2-Body1">S_BADUSERID</td>
+                    <td class="BodyA-Column3-Body1">bad DBUSERID (too long or contains non-alphanumeric)</td>
+                </tr>
+            </tbody>
+        </table>
+        <table class="TableStyle-CoreErrCodes" cellspacing="0" style="mc-table-style: url('../Resources/TableStyles/CoreErrCodes.css');">
+            <col class="Column-Column1" />
+            <col class="Column-Column2" />
+            <col class="Column-Column3" />
+            <tbody>
+                <tr class="Body-Body1">
+                    <td class="BodyB-Column1-Body1">-43</td>
+                    <td class="BodyB-Column2-Body1">S_INVREPHANDLE</td>
+                    <td class="BodyA-Column3-Body1">Invalid replication handle provided</td>
+                </tr>
+            </tbody>
+        </table>
+        <table class="TableStyle-CoreErrCodes" cellspacing="0" style="mc-table-style: url('../Resources/TableStyles/CoreErrCodes.css');">
+            <col class="Column-Column1" />
+            <col class="Column-Column2" />
+            <col class="Column-Column3" />
+            <tbody>
+                <tr class="Body-Body1">
+                    <td class="BodyB-Column1-Body1">-44</td>
+                    <td class="BodyB-Column2-Body1">S_INVPKEY</td>
+                    <td class="BodyA-Column3-Body1">Invalid partial key specification</td>
+                </tr>
+            </tbody>
+        </table>
+        <table class="TableStyle-CoreErrCodes" cellspacing="0" style="mc-table-style: url('../Resources/TableStyles/CoreErrCodes.css');">
+            <col class="Column-Column1" />
+            <col class="Column-Column2" />
+            <col class="Column-Column3" />
+            <tbody>
+                <tr class="Body-Body1">
+                    <td class="BodyB-Column1-Body1">-45</td>
+                    <td class="BodyB-Column2-Body1">S_INVARG</td>
+                    <td class="BodyA-Column3-Body1">Invalid function argument</td>
+                </tr>
+            </tbody>
+        </table>
+        <table class="TableStyle-CoreErrCodes" cellspacing="0" style="mc-table-style: url('../Resources/TableStyles/CoreErrCodes.css');">
+            <col class="Column-Column1" />
+            <col class="Column-Column2" />
+            <col class="Column-Column3" />
+            <tbody>
+                <tr class="Body-Body1">
+                    <td class="BodyB-Column1-Body1">-46</td>
+                    <td class="BodyB-Column2-Body1">S_NOTYPE</td>
+                    <td class="BodyA-Column3-Body1">no current record type</td>
+                </tr>
+            </tbody>
+        </table>
+        <table class="TableStyle-CoreErrCodes" cellspacing="0" style="mc-table-style: url('../Resources/TableStyles/CoreErrCodes.css');">
+            <col class="Column-Column1" />
+            <col class="Column-Column2" />
+            <col class="Column-Column3" />
+            <tbody>
+                <tr class="Body-Body1">
+                    <td class="BodyB-Column1-Body1">-47</td>
+                    <td class="BodyB-Column2-Body1">S_INVINDEX</td>
+                    <td class="BodyA-Column3-Body1">Invalid index type</td>
+                </tr>
+            </tbody>
+        </table>
+        <table class="TableStyle-CoreErrCodes" cellspacing="0" style="mc-table-style: url('../Resources/TableStyles/CoreErrCodes.css');">
+            <col class="Column-Column1" />
+            <col class="Column-Column2" />
+            <col class="Column-Column3" />
+            <tbody>
+                <tr class="Body-Body1">
+                    <td class="BodyB-Column1-Body1">-48</td>
+                    <td class="BodyB-Column2-Body1">S_DBCLOSE</td>
+                    <td class="BodyA-Column3-Body1">database not closed</td>
+                </tr>
+            </tbody>
+        </table>
+        <table class="TableStyle-CoreErrCodes" cellspacing="0" style="mc-table-style: url('../Resources/TableStyles/CoreErrCodes.css');">
+            <col class="Column-Column1" />
+            <col class="Column-Column2" />
+            <col class="Column-Column3" />
+            <tbody>
+                <tr class="Body-Body1">
+                    <td class="BodyB-Column1-Body1">-49</td>
+                    <td class="BodyB-Column2-Body1">S_INVPTR</td>
+                    <td class="BodyA-Column3-Body1">invalid pointer</td>
+                </tr>
+            </tbody>
+        </table>
+        <table class="TableStyle-CoreErrCodes" cellspacing="0" style="mc-table-style: url('../Resources/TableStyles/CoreErrCodes.css');">
+            <col class="Column-Column1" />
+            <col class="Column-Column2" />
+            <col class="Column-Column3" />
+            <tbody>
+                <tr class="Body-Body1">
+                    <td class="BodyB-Column1-Body1">-50</td>
+                    <td class="BodyB-Column2-Body1">S_INVID</td>
+                    <td class="BodyA-Column3-Body1">invalid internal ID</td>
+                </tr>
+            </tbody>
+        </table>
+        <table class="TableStyle-CoreErrCodes" cellspacing="0" style="mc-table-style: url('../Resources/TableStyles/CoreErrCodes.css');">
+            <col class="Column-Column1" />
+            <col class="Column-Column2" />
+            <col class="Column-Column3" />
+            <tbody>
+                <tr class="Body-Body1">
+                    <td class="BodyB-Column1-Body1">-51</td>
+                    <td class="BodyB-Column2-Body1">S_INVFORUNIONDB</td>
+                    <td class="BodyA-Column3-Body1">operation invalid for a union database</td>
+                </tr>
+            </tbody>
+        </table>
+        <table class="TableStyle-CoreErrCodes" cellspacing="0" style="mc-table-style: url('../Resources/TableStyles/CoreErrCodes.css');">
+            <col class="Column-Column1" />
+            <col class="Column-Column2" />
+            <col class="Column-Column3" />
+            <tbody>
+                <tr class="Body-Body1">
+                    <td class="BodyB-Column1-Body1">-52</td>
+                    <td class="BodyB-Column2-Body1">S_INVTASK</td>
+                    <td class="BodyA-Column3-Body1">invalid task</td>
+                </tr>
+            </tbody>
+        </table>
+        <table class="TableStyle-CoreErrCodes" cellspacing="0" style="mc-table-style: url('../Resources/TableStyles/CoreErrCodes.css');">
+            <col class="Column-Column1" />
+            <col class="Column-Column2" />
+            <col class="Column-Column3" />
+            <tbody>
+                <tr class="Body-Body1">
+                    <td class="BodyB-Column1-Body1">-53</td>
+                    <td class="BodyB-Column2-Body1">S_UNIONINVMODE</td>
+                    <td class="BodyA-Column3-Body1">Invalid open mode for a union database</td>
+                </tr>
+            </tbody>
+        </table>
+        <table class="TableStyle-CoreErrCodes" cellspacing="0" style="mc-table-style: url('../Resources/TableStyles/CoreErrCodes.css');">
+            <col class="Column-Column1" />
+            <col class="Column-Column2" />
+            <col class="Column-Column3" />
+            <tbody>
+                <tr class="Body-Body1">
+                    <td class="BodyB-Column1-Body1">-54</td>
+                    <td class="BodyB-Column2-Body1">S_NOTIMPLEMENTED</td>
+                    <td class="BodyA-Column3-Body1">option is not implemented in this version</td>
+                </tr>
+            </tbody>
+        </table>
+        <table class="TableStyle-CoreErrCodes" cellspacing="0" style="mc-table-style: url('../Resources/TableStyles/CoreErrCodes.css');">
+            <col class="Column-Column1" />
+            <col class="Column-Column2" />
+            <col class="Column-Column3" />
+            <tbody>
+                <tr class="Body-Body1">
+                    <td class="BodyB-Column1-Body1">-55</td>
+                    <td class="BodyB-Column2-Body1">S_DEFUNCT</td>
+                    <td class="BodyA-Column3-Body1">This API is defunct and is not supported</td>
+                </tr>
+            </tbody>
+        </table>
+        <table class="TableStyle-CoreErrCodes" cellspacing="0" style="mc-table-style: url('../Resources/TableStyles/CoreErrCodes.css');">
+            <col class="Column-Column1" />
+            <col class="Column-Column2" />
+            <col class="Column-Column3" />
+            <tbody>
+                <tr class="Body-Body1">
+                    <td class="BodyB-Column1-Body1">-56</td>
+                    <td class="BodyB-Column2-Body1">S_IMPBADXML</td>
+                    <td class="BodyA-Column3-Body1">bad xml data</td>
+                </tr>
+            </tbody>
+        </table>
+        <table class="TableStyle-CoreErrCodes" cellspacing="0" style="mc-table-style: url('../Resources/TableStyles/CoreErrCodes.css');">
+            <col class="Column-Column1" />
+            <col class="Column-Column2" />
+            <col class="Column-Column3" />
+            <tbody>
+                <tr class="Body-Body1">
+                    <td class="BodyB-Column1-Body1">-57</td>
+                    <td class="BodyB-Column2-Body1">S_IMPBADDATA</td>
+                    <td class="BodyA-Column3-Body1">bad data</td>
+                </tr>
+            </tbody>
+        </table>
+        <table class="TableStyle-CoreErrCodes" cellspacing="0" style="mc-table-style: url('../Resources/TableStyles/CoreErrCodes.css');">
+            <col class="Column-Column1" />
+            <col class="Column-Column2" />
+            <col class="Column-Column3" />
+            <tbody>
+                <tr class="Body-Body1">
+                    <td class="BodyB-Column1-Body1">-58</td>
+                    <td class="BodyB-Column2-Body1">S_REPBADTYPE</td>
+                    <td class="BodyA-Column3-Body1">bad replication type</td>
+                </tr>
+            </tbody>
+        </table>
+        <table class="TableStyle-CoreErrCodes" cellspacing="0" style="mc-table-style: url('../Resources/TableStyles/CoreErrCodes.css');">
+            <col class="Column-Column1" />
+            <col class="Column-Column2" />
+            <col class="Column-Column3" />
+            <tbody>
+                <tr class="Body-Body1">
+                    <td class="BodyB-Column1-Body1">-59</td>
+                    <td class="BodyB-Column2-Body1">S_REPINVMODE</td>
+                    <td class="BodyA-Column3-Body1">Invalid open mode for a replicated database</td>
+                </tr>
+            </tbody>
+        </table>
+        <table class="TableStyle-CoreErrCodes" cellspacing="0" style="mc-table-style: url('../Resources/TableStyles/CoreErrCodes.css');">
+            <col class="Column-Column1" />
+            <col class="Column-Column2" />
+            <col class="Column-Column3" />
+            <tbody>
+                <tr class="Body-Body1">
+                    <td class="BodyB-Column1-Body1">-60</td>
+                    <td class="BodyB-Column2-Body1">S_REPINVLOCK</td>
+                    <td class="BodyA-Column3-Body1">Invalid 'exclusive lock' request for a replicated database</td>
+                </tr>
+            </tbody>
+        </table>
+        <table class="TableStyle-CoreErrCodes" cellspacing="0" style="mc-table-style: url('../Resources/TableStyles/CoreErrCodes.css');">
+            <col class="Column-Column1" />
+            <col class="Column-Column2" />
+            <col class="Column-Column3" />
+            <tbody>
+                <tr class="Body-Body1">
+                    <td class="BodyB-Column1-Body1">-62</td>
+                    <td class="BodyB-Column2-Body1">S_INVFILE</td>
+                    <td class="BodyA-Column3-Body1">Invalid file type for operation</td>
+                </tr>
+            </tbody>
+        </table>
+        <table class="TableStyle-CoreErrCodes" cellspacing="0" style="mc-table-style: url('../Resources/TableStyles/CoreErrCodes.css');">
+            <col class="Column-Column1" />
+            <col class="Column-Column2" />
+            <col class="Column-Column3" />
+            <tbody>
+                <tr class="Body-Body1">
+                    <td class="BodyB-Column1-Body1">-63</td>
+                    <td class="BodyB-Column2-Body1">S_INVDBA</td>
+                    <td class="BodyA-Column3-Body1">Invalid database address format</td>
+                </tr>
+            </tbody>
+        </table>
+        <table class="TableStyle-CoreErrCodes" cellspacing="0" style="mc-table-style: url('../Resources/TableStyles/CoreErrCodes.css');">
+            <col class="Column-Column1" />
+            <col class="Column-Column2" />
+            <col class="Column-Column3" />
+            <tbody>
+                <tr class="Body-Body1">
+                    <td class="BodyB-Column1-Body1">-64</td>
+                    <td class="BodyB-Column2-Body1">S_INVENDIAN</td>
+                    <td class="BodyA-Column3-Body1">Invalid database endian format</td>
+                </tr>
+            </tbody>
+        </table>
+        <table class="TableStyle-CoreErrCodes" cellspacing="0" style="mc-table-style: url('../Resources/TableStyles/CoreErrCodes.css');">
+            <col class="Column-Column1" />
+            <col class="Column-Column2" />
+            <col class="Column-Column3" />
+            <tbody>
+                <tr class="Body-Body1">
+                    <td class="BodyB-Column1-Body1">-65</td>
+                    <td class="BodyB-Column2-Body1">S_INVSTRING</td>
+                    <td class="BodyA-Column3-Body1">Invalid database string format</td>
+                </tr>
+            </tbody>
+        </table>
+        <table class="TableStyle-CoreErrCodes" cellspacing="0" style="mc-table-style: url('../Resources/TableStyles/CoreErrCodes.css');">
+            <col class="Column-Column1" />
+            <col class="Column-Column2" />
+            <col class="Column-Column3" />
+            <tbody>
+                <tr class="Body-Body1">
+                    <td class="BodyB-Column1-Body1">-66</td>
+                    <td class="BodyB-Column2-Body1">S_DELCIRC</td>
+                    <td class="BodyA-Column3-Body1">Illegal attempt to delete circular record</td>
+                </tr>
+            </tbody>
+        </table>
+        <table class="TableStyle-CoreErrCodes" cellspacing="0" style="mc-table-style: url('../Resources/TableStyles/CoreErrCodes.css');">
+            <col class="Column-Column1" />
+            <col class="Column-Column2" />
+            <col class="Column-Column3" />
+            <tbody>
+                <tr class="Body-Body1">
+                    <td class="BodyB-Column1-Body1">-67</td>
+                    <td class="BodyB-Column2-Body1">S_TRPRECOMMITTED</td>
+                    <td class="BodyA-Column3-Body1">A precommitted transaction must be committed or aborted before further operations are allowed</td>
+                </tr>
+            </tbody>
+        </table>
+        <table class="TableStyle-CoreErrCodes" cellspacing="0" style="mc-table-style: url('../Resources/TableStyles/CoreErrCodes.css');">
+            <col class="Column-Column1" />
+            <col class="Column-Column2" />
+            <col class="Column-Column3" />
+            <tbody>
+                <tr class="Body-Body1">
+                    <td class="BodyB-Column1-Body1">-68</td>
+                    <td class="BodyB-Column2-Body1">S_DDLERROR</td>
+                    <td class="BodyA-Column3-Body1">There were errors processing a DDL file</td>
+                </tr>
+            </tbody>
+        </table>
+        <table class="TableStyle-CoreErrCodes" cellspacing="0" style="mc-table-style: url('../Resources/TableStyles/CoreErrCodes.css');">
+            <col class="Column-Column1" />
+            <col class="Column-Column2" />
+            <col class="Column-Column3" />
+            <tbody>
+                <tr class="Body-Body1">
+                    <td class="BodyB-Column1-Body1">-69</td>
+                    <td class="BodyB-Column2-Body1">S_DBACTIVE</td>
+                    <td class="BodyA-Column3-Body1">Database is currently in use</td>
+                </tr>
+            </tbody>
+        </table>
+        <table class="TableStyle-CoreErrCodes" cellspacing="0" style="mc-table-style: url('../Resources/TableStyles/CoreErrCodes.css');">
+            <col class="Column-Column1" />
+            <col class="Column-Column2" />
+            <col class="Column-Column3" />
+            <tbody>
+                <tr class="Body-Body1">
+                    <td class="BodyB-Column1-Body1">-70</td>
+                    <td class="BodyB-Column2-Body1">S_INVDBD</td>
+                    <td class="BodyA-Column3-Body1">The DBD is not compatible with the runtime library</td>
+                </tr>
+            </tbody>
+        </table>
+        <table class="TableStyle-CoreErrCodes" cellspacing="0" style="mc-table-style: url('../Resources/TableStyles/CoreErrCodes.css');">
+            <col class="Column-Column1" />
+            <col class="Column-Column2" />
+            <col class="Column-Column3" />
+            <tbody>
+                <tr class="Body-Body1">
+                    <td class="BodyB-Column1-Body1">-71</td>
+                    <td class="BodyB-Column2-Body1">S_REPLOGVER</td>
+                    <td class="BodyA-Column3-Body1">Invalid replication log version</td>
+                </tr>
+            </tbody>
+        </table>
+        <table class="TableStyle-CoreErrCodes" cellspacing="0" style="mc-table-style: url('../Resources/TableStyles/CoreErrCodes.css');">
+            <col class="Column-Column1" />
+            <col class="Column-Column2" />
+            <col class="Column-Column3" />
+            <tbody>
+                <tr class="Body-Body1">
+                    <td class="BodyB-Column1-Body1">-72</td>
+                    <td class="BodyB-Column2-Body1">S_REPLOGDBA</td>
+                    <td class="BodyA-Column3-Body1">Invalid replication log database address format</td>
+                </tr>
+            </tbody>
+        </table>
+        <table class="TableStyle-CoreErrCodes" cellspacing="0" style="mc-table-style: url('../Resources/TableStyles/CoreErrCodes.css');">
+            <col class="Column-Column1" />
+            <col class="Column-Column2" />
+            <col class="Column-Column3" />
+            <tbody>
+                <tr class="Body-Body1">
+                    <td class="BodyB-Column1-Body1">-73</td>
+                    <td class="BodyB-Column2-Body1">S_REPLOGENDIAN</td>
+                    <td class="BodyA-Column3-Body1">Invalid replication log endian format</td>
+                </tr>
+            </tbody>
+        </table>
+        <table class="TableStyle-CoreErrCodes" cellspacing="0" style="mc-table-style: url('../Resources/TableStyles/CoreErrCodes.css');">
+            <col class="Column-Column1" />
+            <col class="Column-Column2" />
+            <col class="Column-Column3" />
+            <tbody>
+                <tr class="Body-Body1">
+                    <td class="BodyB-Column1-Body1">-74</td>
+                    <td class="BodyB-Column2-Body1">S_REPLOGSTRING</td>
+                    <td class="BodyA-Column3-Body1">Invalid replication log string format</td>
+                </tr>
+            </tbody>
+        </table>
+        <table class="TableStyle-CoreErrCodes" cellspacing="0" style="mc-table-style: url('../Resources/TableStyles/CoreErrCodes.css');">
+            <col class="Column-Column1" />
+            <col class="Column-Column2" />
+            <col class="Column-Column3" />
+            <tbody>
+                <tr class="Body-Body1">
+                    <td class="BodyB-Column1-Body1">-75</td>
+                    <td class="BodyB-Column2-Body1">S_RECOVERY_FAILED</td>
+                    <td class="BodyA-Column3-Body1">Recovery failed</td>
+                </tr>
+            </tbody>
+        </table>
+        <table class="TableStyle-CoreErrCodes" cellspacing="0" style="mc-table-style: url('../Resources/TableStyles/CoreErrCodes.css');">
+            <col class="Column-Column1" />
+            <col class="Column-Column2" />
+            <col class="Column-Column3" />
+            <tbody>
+                <tr class="Body-Body1">
+                    <td class="BodyB-Column1-Body1">-76</td>
+                    <td class="BodyB-Column2-Body1">S_ROTACTIVE</td>
+                    <td class="BodyA-Column3-Body1">A read-only transaction is already active</td>
+                </tr>
+            </tbody>
+        </table>
+        <table class="TableStyle-CoreErrCodes" cellspacing="0" style="mc-table-style: url('../Resources/TableStyles/CoreErrCodes.css');">
+            <col class="Column-Column1" />
+            <col class="Column-Column2" />
+            <col class="Column-Column3" />
+            <tbody>
+                <tr class="Body-Body1">
+                    <td class="BodyB-Column1-Body1">-77</td>
+                    <td class="BodyB-Column2-Body1">S_NOROTACTIVE</td>
+                    <td class="BodyA-Column3-Body1">No read-only transaction is active</td>
+                </tr>
+            </tbody>
+        </table>
+        <table class="TableStyle-CoreErrCodes" cellspacing="0" style="mc-table-style: url('../Resources/TableStyles/CoreErrCodes.css');">
+            <col class="Column-Column1" />
+            <col class="Column-Column2" />
+            <col class="Column-Column3" />
+            <tbody>
+                <tr class="Body-Body1">
+                    <td class="BodyB-Column1-Body1">-78</td>
+                    <td class="BodyB-Column2-Body1">S_HASWRITELOCKS</td>
+                    <td class="BodyA-Column3-Body1">A read-only transaction cannot start because the user holds write locks</td>
+                </tr>
+            </tbody>
+        </table>
+        <table class="TableStyle-CoreErrCodes" cellspacing="0" style="mc-table-style: url('../Resources/TableStyles/CoreErrCodes.css');">
+            <col class="Column-Column1" />
+            <col class="Column-Column2" />
+            <col class="Column-Column3" />
+            <tbody>
+                <tr class="Body-Body1">
+                    <td class="BodyB-Column1-Body1">-79</td>
+                    <td class="BodyB-Column2-Body1">S_INROT</td>
+                    <td class="BodyA-Column3-Body1">Cannot apply a write or exclusive lock while in a read-only transaction</td>
+                </tr>
+            </tbody>
+        </table>
+        <table class="TableStyle-CoreErrCodes" cellspacing="0" style="mc-table-style: url('../Resources/TableStyles/CoreErrCodes.css');">
+            <col class="Column-Column1" />
+            <col class="Column-Column2" />
+            <col class="Column-Column3" />
+            <tbody>
+                <tr class="Body-Body1">
+                    <td class="BodyB-Column1-Body1">-80</td>
+                    <td class="BodyB-Column2-Body1">S_DBALREADYOPEN</td>
+                    <td class="BodyA-Column3-Body1">Database is already open in this task</td>
+                </tr>
+            </tbody>
+        </table>
+        <table class="TableStyle-CoreErrCodes" cellspacing="0" style="mc-table-style: url('../Resources/TableStyles/CoreErrCodes.css');">
+            <col class="Column-Column1" />
+            <col class="Column-Column2" />
+            <col class="Column-Column3" />
+            <tbody>
+                <tr class="Body-Body1">
+                    <td class="BodyB-Column1-Body1">-81</td>
+                    <td class="BodyB-Column2-Body1">S_SHUTDOWN</td>
+                    <td class="BodyA-Column3-Body1">A server is shutting down</td>
+                </tr>
+            </tbody>
+        </table>
+        <table class="TableStyle-CoreErrCodes" cellspacing="0" style="mc-table-style: url('../Resources/TableStyles/CoreErrCodes.css');">
+            <col class="Column-Column1" />
+            <col class="Column-Column2" />
+            <col class="Column-Column3" />
+            <tbody>
+                <tr class="Body-Body1">
+                    <td class="BodyB-Column1-Body1">-82</td>
+                    <td class="BodyB-Column2-Body1">S_INVURLARGFMT</td>
+                    <td class="BodyA-Column3-Body1">Invalid URL argument format</td>
+                </tr>
+            </tbody>
+        </table>
+        <table class="TableStyle-CoreErrCodes" cellspacing="0" style="mc-table-style: url('../Resources/TableStyles/CoreErrCodes.css');">
+            <col class="Column-Column1" />
+            <col class="Column-Column2" />
+            <col class="Column-Column3" />
+            <tbody>
+                <tr class="Body-Body1">
+                    <td class="BodyB-Column1-Body1">-83</td>
+                    <td class="BodyB-Column2-Body1">S_INVDBAFILE</td>
+                    <td class="BodyA-Column3-Body1">Invalid DBA file value</td>
+                </tr>
+            </tbody>
+        </table>
+        <table class="TableStyle-CoreErrCodes" cellspacing="0" style="mc-table-style: url('../Resources/TableStyles/CoreErrCodes.css');">
+            <col class="Column-Column1" />
+            <col class="Column-Column2" />
+            <col class="Column-Column3" />
+            <tbody>
+                <tr class="Body-Body1">
+                    <td class="BodyB-Column1-Body1">-84</td>
+                    <td class="BodyB-Column2-Body1">S_INVDBASLOT</td>
+                    <td class="BodyA-Column3-Body1">Invalid DBA slot value</td>
+                </tr>
+            </tbody>
+        </table>
+        <table class="TableStyle-CoreErrCodes" cellspacing="0" style="mc-table-style: url('../Resources/TableStyles/CoreErrCodes.css');">
+            <col class="Column-Column1" />
+            <col class="Column-Column2" />
+            <col class="Column-Column3" />
+            <tbody>
+                <tr class="Body-Body1">
+                    <td class="BodyB-Column1-Body1">-85</td>
+                    <td class="BodyB-Column2-Body1">S_REPRDMSERR</td>
+                    <td class="BodyA-Column3-Body1">Error replicating to RDM Server Slave</td>
+                </tr>
+            </tbody>
+        </table>
+        <table class="TableStyle-CoreErrCodes" cellspacing="0" style="mc-table-style: url('../Resources/TableStyles/CoreErrCodes.css');">
+            <col class="Column-Column1" />
+            <col class="Column-Column2" />
+            <col class="Column-Column3" />
+            <tbody>
+                <tr class="Body-Body1">
+                    <td class="BodyB-Column1-Body1">-86</td>
+                    <td class="BodyB-Column2-Body1">S_UNOMISMATCH</td>
+                    <td class="BodyA-Column3-Body1">Union values do not match</td>
+                </tr>
+            </tbody>
+        </table>
+        <table class="TableStyle-CoreErrCodes" cellspacing="0" style="mc-table-style: url('../Resources/TableStyles/CoreErrCodes.css');">
+            <col class="Column-Column1" />
+            <col class="Column-Column2" />
+            <col class="Column-Column3" />
+            <tbody>
+                <tr class="Body-Body1">
+                    <td class="BodyB-Column1-Body1">-88</td>
+                    <td class="BodyB-Column2-Body1">S_MIRSYNC_DENIED</td>
+                    <td class="BodyA-Column3-Body1">Database already used in synchronous mirroring</td>
+                </tr>
+            </tbody>
+        </table>
+        <table class="TableStyle-CoreErrCodes" cellspacing="0" style="mc-table-style: url('../Resources/TableStyles/CoreErrCodes.css');">
+            <col class="Column-Column1" />
+            <col class="Column-Column2" />
+            <col class="Column-Column3" />
+            <tbody>
+                <tr class="Body-Body1">
+                    <td class="BodyB-Column1-Body1">-89</td>
+                    <td class="BodyB-Column2-Body1">S_MIRSYNC_ERROR</td>
+                    <td class="BodyA-Column3-Body1">Generic synchronous mirroring error</td>
+                </tr>
+            </tbody>
+        </table>
+        <table class="TableStyle-CoreErrCodes" cellspacing="0" style="mc-table-style: url('../Resources/TableStyles/CoreErrCodes.css');">
+            <col class="Column-Column1" />
+            <col class="Column-Column2" />
+            <col class="Column-Column3" />
+            <tbody>
+                <tr class="Body-Body1">
+                    <td class="BodyB-Column1-Body1">-90</td>
+                    <td class="BodyB-Column2-Body1">S_IN_CHANGE_TRANS</td>
+                    <td class="BodyA-Column3-Body1">Initialize not allowed when a change transaction is active</td>
+                </tr>
+            </tbody>
+        </table>
+        <table class="TableStyle-CoreErrCodes" cellspacing="0" style="mc-table-style: url('../Resources/TableStyles/CoreErrCodes.css');">
+            <col class="Column-Column1" />
+            <col class="Column-Column2" />
+            <col class="Column-Column3" />
+            <tbody>
+                <tr class="Body-Body1">
+                    <td class="BodyB-Column1-Body1">-91</td>
+                    <td class="BodyB-Column2-Body1">S_IN_INIT_TRANS</td>
+                    <td class="BodyA-Column3-Body1">Changes not allowed when an initialization transaction is active</td>
+                </tr>
+            </tbody>
+        </table>
+        <table class="TableStyle-CoreErrCodes" cellspacing="0" style="mc-table-style: url('../Resources/TableStyles/CoreErrCodes.css');">
+            <col class="Column-Column1" />
+            <col class="Column-Column2" />
+            <col class="Column-Column3" />
+            <tbody>
+                <tr class="Body-Body1">
+                    <td class="BodyB-Column1-Body1">-92</td>
+                    <td class="BodyB-Column2-Body1">S_NOMIRSERVER</td>
+                    <td class="BodyA-Column3-Body1">Unable to connect to a mirroring server</td>
+                </tr>
+            </tbody>
+        </table>
+        <table class="TableStyle-CoreErrCodes" cellspacing="0" style="mc-table-style: url('../Resources/TableStyles/CoreErrCodes.css');">
+            <col class="Column-Column1" />
+            <col class="Column-Column2" />
+            <col class="Column-Column3" />
+            <tbody>
+                <tr class="Body-Body1">
+                    <td class="BodyB-Column1-Body1">-93</td>
+                    <td class="BodyB-Column2-Body1">S_DBDMISMATCH</td>
+                    <td class="BodyA-Column3-Body1">DBD in memory does not match DBD on disk</td>
+                </tr>
+            </tbody>
+        </table>
+        <h3><a MadCap:generatedBookmark="TOC" name="TFS&#160;Errors"></a>TFS&#160;Errors</h3>
+        <table class="TableStyle-CoreErrCodes" cellspacing="0" style="mc-table-style: url('../Resources/TableStyles/CoreErrCodes.css');">
+            <col class="Column-Column1" />
+            <col class="Column-Column2" />
+            <col class="Column-Column3" />
+            <tr class="Body-Body1">
+                <th class="BodyE-Column1-Body1" style="font-weight: bold;">Value</th>
+                <th class="BodyE-Column2-Body1" style="font-weight: bold;">Name</th>
+                <th class="BodyD-Column3-Body1" style="font-weight: bold;">Description</th>
+            </tr>
+        </table>
+        <table class="TableStyle-CoreErrCodes" cellspacing="0" style="mc-table-style: url('../Resources/TableStyles/CoreErrCodes.css');">
+            <col class="Column-Column1" />
+            <col class="Column-Column2" />
+            <col class="Column-Column3" />
+            <tbody>
+                <tr class="Body-Body1">
+                    <td class="BodyB-Column1-Body1">-200</td>
+                    <td class="BodyB-Column2-Body1">S_TX_ERROR</td>
+                    <td class="BodyA-Column3-Body1">generic tx_ error</td>
+                </tr>
+            </tbody>
+        </table>
+        <table class="TableStyle-CoreErrCodes" cellspacing="0" style="mc-table-style: url('../Resources/TableStyles/CoreErrCodes.css');">
+            <col class="Column-Column1" />
+            <col class="Column-Column2" />
+            <col class="Column-Column3" />
+            <tbody>
+                <tr class="Body-Body1">
+                    <td class="BodyB-Column1-Body1">-201</td>
+                    <td class="BodyB-Column2-Body1">S_TX_NOPAGE</td>
+                    <td class="BodyA-Column3-Body1">requested page doesn't exist</td>
+                </tr>
+            </tbody>
+        </table>
+        <table class="TableStyle-CoreErrCodes" cellspacing="0" style="mc-table-style: url('../Resources/TableStyles/CoreErrCodes.css');">
+            <col class="Column-Column1" />
+            <col class="Column-Column2" />
+            <col class="Column-Column3" />
+            <tbody>
+                <tr class="Body-Body1">
+                    <td class="BodyB-Column1-Body1">-202</td>
+                    <td class="BodyB-Column2-Body1">S_TX_NETREAD</td>
+                    <td class="BodyA-Column3-Body1">failure to read data from network</td>
+                </tr>
+            </tbody>
+        </table>
+        <table class="TableStyle-CoreErrCodes" cellspacing="0" style="mc-table-style: url('../Resources/TableStyles/CoreErrCodes.css');">
+            <col class="Column-Column1" />
+            <col class="Column-Column2" />
+            <col class="Column-Column3" />
+            <tbody>
+                <tr class="Body-Body1">
+                    <td class="BodyB-Column1-Body1">-203</td>
+                    <td class="BodyB-Column2-Body1">S_TX_NETWRITE</td>
+                    <td class="BodyA-Column3-Body1">failure to write data to network</td>
+                </tr>
+            </tbody>
+        </table>
+        <table class="TableStyle-CoreErrCodes" cellspacing="0" style="mc-table-style: url('../Resources/TableStyles/CoreErrCodes.css');">
+            <col class="Column-Column1" />
+            <col class="Column-Column2" />
+            <col class="Column-Column3" />
+            <tbody>
+                <tr class="Body-Body1">
+                    <td class="BodyB-Column1-Body1">-204</td>
+                    <td class="BodyB-Column2-Body1">S_TX_WRITEFAIL</td>
+                    <td class="BodyA-Column3-Body1">failed to write to a file</td>
+                </tr>
+            </tbody>
+        </table>
+        <table class="TableStyle-CoreErrCodes" cellspacing="0" style="mc-table-style: url('../Resources/TableStyles/CoreErrCodes.css');">
+            <col class="Column-Column1" />
+            <col class="Column-Column2" />
+            <col class="Column-Column3" />
+            <tbody>
+                <tr class="Body-Body1">
+                    <td class="BodyB-Column1-Body1">-205</td>
+                    <td class="BodyB-Column2-Body1">S_TX_DUPUSER</td>
+                    <td class="BodyA-Column3-Body1">same dbuserid already in use</td>
+                </tr>
+            </tbody>
+        </table>
+        <table class="TableStyle-CoreErrCodes" cellspacing="0" style="mc-table-style: url('../Resources/TableStyles/CoreErrCodes.css');">
+            <col class="Column-Column1" />
+            <col class="Column-Column2" />
+            <col class="Column-Column3" />
+            <tbody>
+                <tr class="Body-Body1">
+                    <td class="BodyB-Column1-Body1">-206</td>
+                    <td class="BodyB-Column2-Body1">S_TX_MAXUSERS</td>
+                    <td class="BodyA-Column3-Body1">ran out of user connections</td>
+                </tr>
+            </tbody>
+        </table>
+        <table class="TableStyle-CoreErrCodes" cellspacing="0" style="mc-table-style: url('../Resources/TableStyles/CoreErrCodes.css');">
+            <col class="Column-Column1" />
+            <col class="Column-Column2" />
+            <col class="Column-Column3" />
+            <tbody>
+                <tr class="Body-Body1">
+                    <td class="BodyB-Column1-Body1">-207</td>
+                    <td class="BodyB-Column2-Body1">S_TX_INVUSERID</td>
+                    <td class="BodyA-Column3-Body1">userid not found in user table</td>
+                </tr>
+            </tbody>
+        </table>
+        <table class="TableStyle-CoreErrCodes" cellspacing="0" style="mc-table-style: url('../Resources/TableStyles/CoreErrCodes.css');">
+            <col class="Column-Column1" />
+            <col class="Column-Column2" />
+            <col class="Column-Column3" />
+            <tbody>
+                <tr class="Body-Body1">
+                    <td class="BodyB-Column1-Body1">-208</td>
+                    <td class="BodyB-Column2-Body1">S_TX_NOTVERIFIED</td>
+                    <td class="BodyA-Column3-Body1">user is not verified</td>
+                </tr>
+            </tbody>
+        </table>
+        <table class="TableStyle-CoreErrCodes" cellspacing="0" style="mc-table-style: url('../Resources/TableStyles/CoreErrCodes.css');">
+            <col class="Column-Column1" />
+            <col class="Column-Column2" />
+            <col class="Column-Column3" />
+            <tbody>
+                <tr class="Body-Body1">
+                    <td class="BodyB-Column1-Body1">-209</td>
+                    <td class="BodyB-Column2-Body1">S_TX_TXNOTACTIVE</td>
+                    <td class="BodyA-Column3-Body1">no transaction is active</td>
+                </tr>
+            </tbody>
+        </table>
+        <table class="TableStyle-CoreErrCodes" cellspacing="0" style="mc-table-style: url('../Resources/TableStyles/CoreErrCodes.css');">
+            <col class="Column-Column1" />
+            <col class="Column-Column2" />
+            <col class="Column-Column3" />
+            <tbody>
+                <tr class="Body-Body1">
+                    <td class="BodyB-Column1-Body1">-210</td>
+                    <td class="BodyB-Column2-Body1">S_TX_INVFILE</td>
+                    <td class="BodyA-Column3-Body1">file not found in file table</td>
+                </tr>
+            </tbody>
+        </table>
+        <table class="TableStyle-CoreErrCodes" cellspacing="0" style="mc-table-style: url('../Resources/TableStyles/CoreErrCodes.css');">
+            <col class="Column-Column1" />
+            <col class="Column-Column2" />
+            <col class="Column-Column3" />
+            <tbody>
+                <tr class="Body-Body1">
+                    <td class="BodyB-Column1-Body1">-211</td>
+                    <td class="BodyB-Column2-Body1">S_TX_TRUNCATED</td>
+                    <td class="BodyA-Column3-Body1">data retrieve had to be truncated</td>
+                </tr>
+            </tbody>
+        </table>
+        <table class="TableStyle-CoreErrCodes" cellspacing="0" style="mc-table-style: url('../Resources/TableStyles/CoreErrCodes.css');">
+            <col class="Column-Column1" />
+            <col class="Column-Column2" />
+            <col class="Column-Column3" />
+            <tbody>
+                <tr class="Body-Body1">
+                    <td class="BodyB-Column1-Body1">-212</td>
+                    <td class="BodyB-Column2-Body1">S_TX_INVDB</td>
+                    <td class="BodyA-Column3-Body1">database not found in database table</td>
+                </tr>
+            </tbody>
+        </table>
+        <table class="TableStyle-CoreErrCodes" cellspacing="0" style="mc-table-style: url('../Resources/TableStyles/CoreErrCodes.css');">
+            <col class="Column-Column1" />
+            <col class="Column-Column2" />
+            <col class="Column-Column3" />
+            <tbody>
+                <tr class="Body-Body1">
+                    <td class="BodyB-Column1-Body1">-214</td>
+                    <td class="BodyB-Column2-Body1">S_TX_CONNECT</td>
+                    <td class="BodyA-Column3-Body1">failed to connect to TFS</td>
+                </tr>
+            </tbody>
+        </table>
+        <table class="TableStyle-CoreErrCodes" cellspacing="0" style="mc-table-style: url('../Resources/TableStyles/CoreErrCodes.css');">
+            <col class="Column-Column1" />
+            <col class="Column-Column2" />
+            <col class="Column-Column3" />
+            <tbody>
+                <tr class="Body-Body1">
+                    <td class="BodyB-Column1-Body1">-215</td>
+                    <td class="BodyB-Column2-Body1">S_TX_HOSTNAME</td>
+                    <td class="BodyA-Column3-Body1">TFS host name not found</td>
+                </tr>
+            </tbody>
+        </table>
+        <table class="TableStyle-CoreErrCodes" cellspacing="0" style="mc-table-style: url('../Resources/TableStyles/CoreErrCodes.css');">
+            <col class="Column-Column1" />
+            <col class="Column-Column2" />
+            <col class="Column-Column3" />
+            <tbody>
+                <tr class="Body-Body1">
+                    <td class="BodyB-Column1-Body1">-216</td>
+                    <td class="BodyB-Column2-Body1">S_TX_LISTEN</td>
+                    <td class="BodyA-Column3-Body1">TCP/IP listen failure in TFS</td>
+                </tr>
+            </tbody>
+        </table>
+        <table class="TableStyle-CoreErrCodes" cellspacing="0" style="mc-table-style: url('../Resources/TableStyles/CoreErrCodes.css');">
+            <col class="Column-Column1" />
+            <col class="Column-Column2" />
+            <col class="Column-Column3" />
+            <tbody>
+                <tr class="Body-Body1">
+                    <td class="BodyB-Column1-Body1">-217</td>
+                    <td class="BodyB-Column2-Body1">S_TX_ACCEPT</td>
+                    <td class="BodyA-Column3-Body1">TCP/IP accept failure in TFS</td>
+                </tr>
+            </tbody>
+        </table>
+        <table class="TableStyle-CoreErrCodes" cellspacing="0" style="mc-table-style: url('../Resources/TableStyles/CoreErrCodes.css');">
+            <col class="Column-Column1" />
+            <col class="Column-Column2" />
+            <col class="Column-Column3" />
+            <tbody>
+                <tr class="Body-Body1">
+                    <td class="BodyB-Column1-Body1">-218</td>
+                    <td class="BodyB-Column2-Body1">S_TX_INVINI</td>
+                    <td class="BodyA-Column3-Body1">Invalid INI file</td>
+                </tr>
+            </tbody>
+        </table>
+        <table class="TableStyle-CoreErrCodes" cellspacing="0" style="mc-table-style: url('../Resources/TableStyles/CoreErrCodes.css');">
+            <col class="Column-Column1" />
+            <col class="Column-Column2" />
+            <col class="Column-Column3" />
+            <tbody>
+                <tr class="Body-Body1">
+                    <td class="BodyB-Column1-Body1">-219</td>
+                    <td class="BodyB-Column2-Body1">S_TX_DBOPEN</td>
+                    <td class="BodyA-Column3-Body1">Cannot destroy a database that is open by others</td>
+                </tr>
+            </tbody>
+        </table>
+        <table class="TableStyle-CoreErrCodes" cellspacing="0" style="mc-table-style: url('../Resources/TableStyles/CoreErrCodes.css');">
+            <col class="Column-Column1" />
+            <col class="Column-Column2" />
+            <col class="Column-Column3" />
+            <tbody>
+                <tr class="Body-Body1">
+                    <td class="BodyB-Column1-Body1">-220</td>
+                    <td class="BodyB-Column2-Body1">S_TX_INVTFS</td>
+                    <td class="BodyA-Column3-Body1">Invalid TFS handle</td>
+                </tr>
+            </tbody>
+        </table>
+        <table class="TableStyle-CoreErrCodes" cellspacing="0" style="mc-table-style: url('../Resources/TableStyles/CoreErrCodes.css');">
+            <col class="Column-Column1" />
+            <col class="Column-Column2" />
+            <col class="Column-Column3" />
+            <tbody>
+                <tr class="Body-Body1">
+                    <td class="BodyB-Column1-Body1">-221</td>
+                    <td class="BodyB-Column2-Body1">S_TX_TXPRECOMMIT</td>
+                    <td class="BodyA-Column3-Body1">transaction is precommitted</td>
+                </tr>
+            </tbody>
+        </table>
+        <table class="TableStyle-CoreErrCodes" cellspacing="0" style="mc-table-style: url('../Resources/TableStyles/CoreErrCodes.css');">
+            <col class="Column-Column1" />
+            <col class="Column-Column2" />
+            <col class="Column-Column3" />
+            <tbody>
+                <tr class="Body-Body1">
+                    <td class="BodyB-Column1-Body1">-222</td>
+                    <td class="BodyB-Column2-Body1">S_TX_ILLEGAL_MOD</td>
+                    <td class="BodyA-Column3-Body1">Illegal attempt to modify file(s) on read-only device</td>
+                </tr>
+            </tbody>
+        </table>
+        <table class="TableStyle-CoreErrCodes" cellspacing="0" style="mc-table-style: url('../Resources/TableStyles/CoreErrCodes.css');">
+            <col class="Column-Column1" />
+            <col class="Column-Column2" />
+            <col class="Column-Column3" />
+            <tbody>
+                <tr class="Body-Body1">
+                    <td class="BodyB-Column1-Body1">-223</td>
+                    <td class="BodyB-Column2-Body1">S_TX_NO_FILE_ACCESS</td>
+                    <td class="BodyA-Column3-Body1">illegal attempt to cause a file access on a diskless system</td>
+                </tr>
+            </tbody>
+        </table>
+        <table class="TableStyle-CoreErrCodes" cellspacing="0" style="mc-table-style: url('../Resources/TableStyles/CoreErrCodes.css');">
+            <col class="Column-Column1" />
+            <col class="Column-Column2" />
+            <col class="Column-Column3" />
+            <tbody>
+                <tr class="Body-Body1">
+                    <td class="BodyB-Column1-Body1">-224</td>
+                    <td class="BodyB-Column2-Body1">S_TX_TFSNOTINITED</td>
+                    <td class="BodyA-Column3-Body1">TFS was not intialized</td>
+                </tr>
+            </tbody>
+        </table>
+        <table class="TableStyle-CoreErrCodes" cellspacing="0" style="mc-table-style: url('../Resources/TableStyles/CoreErrCodes.css');">
+            <col class="Column-Column1" />
+            <col class="Column-Column2" />
+            <col class="Column-Column3" />
+            <tbody>
+                <tr class="Body-Body1">
+                    <td class="BodyB-Column1-Body1">-225</td>
+                    <td class="BodyB-Column2-Body1">S_TX_DOCROOT_USED</td>
+                    <td class="BodyA-Column3-Body1">The docroot is already in use</td>
+                </tr>
+            </tbody>
+        </table>
+        <table class="TableStyle-CoreErrCodes" cellspacing="0" style="mc-table-style: url('../Resources/TableStyles/CoreErrCodes.css');">
+            <col class="Column-Column1" />
+            <col class="Column-Column2" />
+            <col class="Column-Column3" />
+            <tbody>
+                <tr class="Body-Body1">
+                    <td class="BodyB-Column1-Body1">-226</td>
+                    <td class="BodyB-Column2-Body1">S_TX_NO_REMOTE</td>
+                    <td class="BodyA-Column3-Body1">Remote connections not allowed</td>
+                </tr>
+            </tbody>
+        </table>
+        <table class="TableStyle-CoreErrCodes" cellspacing="0" style="mc-table-style: url('../Resources/TableStyles/CoreErrCodes.css');">
+            <col class="Column-Column1" />
+            <col class="Column-Column2" />
+            <col class="Column-Column3" />
+            <tbody>
+                <tr class="Body-Body1">
+                    <td class="BodyB-Column1-Body1">-227</td>
+                    <td class="BodyB-Column2-Body1">S_TX_INVTFSTYPE</td>
+                    <td class="BodyA-Column3-Body1">Invalid TFS type</td>
+                </tr>
+            </tbody>
+        </table>
+        <h3><a MadCap:generatedBookmark="TOC" name="Import_Errors"></a>Import Errors</h3>
+        <table class="TableStyle-CoreErrCodes" cellspacing="0" style="mc-table-style: url('../Resources/TableStyles/CoreErrCodes.css');">
+            <col class="Column-Column1" />
+            <col class="Column-Column2" />
+            <col class="Column-Column3" />
+            <tr class="Body-Body1">
+                <th class="BodyE-Column1-Body1" style="font-weight: bold;">Value</th>
+                <th class="BodyE-Column2-Body1" style="font-weight: bold;">Name</th>
+                <th class="BodyD-Column3-Body1" style="font-weight: bold;">Description</th>
+            </tr>
+        </table>
+        <table class="TableStyle-CoreErrCodes" cellspacing="0" style="mc-table-style: url('../Resources/TableStyles/CoreErrCodes.css');">
+            <col class="Column-Column1" />
+            <col class="Column-Column2" />
+            <col class="Column-Column3" />
+            <tbody>
+                <tr class="Body-Body1">
+                    <td class="BodyB-Column1-Body1">-501</td>
+                    <td class="BodyB-Column2-Body1">DB_IMP_INVREC</td>
+                    <td class="BodyA-Column3-Body1">unrecognized record name</td>
+                </tr>
+            </tbody>
+        </table>
+        <table class="TableStyle-CoreErrCodes" cellspacing="0" style="mc-table-style: url('../Resources/TableStyles/CoreErrCodes.css');">
+            <col class="Column-Column1" />
+            <col class="Column-Column2" />
+            <col class="Column-Column3" />
+            <tbody>
+                <tr class="Body-Body1">
+                    <td class="BodyB-Column1-Body1">-502</td>
+                    <td class="BodyB-Column2-Body1">DB_IMP_INVFLD</td>
+                    <td class="BodyA-Column3-Body1">unrecognized field name</td>
+                </tr>
+            </tbody>
+        </table>
+        <table class="TableStyle-CoreErrCodes" cellspacing="0" style="mc-table-style: url('../Resources/TableStyles/CoreErrCodes.css');">
+            <col class="Column-Column1" />
+            <col class="Column-Column2" />
+            <col class="Column-Column3" />
+            <tbody>
+                <tr class="Body-Body1">
+                    <td class="BodyB-Column1-Body1">-503</td>
+                    <td class="BodyB-Column2-Body1">DB_IMP_INVSET</td>
+                    <td class="BodyA-Column3-Body1">unrecognized set name</td>
+                </tr>
+            </tbody>
+        </table>
+        <table class="TableStyle-CoreErrCodes" cellspacing="0" style="mc-table-style: url('../Resources/TableStyles/CoreErrCodes.css');">
+            <col class="Column-Column1" />
+            <col class="Column-Column2" />
+            <col class="Column-Column3" />
+            <tbody>
+                <tr class="Body-Body1">
+                    <td class="BodyB-Column1-Body1">-504</td>
+                    <td class="BodyB-Column2-Body1">DB_IMP_FLDTYPE</td>
+                    <td class="BodyA-Column3-Body1">unexpected data type</td>
+                </tr>
+            </tbody>
+        </table>
+        <table class="TableStyle-CoreErrCodes" cellspacing="0" style="mc-table-style: url('../Resources/TableStyles/CoreErrCodes.css');">
+            <col class="Column-Column1" />
+            <col class="Column-Column2" />
+            <col class="Column-Column3" />
+            <tbody>
+                <tr class="Body-Body1">
+                    <td class="BodyB-Column1-Body1">-505</td>
+                    <td class="BodyB-Column2-Body1">DB_IMP_FLDSIZE</td>
+                    <td class="BodyA-Column3-Body1">string field truncated</td>
+                </tr>
+            </tbody>
+        </table>
+        <table class="TableStyle-CoreErrCodes" cellspacing="0" style="mc-table-style: url('../Resources/TableStyles/CoreErrCodes.css');">
+            <col class="Column-Column1" />
+            <col class="Column-Column2" />
+            <col class="Column-Column3" />
+            <tbody>
+                <tr class="Body-Body1">
+                    <td class="BodyB-Column1-Body1">-506</td>
+                    <td class="BodyB-Column2-Body1">DB_IMP_NOFLD</td>
+                    <td class="BodyA-Column3-Body1">field missing</td>
+                </tr>
+            </tbody>
+        </table>
+        <table class="TableStyle-CoreErrCodes" cellspacing="0" style="mc-table-style: url('../Resources/TableStyles/CoreErrCodes.css');">
+            <col class="Column-Column1" />
+            <col class="Column-Column2" />
+            <col class="Column-Column3" />
+            <tbody>
+                <tr class="Body-Body1">
+                    <td class="BodyB-Column1-Body1">-507</td>
+                    <td class="BodyB-Column2-Body1">DB_IMP_NOKEY</td>
+                    <td class="BodyA-Column3-Body1">unique key value missing</td>
+                </tr>
+            </tbody>
+        </table>
+        <table class="TableStyle-CoreErrCodes" cellspacing="0" style="mc-table-style: url('../Resources/TableStyles/CoreErrCodes.css');">
+            <col class="Column-Column1" />
+            <col class="Column-Column2" />
+            <col class="Column-Column3" />
+            <tbody>
+                <tr class="Body-Body1">
+                    <td class="BodyB-Column1-Body1">-508</td>
+                    <td class="BodyB-Column2-Body1">DB_IMP_INVMEM</td>
+                    <td class="BodyA-Column3-Body1">record not a valid member of set</td>
+                </tr>
+            </tbody>
+        </table>
+        <table class="TableStyle-CoreErrCodes" cellspacing="0" style="mc-table-style: url('../Resources/TableStyles/CoreErrCodes.css');">
+            <col class="Column-Column1" />
+            <col class="Column-Column2" />
+            <col class="Column-Column3" />
+            <tbody>
+                <tr class="Body-Body1">
+                    <td class="BodyB-Column1-Body1">-509</td>
+                    <td class="BodyB-Column2-Body1">DB_IMP_INVOWN</td>
+                    <td class="BodyA-Column3-Body1">specified owner not a valid owner of set</td>
+                </tr>
+            </tbody>
+        </table>
+        <table class="TableStyle-CoreErrCodes" cellspacing="0" style="mc-table-style: url('../Resources/TableStyles/CoreErrCodes.css');">
+            <col class="Column-Column1" />
+            <col class="Column-Column2" />
+            <col class="Column-Column3" />
+            <tbody>
+                <tr class="Body-Body1">
+                    <td class="BodyB-Column1-Body1">-510</td>
+                    <td class="BodyB-Column2-Body1">DB_IMP_INVREF</td>
+                    <td class="BodyA-Column3-Body1">reference uses non-unique identifier</td>
+                </tr>
+            </tbody>
+        </table>
+        <table class="TableStyle-CoreErrCodes" cellspacing="0" style="mc-table-style: url('../Resources/TableStyles/CoreErrCodes.css');">
+            <col class="Column-Column1" />
+            <col class="Column-Column2" />
+            <col class="Column-Column3" />
+            <tbody>
+                <tr class="Body-Body1">
+                    <td class="BodyB-Column1-Body1">-511</td>
+                    <td class="BodyB-Column2-Body1">DB_IMP_INVDB</td>
+                    <td class="BodyA-Column3-Body1">invalid database name reference</td>
+                </tr>
+            </tbody>
+        </table>
+        <table class="TableStyle-CoreErrCodes" cellspacing="0" style="mc-table-style: url('../Resources/TableStyles/CoreErrCodes.css');">
+            <col class="Column-Column1" />
+            <col class="Column-Column2" />
+            <col class="Column-Column3" />
+            <tbody>
+                <tr class="Body-Body1">
+                    <td class="BodyB-Column1-Body1">-512</td>
+                    <td class="BodyB-Column2-Body1">DB_IMP_DUPMEM</td>
+                    <td class="BodyA-Column3-Body1">specified member already member of set</td>
+                </tr>
+            </tbody>
+        </table>
+        <h3><a MadCap:generatedBookmark="TOC" name="System_Errors"></a><a name="kanchor208"></a>System Errors</h3>
+        <table class="TableStyle-CoreErrCodes" cellspacing="0" style="mc-table-style: url('../Resources/TableStyles/CoreErrCodes.css');">
+            <col class="Column-Column1" />
+            <col class="Column-Column2" />
+            <col class="Column-Column3" />
+            <tr class="Body-Body1">
+                <th class="BodyE-Column1-Body1" style="font-weight: bold;">Value</th>
+                <th class="BodyE-Column2-Body1" style="font-weight: bold;">Name</th>
+                <th class="BodyD-Column3-Body1" style="font-weight: bold;">Description</th>
+            </tr>
+        </table>
+        <table class="TableStyle-CoreErrCodes" cellspacing="0" style="mc-table-style: url('../Resources/TableStyles/CoreErrCodes.css');">
+            <col class="Column-Column1" />
+            <col class="Column-Column2" />
+            <col class="Column-Column3" />
+            <tbody>
+                <tr class="Body-Body1">
+                    <td class="BodyB-Column1-Body1">-900</td>
+                    <td class="BodyB-Column2-Body1">S_NOSPACE</td>
+                    <td class="BodyA-Column3-Body1">out of disk space</td>
+                </tr>
+            </tbody>
+        </table>
+        <table class="TableStyle-CoreErrCodes" cellspacing="0" style="mc-table-style: url('../Resources/TableStyles/CoreErrCodes.css');">
+            <col class="Column-Column1" />
+            <col class="Column-Column2" />
+            <col class="Column-Column3" />
+            <tbody>
+                <tr class="Body-Body1">
+                    <td class="BodyB-Column1-Body1">-901</td>
+                    <td class="BodyB-Column2-Body1">S_SYSERR</td>
+                    <td class="BodyA-Column3-Body1">system error</td>
+                </tr>
+            </tbody>
+        </table>
+        <table class="TableStyle-CoreErrCodes" cellspacing="0" style="mc-table-style: url('../Resources/TableStyles/CoreErrCodes.css');">
+            <col class="Column-Column1" />
+            <col class="Column-Column2" />
+            <col class="Column-Column3" />
+            <tbody>
+                <tr class="Body-Body1">
+                    <td class="BodyB-Column1-Body1">-902</td>
+                    <td class="BodyB-Column2-Body1">S_FAULT</td>
+                    <td class="BodyA-Column3-Body1">page fault</td>
+                </tr>
+            </tbody>
+        </table>
+        <table class="TableStyle-CoreErrCodes" cellspacing="0" style="mc-table-style: url('../Resources/TableStyles/CoreErrCodes.css');">
+            <col class="Column-Column1" />
+            <col class="Column-Column2" />
+            <col class="Column-Column3" />
+            <tbody>
+                <tr class="Body-Body1">
+                    <td class="BodyB-Column1-Body1">-904</td>
+                    <td class="BodyB-Column2-Body1">S_NOMEMORY</td>
+                    <td class="BodyA-Column3-Body1">out of memory</td>
+                </tr>
+            </tbody>
+        </table>
+        <table class="TableStyle-CoreErrCodes" cellspacing="0" style="mc-table-style: url('../Resources/TableStyles/CoreErrCodes.css');">
+            <col class="Column-Column1" />
+            <col class="Column-Column2" />
+            <col class="Column-Column3" />
+            <tbody>
+                <tr class="Body-Body1">
+                    <td class="BodyB-Column1-Body1">-905</td>
+                    <td class="BodyB-Column2-Body1">S_NOFILE</td>
+                    <td class="BodyA-Column3-Body1">error opening data or key file</td>
+                </tr>
+            </tbody>
+        </table>
+        <table class="TableStyle-CoreErrCodes" cellspacing="0" style="mc-table-style: url('../Resources/TableStyles/CoreErrCodes.css');">
+            <col class="Column-Column1" />
+            <col class="Column-Column2" />
+            <col class="Column-Column3" />
+            <tbody>
+                <tr class="Body-Body1">
+                    <td class="BodyB-Column1-Body1">-906</td>
+                    <td class="BodyB-Column2-Body1">S_COMMITFAILED</td>
+                    <td class="BodyA-Column3-Body1">commit failed due to prelog file rename failure</td>
+                </tr>
+            </tbody>
+        </table>
+        <table class="TableStyle-CoreErrCodes" cellspacing="0" style="mc-table-style: url('../Resources/TableStyles/CoreErrCodes.css');">
+            <col class="Column-Column1" />
+            <col class="Column-Column2" />
+            <col class="Column-Column3" />
+            <tbody>
+                <tr class="Body-Body1">
+                    <td class="BodyB-Column1-Body1">-908</td>
+                    <td class="BodyB-Column2-Body1">S_BADLOCKS</td>
+                    <td class="BodyA-Column3-Body1">inconsistent database locks</td>
+                </tr>
+            </tbody>
+        </table>
+        <table class="TableStyle-CoreErrCodes" cellspacing="0" style="mc-table-style: url('../Resources/TableStyles/CoreErrCodes.css');">
+            <col class="Column-Column1" />
+            <col class="Column-Column2" />
+            <col class="Column-Column3" />
+            <tbody>
+                <tr class="Body-Body1">
+                    <td class="BodyB-Column1-Body1">-909</td>
+                    <td class="BodyB-Column2-Body1">S_RECLIMIT</td>
+                    <td class="BodyA-Column3-Body1">file record limit exceeded</td>
+                </tr>
+            </tbody>
+        </table>
+        <table class="TableStyle-CoreErrCodes" cellspacing="0" style="mc-table-style: url('../Resources/TableStyles/CoreErrCodes.css');">
+            <col class="Column-Column1" />
+            <col class="Column-Column2" />
+            <col class="Column-Column3" />
+            <tbody>
+                <tr class="Body-Body1">
+                    <td class="BodyB-Column1-Body1">-910</td>
+                    <td class="BodyB-Column2-Body1">S_KEYERR</td>
+                    <td class="BodyA-Column3-Body1">key file inconsistency</td>
+                </tr>
+            </tbody>
+        </table>
+        <table class="TableStyle-CoreErrCodes" cellspacing="0" style="mc-table-style: url('../Resources/TableStyles/CoreErrCodes.css');">
+            <col class="Column-Column1" />
+            <col class="Column-Column2" />
+            <col class="Column-Column3" />
+            <tbody>
+                <tr class="Body-Body1">
+                    <td class="BodyB-Column1-Body1">-911</td>
+                    <td class="BodyB-Column2-Body1">S_VARDATALEN</td>
+                    <td class="BodyA-Column3-Body1">vardata length inconsistency</td>
+                </tr>
+            </tbody>
+        </table>
+        <table class="TableStyle-CoreErrCodes" cellspacing="0" style="mc-table-style: url('../Resources/TableStyles/CoreErrCodes.css');">
+            <col class="Column-Column1" />
+            <col class="Column-Column2" />
+            <col class="Column-Column3" />
+            <tbody>
+                <tr class="Body-Body1">
+                    <td class="BodyB-Column1-Body1">-914</td>
+                    <td class="BodyB-Column2-Body1">S_BADREAD</td>
+                    <td class="BodyA-Column3-Body1">error reading from a data or key file</td>
+                </tr>
+            </tbody>
+        </table>
+        <table class="TableStyle-CoreErrCodes" cellspacing="0" style="mc-table-style: url('../Resources/TableStyles/CoreErrCodes.css');">
+            <col class="Column-Column1" />
+            <col class="Column-Column2" />
+            <col class="Column-Column3" />
+            <tbody>
+                <tr class="Body-Body1">
+                    <td class="BodyB-Column1-Body1">-916</td>
+                    <td class="BodyB-Column2-Body1">S_DEBUG</td>
+                    <td class="BodyA-Column3-Body1">debug check interrupt</td>
+                </tr>
+            </tbody>
+        </table>
+        <table class="TableStyle-CoreErrCodes" cellspacing="0" style="mc-table-style: url('../Resources/TableStyles/CoreErrCodes.css');">
+            <col class="Column-Column1" />
+            <col class="Column-Column2" />
+            <col class="Column-Column3" />
+            <tbody>
+                <tr class="Body-Body1">
+                    <td class="BodyB-Column1-Body1">-918</td>
+                    <td class="BodyB-Column2-Body1">S_VARDATAPTR</td>
+                    <td class="BodyA-Column3-Body1">vardata pointer inconsistency</td>
+                </tr>
+            </tbody>
+        </table>
+        <table class="TableStyle-CoreErrCodes" cellspacing="0" style="mc-table-style: url('../Resources/TableStyles/CoreErrCodes.css');">
+            <col class="Column-Column1" />
+            <col class="Column-Column2" />
+            <col class="Column-Column3" />
+            <tbody>
+                <tr class="Body-Body1">
+                    <td class="BodyB-Column1-Body1">-919</td>
+                    <td class="BodyB-Column2-Body1">S_BADWRITE</td>
+                    <td class="BodyA-Column3-Body1">error writing to a data or key file</td>
+                </tr>
+            </tbody>
+        </table>
+        <table class="TableStyle-CoreErrCodes" cellspacing="0" style="mc-table-style: url('../Resources/TableStyles/CoreErrCodes.css');">
+            <col class="Column-Column1" />
+            <col class="Column-Column2" />
+            <col class="Column-Column3" />
+            <tbody>
+                <tr class="Body-Body1">
+                    <td class="BodyB-Column1-Body1">-921</td>
+                    <td class="BodyB-Column2-Body1">S_DUPUSERID</td>
+                    <td class="BodyA-Column3-Body1">DBUSERID is already being used</td>
+                </tr>
+            </tbody>
+        </table>
+        <table class="TableStyle-CoreErrCodes" cellspacing="0" style="mc-table-style: url('../Resources/TableStyles/CoreErrCodes.css');">
+            <col class="Column-Column1" />
+            <col class="Column-Column2" />
+            <col class="Column-Column3" />
+            <tbody>
+                <tr class="Body-Body1">
+                    <td class="BodyB-Column1-Body1">-922</td>
+                    <td class="BodyB-Column2-Body1">S_LMBUSY</td>
+                    <td class="BodyA-Column3-Body1">the lock manager table(s) are full</td>
+                </tr>
+            </tbody>
+        </table>
+        <table class="TableStyle-CoreErrCodes" cellspacing="0" style="mc-table-style: url('../Resources/TableStyles/CoreErrCodes.css');">
+            <col class="Column-Column1" />
+            <col class="Column-Column2" />
+            <col class="Column-Column3" />
+            <tbody>
+                <tr class="Body-Body1">
+                    <td class="BodyB-Column1-Body1">-924</td>
+                    <td class="BodyB-Column2-Body1">S_INVNULL</td>
+                    <td class="BodyA-Column3-Body1">invalid NULL parameter</td>
+                </tr>
+            </tbody>
+        </table>
+        <table class="TableStyle-CoreErrCodes" cellspacing="0" style="mc-table-style: url('../Resources/TableStyles/CoreErrCodes.css');">
+            <col class="Column-Column1" />
+            <col class="Column-Column2" />
+            <col class="Column-Column3" />
+            <tbody>
+                <tr class="Body-Body1">
+                    <td class="BodyB-Column1-Body1">-926</td>
+                    <td class="BodyB-Column2-Body1">S_NOTBLOB</td>
+                    <td class="BodyA-Column3-Body1">the specified field is not a blob field</td>
+                </tr>
+            </tbody>
+        </table>
+        <table class="TableStyle-CoreErrCodes" cellspacing="0" style="mc-table-style: url('../Resources/TableStyles/CoreErrCodes.css');">
+            <col class="Column-Column1" />
+            <col class="Column-Column2" />
+            <col class="Column-Column3" />
+            <tbody>
+                <tr class="Body-Body1">
+                    <td class="BodyB-Column1-Body1">-927</td>
+                    <td class="BodyB-Column2-Body1">S_BLOBUPD</td>
+                    <td class="BodyA-Column3-Body1">attempt to directly update a blob field</td>
+                </tr>
+            </tbody>
+        </table>
+        <table class="TableStyle-CoreErrCodes" cellspacing="0" style="mc-table-style: url('../Resources/TableStyles/CoreErrCodes.css');">
+            <col class="Column-Column1" />
+            <col class="Column-Column2" />
+            <col class="Column-Column3" />
+            <tbody>
+                <tr class="Body-Body1">
+                    <td class="BodyB-Column1-Body1">-928</td>
+                    <td class="BodyB-Column2-Body1">S_BLOBPOS</td>
+                    <td class="BodyA-Column3-Body1">invalid blob position</td>
+                </tr>
+            </tbody>
+        </table>
+        <table class="TableStyle-CoreErrCodes" cellspacing="0" style="mc-table-style: url('../Resources/TableStyles/CoreErrCodes.css');">
+            <col class="Column-Column1" />
+            <col class="Column-Column2" />
+            <col class="Column-Column3" />
+            <tbody>
+                <tr class="Body-Body1">
+                    <td class="BodyB-Column1-Body1">-929</td>
+                    <td class="BodyB-Column2-Body1">S_BLOBERR</td>
+                    <td class="BodyA-Column3-Body1">unexpected blob error</td>
+                </tr>
+            </tbody>
+        </table>
+        <table class="TableStyle-CoreErrCodes" cellspacing="0" style="mc-table-style: url('../Resources/TableStyles/CoreErrCodes.css');">
+            <col class="Column-Column1" />
+            <col class="Column-Column2" />
+            <col class="Column-Column3" />
+            <tbody>
+                <tr class="Body-Body1">
+                    <td class="BodyB-Column1-Body1">-931</td>
+                    <td class="BodyB-Column2-Body1">S_INVLOGFILE</td>
+                    <td class="BodyA-Column3-Body1">invalid log file format</td>
+                </tr>
+            </tbody>
+        </table>
+        <table class="TableStyle-CoreErrCodes" cellspacing="0" style="mc-table-style: url('../Resources/TableStyles/CoreErrCodes.css');">
+            <col class="Column-Column1" />
+            <col class="Column-Column2" />
+            <col class="Column-Column3" />
+            <tbody>
+                <tr class="Body-Body1">
+                    <td class="BodyB-Column1-Body1">-932</td>
+                    <td class="BodyB-Column2-Body1">S_BUFFER_TOO_SMALL</td>
+                    <td class="BodyA-Column3-Body1">supplied buffer is too small</td>
+                </tr>
+            </tbody>
+        </table>
+        <table class="TableStyle-CoreErrCodes" cellspacing="0" style="mc-table-style: url('../Resources/TableStyles/CoreErrCodes.css');">
+            <col class="Column-Column1" />
+            <col class="Column-Column2" />
+            <col class="Column-Column3" />
+            <tbody>
+                <tr class="Body-Body1">
+                    <td class="BodyB-Column1-Body1">-933</td>
+                    <td class="BodyB-Column2-Body1">S_FCN_SEQUENCE</td>
+                    <td class="BodyA-Column3-Body1">function(s) called in an incorrect order</td>
+                </tr>
+            </tbody>
+        </table>
+        <table class="TableStyle-CoreErrCodes" cellspacing="0" style="mc-table-style: url('../Resources/TableStyles/CoreErrCodes.css');">
+            <col class="Column-Column1" />
+            <col class="Column-Column2" />
+            <col class="Column-Column3" />
+            <tbody>
+                <tr class="Body-Body1">
+                    <td class="BodyB-Column1-Body1">-939</td>
+                    <td class="BodyB-Column2-Body1">S_READONLY</td>
+                    <td class="BodyA-Column3-Body1">unable to update file due to READONLY option</td>
+                </tr>
+            </tbody>
+        </table>
+        <table class="TableStyle-CoreErrCodes" cellspacing="0" style="mc-table-style: url('../Resources/TableStyles/CoreErrCodes.css');">
+            <col class="Column-Column1" />
+            <col class="Column-Column2" />
+            <col class="Column-Column3" />
+            <tbody>
+                <tr class="Body-Body1">
+                    <td class="BodyB-Column1-Body1">-940</td>
+                    <td class="BodyB-Column2-Body1">S_EACCESS</td>
+                    <td class="BodyA-Column3-Body1">file in use</td>
+                </tr>
+            </tbody>
+        </table>
+        <table class="TableStyle-CoreErrCodes" cellspacing="0" style="mc-table-style: url('../Resources/TableStyles/CoreErrCodes.css');">
+            <col class="Column-Column1" />
+            <col class="Column-Column2" />
+            <col class="Column-Column3" />
+            <tbody>
+                <tr class="Body-Body1">
+                    <td class="BodyB-Column1-Body1">-961</td>
+                    <td class="BodyB-Column2-Body1">S_JNIERROR</td>
+                    <td class="BodyA-Column3-Body1">Java Native Method Error</td>
+                </tr>
+            </tbody>
+        </table>
+        <table class="TableStyle-CoreErrCodes" cellspacing="0" style="mc-table-style: url('../Resources/TableStyles/CoreErrCodes.css');">
+            <col class="Column-Column1" />
+            <col class="Column-Column2" />
+            <col class="Column-Column3" />
+            <tbody>
+                <tr class="Body-Body1">
+                    <td class="BodyB-Column1-Body1">-965</td>
+                    <td class="BodyB-Column2-Body1">S_REPLOG_ERROR</td>
+                    <td class="BodyA-Column3-Body1">Error creating/writing the replication log</td>
+                </tr>
+            </tbody>
+        </table>
+        <table class="TableStyle-CoreErrCodes" cellspacing="0" style="mc-table-style: url('../Resources/TableStyles/CoreErrCodes.css');">
+            <col class="Column-Column1" />
+            <col class="Column-Column2" />
+            <col class="Column-Column3" />
+            <tbody>
+                <tr class="Body-Body1">
+                    <td class="BodyB-Column1-Body1">-967</td>
+                    <td class="BodyB-Column2-Body1">S_DBDREAD</td>
+                    <td class="BodyA-Column3-Body1">Error reading dbd file</td>
+                </tr>
+            </tbody>
+        </table>
+        <hr MadCap:conditions="Default.ScreenOnly" width="100%" size="0" align="center" />
+        <p MadCap:conditions="Default.ScreenOnly" style="font-size: 8pt;"><span class="MyVariablesCopyright">Copyright © 2012, Raima Inc. All rights reserved.</span>
+        </p>
+        <script type="text/javascript" src="../SkinSupport/MadCapBodyEnd.js">
+        </script>
+        <p class="MCWebHelpFramesetLink MCWebHelpFramesetLinkBottom" style="display: none;"><a href="../../Default_CSH.htm#RM/Chapter4.htm" style="">Open topic with navigation</a>
+        </p>
+    </body>
+</html>

@@ -1,0 +1,30 @@
+<?xml version="1.0" encoding="utf-8"?>
+<!DOCTYPE html PUBLIC "-//W3C//DTD XHTML 1.0 Strict//EN" "http://www.w3.org/TR/xhtml1/DTD/xhtml1-strict.dtd">
+<html xmlns:MadCap="http://www.madcapsoftware.com/Schemas/MadCap.xsd" MadCap:tocPath="Replication and Mirroring Guide|User's Guide" MadCap:InPreviewMode="false" MadCap:PreloadImages="false" MadCap:RuntimeFileType="Topic" MadCap:TargetType="WebHelp" lang="en-us" xml:lang="en-us" class="" MadCap:PathToHelpSystem="../../" MadCap:HelpSystemFileName="Default.xml" MadCap:SearchType="Stem">
+    <head>
+        <meta http-equiv="Content-Type" content="text/html; charset=utf-8" /><title>Opening Slave Databases from Programs</title>
+        <link rel="icon" type="image/png" href="http://docs.raima.com/favicon.png" />
+        <link href="../SkinSupport/MadCap.css" rel="stylesheet" />
+        <link href="../Resources/Stylesheets/raima.css" rel="stylesheet" />
+        <script src="../SkinSupport/MadCapAll.js" type="text/javascript">
+        </script>
+    </head>
+    <body>
+        <p class="MCWebHelpFramesetLink MCWebHelpFramesetLinkTop" style="display: none;"><a href="../../Default_CSH.htm#DFUG/Chapter7.htm" style="">Open topic with navigation</a>
+        </p>
+        <div class="MCBreadcrumbsBox_0"><span class="MCBreadcrumbsPrefix">You are here: </span><a class="MCBreadcrumbsLink" href="../dbDataFlow.htm">Replication and Mirroring Guide</a><span class="MCBreadcrumbsDivider"> &gt; </span><span class="MCBreadcrumbsSelf">User's Guide</span><span class="MCBreadcrumbsDivider"> &gt; </span><span class="MCBreadcrumbs">Opening Slave Databases from Programs</span>
+        </div>
+        <h1>Opening Slave Databases from Programs</h1>
+        <p>The <code>d_open</code> or <code>d_iopen</code> functions are able to open a database mirror for reading. Referring to the example above, an application running on <code>RLM-lptp</code> can open the database mirrored from <code>tfs.raima.com</code> with the following statement:</p><pre xml:space="preserve">d_open("tfs.raima.com-<span class="MyVariablesDefaultPort">21553</span>/sales", "r", task);</pre>
+        <p>Or, if the application is not necessarily running on <code>RLM-lptp</code> (although it may be), the following reference to the sales database will work from anywhere:</p><pre xml:space="preserve">d_open("tfs.raima.com-<span class="MyVariablesDefaultPort">21553</span>/sales@RLM-lptp.raima.com", "r", task);</pre>
+        <p>Generally, the advantage of opening a mirror for reading is because it is local and therefore faster.</p>
+        <p>Another reason to mirror a database to the local computer is to view it in a union with other identically structured databases. For example, suppose that <code>acctg-main</code> needs to create a report on <code>invntory</code>, which is maintained independently at two sites. The first is on <code>tfs.raima.com</code> (as in the example above), and the second is on <code>sf.raima.uk</code>. A mirror of <code>invntory</code> from both sites is mirrored to the local computer. Then the following statement will be able to open a merged view of the inventory:</p><pre xml:space="preserve">d_open("tfs.raima.com-<span class="MyVariablesDefaultPort">21553</span>/invntory|sf.raima.uk-<span class="MyVariablesDefaultPort">21553</span>/invntory", "r", task);</pre>
+        <hr MadCap:conditions="Default.ScreenOnly" width="100%" size="0" align="center" />
+        <p MadCap:conditions="Default.ScreenOnly" style="font-size: 8pt;"><span class="MyVariablesCopyright">Copyright © 2012, Raima Inc. All rights reserved.</span>
+        </p>
+        <script type="text/javascript" src="../SkinSupport/MadCapBodyEnd.js">
+        </script>
+        <p class="MCWebHelpFramesetLink MCWebHelpFramesetLinkBottom" style="display: none;"><a href="../../Default_CSH.htm#DFUG/Chapter7.htm" style="">Open topic with navigation</a>
+        </p>
+    </body>
+</html>

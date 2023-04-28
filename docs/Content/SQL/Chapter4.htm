@@ -1,0 +1,494 @@
+<?xml version="1.0" encoding="utf-8"?>
+<!DOCTYPE html PUBLIC "-//W3C//DTD XHTML 1.0 Strict//EN" "http://www.w3.org/TR/xhtml1/DTD/xhtml1-strict.dtd">
+<html xmlns:MadCap="http://www.madcapsoftware.com/Schemas/MadCap.xsd" MadCap:tocPath="SQL API|SQL Language Guide|User's Guide" MadCap:InPreviewMode="false" MadCap:PreloadImages="false" MadCap:RuntimeFileType="Topic" MadCap:TargetType="WebHelp" lang="en-us" xml:lang="en-us" MadCap:PathToHelpSystem="../../" MadCap:HelpSystemFileName="Default.xml" MadCap:SearchType="Stem">
+    <head>
+        <meta http-equiv="Content-Type" content="text/html; charset=utf-8" /><title>Defining a Database</title>
+        <link rel="icon" type="image/png" href="http://docs.raima.com/favicon.png" />
+        <link href="../SkinSupport/MadCap.css" rel="stylesheet" />
+        <link href="../Resources/TableStyles/fncSummary.css" rel="stylesheet" />
+        <link href="../Resources/Stylesheets/raima.css" rel="stylesheet" />
+        <script src="../SkinSupport/MadCapAll.js" type="text/javascript">
+        </script>
+    </head>
+    <body>
+        <p class="MCWebHelpFramesetLink MCWebHelpFramesetLinkTop" style="display: none;"><a href="../../Default_CSH.htm#SQL/Chapter4.htm" style="">Open topic with navigation</a>
+        </p>
+        <div class="MCBreadcrumbsBox_0"><span class="MCBreadcrumbsPrefix">You are here: </span><a class="MCBreadcrumbsLink" href="../dbRSQL.htm">SQL API</a><span class="MCBreadcrumbsDivider"> &gt; </span><a class="MCBreadcrumbsLink" href="dbSQL.htm">SQL Language Guide</a><span class="MCBreadcrumbsDivider"> &gt; </span><a class="MCBreadcrumbsLink" href="Chapter1.htm">User's Guide</a><span class="MCBreadcrumbsDivider"> &gt; </span><span class="MCBreadcrumbs">Defining a Database</span>
+        </div>
+        <h1><a MadCap:generatedBookmark="TOC" name="Defining_a_Database"></a>Defining a Database</h1>
+        <p class="Quotation">But Vronsky felt that now especially it</p>
+        <p class="Quotation">was essential for him to clear up</p>
+        <p class="Quotation">and define his position if he were</p>
+        <p class="Quotation">to avoid getting into difficulties.</p>
+        <p class="QuoteAuthor">- Leo Tolstoy, Anna Karenin</p>
+        <p>A poorly designed database can create all kinds of difficulties for the user of a database application.   Unfortunately, the blame for those difficulties are often laid at the feet of the database management system which, try as it might, simply cannot use non-existent access paths to quickly get at the needed data.  Good database design is as much of an art as it is engineering and a solid understanding of the application requirements is a necessary prerequisite.  However, it is not the purpose of this document to teach you how to produce good database designs.  But you do need to understand that designing a database is a complex task and that the quality of the application in which it is to be used is highly dependent on the quality of the database design.   If you are not experienced in designing databases then it is highly recommended that you first consult any number of good books on that subject before setting out to develop your <span class="MyVariablesProductShortName">RDM</span> SQL database.</p>
+        <p>A database <i>schema</i> is the definition of what kind of data is to be stored and how that data is to be organized in the database.  The Database Definition Language (DDL) consists of the SQL statements that are used to describe a particular database schema (also called the database <i>definition</i>).   Three DDL statements are provided in <span class="MyVariablesRSQLName">RDM SQL</span>: <b>create database</b> (<b>schema</b>), <b>create domain</b>, and <b>create table</b>.  The <b>create database</b> (<b>schema</b>) statement names the database that will be defined by the <b>create domain</b> and <b>create table</b> statements that follow it.  The <b>create domain</b> statement allows you to define a special-purpose data type that can be used by a subsequent <b>create table</b> statement in the declaration of a table column.   The <b>create table</b> statement is used to define the characteristics of a table that will be stored in the database.  Each of these DDL statements are described in detail in the following sections.</p>
+        <h2><a MadCap:generatedBookmark="TOC" name="Create_Database"></a>Create Database</h2>
+        <p>The <b>create database</b> statement must be the first DDL statement issued for a new database specification.  The syntax for this statement is as follows.</p><pre class="Grammar" xml:space="preserve">create_schema_stmt:
+ 		<b>create</b> {<b>schema</b> | <b>database</b>} <i>db_name</i>
+			[<b>pagesize</b> = <i>num</i>] [<b>inmemory</b> [<b>persistent</b> |&#160;<b>volatile</b> |&#160;<b>read</b>]]</pre>
+        <p>Use of "<b>schema</b>" (instead of "<b>database</b>") follows the ISO/ANSI SQL standard convention.  The <b>pagesize</b> and <b>inmemory</b> options are <span class="MyVariablesRSQLName">RDM SQL</span> extensions.    The <b>pagesize</b> option sets the default page size for all of the database files.  If not specified, the default page size is 1024 bytes.  The <b>inmemory</b> option indicates that the database is to be kept entirely in memory.  The read, <b>persistent</b>, and <b>volatile</b> options control whether the database files are read from disk when the database is opened (<b>read</b>, <b>persistent</b>), and whether they are written to the disk when the database is closed (<b>persistent</b>).   The default <b>inmemory</b> option is <b>volatile</b> which means that the database is created empty the first time it is opened and will cease to exist either after the last application closes the database (e.g. Windows) or when the system is rebooted (Unix).  The read option means that the entire database is read from the files when the database is opened, changes to the data are allowed but are not written back to the files on closing.  The <b>persistent</b> option means that the entire database is read on opening and all changes that were made while the database was open are written when the database is closed.</p>
+        <p>The database consists of all of the tables that are declared in the <b>create table</b> statements that are issued after the <b>create database</b> statement.</p>
+        <p class="Heading">Examples</p><pre xml:space="preserve">create database sales;
+
+create database usage_stats no nulls pagesize = 512;</pre>
+        <h2><a MadCap:generatedBookmark="TOC" name="Create_Domain"></a>Create Domain</h2>
+        <p>A "domain" is simply a user-defined and named data type which can then be specified as the data type for columns that are declared in a <b>create table</b> statement.  The syntax for the <b>create domain</b> statement is shown below.</p><pre class="Grammar" xml:space="preserve">create_domain_stmt:
+		<b>create domain</b>   <![CDATA[ ]]><i>domain_name</i> [<b>as</b>] data_type
+			[<b>default</b> {<i>constant</i> | <b>null</b>}]
+</pre>
+        <p>The name of the domain is specified as the <i>domain_name</i>.  The data_type specifies the base type for the domain.  A <i>constant</i> value or <b>null</b> can be specified as the default.</p>
+        <p>The <b>distinct values</b> clause specifies the number of distinct values that will be stored in columns of this type.  The range clause specifies the minimum and maximum values that will be stored in columns of this type.  These two clauses provide important information that is only used by the <span class="MyVariablesRSQLName">RDM SQL</span> query optimizer to determine the best possible execution plan for a query.   Note that these clauses do not specify column validation checks.  It will still be possible to store values that are outside of the specified range.</p>
+        <p>The data types that are available in <span class="MyVariablesRSQLName">RDM SQL</span> are given in the following syntax specification. </p><pre class="Grammar" xml:space="preserve">
+data_type:
+		base_type |&#160;blob_type</pre><pre class="Grammar" xml:space="preserve">
+base_type:
+ 	 	{<b>character</b> | <b>char</b> } [(<i>length</i>)]
+ 	|	{{<b>character</b> | <b>char</b>} <b>varying</b> | <b>varchar</b> } (<i>length</i>)
+ 	|	{<b>binary</b> [(<i>length</i>)]
+	|	{<b>double</b> [<b>precision</b>] | <b>float</b> | <b>real</b> }
+ 	|	{ <b>tinyint</b> | <b>smallint</b> | <b>int</b> | <b>integer</b> | <b>long</b> | <b>bigint</b>}
+ 	|	<b>date</b> | <b>time</b> | <b>timestamp</b>   <![CDATA[  
+]]></pre><pre class="Grammar" xml:space="preserve">
+blob_type:
+ 		{{<b>character</b> | <b>char</b>} <b>large object</b> | <b>long varchar</b> | <b>clob</b>} [(<i>length</i>)] file_option
+       |	{<b>binary large object</b> | <b>large varbinary</b> | <b>blob</b>} [(<i>length</i>)] file_option</pre><pre class="Grammar" xml:space="preserve">file_option:
+	[<b>pagesize</b> = <i>num</i>] [<b>inmemory</b> [<b>persistent</b> |&#160;<b>volatile</b> |&#160;<b>read</b>]]</pre>
+        <p>Each specific blob instance is stored in a separate set of blob file pages using only as many pages as are needed to store the entire blob.  If the size of the blob data is less than a page the unused space on that page will remain unused.  Hence, you should probably supply a <b>pagesize</b> value that will minimize the amount of unused page space based on the average size of your blob data.</p>
+        <p class="Heading">Examples</p><pre xml:space="preserve">create domain birth_date as
+ 	date range date "1900-01-01" to date "2011-01-01";</pre><pre xml:space="preserve">create domain gender as
+	char distinct values = 2;</pre><pre xml:space="preserve">create domain us_state as
+	char(2) distinct values = 53</pre>
+        <h2><a MadCap:generatedBookmark="TOC" name="Create_Table"></a>Create Table</h2>
+        <h3><a MadCap:generatedBookmark="TOC" name="Standard_Database_Table"></a>Standard Database Table</h3>
+        <p>The <b>create table</b> statement is used to define a table to be included in the database.  <b>Create table</b> statements can only be issued after the <b>create database</b> statement and before issuing any other non-DDL statements.  Any domain types that are used in column declarations included in the <b>create table</b> statement must have already been declared through the issuance of a prior <b>create domain</b> statement.  The syntax for the <b>create table</b> statement is as follows.</p><pre class="Grammar" xml:space="preserve">standard_table:
+ 		<b>create</b> [<b>circular</b>] <b>table</b>   <![CDATA[  ]]><i>table_name</i> (
+ 			column_def[, column_def]...
+ 			[, key_def[, key_def]...]
+ 		) [<b>pagesize</b> = <i>num</i>] [<b>inmemory</b> [<b>persistent</b> | <b>volatile</b> | <b>read</b>]]
+			[<b>maxpgs</b> = <i>num</i>] [<b>maxrows</b> = <i>num</i>]</pre><pre class="Grammar" xml:space="preserve">column_def:
+ 		<i>column_name</i> {type_spec | <i>domain_name</i>}
+			[<b>distinct values</b> = <i>num</i>] [<b>range</b>   <![CDATA[ ]]><i>constant</i>   <![CDATA[ ]]><b>to</b>   <![CDATA[ ]]><i>constant</i>]
+			[<b>not null</b>] [key_spec] [refs_spec]</pre><pre class="Grammar">type_spec:
+ 		data_type [<b>default</b> {<i>constant</i> | <b>null</b>}]
+</pre><pre class="Grammar" xml:space="preserve">key_spec:
+		[<b>primary</b> | <b>unique</b>] <b>key</b> ['['<i>keysize</i>']']
+	|	{<b>primary</b> |&#160;<b>unique</b>}&#160;<b>key</b> [<b>hash</b> {&#160;<b>(</b><i>num</i><b>)</b> |&#160;<b>of</b>   <![CDATA[ ]]><i>num</i>   <![CDATA[ ]]><b>rows</b>}] ['['<i>keysize</i>']']</pre><pre class="Grammar" xml:space="preserve">
+refs_spec:
+		<b>references</b>    <![CDATA[  ]]><i>table_name</i>[.<i>column_name</i>] [triggered_action]</pre><pre class="Grammar" xml:space="preserve">key_def:
+		[<b>primary</b> | <b>unique</b>] <b>key</b> [<b>hash</b> {<b>(</b><i>num</i><b>)</b> |&#160;<b>of</b>   <![CDATA[   ]]><i>num</i>   <![CDATA[   ]]><b>rows</b>}] ['['<i>keysize</i>']'] [<i>key_name</i>] 
+ 			(<i>column_name</i>[<b>asc</b> |&#160;<b>desc</b>] [, <i>column_name</i>[<b>asc</b> |&#160;<b>desc</b>] ]...)
+			[<b>pagesize</b> = <i>num</i>] [<b>inmemory</b> [<b>persistent</b> |&#160;<b>volatile</b> | <b>read</b>]] [<b>maxpgs</b> = <i>num</i>] 
+ 	|	<b>foreign key</b> [<i>set_name</i>] <b>(</b><i>column_name</i>[, <i>column_name</i>]...
+			<b>references</b>   <![CDATA[ ]]><i>table_name</i>[<b>(</b><i>column_name</i>[, <i>column_name</i>]...<b>)</b>]
+ 			[triggered_action]</pre><pre class="Grammar" xml:space="preserve">
+triggered_action:
+ 		<b>on update</b> action_spec  [<b>on delete</b> action_spec]
+ 	| 	<b>on delete</b> action_spec [<b>on update</b> action_spec]</pre><pre class="Grammar" xml:space="preserve">action_spec:
+               <b>cascade</b> |&#160;<b>restrict</b>&#160;|&#160;<b>set null</b></pre>
+        <p>The <i>table_name</i> is a user-specified identifier that names the table.  The contents of the table is comprised of the columns that are declared within it.  Columns are declared to be of a specific data type which is either explicitly given or specified through use of a previously declared domain name.  A default value and display format can also optionally be specified unless the column was declared with a domain type.</p>
+        <p>The <b>distinct values</b> clause specifies the number of distinct values that will be stored in this column.  The <b>range</b> clause specifies the minimum and maximum values that will be stored in the column.  These two clauses provide important information that is only used by the <span class="MyVariablesRSQLName">RDM SQL</span> query optimizer to determine the best possible execution plan for a query.   Note that these clauses do not specify column validation checks.  It will still be possible to store values that are outside of the specified range.</p>
+        <p>Columns can be specified with one or more constraints which declare the column to be:</p>
+        <ul>
+            <li value="1"><b>not null</b>—null values are not allowed for the column,</li>
+            <li value="2">a <b>primary</b>/<b>unique</b> or non-unique <b>key</b>—on which an index will be automatically created,</li>
+            <li value="3">a foreign key that <b>references</b> the primary/unique key of the specified table.</li>
+        </ul>
+        <p>Foreign key references are automatically implemented using <span class="MyVariablesProductShortName">RDM</span> sets.  The name of the column becomes the name of the <span class="MyVariablesProductShortName">RDM</span> set.  The <span class="MyVariablesProductShortName">RDM</span> record type into which the SQL table is mapped will not contain a data field for this column.  The SQL column value is retrieved through the owner of the set—i.e., the primary key column's value.   A triggered_action can be specified with foreign key columns in order to specify what should happen when the referenced row (the owner record instance) is updated or deleted.  The default action is <b>restrict</b> meaning that primary key rows that have existing foreign key references cannot be updated/deleted.  If <b>on ... cascade</b> is specified, then all of the referenced rows are updated or deleted when the primary key row is updated (i.e., the primary key column value) or deleted.  Note that the referencing table may itself have a primary key declared that is referenced by foreign keys in other tables that may not have a <b>cascade</b> triggered action specified.  Thus, a delete of the referenced row of a cascade delete allowed table may be denied due to a restrict foreign key on a row of a referencing table.</p>
+        <p>A key_def on a table is used to declare multi-column primary/unique/non-unique keys and foreign keys. The [<b>primary</b> | <b>unique</b>] <b>key</b> clause is used to identify the columns from the table on which a key is to be formed. You can specify the sort order for each column to be either <b>asc</b>ending (default) or <b>desc</b>ending. A table can have only one <b>primary key</b>.  If a <i>key_name</i> is specified then that will be the name of the <span class="MyVariablesProductShortName">RDM</span> compound key.  If not specified a unique system-generated name will be used.</p>
+        <p>Each table is contained in a separate <span class="MyVariablesProductShortName">RDM</span> data file.  Each key is contained in a separate <span class="MyVariablesProductShortName">RDM</span> key file.  The values for each blob type column is stored in a separate <span class="MyVariablesProductShortName">RDM</span> blob file.  The file_option can optionally be specified to provide <span class="MyVariablesProductShortName">RDM</span>-specific file characteristics.</p>
+        <p class="Heading">Examples</p><pre xml:space="preserve">create table sales_office(
+ 	office_id char(3) primary key,
+ 	city char(24),
+ 	state char(2)
+);
+create table salesperson(
+ 	sale_id integer primary key,
+ 	name char(38) not null,
+ 	sex gender,
+   dob birth_date,
+ 	hired_on date default today,
+ 	sales_tot double,
+ 	office char(3) references outlet,
+ 	mgr_id integer references salesperson,
+ 	unique key sale_key(name, office)
+);
+create table customer(
+ 	cust_id integer primary key,
+	name char(38),
+ 	sale_id integer not null 
+ 		references salesperson 
+ 			on update cascade 
+ 			on delete restrict
+);</pre>
+        <h3><a MadCap:generatedBookmark="TOC" name="Virtual_Table"></a>Virtual Table</h3>
+        <p>An <span class="MyVariablesRSQLName">RDM SQL</span><i>virtual table</i> is defined through a combination of the <b>create virtual table</b> statement and a set of user-written C functions that conform to a particular interface specification.  A pointer to a pre-defined structure array that contains an entry for each virtual table with the addresses of each of the virtual table interface functions is passed into SQL before the database is opened.  These functions are then called by SQL at the appropriate times during the execution of any SQL statement that references the virtual table.   This interaction is depicted in Figure 4 which shows SQL calling the function in the application's virtual table function module to fetch a row of weather data from a wireless sensor network (WSN).  Note that in this example by storing the data retrieved from the virtual table in a standard table, <span class="MyVariablesProductShortName">RDM</span> can then replicate that data to an outside host DBMS (e.g., RDM Server or some other well-known SQL DBMS).   Also note that the green boxes represent code that is compiled as part of the user's application while the blue boxes represent <span class="MyVariablesProductShortName">RDM</span> systems code.</p>
+        <p>The syntax for the <b>create virtual table</b> statement is given below.</p><pre class="Grammar" xml:space="preserve">virtual_table:
+ 		<b>create virtual</b> [<b>read only</b>] <b>table</b>   <![CDATA[ ]]><i>table_name</i> (
+			vcolumn_def[, vcolumn_def]…
+ 		)</pre><pre class="Grammar" xml:space="preserve">vcolumn_def:
+		<i>column_name</i> base_type
+			[<b>distinct values</b> = <i>num</i>] [<b>range</b>   <![CDATA[ ]]><i>constant</i>   <![CDATA[ ]]><b>to</b>   <![CDATA[ ]]><i>constant</i>]
+			[<b>primary key</b>]</pre><pre class="Grammar" xml:space="preserve">
+base_type:
+ 	 	{<b>character</b> | <b>char</b> } [(<i>length</i>)]
+ 	|	{{<b>character</b> | <b>char</b>} <b>varying</b> | <b>varchar</b> } (<i>length</i>)
+ 	|	{<b>binary</b> [(<i>length</i>)]
+	|	{<b>double</b> [<b>precision</b>] | <b>float</b> | <b>real</b> }
+ 	|	{ <b>tinyint</b> | <b>smallint</b> | <b>int</b> | <b>integer</b> | <b>long</b> | <b>bigint</b>}
+ 	|	<b>date</b> | <b>time</b> | <b>timestamp</b>   <![CDATA[  
+]]></pre>
+        <p class="Caption" style="text-align: left;">
+            <img src="../Resources/Images/virt-fig4_666x499.png" style="width: 666;height: 499;" />
+            <br />Figure 4. Virtual Tables in <span class="MyVariablesRSQLName">RDM SQL</span></p>
+        <p>No <b>create virtual table</b> statement for a given database can be submitted until all standard <b>create table</b> statements have first been submitted.   In other words, the <b>create virtual table</b> statements must all come at the end of your database schema specification.   Only one <b>primary key</b> column declaration can appear in a <b>create virtual table</b> statement.  Values for this column must be unique and will be used by SQL in calls to the user-function in the virtual table interface API to find the row for a specified value.</p>
+        <p>The DDL schema specification for the aforementioned wireless weather sensor database is given in the following example.</p><pre xml:space="preserve">create database weather_db;
+create table location(  /* location of weather sensor */
+ 	longitude integer,
+ 	latitude integer,
+ 	sensor_id bigint,
+ 	descr char(48),
+ 	county char(24),
+ 	state char(2),
+ 	primary key loc_id(longitude, latitude)
+);
+create table weather_summary(
+ 	longitude integer,
+ 	latitude integer,
+ 	rdg_date date,
+ 	hour_of_day smallint,
+ 	avg_temp smallint,
+ 	avg_ press smallint,
+ 	avg_hum smallint,
+ 	avg_lumens smallint,
+ 	foreign key (longitude, latitude) references location
+);
+create virtual readonly table weather_data(
+ 	sensor_id bigint primary key,
+ 	loc_long integer,
+ 	loc_lat integer,
+ 	rdg_time timestamp,
+ 	temperature smallint,
+ 	pressure smallint,
+ 	humidity smallint,
+ 	light smallint,
+ 	power integer
+);</pre>
+        <h2><a MadCap:generatedBookmark="TOC" name="Compiling_a_DDL_Specification"></a>Compiling a DDL Specification</h2>
+        <p>Of course, you can interactively enter your DDL statements using <code><span class="MyVariablesUrdmsql">rdmsql</span></code> (or any other ODBC-based SQL utility) but you will normally create the DDL specification for your database using a text editor and storing it in a text file.    A good convention is to store SQL scripts in files with a ".sql" extension.  A convention that I like to use is to name the DDL specification file "<i>dbname</i>.sql".  For example, the DDL files for the two example databases described in the next section are "nsfawards.sql" and "bookshop.sql".</p>
+        <p>Assuming you too use the same convention. you can use <span class="MyVariablesUrdmsql">rdmsql</span> to compile an SQL DDL file as follows.</p><pre xml:space="preserve">
+            <span class="MyVariablesUrdmsql">rdmsql</span> –b [<i>@hostname:port</i>] <i>dbname</i>.sql</pre>
+        <p>If the <i>@hostname:port</i> is not specified, @localhost:<span class="MyVariablesDefaultPort">21553</span> will be used.   Errors will be reported to stdout and identify the file and line number of the offending SQL statement.   A successful compilation of a DDL specification will produce the <i>dbname</i>_cat.c and <i>dbname</i>_cat.h files in the current directory (when the "generate C files" option is enabled -see <code><a href="../SQLRM/rsqlSetGenCFiles.htm">rsqlSetGenCFiles</a></code>) and the database dictionary file (<i>dbname</i>.dbd), catalog file (<i>dbname</i>.cat), data files (<i>dbname</i>.d*), and key files (<i>dbname</i>.k*) in a directory named dbname on the TFS.   The database will be initialized and ready for use.</p>
+        <h2><a MadCap:generatedBookmark="TOC" name="Example_Databases"></a>Example Databases</h2>
+        <p>Two example databases are provided with <span class="MyVariablesRSQLName">RDM SQL</span> that  facilitate learning how to use <span class="MyVariablesRSQLName">RDM SQL</span> and will be used in most of the examples given in this book.  This section describes the two databases by presenting the DDL specifications along with an explanation of how that data would be used in a SQL application.   The first database contains actual data derived from over 130,000 National Science Foundation (USA) research grants that were awarded during the years 1990 through 2003.  The second database is for a hypothetical bookshop that only sells high-end, rare antiquarian books.</p>
+        <h3><a MadCap:generatedBookmark="TOC" name="National_Science_Foundation_Awards_Database"></a><a name="National"></a>National Science Foundation Awards Database</h3>
+        <p>The data used in this example has been extracted from the University of California Irvine Knowledge Discovery in Databases Archive (<a href="http://kdd.ics.uci.edu/" target="_blank">http://kdd.ics.uci.edu/</a>).  The original source data can be found at  <a href="http://kdd.ics.uci.edu/databases/nsfabs/nsfawards.htm" target="_blank">http://kdd.ics.uci.edu/databases/nsfabs/nsfawards.htm</a>l.  The data was processed by a Raima-developed <span class="MyVariablesRSQLName">RDM SQL</span> program that, in addition to pulling out the data from each award document, converted all personal names to a "last name, first name, …" format and, where possible, identified each person's gender from the first name. The complete DDL specification for the NSF awards database is shown below.</p>
+        <p class="Notes"><b>NOTE:</b>&#160;The NSF Awards example is a large database and may take a few minutes to create and populate.</p><pre xml:space="preserve">create database nsfawards;
+create table person(
+    name        char(35) primary key,
+    gender      char(1) distinct values = 3,
+    jobclass    char(1) distinct values = 2
+);
+create table sponsor(
+    name        char(50) primary key,
+    addr        char(40),
+    city        char(20),
+    state       char(2) distinct values = 100,
+    zip         char(5)
+);
+create table nsforg(
+    orgid       char(3) primary key,
+    name        char(40)
+);
+create table nsfprog(
+    progid      char(4) primary key,
+    descr       char(40)
+);
+create table nsfapp(
+    appid       char(10) primary key,
+    descr       char(40)
+);
+create table award(
+    awardno     integer primary key,
+    title       char(200),
+    award_date  date key,
+    instr       char(3) distinct values = 11,
+    start_date  date,
+    exp_date    date key,
+    amount      double key,
+    abstract    long varchar,
+    prgm_mgr    char(35) references person,
+    sponsor_nm  char(50) references sponsor,
+    orgid       char(3)  references nsforg
+);
+create table investigator(
+    awardno     integer  references award,
+    name        char(35) references person
+);
+create table field_apps(
+    awardno     integer  references award,
+    appid       char(10) references nsfapp
+);   
+create table progrefs(
+    awardno     integer  references award,
+    progid      char(4)  references nsfprog
+);</pre>
+        <p>Descriptions for each of the tables declared in the <code>nsfawards</code> database are given in the following table.</p>
+        <table style="caption-side: top;mc-table-style: url('../Resources/TableStyles/fncSummary.css');margin-left: 0;margin-right: auto;" class="TableStyle-fncSummary" cellspacing="0">
+            <caption>Table 4. NSF Awards Database Table Descriptions</caption>
+            <col class="Column-Column1" />
+            <col class="Column-Column2" />
+            <thead>
+                <tr class="Head-Header1">
+                    <th class="HeadE-Column1-Header1">Table Name</th>
+                    <th class="HeadD-Column2-Header1">Description</th>
+                </tr>
+            </thead>
+            <tbody>
+                <tr class="Body-Body1">
+                    <td style="font-family: monospace;" class="BodyE-Column1-Body1">person</td>
+                    <td class="BodyD-Column2-Body1">Contains one row for each investigator or NSF program manager.  An investigator (jobcclass = "I") is a person who is doing the research.  The NSF program manager (jobcclass =  "P")  oversees the research project on behalf of the NSF.   An award can have more than one investigator but only one program manager.  The gender column is derived from the first name but has three values "M", "F", and "U" for "unknown" when the gender based on the first name could not be determined (about 13%).</td>
+                </tr>
+                <tr class="Body-Body1">
+                    <td style="font-family: monospace;" class="BodyE-Column1-Body1">sponsor</td>
+                    <td class="BodyD-Column2-Body1">Institution that is sponsoring the research.  Usually where the principal investigator is employed.  Each award has a single sponsor.</td>
+                </tr>
+                <tr class="Body-Body1">
+                    <td style="font-family: monospace;" class="BodyE-Column1-Body1">nsforg</td>
+                    <td class="BodyD-Column2-Body1">NSF organization.  The highest level NSF division or office under which the grant is awarded.</td>
+                </tr>
+                <tr class="Body-Body1">
+                    <td style="font-family: monospace;" class="BodyE-Column1-Body1">nsfprog</td>
+                    <td class="BodyD-Column2-Body1">Specific NSF programs responsible for funding research grants.</td>
+                </tr>
+                <tr class="Body-Body1">
+                    <td style="font-family: monospace;" class="BodyE-Column1-Body1">nsfapp</td>
+                    <td class="BodyD-Column2-Body1">NSF application areas that the research impacts.</td>
+                </tr>
+                <tr class="Body-Body1">
+                    <td style="font-family: monospace;" class="BodyE-Column1-Body1">award</td>
+                    <td class="BodyD-Column2-Body1">Specific data about the research grant.  The columns are fairly self-explanatory.  For clarity the exp_data column contains the award expiration data (i.e., when the money runs out).  The amount column contains the total funding amount.  The instr column is a code indicating the award instrument (e.g.,  "CTG" = "continuing", "STD" = "standard", etc.).</td>
+                </tr>
+                <tr class="Body-Body1">
+                    <td style="font-family: monospace;" class="BodyE-Column1-Body1">investigator</td>
+                    <td class="BodyD-Column2-Body1">The specific investigators responsible for carrying out the research.  This table is used to form a many-to-many relationship between the person and award tables.</td>
+                </tr>
+                <tr class="Body-Body1">
+                    <td style="font-family: monospace;" class="BodyE-Column1-Body1">field_apps</td>
+                    <td class="BodyD-Column2-Body1">NSF application areas for which the research is intended.  This table is used to form a many-to-many relationship between the nsfapp and award tables.</td>
+                </tr>
+                <tr class="Body-Body1">
+                    <td style="font-family: monospace;" class="BodyB-Column1-Body1">progrefs</td>
+                    <td class="BodyA-Column2-Body1">Specific programs under which the research is funded.  This table is used to form a many-to-many relationship between the nsfprog and award tables.</td>
+                </tr>
+            </tbody>
+        </table>
+        <p>Note that the interpretations given in the above descriptions are my own and may not be completely accurate (e.g., it could be that NSF programs are not actually responsible for funding research grants).  However, my intent is to simply use this data for the purpose of illustration (although we will later delve into an interesting gender analysis).</p>
+        <p>Note the use of the <b>distinct values</b> clause in the DDL specification.  In particular, where the number of actual distinct values is significantly less than the total number of rows in the table it is important to indicate this so that the SQL query optimizer can make better choices as to access method.   The <a href="Chapter9.htm">Concurrent Database Access</a> section explains in greater detail how the <span class="MyVariablesProductShortName">RDM</span> query optimizer works.</p>
+        <p>A schema diagram for the <code>nsfawards</code> database is shown below.  Each box represents a table and each arrow represents a one-to-many relationship between two tables.  The arrow label is the foreign key column (declared using the <b>references</b> clause in the DDL specification) in the target (i.e. the "many" side) table on which the relationship is formed.</p>
+        <p class="Caption" style="text-align: left;">
+            <img src="../Resources/Images/nsf-fig5_531x292.jpg" style="width: 531;height: 292;" />
+            <br />Figure 5 - NSF Awards Database Schema Diagram</p>
+        <h3><a MadCap:generatedBookmark="TOC" name="Antiquarian_Bookshop_Database"></a><a name="Antiquar"></a>Antiquarian Bookshop Database</h3>
+        <p>Our fictional bookshop is located in Hertford, England (a very real and charming town north of London).  It is located in a building constructed around 1735 and has two rather smallish rooms on two floors with floor-to-ceiling bookshelves throughout.  Upon entering, one is immediately transported to a much earlier era being quite overwhelmed by the wonderful sight and odor of the ancient mahogany wood in which the entire interior is lined along with the rare and ancient books that reside on them.  There is a little bell that announces one's entrance into the shop but it is not really needed, as the delightfully squeaky floor boards quite clearly makes your presence known.</p>
+        <p>In spite of the ancient setting and very old and rare books, this bookshop has a very modern Internet storefront through which it sells and auctions off its expensive inventory.  A computer system contains a database describing the inventory and manages the sales and auction processes.  The database schema for our bookshop is given below.</p><pre xml:space="preserve">create database bookshop;
+
+create table author(
+    last_name   char(13) primary key,
+    full_name   char(35),    
+    gender      char(1) distinct values = 2,
+    yr_born     smallint,
+    yr_died     smallint,
+    short_bio   varchar(250)
+);
+
+create table genres(
+    text       char(31) primary key
+);
+
+create table subjects(
+    text       char(51) primary key
+);
+
+create table book(
+    bookid      char(14) primary key,
+    last_name   char(13) 
+        references author on delete cascade on update cascade,
+    title       varchar(255),
+    descr       char(61),
+    publisher   char(136),
+    publ_year   smallint key,
+    lc_class    char(33),
+    date_acqd   date,
+    date_sold   date,
+    price       double,
+    cost        double
+);
+
+create table related_name(
+    bookid      char(14) 
+        references book on delete cascade on update cascade,
+    name        char(61)
+);
+    
+create table genres_books(
+    bookid      char(14) 
+        references book on delete cascade on update cascade,
+    genre       char(31) 
+        references genres
+);
+
+create table subjects_books(
+    bookid      char(14) 
+        references book on delete cascade on update cascade,
+    subject     char(51) 
+        references subjects
+);
+
+create table acctmgr(
+    mgrid       char(7) primary key,
+    name        char(24),
+    hire_date   date,
+    commission  double
+);
+
+create table patron(
+    patid       char(3) primary key,
+    name        char(30),
+    street      char(30),
+    city        char(17),
+    state       char(2),
+    country     char(2),
+    pc          char(10),
+    email       char(63),
+    phone       char(15),
+    mgrid       char(7) 
+        references acctmgr
+);
+
+create table note(
+    noteid      integer primary key,
+    bookid      char(14) 
+        references book on delete cascade on update cascade,
+    patid       char(3) 
+        references patron on delete cascade on update cascade
+);
+
+create table note_line(
+    noteid      integer 
+        references note on delete cascade on update cascade,
+    text        char(61)
+);
+
+create table sale(
+    bookid      char(14) 
+        references book on delete cascade on update cascade,
+    patid       char(3) 
+        references patron on delete cascade on update cascade
+);
+
+create table auction(
+    aucid       integer primary key,
+    bookid      char(14) 
+        references book on delete cascade on update cascade,
+    mgrid       char(7) 
+        references acctmgr,
+    start_date  date,
+    end_date    date,
+    reserve     double,
+    curr_bid    double
+);
+
+create table bid(
+    aucid       integer 
+        references auction on delete cascade on update cascade,
+    patid       char(3) 
+        references patron on delete cascade on update cascade,
+    offer       double,
+    bid_ts      timestamp
+);</pre>
+        <p>Descriptions for each of the above tables are given below.</p>
+        <table style="caption-side: top;mc-table-style: url('../Resources/TableStyles/fncSummary.css');margin-left: 0;margin-right: auto;" class="TableStyle-fncSummary" cellspacing="0">
+            <caption>Table 5. Bookshop Database Table Descriptions</caption>
+            <col class="Column-Column1" />
+            <col class="Column-Column2" />
+            <thead>
+                <tr class="Head-Header1">
+                    <th class="HeadE-Column1-Header1">Table Name</th>
+                    <th class="HeadD-Column2-Header1">Description</th>
+                </tr>
+            </thead>
+            <tbody>
+                <tr class="Body-Body1">
+                    <td style="font-family: monospace;" class="BodyE-Column1-Body1">author</td>
+                    <td class="BodyD-Column2-Body1">Each row contains biographical information about a renowned author.</td>
+                </tr>
+                <tr class="Body-Body1">
+                    <td style="font-family: monospace;" class="BodyE-Column1-Body1">book</td>
+                    <td class="BodyD-Column2-Body1">Contains information about each book in the bookshop inventory.  The last_name column associates the book with its author.  Books with a non null date_sold are no longer available.</td>
+                </tr>
+                <tr class="Body-Body1">
+                    <td style="font-family: monospace;" class="BodyE-Column1-Body1">genres</td>
+                    <td class="BodyD-Column2-Body1">Table of genre names (e.g., "Historical fiction") with which particular books are associated via the genres_books table.</td>
+                </tr>
+                <tr class="Body-Body1">
+                    <td style="font-family: monospace;" class="BodyE-Column1-Body1">subjects</td>
+                    <td class="BodyD-Column2-Body1">Table of subject names (e.g., "Cape Cod") with which particular books are associated via the subjects_books table.</td>
+                </tr>
+                <tr class="Body-Body1">
+                    <td style="font-family: monospace;" class="BodyE-Column1-Body1">related_name</td>
+                    <td class="BodyD-Column2-Body1">Related names are names of individuals associated with a particular book.  The names are usually hand-written in the book's front matter or on separate pages that were included with the book (e.g., letters) and identify the book's provenance (owners).   Only a few books have related names.  However, their presence can significantly increase the value of the book.</td>
+                </tr>
+                <tr class="Body-Body1">
+                    <td style="font-family: monospace;" class="BodyE-Column1-Body1">genres_books</td>
+                    <td class="BodyD-Column2-Body1">Used to create a many-to-many relationship between genres and books.</td>
+                </tr>
+                <tr class="Body-Body1">
+                    <td style="font-family: monospace;" class="BodyE-Column1-Body1">subjects_books</td>
+                    <td class="BodyD-Column2-Body1">Used to create a many-to-many relationship between subjects and books.</td>
+                </tr>
+                <tr class="Body-Body1">
+                    <td style="font-family: monospace;" class="BodyE-Column1-Body1">note</td>
+                    <td class="BodyD-Column2-Body1">Connects each note_line to its associated book.   Notes include edition info and other comments (often coded) relating to its condition.</td>
+                </tr>
+                <tr class="Body-Body1">
+                    <td style="font-family: monospace;" class="BodyE-Column1-Body1">note_line</td>
+                    <td class="BodyD-Column2-Body1">One row for each line of text in a particular note.</td>
+                </tr>
+                <tr class="Body-Body1">
+                    <td style="font-family: monospace;" class="BodyE-Column1-Body1">acctmgr</td>
+                    <td class="BodyD-Column2-Body1">Account manager are  the bookshop employees responsible for servicing the patrons and managing auctions.</td>
+                </tr>
+                <tr class="Body-Body1">
+                    <td style="font-family: monospace;" class="BodyE-Column1-Body1">patron</td>
+                    <td class="BodyD-Column2-Body1">Bookshop customers and their contact info.  Connected to their purchases/bids through their relationship with the sale and auction tables.</td>
+                </tr>
+                <tr class="Body-Body1">
+                    <td style="font-family: monospace;" class="BodyE-Column1-Body1">sale</td>
+                    <td class="BodyD-Column2-Body1">Contains one row for each book that has been sold.  Connects the book with the patron who acquired through the bookid and patid columns.</td>
+                </tr>
+                <tr class="Body-Body1">
+                    <td style="font-family: monospace;" class="BodyE-Column1-Body1">auction</td>
+                    <td class="BodyD-Column2-Body1">Some books are auctioned.  Those that have been (or currently being) auctioned have a row in this table that identifies the account manager who oversees the auction.  The reserve column specifies the minimum acceptable bid, curr_bid contains the current amount bid.</td>
+                </tr>
+                <tr class="Body-Body1">
+                    <td style="font-family: monospace;" class="BodyB-Column1-Body1">bid</td>
+                    <td class="BodyA-Column2-Body1">Each row provides the bid history for a particular auction.</td>
+                </tr>
+            </tbody>
+        </table>
+        <p>Foreign keys are declared using the <b>references</b> clause.  Many are specified with the <b>on delete</b>/<b>update cascade</b> option indicating that deletions or updates to the referenced rows will cause the referencing row to automatically be deleted or updated as well.</p>
+        <p>A schema diagram depicting the inter-table relationships is shown below.  As was mentioned above for the NSF awards database, the arrows represent a one-to-many relationship between the source and target tables and labels on the arrows identify the foreign key in the target table on which the relationship is formed.</p>
+        <p class="Caption" style="text-align: left;">
+            <img src="../Resources/Images/nsf-fig6_662x481.jpg" style="width: 662;height: 481;" />
+            <br />Figure 6 - Bookshop Database Schema Diagram</p>
+        <p>The sample data that is included with this example contains book descriptions that were obtained from the United States Library of Congress online card catalog: <a href="http://catalog.loc.gov/" target="_blank">http://catalog.loc.gov</a>.  The short biographical sketches included with each author entry are condensed descriptions from information about each author contained on Wikipedia: <a href="http://www.wikipedia.org/" target="_blank">http://www.wikipedia.org</a>.   The use of the Wikipedia information is governed by the Creative Commons Attribution-ShareAlike license: <a href="http://creativecommons.org/licenses/by-sa/3.0/" target="_blank">http://creativecommons.org/licenses/by-sa/3.0/</a>.   Pricing information and the JPEG files of photographs of some of the books in the database were obtained from the website for Peter Harrington Antiquarian Bookseller in Chelsea London, <a href="http://www.peterharrington.co.uk/" target="_blank">http://www.peterharrington.co.uk</a>, which is a perfect real-world example of the kind of bookshop depicted in this example.</p>
+        <hr MadCap:conditions="Default.ScreenOnly" width="100%" size="0" align="center" />
+        <p MadCap:conditions="Default.ScreenOnly" style="font-size: 8pt;"><span class="MyVariablesCopyright">Copyright © 2012, Raima Inc. All rights reserved.</span>
+        </p>
+        <script type="text/javascript" src="../SkinSupport/MadCapBodyEnd.js">
+        </script>
+        <p class="MCWebHelpFramesetLink MCWebHelpFramesetLinkBottom" style="display: none;"><a href="../../Default_CSH.htm#SQL/Chapter4.htm" style="">Open topic with navigation</a>
+        </p>
+    </body>
+</html>

@@ -1,0 +1,149 @@
+<?xml version="1.0" encoding="utf-8"?>
+<!DOCTYPE html PUBLIC "-//W3C//DTD XHTML 1.0 Strict//EN" "http://www.w3.org/TR/xhtml1/DTD/xhtml1-strict.dtd">
+<html xmlns:MadCap="http://www.madcapsoftware.com/Schemas/MadCap.xsd" MadCap:tocPath="Utility Programs|SQL Utilities" MadCap:InPreviewMode="false" MadCap:PreloadImages="false" MadCap:RuntimeFileType="Topic" MadCap:TargetType="WebHelp" lang="en-us" xml:lang="en-us" MadCap:PathToHelpSystem="../../" MadCap:HelpSystemFileName="Default.xml" MadCap:SearchType="Stem">
+    <head>
+        <meta http-equiv="Content-Type" content="text/html; charset=utf-8" /><title>rdmsql</title>
+        <link rel="icon" type="image/png" href="http://docs.raima.com/favicon.png" />
+        <link href="../SkinSupport/MadCap.css" rel="stylesheet" />
+        <link href="../Resources/TableStyles/ArgsTwoCol.css" rel="stylesheet" />
+        <link href="../Resources/Stylesheets/raima.css" rel="stylesheet" />
+        <script src="../SkinSupport/MadCapAll.js" type="text/javascript">
+        </script>
+    </head>
+    <body>
+        <p class="MCWebHelpFramesetLink MCWebHelpFramesetLinkTop" style="display: none;"><a href="../../Default_CSH.htm#util/rdmsql.htm" style="">Open topic with navigation</a>
+        </p>
+        <div class="MCBreadcrumbsBox_0"><span class="MCBreadcrumbsPrefix">You are here: </span><a class="MCBreadcrumbsLink" href="../dbUTIL.htm">Utility Programs</a><span class="MCBreadcrumbsDivider"> &gt; </span><a class="MCBreadcrumbsLink" href="../dbUTILsql.htm">SQL Utilities</a><span class="MCBreadcrumbsDivider"> &gt; </span><span class="MCBreadcrumbs">rdmsql</span>
+        </div>
+        <h3 class="newpage"><span class="MyVariablesUrdmsql">rdmsql</span>
+        </h3>
+        <p>Simple Interactive SQL&#160;Utility</p>
+        <p class="Heading">Command Syntax</p><pre xml:space="preserve"><span class="MyVariablesUrdmsql">rdmsql</span> [-h] [-B] [-V] [-q|[-stdout file]] [-stderr file] [-tfs type]
+       [-docroot path] [-d path] [-b] [-c] [-a tfs] [-e] [-u] [-r]
+</pre>
+        <p class="Heading">Description</p>
+        <p>The <b><span class="MyVariablesUrdmsql">rdmsql</span></b> utility is a simple interactive SQL utility based which uses the ODBC&#160;API. This allows the utility to use the default TFS mode for connecting with the database as well as provides the ability to connect to a remote <b><span class="MyVariablesUrdmsqlserver">rdmsqlserver</span></b> utility running on another system.</p>
+        <p class="Heading">Options</p>
+        <table style="caption-side: top;mc-table-style: url('../Resources/TableStyles/ArgsTwoCol.css');" class="TableStyle-ArgsTwoCol" cellspacing="0">
+            <col class="Column-Column1" style="width: 200px;" />
+            <col class="Column-Column2" />
+            <tbody>
+                <tr class="Body-Body1">
+                    <td class="BodyE-Column1-Body1">-h</td>
+                    <td class="BodyD-Column2-Body1">Display this usage information</td>
+                </tr>
+                <tr class="Body-Body1">
+                    <td class="BodyE-Column1-Body1">-B</td>
+                    <td class="BodyD-Column2-Body1">Do not display the banner</td>
+                </tr>
+                <tr class="Body-Body1">
+                    <td class="BodyE-Column1-Body1">-V</td>
+                    <td class="BodyD-Column2-Body1">Display the version information</td>
+                </tr>
+                <tr class="Body-Body1">
+                    <td class="BodyE-Column1-Body1">-q</td>
+                    <td class="BodyD-Column2-Body1">Quiet mode.  No information will be displayed</td>
+                </tr>
+                <tr class="Body-Body1">
+                    <td class="BodyE-Column1-Body1">-stdout file</td>
+                    <td class="BodyD-Column2-Body1">Redirect <code>stdout</code> to the specified file</td>
+                </tr>
+                <tr class="Body-Body1">
+                    <td class="BodyE-Column1-Body1">-stderr file</td>
+                    <td class="BodyD-Column2-Body1">Redirect <code>stderr</code> to the specified file</td>
+                </tr>
+                <tr class="Body-Body1" MadCap:conditions="CmdLine.TFS">
+                    <td class="BodyB-Column1-Body1">-tfs TFS_TYPE</td>
+                    <td class="BodyA-Column2-Body1">Specify the TFS type to use (TFST, TFSR, or TFSS) [default = TFST]</td>
+                </tr>
+            </tbody>
+        </table>
+        <table style="mc-table-style: url('../Resources/TableStyles/ArgsTwoCol.css');" class="TableStyle-ArgsTwoCol" cellspacing="0">
+            <col class="Column-Column1" style="width: 200px;" />
+            <col class="Column-Column2" />
+            <tbody>
+                <tr class="Body-Body1">
+                    <td class="BodyE-Column1-Body1">-d[ocroot] <i>path</i></td>
+                    <td class="BodyD-Column2-Body1">Document root for the TFS instance</td>
+                </tr>
+                <tr class="Body-Body1">
+                    <td class="BodyE-Column1-Body1">-b</td>
+                    <td class="BodyD-Column2-Body1">Run <code style="font-style: normal;">startupfile</code> in batch mode</td>
+                </tr>
+                <tr class="Body-Body1">
+                    <td class="BodyE-Column1-Body1">-c</td>
+                    <td class="BodyD-Column2-Body1">Run <code style="font-style: normal;">startupfile</code> in compilation mode</td>
+                </tr>
+                <tr class="Body-Body1">
+                    <td class="BodyE-Column1-Body1">-a host[:port]</td>
+                    <td class="BodyD-Column2-Body1">Name of tfserver to use,</td>
+                </tr>
+                <tr class="Body-Body1">
+                    <td class="BodyE-Column1-Body1">-e</td>
+                    <td class="BodyD-Column2-Body1">Disable echo of <code>startupfile</code> commands.</td>
+                </tr>
+                <tr class="Body-Body1">
+                    <td class="BodyE-Column1-Body1">-u</td>
+                    <td class="BodyD-Column2-Body1">Display result set headings in uppercase.</td>
+                </tr>
+                <tr class="Body-Body1">
+                    <td class="BodyE-Column1-Body1">-r</td>
+                    <td class="BodyD-Column2-Body1">Use remote connection to <span style="font-weight: bold;" class="MyVariablesUrdmsqlserver">rdmsqlserver</span></td>
+                </tr>
+                <tr class="Body-Body1">
+                    <td class="BodyE-Column1-Body1">-C&#160;#</td>
+                    <td class="BodyD-Column2-Body1">Set maximum database connections to # (default 5)</td>
+                </tr>
+                <tr class="Body-Body1">
+                    <td class="BodyE-Column1-Body1">-H&#160;#</td>
+                    <td class="BodyD-Column2-Body1">Set size of statement history list to #</td>
+                </tr>
+                <tr class="Body-Body1">
+                    <td class="BodyE-Column1-Body1">-s #</td>
+                    <td class="BodyD-Column2-Body1">Set maximum statements per connection to # (default 5)</td>
+                </tr>
+                <tr class="Body-Body1">
+                    <td class="BodyE-Column1-Body1">-w #</td>
+                    <td class="BodyD-Column2-Body1">Set maximum display page width to # (default 4096).</td>
+                </tr>
+                <tr class="Body-Body1">
+                    <td class="BodyB-Column1-Body1">-o <i>errorfile</i></td>
+                    <td class="BodyA-Column2-Body1">Specify error log</td>
+                </tr>
+            </tbody>
+        </table>
+        <p class="Heading">Comments</p>
+        <p style="font-weight: bold;font-style: normal;font-family: monospace;">startupfile [args]</p>
+        <blockquote>
+            <p>Text file containing scripted commands for <b><span class="MyVariablesUrdmsqlserver">rdmsqlserver</span></b> to execute.</p>
+        </blockquote>
+        <p style="font-style: normal;font-weight: bold;font-family: monospace;">-d[ocroot] <i>path</i></p>
+        <blockquote>
+            <p>The <code>docroot</code> option is used only when <b><span class="MyVariablesUrdmsqlserver">rdmsqlserver</span></b> uses a direct-link (TFST) or standalone (TFSS).</p>
+        </blockquote>
+        <p style="font-weight: bold;font-style: normal;font-family: monospace;">-a <i>hostname[:port]</i></p>
+        <blockquote>
+            <p>The <code>hostname</code> option is used only when <b><span class="MyVariablesUrdmsqlserver">rdmsqlserver</span></b> uses an external tfserver (TFSR).</p>
+        </blockquote>
+        <p style="font-weight: bold;font-style: normal;font-family: monospace;">-c<br />-b</p>
+        <blockquote>
+            <p>The compile (-c)&#160;and batch&#160;(-b) options automatically connect to the tfserver (local for TFST/TFSS&#160;or the "<code>-a</code>" option above for TFSR), perform the scripted commands, commit the changes and then exit. These modes are typically used for compiling the database schema (DDL). &#160;The "<code>-c</code>"&#160;option enables an additional option, "Generate C&#160;Files", used for embedding the initialized database into the application program.</p>
+        </blockquote>
+        <p style="font-family: monospace;">-o errorfile</p>
+        <blockquote>
+            <p>Errors encountered during the execution of the <code>startupfile</code> are output to <code>stdout</code>. This option allows those messages to be redirected to a file.</p>
+        </blockquote>
+        <p class="Heading">See Also</p>
+        <p><a href="../SQL/Chapter3.htm#Interfac">Interface and Scripting Commands</a>
+        </p>
+        <p><a href="rdmsqlserver.htm"><span class="MyVariablesUrdmsqlserver">rdmsqlserver</span></a>
+        </p>
+        <hr MadCap:conditions="Default.ScreenOnly" width="100%" size="0" align="center" />
+        <p MadCap:conditions="Default.ScreenOnly" style="font-size: 8pt;"><span class="MyVariablesCopyright">Copyright © 2012, Raima Inc. All rights reserved.</span>
+        </p>
+        <script type="text/javascript" src="../SkinSupport/MadCapBodyEnd.js">
+        </script>
+        <p class="MCWebHelpFramesetLink MCWebHelpFramesetLinkBottom" style="display: none;"><a href="../../Default_CSH.htm#util/rdmsql.htm" style="">Open topic with navigation</a>
+        </p>
+    </body>
+</html>

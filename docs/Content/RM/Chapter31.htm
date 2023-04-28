@@ -1,0 +1,34 @@
+<?xml version="1.0" encoding="utf-8"?>
+<!DOCTYPE html PUBLIC "-//W3C//DTD XHTML 1.0 Strict//EN" "http://www.w3.org/TR/xhtml1/DTD/xhtml1-strict.dtd">
+<html xmlns:MadCap="http://www.madcapsoftware.com/Schemas/MadCap.xsd" MadCap:tocPath="Native API|Reference Manual" MadCap:InPreviewMode="false" MadCap:PreloadImages="false" MadCap:RuntimeFileType="Topic" MadCap:TargetType="WebHelp" lang="en-us" xml:lang="en-us" class="" MadCap:PathToHelpSystem="../../" MadCap:HelpSystemFileName="Default.xml" MadCap:SearchType="Stem">
+    <head>
+        <meta http-equiv="Content-Type" content="text/html; charset=utf-8" /><title>Introduction</title>
+        <link rel="icon" type="image/png" href="http://docs.raima.com/favicon.png" />
+        <link href="../SkinSupport/MadCap.css" rel="stylesheet" />
+        <link href="../Resources/Stylesheets/raima.css" rel="stylesheet" />
+        <script src="../SkinSupport/MadCapAll.js" type="text/javascript">
+        </script>
+    </head>
+    <body>
+        <p class="MCWebHelpFramesetLink MCWebHelpFramesetLinkTop" style="display: none;"><a href="../../Default_CSH.htm#RM/Chapter31.htm" style="">Open topic with navigation</a>
+        </p>
+        <div class="MCBreadcrumbsBox_0"><span class="MCBreadcrumbsPrefix">You are here: </span><a class="MCBreadcrumbsLink" href="../dbCore.htm">Native API</a><span class="MCBreadcrumbsDivider"> &gt; </span><a class="MCBreadcrumbsLink" href="dbRM.htm">Reference Manual</a><span class="MCBreadcrumbsDivider"> &gt; </span><span class="MCBreadcrumbs">Introduction</span>
+        </div>
+        <h2 class="newpage"><a MadCap:generatedBookmark="TOC" name="Introduction_..16"></a>Introduction</h2>
+        <p>This section contains descriptions of the application program interface (API) of all <span class="MyVariablesProductShortName">RDM</span> runtime library functions. Each page header displays the function name described on that page. The <b>Prototypes</b> section gives a synopsis of the actual function declaration (not how it is called). The <b>Parameters</b> section describes all parameters.</p>
+        <p>Note: The parameters for file, record, field, and set identifiers appear in uppercase. This indicates that normally the corresponding C constant created by <b>ddlp</b> in &lt;dbname&gt;.h is passed to the function.</p>
+        <p>The <b>Description</b> explains all of the function's operational details. Any <b>Currency Changes</b> are listed using assignment statements in the order in which the changes occur. The notation "curr_own[SET]," is read "current owner of SET". In the event of a user or system error, the changes to the currency table are not made.</p>
+        <p>When the multi-user library runs in shared mode, many functions have <b>Locking Requirements</b>. The lowest level is no locking, or "None." The next level is "None, but may be old or deleted data," (see <a href="../UG/Chapter7.htm#7.9.2">Read Locks</a> section in the <span class="MyVariablesProductShortName">RDM</span> User's Guide). The third level is "Read lock required." The highest level is "Write lock required." These requirements may be ignored if the database is opened in exclusive or mode.</p>
+        <p>The <b>User's Guide</b> section points to explanatory material in the User's Guide, saving you search time when you need a full description of the concepts involved.</p>
+        <p>In the <a href="Chapter4.htm" style="font-weight: bold;">Return Codes</a> section, the most common status and error codes are listed, often with a possible explanation for their occurrences. We do not list all possible codes, but only those that tend to occur most often.</p>
+        <p>Related functions are identified in the <b>See Also</b> section.</p>
+        <p>An <b>Example</b> section is provided for most functions. The example is intended to illustrate how the function is called, not necessarily how to best use the function. In some cases, the example is brief, but it should be sufficient to show how the call is made. <a href="../UG/Chapter5.htm">Database Manipulation</a>, <a href="../UG/Chapter6.htm">Transaction Processing</a>, and <a href="../UG/Chapter7.htm">Multi-User Database Control</a>, of the <span class="MyVariablesProductShortName">RDM</span> User's Guide provide many more examples of <span class="MyVariablesProductShortName">RDM</span> functions.</p>
+        <hr MadCap:conditions="Default.ScreenOnly" width="100%" size="0" align="center" />
+        <p MadCap:conditions="Default.ScreenOnly" style="font-size: 8pt;"><span class="MyVariablesCopyright">Copyright © 2012, Raima Inc. All rights reserved.</span>
+        </p>
+        <script type="text/javascript" src="../SkinSupport/MadCapBodyEnd.js">
+        </script>
+        <p class="MCWebHelpFramesetLink MCWebHelpFramesetLinkBottom" style="display: none;"><a href="../../Default_CSH.htm#RM/Chapter31.htm" style="">Open topic with navigation</a>
+        </p>
+    </body>
+</html>

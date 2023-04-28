@@ -1,0 +1,66 @@
+<?xml version="1.0" encoding="utf-8"?>
+<!DOCTYPE html PUBLIC "-//W3C//DTD XHTML 1.0 Strict//EN" "http://www.w3.org/TR/xhtml1/DTD/xhtml1-strict.dtd">
+<html xmlns:MadCap="http://www.madcapsoftware.com/Schemas/MadCap.xsd" MadCap:tocPath="SQL API|SQL Language Guide|Reference Guide|SQL Statement Reference" MadCap:InPreviewMode="false" MadCap:PreloadImages="false" MadCap:RuntimeFileType="Topic" MadCap:TargetType="WebHelp" lang="en-us" xml:lang="en-us" MadCap:PathToHelpSystem="../../../" MadCap:HelpSystemFileName="Default.xml" MadCap:SearchType="Stem">
+    <head>
+        <meta http-equiv="Content-Type" content="text/html; charset=utf-8" /><title>delete</title>
+        <link rel="icon" type="image/png" href="http://docs.raima.com/favicon.png" />
+        <link href="../../SkinSupport/MadCap.css" rel="stylesheet" />
+        <link href="../../Resources/Stylesheets/raima.css" rel="stylesheet" />
+        <script src="../../SkinSupport/MadCapAll.js" type="text/javascript">
+        </script>
+    </head>
+    <body>
+        <p class="MCWebHelpFramesetLink MCWebHelpFramesetLinkTop" style="display: none;"><a href="../../../Default_CSH.htm#SQL/DML/delete.htm" style="">Open topic with navigation</a>
+        </p>
+        <div class="MCBreadcrumbsBox_0"><span class="MCBreadcrumbsPrefix">You are here: </span><a class="MCBreadcrumbsLink" href="../../dbRSQL.htm">SQL API</a><span class="MCBreadcrumbsDivider"> &gt; </span><a class="MCBreadcrumbsLink" href="../dbSQL.htm">SQL Language Guide</a><span class="MCBreadcrumbsDivider"> &gt; </span><a class="MCBreadcrumbsLink" href="../SQLStmtRef.htm">Reference Guide</a><span class="MCBreadcrumbsDivider"> &gt; </span><span class="MCBreadcrumbs">delete</span>
+        </div>
+        <h3 class="newpage"><a name="kanchor230"></a>delete</h3>
+        <p>Delete one or more rows from a table</p>
+        <p class="Heading">Syntax </p><pre class="Grammar" xml:space="preserve">delete_stmt:
+ 		<b>delete from</b> [<i>db_name</i>.]<i>table_name</i> 
+ 			[<b>where</b> {conditional_expr | <b>current of</b>    <![CDATA[ ]]><i>cursor_name</i>}]</pre><pre class="Grammar" xml:space="preserve">conditional_expr:
+ 		rel_expr [bool_oper rel_expr]...</pre><pre class="Grammar" xml:space="preserve">rel_expr:
+		expression [<b>not</b>] rel_oper expression
+ 	|  	expression [<b>not</b>] <b>between</b>     <![CDATA[ ]]><i>constant</i>     <![CDATA[ ]]><b>and</b>     <![CDATA[ ]]><i>constant</i>
+ 	|  	expression [<b>not</b>] <b>in</b> (<i>constant</i>[, <i>constant</i>]...) 
+ 	|  	column_ref <b>is</b> [<b>not</b>] <b>null</b>
+ 	|  	string_expr [<b>not</b>] <b>like</b> "<i>string</i>"
+ 	|  	<b>not</b> rel_expr
+ 	|  	( conditional_expr )</pre><pre class="Grammar" xml:space="preserve">rel_oper:
+		=  |  ==
+ 	| 	&lt;
+ 	|  	&gt;
+ 	|  	&lt;=
+ 	|  	&gt;=
+ 	|  	&lt;&gt;  |  !=  |  /=</pre><pre class="Grammar" xml:space="preserve">bool_oper:
+		&amp;  |  &amp;&amp;  | <b>and</b>
+ 	|  	"|"  |  "||"  | <b>or</b></pre>
+        <p class="Heading">Description </p>
+        <p>This statement deletes one or more rows from table <i>table_name</i>.  Two types of <b>delete</b> are supported.  In a <i>searched delete</i>, the <b>delete</b> statement deletes all rows of the table that satisfy the conditional expression (conditional_expr) specified in the <b>where</b> clause.  In a <i>positioned delete</i>, the <b>delete</b> statement deletes the current row associated with the specified cursor (<i>cursor_name</i>) in the <b>where</b> current of clause.  The <i>cursor_name</i> must have been established through a prior call to either <code>rsqlGetCursorName</code> or <code>rsqlSetCursorName</code> on a compiled, updateable <b>select</b> statement associated with a separate statement handle.</p>
+        <p>Deleting rows that have referencing foreign keyed rows will either succeed or fail based on the <b>cascade</b> or <b>restrict</b> settings associated with the related foreign key specifications.   If all referenced rows specify <b>cascade</b> then all of the referencing rows will be deleted in addition to the rows from this particular table.  However, if the <b>restrict</b> option is specified and referencing rows exist, then the <b>delete</b> will fail with a referential integrity error.  Note also that while a foreign key to this table may have <b>cascade</b> set a foreign key to the referencing table may itself have <b>restrict</b> set and thus the cascaded deletion could cause the <b>delete</b> to fail due to a referential integrity constraint violation.</p>
+        <p>A call to <code>rsqlGetRowCount</code> after a successful execution of <b>delete</b> will return the count of all rows from all affected (i.e., cascaded) tables that were deleted.</p>
+        <p class="Heading">Example </p><pre xml:space="preserve">delete from book where date_sold &lt; date "2003-01-01";
+	...
+delete from sponsor where state &lt; "A" or state &gt; "Z";
+	...
+delete from person where current of SQL_CUR_f3f0_08b0;</pre>
+        <p class="Heading">See Also</p>
+        <p><a href="select.htm">select</a>
+        </p>
+        <p><a href="update.htm">update</a>
+        </p>
+        <p><a href="../../SQLRM/rsqlGetCursorName.htm">rsqlGetCursorName</a>
+        </p>
+        <p><a href="../../SQLRM/rsqlSetCursorName.htm">rsqlSetCursorName</a>
+        </p>
+        <p><a href="../../SQLRM/rsqlGetRowCount.htm">rsqlGetRowCount</a>
+        </p>
+        <hr MadCap:conditions="Default.ScreenOnly" width="100%" size="0" align="center" />
+        <p MadCap:conditions="Default.ScreenOnly" style="font-size: 8pt;"><span class="MyVariablesCopyright">Copyright © 2012, Raima Inc. All rights reserved.</span>
+        </p>
+        <script type="text/javascript" src="../../SkinSupport/MadCapBodyEnd.js">
+        </script>
+        <p class="MCWebHelpFramesetLink MCWebHelpFramesetLinkBottom" style="display: none;"><a href="../../../Default_CSH.htm#SQL/DML/delete.htm" style="">Open topic with navigation</a>
+        </p>
+    </body>
+</html>

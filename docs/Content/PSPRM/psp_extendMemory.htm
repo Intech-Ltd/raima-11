@@ -1,0 +1,106 @@
+<?xml version="1.0" encoding="utf-8"?>
+<!DOCTYPE html PUBLIC "-//W3C//DTD XHTML 1.0 Strict//EN" "http://www.w3.org/TR/xhtml1/DTD/xhtml1-strict.dtd">
+<html xmlns:MadCap="http://www.madcapsoftware.com/Schemas/MadCap.xsd" MadCap:tocPath="Native API|Reference Manual|Platform Support Functions (psp_ Prefix)" MadCap:InPreviewMode="false" MadCap:PreloadImages="false" MadCap:RuntimeFileType="Topic" MadCap:TargetType="WebHelp" lang="en-us" xml:lang="en-us" class="" MadCap:PathToHelpSystem="../../" MadCap:HelpSystemFileName="Default.xml" MadCap:SearchType="Stem">
+    <head>
+        <meta http-equiv="Content-Type" content="text/html; charset=utf-8" /><title>psp_extendMemory</title>
+        <link rel="icon" type="image/png" href="http://docs.raima.com/favicon.png" />
+        <link href="../SkinSupport/MadCap.css" rel="stylesheet" />
+        <link href="../Resources/TableStyles/FunctionArgs.css" rel="stylesheet" />
+        <link href="../Resources/Stylesheets/raima.css" rel="stylesheet" />
+        <script src="../SkinSupport/MadCapAll.js" type="text/javascript">
+        </script>
+    </head>
+    <body>
+        <p class="MCWebHelpFramesetLink MCWebHelpFramesetLinkTop" style="display: none;"><a href="../../Default_CSH.htm#PSPRM/psp_extendMemory.htm" style="">Open topic with navigation</a>
+        </p>
+        <div class="MCBreadcrumbsBox_0"><span class="MCBreadcrumbsPrefix">You are here: </span><a class="MCBreadcrumbsLink" href="../dbCore.htm">Native API</a><span class="MCBreadcrumbsDivider"> &gt; </span><a class="MCBreadcrumbsLink" href="../RM/dbRM.htm">Reference Manual</a><span class="MCBreadcrumbsDivider"> &gt; </span><a class="MCBreadcrumbsLink" href="../RM/Chapter5.htm">Platform Support Functions (psp_ Prefix)</a><span class="MCBreadcrumbsDivider"> &gt; </span><span class="MCBreadcrumbs">psp_extendMemory</span>
+        </div>
+        <h3 class="newpage"><a name="kanchor152"></a>psp_extendMemory</h3>
+        <p>Extend or reallocate a memory block</p>
+        <p class="Heading">Prototype</p><pre xml:space="preserve">void *psp_extendMemory(
+&#160;&#160;&#160;&#160;const void *ptr ,
+&#160;&#160;&#160;&#160;size_t      newsize, 
+&#160;&#160;&#160;&#160;PSP_MEMTAG  tag);</pre>
+        <p class="Heading">Parameters</p>
+        <table style="width: 100%;mc-table-style: url('../Resources/TableStyles/FunctionArgs.css');margin-left: 0;margin-right: auto;" class="TableStyle-FunctionArgs" cellspacing="0">
+            <col style="width: 140px;" class="Column-Column1" />
+            <col style="width: 80px;" class="Column-Column3" />
+            <col class="Column-Column2" />
+            <tbody>
+                <tr class="Body-Body1">
+                    <td style="" class="BodyE-Column1-Body1">ptr</td>
+                    <td style="" class="BodyE-Column3-Body1">(input)</td>
+                    <td style="" class="BodyD-Column2-Body1">A pointer to the currently allocated block to be extended.  If this pointer is NULL, the function simply calls psp_getMemory.</td>
+                </tr>
+                <tr class="Body-Body1">
+                    <td class="BodyE-Column1-Body1">newsize</td>
+                    <td class="BodyE-Column3-Body1">(input)</td>
+                    <td class="BodyD-Column2-Body1">The size, in bytes, of the memory block to allocate.</td>
+                </tr>
+                <tr class="Body-Body1">
+                    <td style="" class="BodyB-Column1-Body1">tag</td>
+                    <td style="" class="BodyB-Column3-Body1">(input)</td>
+                    <td style="" class="BodyA-Column2-Body1">The memory tag.  To use a default system tag, specify NULL.</td>
+                </tr>
+            </tbody>
+        </table>
+        <p class="Heading">Description</p>
+        <p>This function extends the previously allocated block of memory to a specified length.  The contents of the existing block are unchanged.  The memory <code>tag</code> must be the same one used in the original memory allocation of <code>ptr</code>.
+</p>
+        <p>If the new block size is larger than the original size, <span class="MyVariablesProductShortName">RDM</span> attempts to extend the block in place.  If in-place extension is not possible, <span class="MyVariablesProductShortName">RDM</span> allocates a new block and copies the contents of the current block into it.
+
+</p>
+        <p class="Heading">Required Headers</p><pre xml:space="preserve">#include "psp.h"</pre>
+        <p class="Heading">Libraries</p>
+        <table style="width: 100%; margin-left: 0; margin-right: auto;">
+            <col style="width: 200px;">
+            </col>
+            <col>
+            </col>
+            <thead>
+                <tr>
+                    <th>Library Name</th>
+                    <th>Description</th>
+                </tr>
+            </thead>
+            <tbody>
+                <tr>
+                    <td><code>rdmpsp<span class="MyVariablesLibraryVersion">11</span></code>
+                    </td>
+                    <td>Platform Support Library</td>
+                </tr>
+            </tbody>
+        </table>
+        <p>See <a href="../GS/distrib.htm#Library">Library Naming Conventions</a> section for full library name and a list of library dependencies.</p>
+        <p class="Heading">Return Codes</p>
+        <p>A pointer to the allocated block, or NULL.</p>
+        <p class="Heading">Example</p><pre xml:space="preserve">#include "psp.h"
+
+void extendBuffer(
+&#160;&#160;&#160;&#160;char **ppvBuf,
+&#160;&#160;&#160;&#160;
+&#160;&#160;&#160;&#160;int buffSize,
+&#160;&#160;&#160;&#160;PSP_MEMTAG mTag)
+{
+&#160;&#160;&#160;&#160;void *pvTemp = *ppvBuf;
+&#160;&#160;&#160;&#160;*ppvBuf = psp_extendMemory(pvTemp, buffSize, mTag);
+&#160;&#160;&#160;&#160;if&#160;(*ppvBuf == NULL)
+&#160;&#160;&#160;&#160;&#160;&#160;&#160;&#160;return S_NOMEMORY;
+&#160;&#160;&#160;&#160;return S_OKAY;
+}</pre>
+        <p class="Heading">See Also</p>
+        <p><a href="psp_freeMemory.htm">psp_freeMemory</a>
+        </p>
+        <p><a href="psp_freeTagMemory.htm">psp_freeTagMemory</a>
+        </p>
+        <p><a href="psp_getMemory.htm">psp_getMemory</a>
+        </p>
+        <hr MadCap:conditions="Default.ScreenOnly" width="100%" size="0" align="center" />
+        <p MadCap:conditions="Default.ScreenOnly" style="font-size: 8pt;"><span class="MyVariablesCopyright">Copyright © 2012, Raima Inc. All rights reserved.</span>
+        </p>
+        <script type="text/javascript" src="../SkinSupport/MadCapBodyEnd.js">
+        </script>
+        <p class="MCWebHelpFramesetLink MCWebHelpFramesetLinkBottom" style="display: none;"><a href="../../Default_CSH.htm#PSPRM/psp_extendMemory.htm" style="">Open topic with navigation</a>
+        </p>
+    </body>
+</html>

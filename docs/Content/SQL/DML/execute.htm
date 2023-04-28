@@ -1,0 +1,65 @@
+<?xml version="1.0" encoding="utf-8"?>
+<!DOCTYPE html PUBLIC "-//W3C//DTD XHTML 1.0 Strict//EN" "http://www.w3.org/TR/xhtml1/DTD/xhtml1-strict.dtd">
+<html xmlns:MadCap="http://www.madcapsoftware.com/Schemas/MadCap.xsd" MadCap:tocPath="SQL API|SQL Language Guide|Reference Guide|SQL Statement Reference" MadCap:InPreviewMode="false" MadCap:PreloadImages="false" MadCap:RuntimeFileType="Topic" MadCap:TargetType="WebHelp" lang="en-us" xml:lang="en-us" MadCap:PathToHelpSystem="../../../" MadCap:HelpSystemFileName="Default.xml" MadCap:SearchType="Stem">
+    <head>
+        <meta http-equiv="Content-Type" content="text/html; charset=utf-8" /><title>execute</title>
+        <link rel="icon" type="image/png" href="http://docs.raima.com/favicon.png" />
+        <link href="../../SkinSupport/MadCap.css" rel="stylesheet" />
+        <link href="../../Resources/Stylesheets/raima.css" rel="stylesheet" />
+        <script src="../../SkinSupport/MadCapAll.js" type="text/javascript">
+        </script>
+    </head>
+    <body>
+        <p class="MCWebHelpFramesetLink MCWebHelpFramesetLinkTop" style="display: none;"><a href="../../../Default_CSH.htm#SQL/DML/execute.htm" style="">Open topic with navigation</a>
+        </p>
+        <div class="MCBreadcrumbsBox_0"><span class="MCBreadcrumbsPrefix">You are here: </span><a class="MCBreadcrumbsLink" href="../../dbRSQL.htm">SQL API</a><span class="MCBreadcrumbsDivider"> &gt; </span><a class="MCBreadcrumbsLink" href="../dbSQL.htm">SQL Language Guide</a><span class="MCBreadcrumbsDivider"> &gt; </span><a class="MCBreadcrumbsLink" href="../SQLStmtRef.htm">Reference Guide</a><span class="MCBreadcrumbsDivider"> &gt; </span><span class="MCBreadcrumbs">execute</span>
+        </div>
+        <h3 class="newpage"><a name="kanchor234"></a>execute</h3>
+        <p>Execute a stored procedure</p>
+        <p class="Heading">Syntax </p><pre class="Grammar" xml:space="preserve">execute_stmt:
+		[<b>exec</b>[<b>ute</b>] |&#160;<b>run</b>] <i>proc_name</i> [<b>(</b><i>constant</i>[, <i>constant</i>]...<b>)</b>]</pre>
+        <p class="Heading">Description</p>
+        <p>The <b>execute</b> statement will execute the stored procedure named <i>proc_name</i>.   An argument value, <i>constant</i>, of the proper data type must be specified for each argument that was declared in the <b>create procedure</b> statement for <i>proc_name</i>.   Specification of the <b>execute</b> keyword is optional.  Thus, the procedure can be invoked simply by specifying <i>proc_name</i> followed by the argument values enclosed in parentheses.</p>
+        <p>When executing a modification or transactional stored procedure, either all or none of the changes by the procedure's <b>insert</b>, <b>update</b>, and <b>delete</b> statements will be made.  If an error occurs (e.g., a referential integrity error) during execution of any one of the included statements then all changes made since the start of the procedure will be discarded.</p>
+        <p>For retrieval stored procedures that contain more than one <b>select</b> statement, <code>rsqlMoreResults</code> must be called to execute each subsequent <b>select</b> after the first.  After the last <b>select</b> has returned <code>errNOMOREDATA</code>, a call to <code>rsqlMoreResults</code> will also return <code>errNOMOREDATA</code> indicating that the last <b>select</b> has been executed.</p>
+        <p class="Heading">Example</p><pre xml:space="preserve">create proc authors_books(lastnm char) as
+    select publ_yr, title from book where last_name = lastnm
+end proc;
+    ...
+authors_books("PotterB");
+PUBL_YR TITLE
+   1903 The Tailor of Gloucester
+   1903 The tale of Squirrel Nutkin
+   1904 The tale of Benjamin Bunny
+   1904 The tale of Peter Rabbit; thirty-one illustrations.
+   1905 The pie and the patty-pan.
+   1905 The tale of Mrs. Tiggy-Winkle
+   1906 The tale of Mr. Jeremy Fisher
+   1908 The tale of Jemima Puddle-Duck
+   1907 The tale of Tom Kitten
+   1911 The tale of Timmy Tiptoes
+   1912 The tale of Mr. Tod
+   1913 The tale of Pigling Bland
+   1918 The tale of Johnny Town-mouse
+    ...
+create procedure sold(pid char, bid char, offer double, sale_date char) as
+    start transaction
+    update book set price = offer, date_sold = sale_date where bookid = bid
+    insert into sale values bid, pid
+    commit
+end proc;
+    ...
+execute sold("SMD", "potter08", 750.0, date "2011-04-03");
+    ...</pre>
+        <p class="Heading">See Also</p>
+        <p><a href="../DDL/createproc.htm">create procedure</a>
+        </p>
+        <hr MadCap:conditions="Default.ScreenOnly" width="100%" size="0" align="center" />
+        <p MadCap:conditions="Default.ScreenOnly" style="font-size: 8pt;"><span class="MyVariablesCopyright">Copyright © 2012, Raima Inc. All rights reserved.</span>
+        </p>
+        <script type="text/javascript" src="../../SkinSupport/MadCapBodyEnd.js">
+        </script>
+        <p class="MCWebHelpFramesetLink MCWebHelpFramesetLinkBottom" style="display: none;"><a href="../../../Default_CSH.htm#SQL/DML/execute.htm" style="">Open topic with navigation</a>
+        </p>
+    </body>
+</html>

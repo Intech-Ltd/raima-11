@@ -1,0 +1,71 @@
+<?xml version="1.0" encoding="utf-8"?>
+<!DOCTYPE html PUBLIC "-//W3C//DTD XHTML 1.0 Strict//EN" "http://www.w3.org/TR/xhtml1/DTD/xhtml1-strict.dtd">
+<html xmlns:MadCap="http://www.madcapsoftware.com/Schemas/MadCap.xsd" MadCap:tocPath="SQL API|SQL Language Guide|Reference Guide|SQL Statement Reference" MadCap:InPreviewMode="false" MadCap:PreloadImages="false" MadCap:RuntimeFileType="Topic" MadCap:TargetType="WebHelp" lang="en-us" xml:lang="en-us" MadCap:PathToHelpSystem="../../../" MadCap:HelpSystemFileName="Default.xml" MadCap:SearchType="Stem">
+    <head>
+        <meta http-equiv="Content-Type" content="text/html; charset=utf-8" /><title>create domain&#160; </title>
+        <link rel="icon" type="image/png" href="http://docs.raima.com/favicon.png" />
+        <link href="../../SkinSupport/MadCap.css" rel="stylesheet" />
+        <link href="../../Resources/Stylesheets/raima.css" rel="stylesheet" />
+        <script src="../../SkinSupport/MadCapAll.js" type="text/javascript">
+        </script>
+    </head>
+    <body>
+        <p class="MCWebHelpFramesetLink MCWebHelpFramesetLinkTop" style="display: none;"><a href="../../../Default_CSH.htm#SQL/DDL/createdomain.htm" style="">Open topic with navigation</a>
+        </p>
+        <div class="MCBreadcrumbsBox_0"><span class="MCBreadcrumbsPrefix">You are here: </span><a class="MCBreadcrumbsLink" href="../../dbRSQL.htm">SQL API</a><span class="MCBreadcrumbsDivider"> &gt; </span><a class="MCBreadcrumbsLink" href="../dbSQL.htm">SQL Language Guide</a><span class="MCBreadcrumbsDivider"> &gt; </span><a class="MCBreadcrumbsLink" href="../SQLStmtRef.htm">Reference Guide</a><span class="MCBreadcrumbsDivider"> &gt; </span><span class="MCBreadcrumbs">create domain</span>
+        </div>
+        <h3 class="newpage"><a name="kanchor226"></a>create domain&#160; </h3>
+        <p>Create a column domain specification</p>
+        <p class="Heading">Syntax</p><pre class="Grammar" xml:space="preserve">create_domain_stmt:
+		<b>create domain</b>    <![CDATA[ ]]><i>domain_name</i> [<b>as</b>] data_type
+			[<b>default</b> {<i>constant</i> | <b>null</b>}]
+</pre><pre class="Grammar" xml:space="preserve">
+data_type:
+		base_type |&#160;blob_type</pre><pre class="Grammar" xml:space="preserve">
+base_type:
+ 	 	{<b>character</b> | <b>char</b> } [(<i>length</i>)]
+ 	|	{{<b>character</b> | <b>char</b>} <b>varying</b> | <b>varchar</b> } (<i>length</i>)
+ 	|	{<b>binary</b> [(<i>length</i>)]
+	|	{<b>double</b> [<b>precision</b>] | <b>float</b> | <b>real</b> }
+ 	|	{ <b>tinyint</b> | <b>smallint</b> | <b>int</b> | <b>integer</b> | <b>long</b> | <b>bigint</b>}
+ 	|	<b>date</b> | <b>time</b> | <b>timestamp</b>    <![CDATA[  
+]]></pre><pre class="Grammar" xml:space="preserve">
+blob_type:
+ 		{{<b>character</b> | <b>char</b>} <b>large object</b> | <b>long varchar</b> | <b>clob</b>} [(<i>length</i>)] file_option
+       |	{<b>binary large object</b> | <b>large varbinary</b> | <b>blob</b>} [(<i>length</i>)] file_option</pre><pre class="Grammar" xml:space="preserve">file_option:
+	[<b>pagesize</b> = <i>num</i>] [<b>inmemory</b> [<b>persistent</b> |&#160;<b>volatile</b> |&#160;<b>read</b>]]</pre>
+        <p class="Heading">Description </p>
+        <p>A "domain" is simply a user-defined and named data type which can then be specified as the data type for columns declared in a <b>create table</b> statement.  The <b>create domain</b> statement must be submitted before any <b>create table</b> statements that reference it.     </p>
+        <p>The name of the domain is specified as the <i>domain_name</i>.  The data_type specifies the base type for the domain.  A <i>constant</i> value or <b>null</b> can be specified as the default.</p>
+        <p class="Heading">Example </p><pre>create database bookshop;
+
+<b>create domain money as double
+    default null;</b>
+
+create table book(
+    bookid      char(14) primary key,
+    last_name   char(11) references author,
+    title       varchar(255),
+    descr       char(61),
+    publisher   char(136),
+    publ_year   smallint,
+    lc_class    char(33),
+    date_acqd   date,
+    date_sold   date,
+    price       money,
+    cost        money
+);</pre>
+        <p class="Heading">See Also</p>
+        <p><a href="createdatabase.htm">create database</a>
+        </p>
+        <p><a href="createtable.htm">create table</a>
+        </p>
+        <hr MadCap:conditions="Default.ScreenOnly" width="100%" size="0" align="center" />
+        <p MadCap:conditions="Default.ScreenOnly" style="font-size: 8pt;"><span class="MyVariablesCopyright">Copyright © 2012, Raima Inc. All rights reserved.</span>
+        </p>
+        <script type="text/javascript" src="../../SkinSupport/MadCapBodyEnd.js">
+        </script>
+        <p class="MCWebHelpFramesetLink MCWebHelpFramesetLinkBottom" style="display: none;"><a href="../../../Default_CSH.htm#SQL/DDL/createdomain.htm" style="">Open topic with navigation</a>
+        </p>
+    </body>
+</html>

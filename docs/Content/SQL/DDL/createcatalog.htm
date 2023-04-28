@@ -1,0 +1,47 @@
+<?xml version="1.0" encoding="utf-8"?>
+<!DOCTYPE html PUBLIC "-//W3C//DTD XHTML 1.0 Strict//EN" "http://www.w3.org/TR/xhtml1/DTD/xhtml1-strict.dtd">
+<html xmlns:MadCap="http://www.madcapsoftware.com/Schemas/MadCap.xsd" MadCap:tocPath="SQL API|SQL Language Guide|Reference Guide|SQL Statement Reference" MadCap:InPreviewMode="false" MadCap:PreloadImages="false" MadCap:RuntimeFileType="Topic" MadCap:TargetType="WebHelp" lang="en-us" xml:lang="en-us" MadCap:PathToHelpSystem="../../../" MadCap:HelpSystemFileName="Default.xml" MadCap:SearchType="Stem">
+    <head>
+        <meta http-equiv="Content-Type" content="text/html; charset=utf-8" /><title>create catalog   </title>
+        <link rel="icon" type="image/png" href="http://docs.raima.com/favicon.png" />
+        <link href="../../SkinSupport/MadCap.css" rel="stylesheet" />
+        <link href="../../Resources/Stylesheets/raima.css" rel="stylesheet" />
+        <script src="../../SkinSupport/MadCapAll.js" type="text/javascript">
+        </script>
+    </head>
+    <body>
+        <p class="MCWebHelpFramesetLink MCWebHelpFramesetLinkTop" style="display: none;"><a href="../../../Default_CSH.htm#SQL/DDL/createcatalog.htm" style="">Open topic with navigation</a>
+        </p>
+        <div class="MCBreadcrumbsBox_0"><span class="MCBreadcrumbsPrefix">You are here: </span><a class="MCBreadcrumbsLink" href="../../dbRSQL.htm">SQL API</a><span class="MCBreadcrumbsDivider"> &gt; </span><a class="MCBreadcrumbsLink" href="../dbSQL.htm">SQL Language Guide</a><span class="MCBreadcrumbsDivider"> &gt; </span><a class="MCBreadcrumbsLink" href="../SQLStmtRef.htm">Reference Guide</a><span class="MCBreadcrumbsDivider"> &gt; </span><span class="MCBreadcrumbs">create catalog</span>
+        </div>
+        <h3 class="newpage"><a name="kanchor224"></a>create catalog     <![CDATA[ ]]></h3>
+        <p>Create a new catalog file</p>
+        <p class="Heading">Syntax</p><pre class="Grammar" xml:space="preserve">create_catalog_stmt:
+		<b>create catalog for</b>    <![CDATA[ ]]><i>dbname</i></pre>
+        <p class="Heading">Description </p>
+        <p>The <b>create catalog</b> statement is used to either create a catalog file for a <span class="MyVariablesProductShortName">RDM</span> core (i.e., non-SQL) database or to update the catalog of a <span class="MyVariablesRSQLName">RDM SQL</span> database in order to store column statistics updated through prior calls to the <b>set column</b> statement.</p>
+        <p>When a core database is opened in SQL, the <span class="MyVariablesRSQLName">RDM SQL</span> engine creates an internal catalog from the core database dictionary.  Once opened, since the database dictionary does not contain the <b>range</b> and <b>distinct values</b> that in SQL can be specified for table columns, the <b>set column</b> statement can be used to provide this information.  Moreover, as core databases also do not distinguish between character and binary blob data, the <b>set column</b> statement can be used to specify a blob column to be either a <b>long varchar</b> or <b>long wvarchar</b>.  Having done so, a catalog containing the SQL version of the core database along with the additional information provided in previously executed <b>set column</b> statements can be permanently stored in a catalog by executing the <b>create catalog</b> statement.</p>
+        <p>For an SQL database, this statement can be used to update the column statistics specified in previously executed <b>set column</b> statements contained in the catalog for the specified database.</p>
+        <p>Execution of this statement requires that the database has been opened in exclusive access mode.  This statement is not transactional.  Hence, once executed it cannot be undone.</p>
+        <p class="Heading">Example </p><pre>open database mycoredb in exclusive mode;
+set column geosensor.descr to long varchar;
+set column geosensor.type distinct values 20;
+
+... other set column statements
+
+<b>create catalog for mycoredb;</b> <![CDATA[
+]]></pre>
+        <p class="Heading">See Also</p>
+        <p><a href="../DML/open.htm">open</a>
+        </p>
+        <p><a href="../DML/setcol.htm">set column</a>
+        </p>
+        <hr MadCap:conditions="Default.ScreenOnly" width="100%" size="0" align="center" />
+        <p MadCap:conditions="Default.ScreenOnly" style="font-size: 8pt;"><span class="MyVariablesCopyright">Copyright © 2012, Raima Inc. All rights reserved.</span>
+        </p>
+        <script type="text/javascript" src="../../SkinSupport/MadCapBodyEnd.js">
+        </script>
+        <p class="MCWebHelpFramesetLink MCWebHelpFramesetLinkBottom" style="display: none;"><a href="../../../Default_CSH.htm#SQL/DDL/createcatalog.htm" style="">Open topic with navigation</a>
+        </p>
+    </body>
+</html>

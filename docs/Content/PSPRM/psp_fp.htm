@@ -1,0 +1,110 @@
+<?xml version="1.0" encoding="utf-8"?>
+<!DOCTYPE html PUBLIC "-//W3C//DTD XHTML 1.0 Strict//EN" "http://www.w3.org/TR/xhtml1/DTD/xhtml1-strict.dtd">
+<html xmlns:MadCap="http://www.madcapsoftware.com/Schemas/MadCap.xsd" MadCap:tocPath="Native API|Reference Manual|Platform Support Functions (psp_ Prefix)" MadCap:InPreviewMode="false" MadCap:PreloadImages="false" MadCap:RuntimeFileType="Topic" MadCap:TargetType="WebHelp" lang="en-us" xml:lang="en-us" class="" MadCap:PathToHelpSystem="../../" MadCap:HelpSystemFileName="Default.xml" MadCap:SearchType="Stem">
+    <head>
+        <meta http-equiv="Content-Type" content="text/html; charset=utf-8" /><title>psp_fprintf, psp_fputc, psp_fputs, psp_vfprintf</title>
+        <link rel="icon" type="image/png" href="http://docs.raima.com/favicon.png" />
+        <link href="../SkinSupport/MadCap.css" rel="stylesheet" />
+        <link href="../Resources/TableStyles/FunctionArgs.css" rel="stylesheet" />
+        <link href="../Resources/Stylesheets/raima.css" rel="stylesheet" />
+        <script src="../SkinSupport/MadCapAll.js" type="text/javascript">
+        </script>
+    </head>
+    <body>
+        <p class="MCWebHelpFramesetLink MCWebHelpFramesetLinkTop" style="display: none;"><a href="../../Default_CSH.htm#PSPRM/psp_fp.htm" style="">Open topic with navigation</a>
+        </p>
+        <div class="MCBreadcrumbsBox_0"><span class="MCBreadcrumbsPrefix">You are here: </span><a class="MCBreadcrumbsLink" href="../dbCore.htm">Native API</a><span class="MCBreadcrumbsDivider"> &gt; </span><a class="MCBreadcrumbsLink" href="../RM/dbRM.htm">Reference Manual</a><span class="MCBreadcrumbsDivider"> &gt; </span><a class="MCBreadcrumbsLink" href="../RM/Chapter5.htm">Platform Support Functions (psp_ Prefix)</a><span class="MCBreadcrumbsDivider"> &gt; </span><span class="MCBreadcrumbs">psp_fprintf, psp_fputc, psp_fputs, psp_vfprintf</span>
+        </div>
+        <h3 class="newpage"><a name="kanchor175"></a>psp_fprintf, psp_fputc, psp_fputs, psp_vfprintf</h3>
+        <p>Write character(s) to a standard I/O stream</p>
+        <p class="Heading">Prototype</p><pre xml:space="preserve">int32_t psp_fprintf(
+    PSP_FILE_STREAM stream,
+    const char     *format,
+    ...);</pre><pre xml:space="preserve">int32_t psp_fputc(
+    int32_t         c,
+    PSP_FILE_STREAM&#160;stream);</pre><pre xml:space="preserve">int32_t psp_fputs(
+    const char     *str,
+    PSP_FILE_STREAM&#160;stream);</pre><pre xml:space="preserve">int32_t psp_vfprintf(
+    PSP_FILE_STREAM stream,
+    const char     *format,
+    va_list         args);</pre>
+        <p class="Heading">Parameters</p>
+        <table style="width: 100%;mc-table-style: url('../Resources/TableStyles/FunctionArgs.css');margin-left: 0;margin-right: auto;" class="TableStyle-FunctionArgs" cellspacing="0">
+            <col style="width: 140px;" class="Column-Column1" />
+            <col style="width: 80px;" class="Column-Column3" />
+            <col class="Column-Column2" />
+            <tbody>
+                <tr class="Body-Body1">
+                    <td style="" class="BodyE-Column1-Body1">stream</td>
+                    <td style="" class="BodyE-Column3-Body1">(input)</td>
+                    <td style="" class="BodyD-Column2-Body1">The handle to the PSP_FILE_STREAM&#160;file opened with <code>psp_fopen</code> or <code>psp_fopen_std</code>.</td>
+                </tr>
+                <tr class="Body-Body1">
+                    <td class="BodyE-Column1-Body1">format</td>
+                    <td class="BodyE-Column3-Body1">(input)</td>
+                    <td class="BodyD-Column2-Body1">A printf-style format string.</td>
+                </tr>
+                <tr class="Body-Body1">
+                    <td style="" class="BodyE-Column1-Body1">c</td>
+                    <td style="" class="BodyE-Column3-Body1">(input)</td>
+                    <td style="" class="BodyD-Column2-Body1">A UTF-8 character.</td>
+                </tr>
+                <tr class="Body-Body1">
+                    <td class="BodyE-Column1-Body1">str</td>
+                    <td class="BodyE-Column3-Body1">(input)</td>
+                    <td class="BodyD-Column2-Body1">A UTF-8 string.</td>
+                </tr>
+                <tr class="Body-Body1">
+                    <td style="" class="BodyE-Column1-Body1">...</td>
+                    <td style="" class="BodyE-Column3-Body1">(input)</td>
+                    <td style="" class="BodyD-Column2-Body1">Values to be printed.</td>
+                </tr>
+                <tr class="Body-Body1">
+                    <td class="BodyB-Column1-Body1">args</td>
+                    <td class="BodyB-Column3-Body1">(input)</td>
+                    <td class="BodyA-Column2-Body1">Variable argument list (stdarg format).</td>
+                </tr>
+            </tbody>
+        </table>
+        <p class="Heading">Description</p>
+        <p>These functions correspond to the standard C library functions (minus the "psp_" prefix). The additional parameter, <code>stream</code>, must be a handle returned from <code>psp_fopen</code> or <code>psp_fopen_std</code>.</p>
+        <p class="Heading">Required Headers</p><pre xml:space="preserve">#include "psp.h"</pre>
+        <p class="Heading">Libraries</p>
+        <table style="width: 100%; margin-left: 0; margin-right: auto;">
+            <col style="width: 200px;">
+            </col>
+            <col>
+            </col>
+            <thead>
+                <tr>
+                    <th>Library Name</th>
+                    <th>Description</th>
+                </tr>
+            </thead>
+            <tbody>
+                <tr>
+                    <td><code>rdmpsp<span class="MyVariablesLibraryVersion">11</span></code>
+                    </td>
+                    <td>Platform Support Library</td>
+                </tr>
+            </tbody>
+        </table>
+        <p>See <a href="../GS/distrib.htm#Library">Library Naming Conventions</a> section for full library name and a list of library dependencies.</p>
+        <p class="Heading">Return Codes</p>
+        <p>Number of bytes written or -1 if write error occurred</p>
+        <p class="Heading">See Also</p>
+        <p><a href="psp_fclose.htm">psp_fclose</a>
+        </p>
+        <p><a href="psp_fopen.htm">psp_fopen</a>
+        </p>
+        <p><a href="psp_fg.htm">Stream Input Functions</a>
+        </p>
+        <hr MadCap:conditions="Default.ScreenOnly" width="100%" size="0" align="center" />
+        <p MadCap:conditions="Default.ScreenOnly" style="font-size: 8pt;"><span class="MyVariablesCopyright">Copyright © 2012, Raima Inc. All rights reserved.</span>
+        </p>
+        <script type="text/javascript" src="../SkinSupport/MadCapBodyEnd.js">
+        </script>
+        <p class="MCWebHelpFramesetLink MCWebHelpFramesetLinkBottom" style="display: none;"><a href="../../Default_CSH.htm#PSPRM/psp_fp.htm" style="">Open topic with navigation</a>
+        </p>
+    </body>
+</html>

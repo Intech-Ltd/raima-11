@@ -1,0 +1,333 @@
+<?xml version="1.0" encoding="utf-8"?>
+<!DOCTYPE html PUBLIC "-//W3C//DTD XHTML 1.0 Strict//EN" "http://www.w3.org/TR/xhtml1/DTD/xhtml1-strict.dtd">
+<html xmlns:MadCap="http://www.madcapsoftware.com/Schemas/MadCap.xsd" MadCap:tocPath="Utility Programs" MadCap:InPreviewMode="false" MadCap:PreloadImages="false" MadCap:RuntimeFileType="Topic" MadCap:TargetType="WebHelp" lang="en-us" xml:lang="en-us" MadCap:PathToHelpSystem="../../" MadCap:HelpSystemFileName="Default.xml" MadCap:SearchType="Stem">
+    <head>
+        <meta http-equiv="Content-Type" content="text/html; charset=utf-8" /><title>ddlp</title>
+        <link rel="icon" type="image/png" href="http://docs.raima.com/favicon.png" />
+        <link href="../SkinSupport/MadCap.css" rel="stylesheet" />
+        <link href="../Resources/TableStyles/ArgsTwoCol.css" rel="stylesheet" />
+        <link href="../Resources/Stylesheets/raima.css" rel="stylesheet" />
+        <script src="../SkinSupport/MadCapAll.js" type="text/javascript">
+        </script>
+    </head>
+    <body>
+        <p class="MCWebHelpFramesetLink MCWebHelpFramesetLinkTop" style="display: none;"><a href="../../Default_CSH.htm#util/ddlp.htm" style="">Open topic with navigation</a>
+        </p>
+        <div class="MCBreadcrumbsBox_0"><span class="MCBreadcrumbsPrefix">You are here: </span><a class="MCBreadcrumbsLink" href="../dbUTIL.htm">Utility Programs</a><span class="MCBreadcrumbsDivider"> &gt; </span><span class="MCBreadcrumbs">ddlp</span>
+        </div>
+        <h3 class="newpage">ddlp</h3>
+        <p>Database definition language processor</p>
+        <p class="Heading">Prototype</p><pre xml:space="preserve">ddlp [-docroot path] [-a hostname[:port]] [-c[n]] [-cpp] [-d] [-dba4] [-e]
+       [-i "preproc options"] [-p] [-m] [-master masterTFS] [-nd] [-nh]
+       [-ns namespace] [-r] [-q] [-u] [-x] [-z] [-s on|off] ddlfile</pre>
+        <p class="Heading">Description</p>
+        <p>The database definition language processor, <b>ddlp</b>, compiles the DDL specification contained in the text file <code>ddlfile</code>, and generates the database dictionary (<code>dbname.dbd</code>) and the database header file (<code>dbname.h</code>). DDL errors will be reported on stdout with the line number where the error was first detected. See the TIMS example (supplied with the product) for more information.</p>
+        <p style="font-style: normal;">Using the -c option will generate a C-language structure for passing to <code>d_open_ptr</code>. This generates the file <code><i>dbname</i>_dbd.h</code> that should be included in the application source and <code><i>dbname</i>_dbd.c</code> which should be compiled and linked with the application. Embedding the dbd directly into the program is necessary for in-memory databases that may not have a filesystem available for storing the dbd file.</p>
+        <p>The <code>-p</code> option causes         <b>ddlp</b> to use the C preprocessor prior to compiling the DDL. Thus <code>#define</code> and <code>#include</code> statements may be used. Use the <code>-i</code> option to send options to the preprocessor. </p>
+        <p>Be sure to refer to the list of <b>ddlp</b> keywords listed at the end of this section.</p>
+        <p class="Notes">Sometimes the reported error line number is the line following the place where the actual error occurs. Be sure to check the lines preceding the reported line if you cannot find the error in the reported line.</p>
+        <p>The <b>ddlp </b>error message format (interpreted by some text editors) is shown below:</p><pre>filename line col : message</pre>
+        <p class="Heading">Options</p>
+        <table style="width: 100%;border-collapse: collapse;mc-table-style: url('../Resources/TableStyles/ArgsTwoCol.css');margin-left: 0;margin-right: auto;" class="TableStyle-ArgsTwoCol" cellspacing="0">
+            <col style="width: 130px;" class="Column-Column1" />
+            <col class="Column-Column2" />
+            <tbody>
+                <tr MadCap:conditions="" class="Body-Body1">
+                    <td class="BodyE-Column1-Body1">-docroot path</td>
+                    <td class="BodyD-Column2-Body1">[non-RPC configuration only] Specifies the document root when in Direct-Link or Standalone configuration.</td>
+                </tr>
+                <tr MadCap:conditions="" class="Body-Body1">
+                    <td class="BodyE-Column1-Body1">-a tfs:[:port]</td>
+                    <td class="BodyD-Column2-Body1">Identify the TFS host name and (optionally) the port for non-default TFS.</td>
+                </tr>
+                <tr MadCap:conditions="" class="Body-Body1">
+                    <td class="BodyE-Column1-Body1">-c</td>
+                    <td class="BodyD-Column2-Body1">Generate the database dictionary as a C-language structure for passing to <code>d_open_ptr</code>. </td>
+                </tr>
+                <tr MadCap:conditions="" class="Body-Body1">
+                    <td class="BodyE-Column1-Body1">-cn</td>
+                    <td class="BodyD-Column2-Body1">Same as -c, but do not generate DBD file.</td>
+                </tr>
+                <tr class="Body-Body1">
+                    <td class="BodyE-Column1-Body1">-cpp</td>
+                    <td class="BodyD-Column2-Body1">Generate the database dictionary as a CPP source and header.</td>
+                </tr>
+                <tr class="Body-Body1">
+                    <td class="BodyE-Column1-Body1">-d</td>
+                    <td class="BodyD-Column2-Body1">Allows fields in different record types to use the same field name. If duplicate field names exist and this option is not specified, it will result in a compile error. If specified, then all field name constants in the generated header file will be prefixed with the name of the record containing the field. These prefixed constants must be used in any C file referring to the fields.<br /><br />If duplicated field names are listed in a <b>file</b> statement as keys or as variable-length data fields, it will be necessary to qualify the field by prefixing the field name with the record name and a dot, for example:<pre xml:space="preserve">database tims {
+    ...
+    key file "tims.k03" contains <b>borrower.</b>name;
+    ...
+    record author {
+        char name[32];
+        ...
+    }
+    record borrower {
+        key char name[32];
+        ...
+    }
+    ...
+}</pre></td>
+                </tr>
+                <tr class="Body-Body1">
+                    <td class="BodyE-Column1-Body1">-dba4</td>
+                    <td class="BodyD-Column2-Body1">Use 4-byte database addresses (default is 8 bytes).</td>
+                </tr>
+                <tr class="Body-Body1">
+                    <td class="BodyE-Column1-Body1">-e</td>
+                    <td class="BodyD-Column2-Body1">Reserved for internal use by <span class="MyVariablesShortCompanyName">Raima</span>.</td>
+                </tr>
+                <tr class="Body-Body1">
+                    <td class="BodyE-Column1-Body1">-i "preproc&#160;options"</td>
+                    <td class="BodyD-Column2-Body1">Instructs ddlp to send "preproc options" to the C preprocessor. This option's main use is to add include paths (e.g., -i "-I../myinclude") for the preprocessor to search. Use together with -p option.</td>
+                </tr>
+                <tr class="Body-Body1">
+                    <td class="BodyE-Column1-Body1">-p</td>
+                    <td class="BodyD-Column2-Body1">Instruct ddlp to invoke the C preprocessor prior to compilation.</td>
+                </tr>
+                <tr class="Body-Body1">
+                    <td class="BodyE-Column1-Body1">-m</td>
+                    <td class="BodyD-Column2-Body1">Generate the Memory Requirements Report.</td>
+                </tr>
+                <tr class="Body-Body1">
+                    <td class="BodyE-Column1-Body1">-master</td>
+                    <td class="BodyD-Column2-Body1">Identify the master TFS for which this is a slave.</td>
+                </tr>
+                <tr class="Body-Body1">
+                    <td class="BodyE-Column1-Body1">-nd</td>
+                    <td class="BodyD-Column2-Body1">Do not generate the DBD file. Can be used to make sure DDL compiles. The header file will still be generated.</td>
+                </tr>
+                <tr class="Body-Body1">
+                    <td class="BodyE-Column1-Body1">-nh</td>
+                    <td class="BodyD-Column2-Body1">Do not generate the header file.</td>
+                </tr>
+                <tr class="Body-Body1">
+                    <td class="BodyE-Column1-Body1">-ns namespace</td>
+                    <td style="font-style: normal;" class="BodyD-Column2-Body1">Has the effect of creating a new database with its name prefixed by <i>namespace</i> which is otherwise identical to the original database. For example, the statement<pre xml:space="preserve">ddlp -c -ns my tims.ddl</pre>will create a database named <code>mytims</code> with <code>mytims.dbd</code> stored in the TFS, a header file named <code>tims.h</code> (note it does <i>not</i> have the prefix), and dictionary files named <code>mytims_dbd.h</code> and <code>mytims_dbd.c</code>.</td>
+                </tr>
+                <tr class="Body-Body1">
+                    <td class="BodyE-Column1-Body1">-r</td>
+                    <td class="BodyD-Column2-Body1">Generates the file structure report.</td>
+                </tr>
+                <tr class="Body-Body1">
+                    <td class="BodyE-Column1-Body1">-q</td>
+                    <td class="BodyD-Column2-Body1">Quiet mode. Do not print "0 errors detected" after successful execution. Does not suppress error/warning mesages.</td>
+                </tr>
+                <tr class="Body-Body1">
+                    <td class="BodyE-Column1-Body1">-u</td>
+                    <td class="BodyD-Column2-Body1">Use UTF-16 mode for text files. All text files opened for reading or writing will be treated as UTF-16 files.</td>
+                </tr>
+                <tr class="Body-Body1">
+                    <td class="BodyE-Column1-Body1">-x</td>
+                    <td class="BodyD-Column2-Body1">Generates a cross-reference listing of record, set, and field names.</td>
+                </tr>
+                <tr class="Body-Body1">
+                    <td class="BodyE-Column1-Body1">-z</td>
+                    <td class="BodyD-Column2-Body1">Instructs ddlp to omit the creation of the SIZEOF_* definitions.</td>
+                </tr>
+                <tr class="Body-Body1">
+                    <td class="BodyB-Column1-Body1">-s on|off</td>
+                    <td class="BodyA-Column2-Body1">Instructs ddlp to convert all record, field and set names in the DDL&#160;file to lower case. By default, these names are preserved as-is.</td>
+                </tr>
+            </tbody>
+        </table>
+        <h4>Language Summary</h4><pre class="Grammar" xml:space="preserve">database_stmt:
+ 		<b>database</b>   <![CDATA[ ]]><i>db_name</i> 
+			[ '<b>[</b>' <i>pgsize</i> '<b>]</b>' ] [<b>inmemory</b> [<b>persistent</b> |&#160;<b>volatile</b> |&#160;<b>read</b>]] [<b>dba4</b> |&#160;<b>dba8</b>]
+                '<b>{</b>
+                        file_stmt [file_stmt]...
+                        record_stmt [record_stmt]...
+                        [set_stmt [set_stmt]...]
+                '<b>}</b>'</pre><pre class="Grammar" xml:space="preserve">file_stmt:
+ 		<b>data file</b> ['<b>[</b>' <i>pgsize</i> '<b>]</b>'] file_spec [<b>maxslots =</b><i>slots</i>]
+                        <b>contains</b>   <![CDATA[ ]]><i>recname</i>[, <i>recname</i>]... '<b>;</b>'
+    &#160;&#160;&#160;&#160;|&#160;&#160;&#160;&#160;&#160;&#160;<b>key file</b> ['<b>[</b>' <i>pgsize</i> '<b>]</b>'] file_spec
+                        <b>contains</b> [<i>recname</i>.]<i>keyfld</i>[, [<i>recname</i>.]<i>keyfld</i>]... '<b>;</b>'
+        |       <b>hash file</b> ['<b>[</b>' <i>pgsize</i> '<b>]</b>'] file_spec <b>size =</b><i>hashtablesize</i>   <![CDATA[
+                        ]]><b>contains</b> [<i>recname</i>.]<i>blobfld</i>[, [<i>recname</i>.]<i>blobfld</i>]... '<b>;</b>'
+        |       [<b>compact</b>] <b>vardata file</b> ['<b>[</b>' <i>pgsize</i> '<b>]</b>'] file_spec
+                        <b>contains</b> [<i>recname</i>.]<i>varfld</i>[, [<i>recname</i>.]<i>varfld</i>]... '<b>;</b>' 
+        |       <b>blob file</b> ['<b>[</b>' <i>pgsize</i> '<b>]</b>'] file_spec
+                        <b>contains</b> [<i>recname</i>.]<i>blobfld</i>[, [<i>recname</i>.]<i>blobfld</i>]... '<b>;</b>' </pre><pre class="Grammar" xml:space="preserve">file_spec:
+                [<b>fileid =</b>] "<i>filename</i>" [file_option[, file_option]...]</pre><pre class="Grammar" xml:space="preserve">file_option:
+                <b>inmemory</b> [<b>persistent</b> |&#160;<b>volatile</b> |&#160;<b>read</b>]
+        |       <b>maxpgs =</b><i>pages</i>
+        |       <b>pagesize =</b><i>pgsize</i></pre><pre class="Grammar" xml:space="preserve">record_stmt:
+ 		[<b>static</b>] [<b>circular</b>] <b>record</b>   <![CDATA[ ]]><i>recname</i> '<b>{</b>'
+                        field_stmt [field_stmt]...
+                        [comkey_stmt [comkey_stmt]...]
+                '<b>}</b>'</pre><pre class="Grammar" xml:space="preserve">field_stmt:
+                [key_stmt] field_type_stmt '<b>;</b>'
+        |       [key_stmt] <b>struct</b> '<b>{</b>'
+                        type_stmt <i>fldname</i> array_stmt '<b>;</b>'
+                        [ type_stmt <i>fldname</i> array_stmt '<b>;</b>' ]...
+                '<b>}</b>' <i>fldname</i> array_stmt '<b>;</b>'
+</pre><pre class="Grammar" xml:space="preserve">key_stmt:
+                [<b>optional</b>] [<b>unique</b>] <b>key</b> [ '[' <i>keylen</i> ']' ]
+        |       <b>hash</b> [ '<b>[</b>' <i>keylen</i> '<b>]</b>' ]</pre><pre class="Grammar" xml:space="preserve">field_type_stmt:
+                type_stmt <i>fldname</i> array_stmt
+        |       <b>blob_id</b>    <![CDATA[  ]]><i>fldname</i>
+        |      &#160;{<b>varchar</b>&#160;|&#160;<b>varwchar</b> |&#160;<b>varbinary</b>} '<b>[</b>' [<i>minsize</i>,] <i>maxsize</i> '<b>]</b>'
+</pre><pre class="Grammar" xml:space="preserve">array_stmt:
+                [ '<b>[</b>' <i>dim</i> '<b>]</b>' [ '<b>[</b>' <i>dim2</i> '<b>]</b>' [ '<b>[</b>' <i>dim3</i> '<b>]</b>' ] ] ]</pre><pre class="Grammar" xml:space="preserve">type_stmt:
+                [<b>unsigned</b>] { <b>int</b> |&#160;<b>short</b> |&#160;<b>long</b> |&#160;<b>char</b>&#160;}
+        |       <b>wchar</b> |&#160;<b>wchar_t</b>
+        |       <b>int16_t</b> |&#160;<b>int32_t</b> |&#160;<b>int64_t</b>
+        |       <b>uint8_t</b> |&#160;<b>uint16_t</b> |&#160;<b>uint32_t</b> |&#160;<b>uint64_t</b>
+        |       <b>float</b> |&#160;<b>double</b>
+        |       <b>DB_ADDR</b> |&#160;<b>DB_ADDR4</b> |&#160;<b>DB_ADDR8</b></pre><pre class="Grammar" xml:space="preserve">comkey_stmt:
+                <b>compound</b> [<b>optional</b>] [<b>unique</b>] <b>key</b> [ '<b>[</b>' <i>keylen</i> '<b>]</b>' ] <i>keyname</i> '<b>{</b>'
+                        <i>fldname</i> [<b>asc</b>[<b>ending</b>] |&#160;<b>desc</b>[<b>ending</b>]] '<b>;</b>'
+                        [ <i>fldname</i> [<b>asc</b>[<b>ending</b>] |&#160;<b>desc</b>[<b>ending</b>]] '<b>;</b>' ]...
+                '<b>}</b>' ['<b>;</b>']
+        |&#160;      <b>compound hash</b> [ '<b>[</b>' <i>keylen</i> '<b>]</b>' ] <i>keyname</i> '<b>{</b>'
+                        <i>fldname</i> '<b>;</b>'
+                        [ <i>fldname</i> '<b>;</b>' ]...
+               '<b>}</b>' ['<b>;</b>']</pre><pre class="Grammar" xml:space="preserve">set_stmt:
+                <b>set</b>   <![CDATA[ ]]><i>setname</i>   <![CDATA[ ]]><b>{</b>   <![CDATA[
+                        ]]><b>order</b> {<b>asc</b>[<b>ending</b>] |&#160;<b>desc</b>[<b>ending</b>] |&#160;<b>first</b>&#160;|&#160;<b>last</b> |&#160;<b>next</b>}&#160;'<b>;</b>'
+                        <b>owner</b>   <![CDATA[ ]]><i>recname</i> '<b>;</b>'
+                        member_stmt [member_stmt] ...
+                <b>}</b></pre><pre class="Grammar" xml:space="preserve">member_stmt:
+                <b>member</b>   <![CDATA[ ]]><i>recname</i> [ <b>by</b>   <![CDATA[ ]]><i>fldname</i>[, <i>fldname</i>...] ] '<b>;</b>'<br /></pre>
+        <p>where the language elements are defined as follows:</p>
+        <table style="width: 100%;mc-table-style: url('../Resources/TableStyles/ArgsTwoCol.css');margin-left: 0;margin-right: auto;" class="TableStyle-ArgsTwoCol" cellspacing="0">
+            <col class="Column-Column1" style="width: 120px;" />
+            <col class="Column-Column2" />
+            <tbody>
+                <tr class="Body-Body1">
+                    <td class="BodyE-Column1-Body1">dbname</td>
+                    <td class="BodyD-Column2-Body1">An identifier that names the database.</td>
+                </tr>
+                <tr class="Body-Body1">
+                    <td class="BodyE-Column1-Body1">pgsize</td>
+                    <td class="BodyD-Column2-Body1">The default size of a database page. (If pgsize is not supplied, the default is 1,024 bytes or the smallest multiple of 512 that will still hold the largest record.)</td>
+                </tr>
+                <tr class="Body-Body1">
+                    <td class="BodyE-Column1-Body1">fileid</td>
+                    <td class="BodyD-Column2-Body1">An identifier used as a reference for the specified file.</td>
+                </tr>
+                <tr class="Body-Body1">
+                    <td class="BodyE-Column1-Body1">filename</td>
+                    <td class="BodyD-Column2-Body1">A string enclosed in double quotes (" ") that identifies a base file name. Absolute or relative paths are ignored.</td>
+                </tr>
+                <tr class="Body-Body1">
+                    <td class="BodyE-Column1-Body1">recname</td>
+                    <td class="BodyD-Column2-Body1">An identifier that names a record type. A set statement may name <span class="state">system</span> as an owner record type. By doing this, it declares that a <span class="state">system</span> record exists, so the system record must be listed in a data file definition. A <span class="state">system</span> record cannot be defined in a record statement, and will not have any data fields - it is strictly a set owner.</td>
+                </tr>
+                <tr class="Body-Body1">
+                    <td class="BodyE-Column1-Body1">keyname</td>
+                    <td class="BodyD-Column2-Body1">The name of a key field. When listed in a key file statement, keyname can have a prefix identifying the record type (necessary when using the -d option). The format is <code>recname.keyname</code>.</td>
+                </tr>
+                <tr class="Body-Body1">
+                    <td class="BodyE-Column1-Body1">hashname</td>
+                    <td class="BodyD-Column2-Body1">The name of a hash field. When listed in a hash file statement, hashname can have a prefix identifying the record type (necessary when using the -d option). The format is <code>recname.hashname</code>.</td>
+                </tr>
+                <tr class="Body-Body1">
+                    <td class="BodyE-Column1-Body1">fldname</td>
+                    <td class="BodyD-Column2-Body1">An identifier that names a data field.</td>
+                </tr>
+                <tr class="Body-Body1">
+                    <td class="BodyE-Column1-Body1">dim</td>
+                    <td class="BodyD-Column2-Body1">A number that specifies the size of an array field dimension.</td>
+                </tr>
+                <tr class="Body-Body1">
+                    <td class="BodyB-Column1-Body1">setname</td>
+                    <td class="BodyA-Column2-Body1">An identifier that names a set.</td>
+                </tr>
+            </tbody>
+        </table>
+        <p class="Heading">ddlp Keywords (not case sensitive)</p>
+        <table style="caption-side: top;margin-left: 0;margin-right: auto;">
+            <col />
+            <col />
+            <col />
+            <col />
+            <tr>
+                <td>asc</td>
+                <td>ascending</td>
+                <td>blob</td>
+                <td>by</td>
+            </tr>
+            <tr>
+                <td>char</td>
+                <td>circular</td>
+                <td>compact</td>
+                <td>compound</td>
+            </tr>
+            <tr>
+                <td>const</td>
+                <td>contains</td>
+                <td>data</td>
+                <td>database</td>
+            </tr>
+            <tr>
+                <td>DB_ADDR</td>
+                <td>desc</td>
+                <td>descending</td>
+                <td>double</td>
+            </tr>
+            <tr>
+                <td>file</td>
+                <td>first</td>
+                <td>float</td>
+                <td>initial</td>
+            </tr>
+            <tr>
+                <td>int16_t</td>
+                <td>int64_t</td>
+                <td>int32_t</td>
+                <td>inmemory</td>
+            </tr>
+            <tr>
+                <td>key</td>
+                <td>last</td>
+                <td>long</td>
+                <td>maxpgs</td>
+            </tr>
+            <tr>
+                <td>maxslots</td>
+                <td>member</td>
+                <td>next</td>
+                <td>nullable</td>
+            </tr>
+            <tr>
+                <td>opt</td>
+                <td>optional</td>
+                <td>order</td>
+                <td>owner</td>
+            </tr>
+            <tr>
+                <td>pagesize</td>
+                <td>pctincrease</td>
+                <td>persistent</td>
+                <td>read</td>
+            </tr>
+            <tr>
+                <td>record</td>
+                <td>records</td>
+                <td>set</td>
+                <td>static</td>
+            </tr>
+            <tr>
+                <td>struct</td>
+                <td>thru</td>
+                <td>typedef</td>
+                <td>unique</td>
+            </tr>
+            <tr>
+                <td>unsigned</td>
+                <td>vardata</td>
+                <td>volatile</td>
+                <td>wchar_t</td>
+            </tr>
+        </table>
+        <hr MadCap:conditions="Default.ScreenOnly" width="100%" size="0" align="center" />
+        <p MadCap:conditions="Default.ScreenOnly" style="font-size: 8pt;"><span class="MyVariablesCopyright">Copyright © 2012, Raima Inc. All rights reserved.</span>
+        </p>
+        <script type="text/javascript" src="../SkinSupport/MadCapBodyEnd.js">
+        </script>
+        <p class="MCWebHelpFramesetLink MCWebHelpFramesetLinkBottom" style="display: none;"><a href="../../Default_CSH.htm#util/ddlp.htm" style="">Open topic with navigation</a>
+        </p>
+    </body>
+</html>

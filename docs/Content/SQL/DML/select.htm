@@ -1,0 +1,182 @@
+<?xml version="1.0" encoding="utf-8"?>
+<!DOCTYPE html PUBLIC "-//W3C//DTD XHTML 1.0 Strict//EN" "http://www.w3.org/TR/xhtml1/DTD/xhtml1-strict.dtd">
+<html xmlns:MadCap="http://www.madcapsoftware.com/Schemas/MadCap.xsd" MadCap:tocPath="SQL API|SQL Language Guide|Reference Guide|SQL Statement Reference" MadCap:InPreviewMode="false" MadCap:PreloadImages="false" MadCap:RuntimeFileType="Topic" MadCap:TargetType="WebHelp" lang="en-us" xml:lang="en-us" MadCap:PathToHelpSystem="../../../" MadCap:HelpSystemFileName="Default.xml" MadCap:SearchType="Stem">
+    <head>
+        <meta http-equiv="Content-Type" content="text/html; charset=utf-8" /><title>select</title>
+        <link rel="icon" type="image/png" href="http://docs.raima.com/favicon.png" />
+        <link href="../../SkinSupport/MadCap.css" rel="stylesheet" />
+        <link href="../../Resources/Stylesheets/raima.css" rel="stylesheet" />
+        <script src="../../SkinSupport/MadCapAll.js" type="text/javascript">
+        </script>
+    </head>
+    <body>
+        <p class="MCWebHelpFramesetLink MCWebHelpFramesetLinkTop" style="display: none;"><a href="../../../Default_CSH.htm#SQL/DML/select.htm" style="">Open topic with navigation</a>
+        </p>
+        <div class="MCBreadcrumbsBox_0"><span class="MCBreadcrumbsPrefix">You are here: </span><a class="MCBreadcrumbsLink" href="../../dbRSQL.htm">SQL API</a><span class="MCBreadcrumbsDivider"> &gt; </span><a class="MCBreadcrumbsLink" href="../dbSQL.htm">SQL Language Guide</a><span class="MCBreadcrumbsDivider"> &gt; </span><a class="MCBreadcrumbsLink" href="../SQLStmtRef.htm">Reference Guide</a><span class="MCBreadcrumbsDivider"> &gt; </span><span class="MCBreadcrumbs">select</span>
+        </div>
+        <h3 class="newpage"><a name="kanchor244"></a>select</h3>
+        <p>Retrieve a set of rows of data from the database</p>
+        <p class="Heading">Syntax </p><pre class="Grammar" xml:space="preserve">select_stmt:
+ 		<b>select</b> [<b>first</b>] [<b>all</b> | <b>distinct</b>] {* | select_item[, select_item]...}
+ 			<b>from</b> table_ref[, table_ref]...
+ 			[<b>where</b> conditional_expr]
+ 			[grouping | sorting | grouping sorting]
+			[<b>limit (</b><i>num</i> {<b>rows</b> |&#160;<b>mins</b>&#160;|&#160;<b>secs</b>&#160;|&#160;<b>msecs</b>}<b>)</b>]
+			[<b>for</b> {<b>read only</b> |&#160;<b>update</b> [<b>of</b>        <![CDATA[ ]]><i>column_name</i>[, <i>column_name</i>]...]}]</pre><pre class="Grammar" xml:space="preserve">grouping:
+ 		<b>group by</b> sort_col[, sort_col]... [<b>having</b> conditional_expr]</pre><pre class="Grammar" xml:space="preserve">sorting:
+ 		<b>order by</b> sort_col [<b>asc</b> |&#160;<b>desc</b>][, sort_col [<b>asc</b> |&#160;<b>desc</b>]]...</pre><pre class="Grammar" xml:space="preserve">sort_col:
+		num | <i>column_name</i></pre><pre class="Grammar" xml:space="preserve">select_item:
+		expression [alias_name | "column heading"]</pre><pre class="Grammar" xml:space="preserve">table_ref:
+		table_primary | table_join</pre><pre class="Grammar" xml:space="preserve">table_primary:
+ 		table_spec | ( table_join )</pre><pre class="Grammar" xml:space="preserve">table_spec:
+ 		[<i>db_name</i>.]<i>table_name</i> [[<b>as</b>] correlation_name]</pre><pre class="Grammar" xml:space="preserve">table_join:
+		natural_join | qualified_join | cross_join</pre><pre class="Grammar" xml:space="preserve">natural_join:
+		table_ref <b>natural</b> [<b>inner</b> | {<b>left</b> | <b>right</b>} [<b>outer</b>]] <b>join</b> table_primary</pre><pre class="Grammar" xml:space="preserve">qualified _join:
+		table_ref [<b>inner</b> | {<b>left</b> | <b>right</b>} [<b>outer</b>]] <b>join</b> table_primary
+ 			[<b>using</b> (<i>column_name</i>[, <i>column_name</i>]...) | <b>on</b> conditional_expr]</pre><pre class="Grammar" xml:space="preserve">cross_join:
+		table_ref <b>cross join</b> table_primary</pre><pre class="Grammar" xml:space="preserve">arith_expr:
+ 		expression	/*&#160;involving only numeric operands and operations */
+
+dt_expr:
+ 		expression	/*&#160;involving only date/time/timestamp operands and operations */
+
+string_expr:
+ 		expression	/*&#160;involving only string operands and operations */
+</pre><pre class="Grammar" xml:space="preserve">expression:
+		operand [arith_operator operand]...</pre><pre class="Grammar" xml:space="preserve">operand:
+		<i>constant</i> |&#160;param_ref  |&#160;column_ref&#160;|&#160;function |&#160;(expr)</pre><pre class="Grammar" xml:space="preserve">param_ref:
+		?&#160;|&#160;:<i>param_name</i></pre><pre class="Grammar" xml:space="preserve">column_ref:
+		[{<i>table_name</i> |&#160;<i>correlation_name</i>}.]<i>column_name</i></pre><pre class="Grammar" xml:space="preserve">arith_operator:
+		+&#160;|&#160;- | * |&#160;/</pre><pre class="Grammar" xml:space="preserve">function:
+		aggregate_fcn&#160;|&#160;scalar_fcn</pre><pre class="Grammar" xml:space="preserve">aggregate_fcn:
+		{<b>sum</b> | <b>avg</b> | <b>max</b> | <b>min</b>} (expression) 
+ 	|	<b>count (</b>{* | column_ref }<b>)</b>
+	|	<i>aggregate_udf_name</i> ([expression][, expression]...)</pre><pre class="Grammar" xml:space="preserve">scalar_fcn:
+ 	|	<b>if (</b>conditional_expr, expression, expression<b>)</b>
+ 	|	numeric_function | datetime_function |&#160;string_function
+ 	|	<i>scalar_udf_name</i> ([expression][, expression]...)</pre><pre class="Grammar" xml:space="preserve">numeric_function:
+		<b>abs</b>(arith_expr)
+	|	<b>acos</b>(arith_expr)
+	|	<b>asin</b>(arith_expr)
+	|	<b>atan</b>(arith_expr)
+	|	<b>atan2</b>(arith_expr)
+	|	{<b>ceil</b> |&#160;<b>ceiling</b>}(arith_expr)
+	|	<b>cos</b>(arith_expr)
+	|	<b>cot</b>(arith_expr)
+	|	<b>exp</b>(arith_expr)
+	|	<b>floor</b>(arith_expr)
+	|	{<b>ln</b> |&#160;<b>log</b>}(arith_expr)
+	|	<b>mod</b>(arith_expr)
+	|	<b>pi</b>()
+	|	<b>rand</b>(<i>num</i>)
+	|	<b>sign</b>(arith_expr)
+	|	<b>sin</b>(arith_expr)
+	|	<b>sqrt</b>(arith_expr)
+	|	<b>tan</b>(arith_expr)</pre><pre class="Grammar" xml:space="preserve">datetime_function:
+		<b>age</b>(dt_expr)
+	|	{<b>curdate</b> |&#160;<b>current_date</b>}()
+	|	{<b>curtime</b> |&#160;<b>current_time</b>}()
+	|	<b>dayofmonth</b>(dt_expr)
+	|	<b>dayofyear</b>(dt_expr)
+	|	<b>hour</b>(dt_expr)
+	|	<b>minute</b>(dt_expr)
+	|	<b>month</b>(dt_expr)
+	|	<b>quarter</b>(dt_expr)
+	|	<b>second</b>(dt_expr)
+	|	<b>week</b>(dt_expr)
+	|	<b>year</b>(dt_expr)</pre><pre class="Grammar" xml:space="preserve">string_function:
+		<b>ascii</b>(string_expr)
+	|	<b>char</b>(<i>num</i>)
+	|	<b>concat</b>(string_expr, string_expr)
+	|	<b>convert</b>(expression, {convert_type | {<b>char</b>}, <i>width</i>, convert_format})
+	|	<b>lcase</b>(string_expr)
+	|	<b>left</b>(string_expr, <i>num</i>)
+	|	<b>length</b>(string_expr)
+	|	<b>locate</b>(string_expr, string_expr, <i>num</i>)
+	|	<b>ltrim</b>(string_expr)
+	|	<b>repeat</b>(string_expr, <i>num</i>)
+	|	<b>replace</b>(string_expr, string_expr, string_expr)
+	|	<b>right</b>(string_expr, <i>num</i>)
+	|	<b>rtrim</b>(string_expr)
+	|	<b>substring</b>(string_expr, <i>num</i>, <i>num</i>)
+	|	<b>ucase</b>(string_expr)
+	|	<b>unicode</b>(string_expr)</pre><pre class="Grammar" xml:space="preserve">convert_type:
+		<b>char</b> |<b>smallint</b> | <b>integer</b> | <b>real</b>
+	|	<b>double</b> | <b>date</b> | <b>time</b> | <b>timestamp</b> |&#160;<b>tinyint</b> |&#160;<b>bigint</b>
+
+convert_format:
+		numeric_format | datetime_format
+
+numeric_format:
+		"[&lt;&lt; | &gt;&gt; | &gt;&lt;]['text' | $][- | (][#,]#[.#[#]...][e | E]['text' | $ | %]"
+
+datetime_format:
+		"[&lt;&lt; | &gt;&gt; | &gt;&lt;]['text' | spchar | date_code | time_code]..."
+
+date_code:
+		<b>m</b> | <b>mm</b> | <b>mmm</b> | <b>mon</b> | <b>mmmm</b> | <b>month</b>
+	|	<b>d</b> | <b>dd</b> | <b>ddd</b> | <b>dddd</b> | <b>day</b>
+	|	<b>yy</b> | <b>yyyy</b>
+
+time_code:
+		<b>h</b> | <b>hh</b> | <b>m</b> | <b>mm</b> | <b>s</b> | <b>ss</b> | .<b>f</b>[<b>f</b>]... | [<b>a/p</b> | <b>am/pm</b> | <b>A/P</b> | <b>AM/PM</b>]
+</pre><pre class="Grammar" xml:space="preserve">conditional_expr:
+ 		rel_expr [bool_oper rel_expr]...</pre><pre class="Grammar" xml:space="preserve">rel_expr:
+		expression [<b>not</b>] rel_oper expression
+ 	|  	expression [<b>not</b>] <b>between</b>     <![CDATA[ ]]><i>constant</i>     <![CDATA[ ]]><b>and</b>     <![CDATA[ ]]><i>constant</i>
+ 	|  	expression [<b>not</b>] <b>in</b> (<i>constant</i>[, <i>constant</i>]...) 
+ 	|  	column_ref <b>is</b> [<b>not</b>] <b>null</b>
+ 	|  	string_expr [<b>not</b>] <b>like</b> "<i>string</i>"
+ 	|  	<b>not</b> rel_expr
+ 	|  	( conditional_expr )</pre><pre class="Grammar" xml:space="preserve">rel_oper:
+		=  |  ==
+ 	| 	&lt;
+ 	|  	&gt;
+ 	|  	&lt;=
+ 	|  	&gt;=
+ 	|  	&lt;&gt;  |  !=  |  /=</pre><pre class="Grammar" xml:space="preserve">bool_oper:
+		&amp;  |  &amp;&amp;  | <b>and</b>
+ 	|  	"|"  |  "||"  | <b>or</b></pre>
+        <p class="Heading">Description </p>
+        <p>The <b>select</b> statement retrieves a subset of data (the <i>result set</i>) from a table or tables.  The result set contains rows that satisfy a conditional expression (where clause).  If there is no condition for the <b>where</b> clause, the <b>select</b> statement retrieves all rows from the table or tables.  If the <b>select</b> statement includes a <b>group by</b> clause, only rows that satisfy the <b>where</b> clause are reflected in grouping calculations.</p>
+        <p>A <b>select first</b> only returns the first row of the result set.  A <b>select distinct</b> will eliminate duplicate rows from the result set.  Note that this necessarily requires that the rows first be sorted and can be quite an expensive (i.e., time consuming) operation and should be avoided unless absolutely necessary.  The default behavior is <b>select all</b> which returns all of the rows of the result set.</p>
+        <p>The select_item expressions can optionally be given an alias or alternate column heading.</p>
+        <p>The <b>natural join</b> specification indicates that the join is to be performed based on the common columns (names and types) from the two tables.  The join is based on the columns from the table (or tables) specified on the left side of "natural … join" with those columns from the table (or tables) on the right side that have the same name. A natural left (right) outer join includes the results of the inner join plus those rows of the left (right) table that do not have a corresponding matching row in the joined table. An inner join is the default so that the specification of "natural join" produces a natural inner join. For outer joins, "outer" does not need to be specified.</p>
+        <p>A <b>qualified join</b> is like a <b>natural join</b> except that it requires that the columns on which the join is to be formed be explicitly specified. Two specification methods are provided. The <b>using</b> clause requires you to name the common column names between the joined tables which are to be used to form the join allowing you to choose only the matching columns on which you want the join formed. The <b>on</b> clause requires you to specify the join predicates as conditional expressions exactly as they would be specified in the <b>where</b> clause.  The <b>on</b> clause is necessary whenever the join is to be performed between columns that do not have the same name.</p>
+        <p>A <b>cross join</b> is simply a cross product of the two tables where each row of the left table is joined with each row of the right table so that the cardinality of the result (i.e., the number of result rows) is equal to the product of the cardinalities of the two tables. An <b>on</b> clause cannot be specified with a cross join. However, there is nothing that restricts including join conditions in the <b>where</b> clause. In practice, there are very few times when a cross join is needed and since it can be a very expensive operation that can potentially produce huge result sets, its use should be avoided.</p>
+        <p>Parentheses are sometimes needed to be used to group joins when more than two tables are involved in the <b>from</b> clause. They are required when one table needs to be joined with two or more tables.</p>
+        <p>The <b>group by</b> clause defines a set of aggregate rows upon which computations are to be made.  An aggregate consists of those rows that have identical values in the columns that are named in the group by specification.  Each of the other selected columns should either have a unique value within each aggregate or be a computation that uses of one or more aggregate functions (<b>sum</b>, <b>avg</b>, <b>min</b>, <b>max</b>, <b>count</b>, or an aggregate UDF).  Only one row is reported for each aggregate resulting from the <b>select</b>.</p>
+        <p>The <b>having</b> clause is similar to the <b>where</b> clause in that it is used to conditionally select which resultant rows will be reported.  However, the <b>having</b> conditional expression is not evaluated until after the <b>group by</b> processing has been performed.  The conditional expression will include comparisons that typically involve the aggregate functions in the <b>select</b> column list.</p>
+        <p>The <b>limits</b> clause can be specified to limit either the number of rows that are returned or the amount of time the <b>select</b> statement is allowed to run.  This feature is particularly useful when retrieving data from a virtual table which may represent a never-ending source of data (such as from a weather sensor network).</p>
+        <p>The for <b>read only</b> clause will cause <span class="MyVariablesRSQLName">RDM SQL</span> to execute the <b>select</b> statement within its own read only transaction which accesses a static, transaction-consistent version of the database at the time the <b>select</b> statement executes and does not require any locking to be performed.</p>
+        <p>The <b>for update</b> clause indicates that the <b>select</b> statement is updateable by a positioned <b>update</b> on a separate statement handle in the same connection that references the cursor name associated with this <b>select</b>..  An updateable <b>select</b> is one for which the <b>select</b> result expressions are only simple column names, only one table is listed in the <b>from</b> clause, and no <b>order by</b> clause is specified. If an <b>of</b> column name list clause is specified then only those <b>select</b>  result columns can be updated. If the <b>of</b> column name list clause is not specified then any of the <b>select</b> result columns can be updated.  Any columns declared in the table can be referenced in the associated <b>update</b> (i.e., used in the <b>set</b> assignment of one of the updateable columns). The cursor name associated with the <b>select</b> statement can be set by a call to function <code>rsqlSetCursorName</code> or the system-generated cursor name can be retrieved through a call to <code>rsqlGetCursorName</code>.  The cursor name needs to be specified in the <b>where current of</b> clause of the related positioned <b>update</b> statement.</p>
+        <p class="Heading">Example </p><pre xml:space="preserve">select name, sum(amount) from sponsor join award on sponsor_nm = name
+    group by name order by 2 desc;
+	...
+select sum(if(gender="M",1,0)) men, sum(if(gender="F",1,0)) women 
+ 	from award natural join investigator natural join person;
+	...	
+select loc_long, loc_lat, convert(rdg_time,date), hour(rdg_time), 
+ 		avg(temperature), avg(pressure), avg(humidity), avg(light) from weather_data
+ 		group by 1,2,4 
+ 		limit(4 hours);
+	...
+select bookid, publ_year, last_name, title from book where publ_year &lt; 1800;
+	...
+select aucid, count(*) from auction natural join bid where start_date = curdate()
+	group by 1;
+	...</pre>
+        <p xml:space="preserve" class="Heading">See Also</p>
+        <p><a href="set.htm">set read only transaction mode</a>
+        </p>
+        <p><a href="update.htm">update</a>
+        </p>
+        <hr MadCap:conditions="Default.ScreenOnly" width="100%" size="0" align="center" />
+        <p MadCap:conditions="Default.ScreenOnly" style="font-size: 8pt;"><span class="MyVariablesCopyright">Copyright © 2012, Raima Inc. All rights reserved.</span>
+        </p>
+        <script type="text/javascript" src="../../SkinSupport/MadCapBodyEnd.js">
+        </script>
+        <p class="MCWebHelpFramesetLink MCWebHelpFramesetLinkBottom" style="display: none;"><a href="../../../Default_CSH.htm#SQL/DML/select.htm" style="">Open topic with navigation</a>
+        </p>
+    </body>
+</html>

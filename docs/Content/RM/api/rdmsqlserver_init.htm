@@ -1,0 +1,250 @@
+<?xml version="1.0" encoding="utf-8"?>
+<!DOCTYPE html PUBLIC "-//W3C//DTD XHTML 1.0 Strict//EN" "http://www.w3.org/TR/xhtml1/DTD/xhtml1-strict.dtd">
+<html xmlns:MadCap="http://www.madcapsoftware.com/Schemas/MadCap.xsd" MadCap:tocPath="SQL API|ODBC User's Guide|Summary Listing of RDM SQL Server API Functions" MadCap:InPreviewMode="false" MadCap:PreloadImages="false" MadCap:RuntimeFileType="Topic" MadCap:TargetType="WebHelp" lang="en-us" xml:lang="en-us" MadCap:PathToHelpSystem="../../../" MadCap:HelpSystemFileName="Default.xml" MadCap:SearchType="Stem">
+    <head>
+        <meta http-equiv="Content-Type" content="text/html; charset=utf-8" /><title>rdmsqlserver_init</title>
+        <link rel="icon" type="image/png" href="http://docs.raima.com/favicon.png" />
+        <link href="../../SkinSupport/MadCap.css" rel="stylesheet" />
+        <link href="../../Resources/TableStyles/ParamStruct.css" rel="stylesheet" />
+        <link href="../../Resources/TableStyles/FunctionArgs.css" rel="stylesheet" />
+        <link href="../../Resources/TableStyles/CoreErrCodes.css" rel="stylesheet" />
+        <link href="../../Resources/Stylesheets/raima.css" rel="stylesheet" />
+        <script src="../../SkinSupport/MadCapAll.js" type="text/javascript">
+        </script>
+    </head>
+    <body>
+        <p class="MCWebHelpFramesetLink MCWebHelpFramesetLinkTop" style="display: none;"><a href="../../../Default_CSH.htm#RM/api/rdmsqlserver_init.htm" style="">Open topic with navigation</a>
+        </p>
+        <div class="MCBreadcrumbsBox_0"><span class="MCBreadcrumbsPrefix">You are here: </span><a class="MCBreadcrumbsLink" href="../../dbRSQL.htm">SQL API</a><span class="MCBreadcrumbsDivider"> &gt; </span><a class="MCBreadcrumbsLink" href="../../ODBCRM/dbODBCUG.htm">ODBC User's Guide</a><span class="MCBreadcrumbsDivider"> &gt; </span><a class="MCBreadcrumbsLink" href="../../ODBCRM/SQLServerAPI.htm">Summary Listing of RDM SQL Server API Functions</a><span class="MCBreadcrumbsDivider"> &gt; </span><span class="MCBreadcrumbs">rdmsqlserver_init</span>
+        </div>
+        <h3 class="newpage"><a name="kanchor400"></a>rdmsqlserver_init</h3>
+        <p>Start up a RDM SQL Server</p>
+        <p class="Heading">Prototype</p><pre xml:space="preserve">int32_t rdmsqlserver_init(
+        const SQL_PARAMS *params,
+        RDMSQL_CTX      **sql_ctx)
+</pre>
+        <p class="Heading">Parameters</p>
+        <table style="width: 100%;mc-table-style: url('../../Resources/TableStyles/FunctionArgs.css');margin-left: 0;margin-right: auto;" class="TableStyle-FunctionArgs" cellspacing="0">
+            <col style="width: 140px;" class="Column-Column1" />
+            <col style="width: 80px;" class="Column-Column3" />
+            <col class="Column-Column2" />
+            <tbody>
+                <tr class="Body-Body1">
+                    <td class="BodyE-Column1-Body1">params</td>
+                    <td class="BodyE-Column3-Body1">(input)</td>
+                    <td class="BodyD-Column2-Body1">Parameters required for server operation. If
+  NULL, defaults are used.
+</td>
+                </tr>
+                <tr class="Body-Body1">
+                    <td class="BodyB-Column1-Body1">sql_ctx</td>
+                    <td class="BodyB-Column3-Body1">(output)</td>
+                    <td class="BodyA-Column2-Body1">Handle used for running, stopping or terminating
+  this server.
+</td>
+                </tr>
+            </tbody>
+        </table>
+        <p class="Heading">Description</p>
+        <p>Call <code>rdmsqlserver_init</code> to set up the RDM SQL server.
+  This function must be called prior to any rdbc API function calls unless
+  you relay on an external RDM SQL server.
+  Any successful call to <code>rdmsqlserver_init</code> requires a corresponding call
+  to <code>rdmsqlserver_term</code> before termination of the application.
+  This function will also initialize  the TFS unless one has already been
+  started.
+</p>
+        <p class="Heading">SQL_PARAMS prototypes</p><pre xml:space="preserve">  typedef struct {
+     uint16_t    port;
+     uint32_t    rd_only;
+     uint32_t    no_disk;
+     uint16_t    verbose;
+     TFS_TYPE    tfs_type;
+     uint16_t    no_tfsrun;
+     const char *stdout_file;
+     const char *docroot;
+  } SQL_PARAMS;
+</pre>
+        <table style="width: 100%;border-collapse: collapse;border-left-style: solid;border-left-width: 1px;border-left-color: #c0c0c0;border-right-style: solid;border-right-width: 1px;border-right-color: #c0c0c0;border-top-style: solid;border-top-width: 1px;border-top-color: #c0c0c0;border-bottom-style: solid;border-bottom-width: 1px;border-bottom-color: #c0c0c0;margin-left: 0;margin-right: auto;mc-table-style: url('../../Resources/TableStyles/ParamStruct.css');" class="TableStyle-ParamStruct" cellspacing="0">
+            <caption>SQL_PARAMS structure definition</caption>
+            <col style="width: 117px;" class="Column-Column1" />
+            <col style="width: 140px;" class="Column-Column2" />
+            <col class="Column-Column3" />
+            <thead>
+                <tr class="Head-Header1">
+                    <th class="HeadE-Column1-Header1">Element</th>
+                    <th class="HeadE-Column2-Header1">Declaration</th>
+                    <th class="HeadD-Column3-Header1">Description</th>
+                </tr>
+            </thead>
+            <tbody>
+                <tr class="Body-Body1">
+                    <td class="BodyE-Column1-Body1">port</td>
+                    <td style="font-family: monospace;" class="BodyE-Column2-Body1">uint16_t</td>
+                    <td class="BodyD-Column3-Body1">TFS&#160;anchor port. Should match TFS <code>-p port</code> number (use <span class="MyVariablesDefaultPort">21553</span> if default).</td>
+                </tr>
+                <tr class="Body-Body1">
+                    <td class="BodyE-Column1-Body1">rd_only</td>
+                    <td style="font-family: monospace;" class="BodyE-Column2-Body1">uint32_t</td>
+                    <td class="BodyD-Column3-Body1">Read-only device, TRUE or FALSE.</td>
+                </tr>
+                <tr class="Body-Body1">
+                    <td class="BodyE-Column1-Body1">no_disk</td>
+                    <td style="font-family: monospace;" class="BodyE-Column2-Body1">uint32_t</td>
+                    <td class="BodyD-Column3-Body1">Diskless mode, TRUE or FALSE.</td>
+                </tr>
+                <tr class="Body-Body1">
+                    <td class="BodyE-Column1-Body1">verbose</td>
+                    <td style="font-family: monospace;" class="BodyE-Column2-Body1">uint16_t</td>
+                    <td class="BodyD-Column3-Body1">Verbose, true or false.</td>
+                </tr>
+                <tr class="Body-Body1">
+                    <td class="BodyE-Column1-Body1">tfs_type</td>
+                    <td style="font-family: monospace;" class="BodyE-Column2-Body1">TFS_TYPE</td>
+                    <td class="BodyD-Column3-Body1">The type of Transactional File Server to use</td>
+                </tr>
+                <tr class="Body-Body1">
+                    <td class="BodyE-Column1-Body1">no_tfsrun</td>
+                    <td style="font-family: monospace;" class="BodyE-Column2-Body1">uint16_t</td>
+                    <td class="BodyD-Column3-Body1">Whether the tfserver should be started
+  or not (listen)
+</td>
+                </tr>
+                <tr class="Body-Body1">
+                    <td class="BodyE-Column1-Body1">logfile</td>
+                    <td style="font-family: monospace;" class="BodyE-Column2-Body1">const char *</td>
+                    <td class="BodyD-Column3-Body1">File name to open for logging. Can be NULL.</td>
+                </tr>
+                <tr class="Body-Body1">
+                    <td class="BodyB-Column1-Body1">stdout_file</td>
+                    <td style="font-family: monospace;" class="BodyB-Column2-Body1">const char *</td>
+                    <td class="BodyA-Column3-Body1">The name of a file to write informational messages instead of displaying them to stdout. If the value is NULL or "stdout" the messages will be sent to stdout. If the value is an empty string ("") no messages will be displayed.</td>
+                </tr>
+            </tbody>
+        </table>
+        <p class="Heading">Required Headers</p><pre xml:space="preserve">#include "rdmsqlserver.h"</pre>
+        <p class="Heading">Libraries</p>
+        <table style="width: 100%; margin-left: 0; margin-right: auto;">
+            <col style="width: 200px;">
+            </col>
+            <col>
+            </col>
+            <thead>
+                <tr>
+                    <th>Library Name</th>
+                    <th>Description</th>
+                </tr>
+            </thead>
+            <tbody>
+                <tr>
+                    <td><code>rdmsqlserver<span class="MyVariablesLibraryVersion">11</span></code>
+                    </td>
+                    <td><span class="MyVariablesProductShortName">RDM</span> SQL&#160;Server Library</td>
+                </tr>
+            </tbody>
+        </table>
+        <p>See <a href="../../GS/distrib.htm#Library">Library Naming Conventions</a> section for full library name and a list of library dependencies.</p>
+        <p class="Heading">Return Codes</p>
+        <table class="TableStyle-CoreErrCodes" cellspacing="0" style="mc-table-style: url('../../Resources/TableStyles/CoreErrCodes.css');">
+            <col class="Column-Column1" />
+            <col class="Column-Column2" />
+            <col class="Column-Column3" />
+            <thead>
+                <tr class="Head-Header1">
+                    <th class="HeadE-Column1-Header1">Value</th>
+                    <th class="HeadE-Column2-Header1">Name</th>
+                    <th class="HeadD-Column3-Header1">Description</th>
+                </tr>
+            </thead>
+            <tbody>
+                <tr class="Body-Body1">
+                    <td class="BodyB-Column1-Body1">0</td>
+                    <td class="BodyB-Column2-Body1">S_OKAY</td>
+                    <td class="BodyA-Column3-Body1">normal return, okay</td>
+                </tr>
+            </tbody>
+        </table>
+        <table class="TableStyle-CoreErrCodes" cellspacing="0" style="mc-table-style: url('../../Resources/TableStyles/CoreErrCodes.css');">
+            <col class="Column-Column1" />
+            <col class="Column-Column2" />
+            <col class="Column-Column3" />
+            <tbody>
+                <tr class="Body-Body1">
+                    <td class="BodyB-Column1-Body1">-225</td>
+                    <td class="BodyB-Column2-Body1">S_TX_DOCROOT_USED</td>
+                    <td class="BodyA-Column3-Body1">The docroot is already in use</td>
+                </tr>
+            </tbody>
+        </table>
+        <table class="TableStyle-CoreErrCodes" cellspacing="0" style="mc-table-style: url('../../Resources/TableStyles/CoreErrCodes.css');">
+            <col class="Column-Column1" />
+            <col class="Column-Column2" />
+            <col class="Column-Column3" />
+            <tbody>
+                <tr class="Body-Body1">
+                    <td class="BodyB-Column1-Body1">-227</td>
+                    <td class="BodyB-Column2-Body1">S_TX_INVTFSTYPE</td>
+                    <td class="BodyA-Column3-Body1">Invalid TFS type</td>
+                </tr>
+            </tbody>
+        </table>
+        <table class="TableStyle-CoreErrCodes" cellspacing="0" style="mc-table-style: url('../../Resources/TableStyles/CoreErrCodes.css');">
+            <col class="Column-Column1" />
+            <col class="Column-Column2" />
+            <col class="Column-Column3" />
+            <tbody>
+                <tr class="Body-Body1">
+                    <td class="BodyB-Column1-Body1">-904</td>
+                    <td class="BodyB-Column2-Body1">S_NOMEMORY</td>
+                    <td class="BodyA-Column3-Body1">out of memory</td>
+                </tr>
+            </tbody>
+        </table>
+        <p class="Heading">See Also</p>
+        <p><a href="rdmsqlserver_start.htm">rdmsqlserver_start</a>
+        </p>
+        <p><a href="rdmsqlserver_stop.htm">rdmsqlserver_stop</a>
+        </p>
+        <p><a href="rdmsqlserver_term.htm">rdmsqlserver_term</a>
+        </p>
+        <p><a href="../../ODBCRM/api/SQLConnect.htm">SQLConnect</a>
+        </p>
+        <p><a href="../utilapi/d_tfsinit.htm">d_tfsinit, d_tfsinitEx</a>
+        </p>
+        <p><a href="../utilapi/d_tfsrun.htm">d_tfsrun</a>
+        </p>
+        <p class="Heading">Example</p><pre xml:space="preserve">static RDMSQL_CTX *sql_ctx = NULL;
+
+     static uint16_t sql_finished = 0;
+     SQL_PARAMS sparams;
+  
+     sparams.port= get_tfsPort ();
+     sparams.rd_only= get_tfsReadOnly ();
+     sparams.no_disk= get_tfsNoDisk ();
+     sparams.verbose= FALSE;
+     sparams.stdout_file= NULL;
+     sparams.docroot= get_tfsDocroot ();
+     sparams.tfs_type= tfsType ();
+     sparams.no_tfsrun= TRUE;
+  
+     sStatus = rdmsqlserver_init(&amp;sparams, &amp;sql_ctx);
+     if (sStatus == S_OKAY) {
+         sStatus = rdmsqlserver_run(sql_ctx, TRUE, &amp;sql_finished);
+         if (sStatus == S_OKAY) {
+  
+             /* The main part of your application */
+  
+             (void) rdmsqlserver_term(sql_ctx);
+         }
+         (void) rdmsqlserver_term(sql_ctx);
+     }
+</pre>
+        <hr MadCap:conditions="Default.ScreenOnly" width="100%" size="0" align="center" />
+        <p MadCap:conditions="Default.ScreenOnly" style="font-size: 8pt;"><span class="MyVariablesCopyright">Copyright © 2012, Raima Inc. All rights reserved.</span>
+        </p>
+        <script type="text/javascript" src="../../SkinSupport/MadCapBodyEnd.js">
+        </script>
+        <p class="MCWebHelpFramesetLink MCWebHelpFramesetLinkBottom" style="display: none;"><a href="../../../Default_CSH.htm#RM/api/rdmsqlserver_init.htm" style="">Open topic with navigation</a>
+        </p>
+    </body>
+</html>

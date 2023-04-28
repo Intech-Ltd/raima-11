@@ -1,0 +1,429 @@
+/* ----------------------------------------------------------------------------
+ *
+ * Raima Database Manager
+ *
+ * Copyright (c) 2010 Raima Inc.,  All rights reserved.
+ *
+ * Use of this software, whether in source code format, or in executable,
+ * binary object code form, is governed by the Raima LICENSE which
+ * is fully described in the LICENSE.TXT file, included within this
+ * distribution of files.
+ *
+ * ----------------------------------------------------------------------------
+ */
+
+.nav-header-highlight {
+    color : #fcfcfc;
+    font-family : Arial, Helvetica, sans-serif;
+    font-style : normal;
+    font-size : 14pt;
+    font-weight : bold;
+    text-decoration : none;
+    outline: none; 
+}
+.nav-header-text{
+    color : #bbbbbb;
+    font-family : Arial, Helvetica, sans-serif;
+    font-style : normal;
+    font-size : 14pt;
+    font-weight : bold;
+    text-decoration : none;
+    outline: none; 
+}
+.copyright{
+    color : #909090;
+    font-family : Times New Roman, sans-serif;
+    font-style : normal;
+    font-size : 7pt;
+    text-align: center;
+    text-decoration : none;
+}
+.settings{
+    color : #000000;
+    font-family : Times New Roman, sans-serif;
+    font-style : normal;
+    font-size : 8pt;
+    font-weight : bold;
+    text-align: center;
+    text-decoration : none;
+    outline: none; 
+}
+.settings_on{
+    color : #000000;
+    font-family : Times New Roman, sans-serif;
+    font-style : normal;
+    font-size : 8pt;
+    font-weight : bold;
+    text-align: center;
+    text-decoration : underline;
+    outline: none; 
+}
+
+.borderless-table {
+    color : #000000;
+    font-family : Times New Roman, sans-serif;
+    font-style : normal;
+    font-size : 9pt;
+    text-align: left;
+    text-decoration : none;
+    background-color: #eeeeee;
+}   
+.table-text-1{
+    color : #000000;
+    font-family : Times New Roman, sans-serif;
+    font-style : normal;
+    font-size : 9pt;
+    text-align: left;
+    text-decoration : none;
+/*    text-indent : 3px;*/
+    background-color: #eeeeee;
+    border-color: #cccccc;
+}
+.table-text-2{
+    color : #000000;
+    font-family : Times New Roman, sans-serif;
+    font-style : normal;
+    font-size : 9pt;
+    text-align: left;
+    text-decoration : none;
+/*    text-indent : 3px;*/
+    background-color: #dddddd;
+    border-color: #cccccc;
+}
+
+.box-title-text{
+    color : #000000;
+    font-family : Times New Roman, sans-serif;
+    font-style : normal;
+    font-weight : bold;
+    font-size : 11pt;
+    text-align: left;
+    text-decoration : none;
+    padding: 2px;
+}
+.box-subtitle-text-with-bkgrnd{
+    color : #000000;
+    font-family : Times New Roman, sans-serif;
+    font-style : normal;
+    font-weight : bold;
+    font-size : 10pt;
+    text-align: left;
+    text-indent : 3px;
+    background-color: #cccccc;
+    border-color: #cccccc;
+    box-shadow: 4px 0px 4px #888888;
+    padding: 2px;
+}
+.box-subtitle-text{
+    color : #000000;
+    font-family : Times New Roman, sans-serif;
+    font-style : normal;
+    font-weight : bold;
+    font-size : 10pt;
+    text-align: left;
+    text-decoration : underline;
+    border-color: #cccccc;
+    padding: 2px;
+}
+.box-text{
+    color : #000000;
+    font-family : Times New Roman, sans-serif;
+    font-style : normal;
+    font-size : 9pt;
+    text-align: left;
+    text-decoration : none;
+/*    text-indent : 3px;*/
+    background-color: #eeeeee;
+}
+.box-link-text{
+    color : #000000;
+    font-family : Times New Roman, sans-serif;
+    font-style : normal;
+    font-size : 9pt;
+    text-align: left;
+    text-decoration : none;
+/*    text-indent : 3px;*/
+}
+
+.pagetab-text-on{
+    color : #000000;
+    font-family : Times New Roman, sans-serif;
+    font-style : normal;
+    font-weight : bold;
+    font-size : 10pt;
+    text-decoration : none;
+    background-color: #eeeeee;
+    
+}
+.pagetab-text-off{
+    color : #000000;
+    font-family : Times New Roman, sans-serif;
+    font-style : normal;
+    font-weight : bold;
+    font-size : 10pt;
+    text-decoration : none;
+    background-color: #cccccc;
+}
+.arrowtab-text-on{
+    font-family : Times New Roman, sans-serif;
+    font-style : normal;
+    font-weight : bold;
+    font-size : 10pt;
+    text-decoration : none;
+    color : #000000;
+    background-color: #cccccc;
+    
+    visibility: hidden;
+    position: absolute;
+    top: 11px; 
+    height: 25px; 
+    text-align: center; 
+    border-style: solid solid hidden solid; 
+    border-width: 1px; 
+    border-color: #000000; 
+    line-height: 1.5em;
+}
+.arrowtab-text-off{
+    font-family : Times New Roman, sans-serif;
+    font-style : normal;
+    font-size : 10pt;
+    text-decoration : none;
+    color : #999999;
+    background-color: #cccccc;
+    
+    visibility: hidden;
+    position: absolute;
+    top: 11px; 
+    height: 25px; 
+    text-align: center; 
+    border-style: solid solid hidden solid; 
+    border-width: 1px; 
+    border-color: #000000; 
+    line-height: 1.5em;
+}
+.dropdown-text-off{
+    color : #000000;
+    font-family : Times New Roman, sans-serif;
+    font-style : normal;
+    font-size : 9pt;
+    text-align: left;
+    text-decoration : none;
+    background-color: #cccccc
+}
+.dropdown-text-on{
+    color : #000000;
+    font-family : Times New Roman, sans-serif;
+    font-style : normal;
+    font-size : 9pt;
+    text-align: left;
+    text-decoration : none;
+    background-color: #aaaaaa
+}
+.button-table {
+    color : #000000;
+    font-family : Times New Roman, sans-serif;
+    font-style : normal;
+    font-weight : bold;
+    font-size : 11pt;
+    text-align: center;
+    text-decoration : none;
+    background-color: #cccccc;
+    border-style : outset;
+    border-width: 2px;
+/*    border-spacing: 1px;*/
+    border-color: #cccccc;
+}
+.button-text {
+    background-color: #cccccc;
+    color : #000000;
+    font-size : 9pt;
+    text-decoration : none;
+}
+.button-small-text {
+    background-color: #cccccc;
+    color : #000000;
+    font-size : 7pt;
+    text-decoration : none;
+}
+.button-table-disabled {
+    color : #000000;
+    font-family : Times New Roman, sans-serif;
+    font-style : normal;
+    font-weight : bold;
+    font-size : 11pt;
+    text-align: center;
+    text-decoration : none;
+    background-color: #bbbbbb;
+    border-style : outset;
+    border-width: 2px;
+/*    border-spacing: 1px;*/
+    border-color: #bbbbbb;
+}
+.button-text-disabled {
+    background-color: #bbbbbb;
+    color : #fcfcfc;
+    font-size : 9pt;
+    text-decoration : none;
+}
+/* Generic box container */
+.boxContainer
+{
+    visibility: hidden;
+    position: relative;
+    background-color: #eeeeee;
+    border-style : solid solid none solid;
+    border-width: 1px;
+    border-color: #000000;
+    z-index:1;
+}
+
+
+/************************************************************************/
+/* Here are the layers */
+/************************************************************************/
+/* hiddenContainer used to calculate string sizes */
+#hiddenContainer
+{
+    position: absolute;
+    top: 0px;
+    visibility: hidden;
+    height: auto;
+    width: auto;
+}
+/* Main container of content */
+#contentContainer
+{
+    visibility: visible;
+    position: relative;
+    /*background-color: #cccccc;*/
+    /*background-image: url('backgrnd.jpg');*/
+    background-repeat: repeat;
+    z-index:0;
+}
+/* Page inside of contentContainer */
+#pageContainer
+{
+    visibility: visible;
+    position: relative;
+    top: 35px;
+    background-color: #eeeeee;
+    border-style : solid;
+    border-width: 1px;
+    border-color: #000000;
+    border-radius: 4px;
+    box-shadow: 4px 4px 4px #888888;
+    z-index:1;
+}
+/* tab dropdown container */
+#dropdownContainer
+{
+    visibility: hidden;
+    width: 100px;
+    position: absolute;
+    top: 35px;
+    background-color: #cccccc;
+    border-style : solid;
+    border-width: 2px;
+    border-color: #000000;
+    z-index:3;
+}
+/* Page inside of pageContainer */
+#TFSPageContainer
+{
+    position: relative;
+    top: 5px;
+}
+/* Page inside of pageContainer */
+#DbPageContainer
+{
+    position: relative;
+    top: 5px;
+}
+/* Page inside of pageContainer */
+#ConnectContainer
+{
+    position: relative;
+    top: 5px;
+}
+/* Page inside of pageContainer */
+#LoginContainer
+{
+    position: relative;
+    top: 5px;
+}
+
+/* contains system wide settings, like refresh rate */
+#settingsContainer
+{
+    visibility: visible;
+    width: 40px;
+    position: absolute;
+    top: 15px;
+    height: 15px;
+    background-color : #ffffff;
+    text-align : center;
+    z-index: 0;
+}
+/* Hold any buttons needed on a page */
+#buttonContainer
+{
+    left: 10px;
+    visibility: visible;
+    position: absolute;
+    background-color: #aa6666;
+    z-index: 3;
+}
+#helpContainer
+{
+    visibility: hidden;
+    position: absolute;
+    background-color: #f3e8ac;
+    z-index: 1;
+    width: 250px;
+    color : #000000;
+    font-family : Times New Roman, sans-serif;
+    font-style : normal;
+    font-size : 9pt;
+    text-align: left;
+    text-decoration : none;
+    word-wrap: break-word;
+    border-style : solid;
+    border-width: 1px;
+    padding: 2px;
+    border-color: #000000;
+}
+#logoutDiv
+{
+    top: 15px;
+    left:0px;
+    visibility: hidden;
+    position: absolute;
+}
+#refreshDiv
+{
+    top: 0px;
+    left:0px;
+    visibility: visible;
+    position: absolute;
+}
+#refresh0Div
+{
+    top: 0px;
+    left:45px;
+    visibility: visible;
+    position: absolute;
+}
+#refresh1Div
+{
+    top: 0px;
+    left:67px;
+    visibility: visible;
+    position: absolute;
+}
+#refresh2Div
+{
+    top: 0px;
+    left:77px;
+    visibility: visible;
+    position: absolute;
+}

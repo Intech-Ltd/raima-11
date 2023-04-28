@@ -1,0 +1,1261 @@
+/* MadCap Table Style: */
+
+/*<meta Version="7" />*/
+
+mcTableStyle
+{
+	name: ODBCErrorCodes;
+	border-collapse: collapse;
+	border-left-style: solid;
+	border-left-width: 1px;
+	border-left-color: #c0c0c0;
+	border-right-style: solid;
+	border-right-width: 1px;
+	border-right-color: #c0c0c0;
+	border-top-style: none;
+	border-top-width: 1px;
+	border-top-color: #c0c0c0;
+	border-bottom-style: solid;
+	border-bottom-width: 1px;
+	border-bottom-color: #c0c0c0;
+	max-id: 6;
+	cell-padding-left: 0px;
+	cell-padding-right: 0px;
+	cell-padding-top: 0px;
+	cell-padding-bottom: 0px;
+	background-image: none;
+	margin-left: 0px;
+	margin-right: 0px;
+	margin-top: 0px;
+	margin-bottom: 0px;
+}
+
+mcTableColumnStyle
+{
+	span: 1;
+	separator-style: solid;
+	separator-width: 1px;
+	separator-color: #c0c0c0;
+	name: Column1;
+	id: 0;
+	text-align: left;
+	vertical-align: top;
+	cell-padding-left: 0px;
+	cell-padding-right: 0px;
+	cell-padding-top: 0px;
+	cell-padding-bottom: 0px;
+	size: 250px;
+}
+
+mcTableColumnStyle
+{
+	span: 1;
+	id: 4;
+	name: Column2;
+	separator-style: solid;
+	separator-width: 1px;
+	separator-color: #c0c0c0;
+	text-align: left;
+	vertical-align: top;
+}
+
+mcTableHeadStyle
+{
+	span: 1;
+	separator-style: solid;
+	separator-width: 1px;
+	separator-color: #c0c0c0;
+	name: Header1;
+	id: 2;
+	font-family: sans-serif;
+	font-weight: bold;
+	background-image: none;
+	cell-padding-left: 0px;
+	cell-padding-right: 0px;
+	cell-padding-top: 0px;
+	cell-padding-bottom: 0px;
+	background-color: #c0c0c0;
+}
+
+mcTableBodyStyle
+{
+	span: 1;
+	font-weight: normal;
+	separator-style: solid;
+	separator-width: 1px;
+	separator-color: #c0c0c0;
+	name: Body1;
+	id: 1;
+	font-family: sans-serif;
+	cell-padding-left: 0px;
+	cell-padding-right: 0px;
+	cell-padding-top: 0px;
+	cell-padding-bottom: 0px;
+	background-image: none;
+}
+
+mcTableFootStyle
+{
+	span: 1;
+	separator-style: solid;
+	separator-width: 1px;
+	separator-color: #c0c0c0;
+	name: Footer1;
+	id: 3;
+	cell-padding-left: 0px;
+	cell-padding-right: 0px;
+	cell-padding-top: 0px;
+	cell-padding-bottom: 0px;
+	background-image: none;
+}
+
+
+/* Cell Styles: */
+ 
+.TableStyle-ODBCErrorCodes
+{
+	border-collapse: collapse;
+	background-image: none;
+	border-left-style: solid;
+	border-left-color: #c0c0c0;
+	border-left-width: 1px;
+	border-right-style: solid;
+	border-right-color: #c0c0c0;
+	border-right-width: 1px;
+	border-top-style: none;
+	border-top-color: #c0c0c0;
+	border-top-width: 1px;
+	border-bottom-style: solid;
+	border-bottom-color: #c0c0c0;
+	border-bottom-width: 1px;
+	margin-left: 0px;
+	margin-right: 0px;
+	margin-top: 0px;
+	margin-bottom: 0px;
+	border-spacing: 0px 0px;
+}
+
+.TableStyle-ODBCErrorCodes .Column-Column1
+{
+	width: 250px;
+}
+
+.TableStyle-ODBCErrorCodes .Column-Column2
+{
+	
+}
+
+.TableStyle-ODBCErrorCodes .Head-Header1
+{
+	
+}
+
+.TableStyle-ODBCErrorCodes .HeadI-Column1-Header1
+{
+	text-align: left;
+	vertical-align: top;
+	font-family: sans-serif;
+	font-weight: bold;
+	background-color: #c0c0c0;
+	background-image: none;
+	padding-left: 0px;
+	padding-right: 0px;
+	padding-top: 0px;
+	padding-bottom: 0px;
+}
+
+.TableStyle-ODBCErrorCodes .HeadI-Column1-Header1 p
+{
+	font-family: sans-serif;
+	font-weight: bold;
+}
+
+.TableStyle-ODBCErrorCodes .HeadE-Column1-Header1
+{
+	text-align: left;
+	vertical-align: top;
+	border-right-width: 1px;
+	border-right-color: #c0c0c0;
+	border-right-style: solid;
+	font-family: sans-serif;
+	font-weight: bold;
+	background-color: #c0c0c0;
+	background-image: none;
+	padding-left: 0px;
+	padding-right: 0px;
+	padding-top: 0px;
+	padding-bottom: 0px;
+	border-bottom-width: 1px;
+	border-bottom-color: #c0c0c0;
+	border-bottom-style: solid;
+}
+
+.TableStyle-ODBCErrorCodes .HeadE-Column1-Header1 p
+{
+	font-family: sans-serif;
+	font-weight: bold;
+}
+
+.TableStyle-ODBCErrorCodes .HeadF-Column1-Header1
+{
+	text-align: left;
+	vertical-align: top;
+	font-family: sans-serif;
+	font-weight: bold;
+	background-color: #c0c0c0;
+	background-image: none;
+	padding-left: 0px;
+	padding-right: 0px;
+	padding-top: 0px;
+	padding-bottom: 0px;
+	border-bottom-width: 1px;
+	border-bottom-color: #c0c0c0;
+	border-bottom-style: solid;
+}
+
+.TableStyle-ODBCErrorCodes .HeadF-Column1-Header1 p
+{
+	font-family: sans-serif;
+	font-weight: bold;
+}
+
+.TableStyle-ODBCErrorCodes .HeadH-Column1-Header1
+{
+	text-align: left;
+	vertical-align: top;
+	border-right-width: 1px;
+	border-right-color: #c0c0c0;
+	border-right-style: solid;
+	font-family: sans-serif;
+	font-weight: bold;
+	background-color: #c0c0c0;
+	background-image: none;
+	padding-left: 0px;
+	padding-right: 0px;
+	padding-top: 0px;
+	padding-bottom: 0px;
+}
+
+.TableStyle-ODBCErrorCodes .HeadH-Column1-Header1 p
+{
+	font-family: sans-serif;
+	font-weight: bold;
+}
+
+.TableStyle-ODBCErrorCodes .HeadD-Column1-Header1
+{
+	text-align: left;
+	vertical-align: top;
+	font-family: sans-serif;
+	font-weight: bold;
+	background-color: #c0c0c0;
+	background-image: none;
+	padding-left: 0px;
+	padding-right: 0px;
+	padding-top: 0px;
+	padding-bottom: 0px;
+	border-bottom-width: 1px;
+	border-bottom-color: #c0c0c0;
+	border-bottom-style: solid;
+}
+
+.TableStyle-ODBCErrorCodes .HeadD-Column1-Header1 p
+{
+	font-family: sans-serif;
+	font-weight: bold;
+}
+
+.TableStyle-ODBCErrorCodes .HeadC-Column1-Header1
+{
+	text-align: left;
+	vertical-align: top;
+	font-family: sans-serif;
+	font-weight: bold;
+	background-color: #c0c0c0;
+	background-image: none;
+	padding-left: 0px;
+	padding-right: 0px;
+	padding-top: 0px;
+	padding-bottom: 0px;
+}
+
+.TableStyle-ODBCErrorCodes .HeadC-Column1-Header1 p
+{
+	font-family: sans-serif;
+	font-weight: bold;
+}
+
+.TableStyle-ODBCErrorCodes .HeadB-Column1-Header1
+{
+	text-align: left;
+	vertical-align: top;
+	border-right-width: 1px;
+	border-right-color: #c0c0c0;
+	border-right-style: solid;
+	font-family: sans-serif;
+	font-weight: bold;
+	background-color: #c0c0c0;
+	background-image: none;
+	padding-left: 0px;
+	padding-right: 0px;
+	padding-top: 0px;
+	padding-bottom: 0px;
+}
+
+.TableStyle-ODBCErrorCodes .HeadB-Column1-Header1 p
+{
+	font-family: sans-serif;
+	font-weight: bold;
+}
+
+.TableStyle-ODBCErrorCodes .HeadA-Column1-Header1
+{
+	text-align: left;
+	vertical-align: top;
+	font-family: sans-serif;
+	font-weight: bold;
+	background-color: #c0c0c0;
+	background-image: none;
+	padding-left: 0px;
+	padding-right: 0px;
+	padding-top: 0px;
+	padding-bottom: 0px;
+}
+
+.TableStyle-ODBCErrorCodes .HeadA-Column1-Header1 p
+{
+	font-family: sans-serif;
+	font-weight: bold;
+}
+
+.TableStyle-ODBCErrorCodes .HeadG-Column1-Header1
+{
+	text-align: left;
+	vertical-align: top;
+	font-family: sans-serif;
+	font-weight: bold;
+	background-color: #c0c0c0;
+	background-image: none;
+	padding-left: 0px;
+	padding-right: 0px;
+	padding-top: 0px;
+	padding-bottom: 0px;
+}
+
+.TableStyle-ODBCErrorCodes .HeadG-Column1-Header1 p
+{
+	font-family: sans-serif;
+	font-weight: bold;
+}
+
+.TableStyle-ODBCErrorCodes .HeadI-Column2-Header1
+{
+	text-align: left;
+	vertical-align: top;
+	font-family: sans-serif;
+	font-weight: bold;
+	background-color: #c0c0c0;
+	background-image: none;
+	padding-left: 0px;
+	padding-right: 0px;
+	padding-top: 0px;
+	padding-bottom: 0px;
+}
+
+.TableStyle-ODBCErrorCodes .HeadI-Column2-Header1 p
+{
+	font-family: sans-serif;
+	font-weight: bold;
+}
+
+.TableStyle-ODBCErrorCodes .HeadE-Column2-Header1
+{
+	text-align: left;
+	vertical-align: top;
+	border-right-width: 1px;
+	border-right-color: #c0c0c0;
+	border-right-style: solid;
+	font-family: sans-serif;
+	font-weight: bold;
+	background-color: #c0c0c0;
+	background-image: none;
+	padding-left: 0px;
+	padding-right: 0px;
+	padding-top: 0px;
+	padding-bottom: 0px;
+	border-bottom-width: 1px;
+	border-bottom-color: #c0c0c0;
+	border-bottom-style: solid;
+}
+
+.TableStyle-ODBCErrorCodes .HeadE-Column2-Header1 p
+{
+	font-family: sans-serif;
+	font-weight: bold;
+}
+
+.TableStyle-ODBCErrorCodes .HeadF-Column2-Header1
+{
+	text-align: left;
+	vertical-align: top;
+	font-family: sans-serif;
+	font-weight: bold;
+	background-color: #c0c0c0;
+	background-image: none;
+	padding-left: 0px;
+	padding-right: 0px;
+	padding-top: 0px;
+	padding-bottom: 0px;
+	border-bottom-width: 1px;
+	border-bottom-color: #c0c0c0;
+	border-bottom-style: solid;
+}
+
+.TableStyle-ODBCErrorCodes .HeadF-Column2-Header1 p
+{
+	font-family: sans-serif;
+	font-weight: bold;
+}
+
+.TableStyle-ODBCErrorCodes .HeadH-Column2-Header1
+{
+	text-align: left;
+	vertical-align: top;
+	border-right-width: 1px;
+	border-right-color: #c0c0c0;
+	border-right-style: solid;
+	font-family: sans-serif;
+	font-weight: bold;
+	background-color: #c0c0c0;
+	background-image: none;
+	padding-left: 0px;
+	padding-right: 0px;
+	padding-top: 0px;
+	padding-bottom: 0px;
+}
+
+.TableStyle-ODBCErrorCodes .HeadH-Column2-Header1 p
+{
+	font-family: sans-serif;
+	font-weight: bold;
+}
+
+.TableStyle-ODBCErrorCodes .HeadD-Column2-Header1
+{
+	text-align: left;
+	vertical-align: top;
+	font-family: sans-serif;
+	font-weight: bold;
+	background-color: #c0c0c0;
+	background-image: none;
+	padding-left: 0px;
+	padding-right: 0px;
+	padding-top: 0px;
+	padding-bottom: 0px;
+	border-bottom-width: 1px;
+	border-bottom-color: #c0c0c0;
+	border-bottom-style: solid;
+}
+
+.TableStyle-ODBCErrorCodes .HeadD-Column2-Header1 p
+{
+	font-family: sans-serif;
+	font-weight: bold;
+}
+
+.TableStyle-ODBCErrorCodes .HeadC-Column2-Header1
+{
+	text-align: left;
+	vertical-align: top;
+	font-family: sans-serif;
+	font-weight: bold;
+	background-color: #c0c0c0;
+	background-image: none;
+	padding-left: 0px;
+	padding-right: 0px;
+	padding-top: 0px;
+	padding-bottom: 0px;
+}
+
+.TableStyle-ODBCErrorCodes .HeadC-Column2-Header1 p
+{
+	font-family: sans-serif;
+	font-weight: bold;
+}
+
+.TableStyle-ODBCErrorCodes .HeadB-Column2-Header1
+{
+	text-align: left;
+	vertical-align: top;
+	border-right-width: 1px;
+	border-right-color: #c0c0c0;
+	border-right-style: solid;
+	font-family: sans-serif;
+	font-weight: bold;
+	background-color: #c0c0c0;
+	background-image: none;
+	padding-left: 0px;
+	padding-right: 0px;
+	padding-top: 0px;
+	padding-bottom: 0px;
+}
+
+.TableStyle-ODBCErrorCodes .HeadB-Column2-Header1 p
+{
+	font-family: sans-serif;
+	font-weight: bold;
+}
+
+.TableStyle-ODBCErrorCodes .HeadA-Column2-Header1
+{
+	text-align: left;
+	vertical-align: top;
+	font-family: sans-serif;
+	font-weight: bold;
+	background-color: #c0c0c0;
+	background-image: none;
+	padding-left: 0px;
+	padding-right: 0px;
+	padding-top: 0px;
+	padding-bottom: 0px;
+}
+
+.TableStyle-ODBCErrorCodes .HeadA-Column2-Header1 p
+{
+	font-family: sans-serif;
+	font-weight: bold;
+}
+
+.TableStyle-ODBCErrorCodes .HeadG-Column2-Header1
+{
+	text-align: left;
+	vertical-align: top;
+	font-family: sans-serif;
+	font-weight: bold;
+	background-color: #c0c0c0;
+	background-image: none;
+	padding-left: 0px;
+	padding-right: 0px;
+	padding-top: 0px;
+	padding-bottom: 0px;
+}
+
+.TableStyle-ODBCErrorCodes .HeadG-Column2-Header1 p
+{
+	font-family: sans-serif;
+	font-weight: bold;
+}
+
+.TableStyle-ODBCErrorCodes .Foot-Footer1
+{
+	
+}
+
+.TableStyle-ODBCErrorCodes .FootI-Column1-Footer1
+{
+	text-align: left;
+	vertical-align: top;
+	background-image: none;
+	padding-left: 0px;
+	padding-right: 0px;
+	padding-top: 0px;
+	padding-bottom: 0px;
+}
+
+.TableStyle-ODBCErrorCodes .FootI-Column1-Footer1 p
+{
+	
+}
+
+.TableStyle-ODBCErrorCodes .FootE-Column1-Footer1
+{
+	text-align: left;
+	vertical-align: top;
+	border-right-width: 1px;
+	border-right-color: #c0c0c0;
+	border-right-style: solid;
+	background-image: none;
+	padding-left: 0px;
+	padding-right: 0px;
+	padding-top: 0px;
+	padding-bottom: 0px;
+	border-top-width: 1px;
+	border-top-color: #c0c0c0;
+	border-top-style: solid;
+}
+
+.TableStyle-ODBCErrorCodes .FootE-Column1-Footer1 p
+{
+	
+}
+
+.TableStyle-ODBCErrorCodes .FootF-Column1-Footer1
+{
+	text-align: left;
+	vertical-align: top;
+	background-image: none;
+	padding-left: 0px;
+	padding-right: 0px;
+	padding-top: 0px;
+	padding-bottom: 0px;
+	border-top-width: 1px;
+	border-top-color: #c0c0c0;
+	border-top-style: solid;
+}
+
+.TableStyle-ODBCErrorCodes .FootF-Column1-Footer1 p
+{
+	
+}
+
+.TableStyle-ODBCErrorCodes .FootH-Column1-Footer1
+{
+	text-align: left;
+	vertical-align: top;
+	border-right-width: 1px;
+	border-right-color: #c0c0c0;
+	border-right-style: solid;
+	background-image: none;
+	padding-left: 0px;
+	padding-right: 0px;
+	padding-top: 0px;
+	padding-bottom: 0px;
+}
+
+.TableStyle-ODBCErrorCodes .FootH-Column1-Footer1 p
+{
+	
+}
+
+.TableStyle-ODBCErrorCodes .FootD-Column1-Footer1
+{
+	text-align: left;
+	vertical-align: top;
+	background-image: none;
+	padding-left: 0px;
+	padding-right: 0px;
+	padding-top: 0px;
+	padding-bottom: 0px;
+	border-top-width: 1px;
+	border-top-color: #c0c0c0;
+	border-top-style: solid;
+}
+
+.TableStyle-ODBCErrorCodes .FootD-Column1-Footer1 p
+{
+	
+}
+
+.TableStyle-ODBCErrorCodes .FootC-Column1-Footer1
+{
+	text-align: left;
+	vertical-align: top;
+	background-image: none;
+	padding-left: 0px;
+	padding-right: 0px;
+	padding-top: 0px;
+	padding-bottom: 0px;
+}
+
+.TableStyle-ODBCErrorCodes .FootC-Column1-Footer1 p
+{
+	
+}
+
+.TableStyle-ODBCErrorCodes .FootB-Column1-Footer1
+{
+	text-align: left;
+	vertical-align: top;
+	border-right-width: 1px;
+	border-right-color: #c0c0c0;
+	border-right-style: solid;
+	background-image: none;
+	padding-left: 0px;
+	padding-right: 0px;
+	padding-top: 0px;
+	padding-bottom: 0px;
+}
+
+.TableStyle-ODBCErrorCodes .FootB-Column1-Footer1 p
+{
+	
+}
+
+.TableStyle-ODBCErrorCodes .FootA-Column1-Footer1
+{
+	text-align: left;
+	vertical-align: top;
+	background-image: none;
+	padding-left: 0px;
+	padding-right: 0px;
+	padding-top: 0px;
+	padding-bottom: 0px;
+}
+
+.TableStyle-ODBCErrorCodes .FootA-Column1-Footer1 p
+{
+	
+}
+
+.TableStyle-ODBCErrorCodes .FootG-Column1-Footer1
+{
+	text-align: left;
+	vertical-align: top;
+	background-image: none;
+	padding-left: 0px;
+	padding-right: 0px;
+	padding-top: 0px;
+	padding-bottom: 0px;
+}
+
+.TableStyle-ODBCErrorCodes .FootG-Column1-Footer1 p
+{
+	
+}
+
+.TableStyle-ODBCErrorCodes .FootI-Column2-Footer1
+{
+	text-align: left;
+	vertical-align: top;
+	background-image: none;
+	padding-left: 0px;
+	padding-right: 0px;
+	padding-top: 0px;
+	padding-bottom: 0px;
+}
+
+.TableStyle-ODBCErrorCodes .FootI-Column2-Footer1 p
+{
+	
+}
+
+.TableStyle-ODBCErrorCodes .FootE-Column2-Footer1
+{
+	text-align: left;
+	vertical-align: top;
+	border-right-width: 1px;
+	border-right-color: #c0c0c0;
+	border-right-style: solid;
+	background-image: none;
+	padding-left: 0px;
+	padding-right: 0px;
+	padding-top: 0px;
+	padding-bottom: 0px;
+	border-top-width: 1px;
+	border-top-color: #c0c0c0;
+	border-top-style: solid;
+}
+
+.TableStyle-ODBCErrorCodes .FootE-Column2-Footer1 p
+{
+	
+}
+
+.TableStyle-ODBCErrorCodes .FootF-Column2-Footer1
+{
+	text-align: left;
+	vertical-align: top;
+	background-image: none;
+	padding-left: 0px;
+	padding-right: 0px;
+	padding-top: 0px;
+	padding-bottom: 0px;
+	border-top-width: 1px;
+	border-top-color: #c0c0c0;
+	border-top-style: solid;
+}
+
+.TableStyle-ODBCErrorCodes .FootF-Column2-Footer1 p
+{
+	
+}
+
+.TableStyle-ODBCErrorCodes .FootH-Column2-Footer1
+{
+	text-align: left;
+	vertical-align: top;
+	border-right-width: 1px;
+	border-right-color: #c0c0c0;
+	border-right-style: solid;
+	background-image: none;
+	padding-left: 0px;
+	padding-right: 0px;
+	padding-top: 0px;
+	padding-bottom: 0px;
+}
+
+.TableStyle-ODBCErrorCodes .FootH-Column2-Footer1 p
+{
+	
+}
+
+.TableStyle-ODBCErrorCodes .FootD-Column2-Footer1
+{
+	text-align: left;
+	vertical-align: top;
+	background-image: none;
+	padding-left: 0px;
+	padding-right: 0px;
+	padding-top: 0px;
+	padding-bottom: 0px;
+	border-top-width: 1px;
+	border-top-color: #c0c0c0;
+	border-top-style: solid;
+}
+
+.TableStyle-ODBCErrorCodes .FootD-Column2-Footer1 p
+{
+	
+}
+
+.TableStyle-ODBCErrorCodes .FootC-Column2-Footer1
+{
+	text-align: left;
+	vertical-align: top;
+	background-image: none;
+	padding-left: 0px;
+	padding-right: 0px;
+	padding-top: 0px;
+	padding-bottom: 0px;
+}
+
+.TableStyle-ODBCErrorCodes .FootC-Column2-Footer1 p
+{
+	
+}
+
+.TableStyle-ODBCErrorCodes .FootB-Column2-Footer1
+{
+	text-align: left;
+	vertical-align: top;
+	border-right-width: 1px;
+	border-right-color: #c0c0c0;
+	border-right-style: solid;
+	background-image: none;
+	padding-left: 0px;
+	padding-right: 0px;
+	padding-top: 0px;
+	padding-bottom: 0px;
+}
+
+.TableStyle-ODBCErrorCodes .FootB-Column2-Footer1 p
+{
+	
+}
+
+.TableStyle-ODBCErrorCodes .FootA-Column2-Footer1
+{
+	text-align: left;
+	vertical-align: top;
+	background-image: none;
+	padding-left: 0px;
+	padding-right: 0px;
+	padding-top: 0px;
+	padding-bottom: 0px;
+}
+
+.TableStyle-ODBCErrorCodes .FootA-Column2-Footer1 p
+{
+	
+}
+
+.TableStyle-ODBCErrorCodes .FootG-Column2-Footer1
+{
+	text-align: left;
+	vertical-align: top;
+	background-image: none;
+	padding-left: 0px;
+	padding-right: 0px;
+	padding-top: 0px;
+	padding-bottom: 0px;
+}
+
+.TableStyle-ODBCErrorCodes .FootG-Column2-Footer1 p
+{
+	
+}
+
+.TableStyle-ODBCErrorCodes .Body-Body1
+{
+	
+}
+
+.TableStyle-ODBCErrorCodes .BodyI-Column1-Body1
+{
+	font-family: sans-serif;
+	font-weight: normal;
+	background-image: none;
+	text-align: left;
+	vertical-align: top;
+	padding-left: 0px;
+	padding-right: 0px;
+	padding-top: 0px;
+	padding-bottom: 0px;
+}
+
+.TableStyle-ODBCErrorCodes .BodyI-Column1-Body1 p
+{
+	font-family: sans-serif;
+	font-weight: normal;
+}
+
+.TableStyle-ODBCErrorCodes .BodyE-Column1-Body1
+{
+	font-family: sans-serif;
+	font-weight: normal;
+	background-image: none;
+	border-bottom-width: 1px;
+	border-bottom-color: #c0c0c0;
+	border-bottom-style: solid;
+	text-align: left;
+	vertical-align: top;
+	padding-left: 0px;
+	padding-right: 0px;
+	padding-top: 0px;
+	padding-bottom: 0px;
+	border-right-width: 1px;
+	border-right-color: #c0c0c0;
+	border-right-style: solid;
+}
+
+.TableStyle-ODBCErrorCodes .BodyE-Column1-Body1 p
+{
+	font-family: sans-serif;
+	font-weight: normal;
+}
+
+.TableStyle-ODBCErrorCodes .BodyF-Column1-Body1
+{
+	font-family: sans-serif;
+	font-weight: normal;
+	background-image: none;
+	border-bottom-width: 1px;
+	border-bottom-color: #c0c0c0;
+	border-bottom-style: solid;
+	text-align: left;
+	vertical-align: top;
+	padding-left: 0px;
+	padding-right: 0px;
+	padding-top: 0px;
+	padding-bottom: 0px;
+}
+
+.TableStyle-ODBCErrorCodes .BodyF-Column1-Body1 p
+{
+	font-family: sans-serif;
+	font-weight: normal;
+}
+
+.TableStyle-ODBCErrorCodes .BodyH-Column1-Body1
+{
+	font-family: sans-serif;
+	font-weight: normal;
+	background-image: none;
+	text-align: left;
+	vertical-align: top;
+	padding-left: 0px;
+	padding-right: 0px;
+	padding-top: 0px;
+	padding-bottom: 0px;
+	border-right-width: 1px;
+	border-right-color: #c0c0c0;
+	border-right-style: solid;
+}
+
+.TableStyle-ODBCErrorCodes .BodyH-Column1-Body1 p
+{
+	font-family: sans-serif;
+	font-weight: normal;
+}
+
+.TableStyle-ODBCErrorCodes .BodyD-Column1-Body1
+{
+	font-family: sans-serif;
+	font-weight: normal;
+	background-image: none;
+	border-bottom-width: 1px;
+	border-bottom-color: #c0c0c0;
+	border-bottom-style: solid;
+	text-align: left;
+	vertical-align: top;
+	padding-left: 0px;
+	padding-right: 0px;
+	padding-top: 0px;
+	padding-bottom: 0px;
+}
+
+.TableStyle-ODBCErrorCodes .BodyD-Column1-Body1 p
+{
+	font-family: sans-serif;
+	font-weight: normal;
+}
+
+.TableStyle-ODBCErrorCodes .BodyC-Column1-Body1
+{
+	font-family: sans-serif;
+	font-weight: normal;
+	background-image: none;
+	text-align: left;
+	vertical-align: top;
+	padding-left: 0px;
+	padding-right: 0px;
+	padding-top: 0px;
+	padding-bottom: 0px;
+}
+
+.TableStyle-ODBCErrorCodes .BodyC-Column1-Body1 p
+{
+	font-family: sans-serif;
+	font-weight: normal;
+}
+
+.TableStyle-ODBCErrorCodes .BodyB-Column1-Body1
+{
+	font-family: sans-serif;
+	font-weight: normal;
+	background-image: none;
+	text-align: left;
+	vertical-align: top;
+	padding-left: 0px;
+	padding-right: 0px;
+	padding-top: 0px;
+	padding-bottom: 0px;
+	border-right-width: 1px;
+	border-right-color: #c0c0c0;
+	border-right-style: solid;
+}
+
+.TableStyle-ODBCErrorCodes .BodyB-Column1-Body1 p
+{
+	font-family: sans-serif;
+	font-weight: normal;
+}
+
+.TableStyle-ODBCErrorCodes .BodyA-Column1-Body1
+{
+	font-family: sans-serif;
+	font-weight: normal;
+	background-image: none;
+	text-align: left;
+	vertical-align: top;
+	padding-left: 0px;
+	padding-right: 0px;
+	padding-top: 0px;
+	padding-bottom: 0px;
+}
+
+.TableStyle-ODBCErrorCodes .BodyA-Column1-Body1 p
+{
+	font-family: sans-serif;
+	font-weight: normal;
+}
+
+.TableStyle-ODBCErrorCodes .BodyG-Column1-Body1
+{
+	font-family: sans-serif;
+	font-weight: normal;
+	background-image: none;
+	text-align: left;
+	vertical-align: top;
+	padding-left: 0px;
+	padding-right: 0px;
+	padding-top: 0px;
+	padding-bottom: 0px;
+}
+
+.TableStyle-ODBCErrorCodes .BodyG-Column1-Body1 p
+{
+	font-family: sans-serif;
+	font-weight: normal;
+}
+
+.TableStyle-ODBCErrorCodes .BodyI-Column2-Body1
+{
+	font-family: sans-serif;
+	font-weight: normal;
+	background-image: none;
+	padding-left: 0px;
+	padding-right: 0px;
+	padding-top: 0px;
+	padding-bottom: 0px;
+	text-align: left;
+	vertical-align: top;
+}
+
+.TableStyle-ODBCErrorCodes .BodyI-Column2-Body1 p
+{
+	font-family: sans-serif;
+	font-weight: normal;
+}
+
+.TableStyle-ODBCErrorCodes .BodyE-Column2-Body1
+{
+	font-family: sans-serif;
+	font-weight: normal;
+	background-image: none;
+	padding-left: 0px;
+	padding-right: 0px;
+	padding-top: 0px;
+	padding-bottom: 0px;
+	border-bottom-width: 1px;
+	border-bottom-color: #c0c0c0;
+	border-bottom-style: solid;
+	text-align: left;
+	vertical-align: top;
+	border-right-width: 1px;
+	border-right-color: #c0c0c0;
+	border-right-style: solid;
+}
+
+.TableStyle-ODBCErrorCodes .BodyE-Column2-Body1 p
+{
+	font-family: sans-serif;
+	font-weight: normal;
+}
+
+.TableStyle-ODBCErrorCodes .BodyF-Column2-Body1
+{
+	font-family: sans-serif;
+	font-weight: normal;
+	background-image: none;
+	padding-left: 0px;
+	padding-right: 0px;
+	padding-top: 0px;
+	padding-bottom: 0px;
+	border-bottom-width: 1px;
+	border-bottom-color: #c0c0c0;
+	border-bottom-style: solid;
+	text-align: left;
+	vertical-align: top;
+}
+
+.TableStyle-ODBCErrorCodes .BodyF-Column2-Body1 p
+{
+	font-family: sans-serif;
+	font-weight: normal;
+}
+
+.TableStyle-ODBCErrorCodes .BodyH-Column2-Body1
+{
+	font-family: sans-serif;
+	font-weight: normal;
+	background-image: none;
+	padding-left: 0px;
+	padding-right: 0px;
+	padding-top: 0px;
+	padding-bottom: 0px;
+	text-align: left;
+	vertical-align: top;
+	border-right-width: 1px;
+	border-right-color: #c0c0c0;
+	border-right-style: solid;
+}
+
+.TableStyle-ODBCErrorCodes .BodyH-Column2-Body1 p
+{
+	font-family: sans-serif;
+	font-weight: normal;
+}
+
+.TableStyle-ODBCErrorCodes .BodyD-Column2-Body1
+{
+	font-family: sans-serif;
+	font-weight: normal;
+	background-image: none;
+	padding-left: 0px;
+	padding-right: 0px;
+	padding-top: 0px;
+	padding-bottom: 0px;
+	border-bottom-width: 1px;
+	border-bottom-color: #c0c0c0;
+	border-bottom-style: solid;
+	text-align: left;
+	vertical-align: top;
+}
+
+.TableStyle-ODBCErrorCodes .BodyD-Column2-Body1 p
+{
+	font-family: sans-serif;
+	font-weight: normal;
+}
+
+.TableStyle-ODBCErrorCodes .BodyC-Column2-Body1
+{
+	font-family: sans-serif;
+	font-weight: normal;
+	background-image: none;
+	padding-left: 0px;
+	padding-right: 0px;
+	padding-top: 0px;
+	padding-bottom: 0px;
+	text-align: left;
+	vertical-align: top;
+}
+
+.TableStyle-ODBCErrorCodes .BodyC-Column2-Body1 p
+{
+	font-family: sans-serif;
+	font-weight: normal;
+}
+
+.TableStyle-ODBCErrorCodes .BodyB-Column2-Body1
+{
+	font-family: sans-serif;
+	font-weight: normal;
+	background-image: none;
+	padding-left: 0px;
+	padding-right: 0px;
+	padding-top: 0px;
+	padding-bottom: 0px;
+	text-align: left;
+	vertical-align: top;
+	border-right-width: 1px;
+	border-right-color: #c0c0c0;
+	border-right-style: solid;
+}
+
+.TableStyle-ODBCErrorCodes .BodyB-Column2-Body1 p
+{
+	font-family: sans-serif;
+	font-weight: normal;
+}
+
+.TableStyle-ODBCErrorCodes .BodyA-Column2-Body1
+{
+	font-family: sans-serif;
+	font-weight: normal;
+	background-image: none;
+	padding-left: 0px;
+	padding-right: 0px;
+	padding-top: 0px;
+	padding-bottom: 0px;
+	text-align: left;
+	vertical-align: top;
+}
+
+.TableStyle-ODBCErrorCodes .BodyA-Column2-Body1 p
+{
+	font-family: sans-serif;
+	font-weight: normal;
+}
+
+.TableStyle-ODBCErrorCodes .BodyG-Column2-Body1
+{
+	font-family: sans-serif;
+	font-weight: normal;
+	background-image: none;
+	padding-left: 0px;
+	padding-right: 0px;
+	padding-top: 0px;
+	padding-bottom: 0px;
+	text-align: left;
+	vertical-align: top;
+}
+
+.TableStyle-ODBCErrorCodes .BodyG-Column2-Body1 p
+{
+	font-family: sans-serif;
+	font-weight: normal;
+}
+
+

@@ -1,0 +1,1341 @@
+<?xml version="1.0" encoding="utf-8"?>
+<!DOCTYPE html PUBLIC "-//W3C//DTD XHTML 1.0 Strict//EN" "http://www.w3.org/TR/xhtml1/DTD/xhtml1-strict.dtd">
+<html xmlns:MadCap="http://www.madcapsoftware.com/Schemas/MadCap.xsd" MadCap:tocPath="SQL API|SQL Language Guide|User's Guide" MadCap:InPreviewMode="false" MadCap:PreloadImages="false" MadCap:RuntimeFileType="Topic" MadCap:TargetType="WebHelp" lang="en-us" xml:lang="en-us" MadCap:PathToHelpSystem="../../" MadCap:HelpSystemFileName="Default.xml" MadCap:SearchType="Stem">
+    <head>
+        <meta http-equiv="Content-Type" content="text/html; charset=utf-8" /><title>Retrieving Data from a Database</title>
+        <link rel="icon" type="image/png" href="http://docs.raima.com/favicon.png" />
+        <link href="../SkinSupport/MadCap.css" rel="stylesheet" />
+        <link href="../Resources/TableStyles/BasicTwoCol.css" rel="stylesheet" />
+        <link href="../Resources/TableStyles/fncSummary.css" rel="stylesheet" />
+        <link href="../Resources/Stylesheets/raima.css" rel="stylesheet" />
+        <script src="../SkinSupport/MadCapAll.js">
+        </script>
+    </head>
+    <body>
+        <p class="MCWebHelpFramesetLink MCWebHelpFramesetLinkTop" style="display: none;"><a href="../../Default_CSH.htm#SQL/Chapter5.htm" style="">Open topic with navigation</a>
+        </p>
+        <div class="MCBreadcrumbsBox_0"><span class="MCBreadcrumbsPrefix">You are here: </span><a class="MCBreadcrumbsLink" href="../dbRSQL.htm">SQL API</a><span class="MCBreadcrumbsDivider"> &gt; </span><a class="MCBreadcrumbsLink" href="dbSQL.htm">SQL Language Guide</a><span class="MCBreadcrumbsDivider"> &gt; </span><a class="MCBreadcrumbsLink" href="Chapter1.htm">User's Guide</a><span class="MCBreadcrumbsDivider"> &gt; </span><span class="MCBreadcrumbs">Retrieving Data from a Database</span>
+        </div>
+        <h1 class="firstHeading"><a MadCap:generatedBookmark="TOC" name="Retrieving_Data_from_a_Database"></a>Retrieving Data from a Database</h1>
+        <p class="Quotation">You can use all the quantitative data you can get,</p>
+        <p class="Quotation">but you still have to distrust it and use your own</p>
+        <p class="Quotation">intelligence and judgment.</p>
+        <p class="QuoteAuthor">- Alvin Toffler</p>
+        <p>The reason data is stored in a database is so that it can be later retrieved and looked at.  However, in order to do something intelligent with that data it must first intelligently be retrieved.   This is often much easier to say than to do and that is particularly true with a language like SQL.</p>
+        <p>Data is retrieved from <span class="MyVariablesProductShortName">RDM</span> databases using the SQL <b>select</b> statement.  This section will explain how to properly formulate <b>select</b> statements to view data contained in one or more <span class="MyVariablesProductShortName">RDM</span> databases.</p>
+        <p>A completely specified <b>select</b> statement is commonly referred to as a <i>query</i>.   The complete set of rows that are returned by a <b>select</b> statement is called the <i>result set</i>.</p>
+        <h2><a MadCap:generatedBookmark="TOC" name="Simple_Queries"></a>Simple Queries</h2>
+        <p>The most basic of queries is to retrieve all of the rows and columns of a table.  The easiest way to do this is to use the following statement:</p><pre xml:space="preserve" class="Grammar">select_statement:
+ 		<b>select * from</b>       <![CDATA[ ]]><i>table_name</i></pre>
+        <p>The "*" indicates that all of the columns declared in <i>table_name</i> are to be returned.  Thus, you can enter the following statement to see all of the account managers in the <code>acctmgr</code> table in the bookshop database.</p><pre xml:space="preserve">select * from acctmgr;
+
+MGRID   NAME                     HIRE_DATE               COMMISSION
+ALFRED  Kralik, Alfred           1997-07-02                   0.025
+AMY     Zonn, Amy                1994-07-06                   0.025
+BARNEY  Noble, Barney            1972-05-08                   0.035
+FRANK   Doel, Frank              1987-02-13                   0.030
+JOE     Fox, Joe                 1998-12-18                   0.025
+KATE    Kelly, Kathleen          1998-12-18                   0.025
+KLARA   Novac, Klara             1990-01-02                   0.025</pre>
+        <p>Of course, if you only need to see some but not all of the columns in a table, those columns can be individually listed as indicated in the following syntax.</p><pre xml:space="preserve" class="Grammar">select_statement:
+ 		<b>select</b>       <![CDATA[ ]]><i>column_name</i>[, <i>column_name</i>]… <b>from</b>       <![CDATA[ ]]><i>table_name</i></pre>
+        <p>Each specified <i>column_name</i> must identify a column that is declared in <i>table_name</i>.  The next example retrieves the name, city, and email address of each bookshop patron.</p><pre xml:space="preserve">select name, city, email from patron;
+
+NAME                           CITY              EMAIL
+Carlos Slim Helu               Acapulco          richest@nomail.com
+William Gates, III             Redmond           bill.gates@microsoft.com
+Warren Buffett                 Omaha             berkshire@berkshirehathaway.com
+Mukesh Ambani                  Mumbai            muki@nomail.com
+Bernard Arnult                 Cannes            barnult@eposte.co.fr
+Stephen Jobs                   Cupertino         founder@apple.com
+Scrooge McDuck                 Anaheim           scrooge@disneycorp.com
+Richie Rich                    San Diego         richierich@apecomics.com
+Jed Clampett                   Beverly Hills     richhillbilly@cbs.com
+Bruce Wayne                    Gotham City       bruce@brucewayne.com
+Thurston Howell III            Newport           lovey@gilligan.com
+Artimis Fowel II               Dublin            artimis@fowlmanor.com
+Charles Montgomery Burns       Springfield       monty@springfieldpower.com
+Jay Gatsby                     West Egg          jimmy@bootleg.com
+Lucille Bluth                  Newport Beach     lucille@bluthco.com
+Chatsworth Osborne Jr.         Haddonfield       mummsiesboy@blueblood.com
+Jean Luc Picard                San Francisco     jlpicard@enterpise.ufp.gov
+Jeffrey Bezos                  Seattle           bezos@amazoncorp.com
+Giorgio Armani                 Piacenza          gio@armani.com</pre>
+        <h2><a MadCap:generatedBookmark="TOC" name="Column_Expressions"></a>Column Expressions</h2>
+        <p>Besides retrieving the values of  individual columns, a <b>select</b> statement allows you to specify expressions that can perform arithmetic operations on the columns in a table.  The normal arithmetic operators (+, -, *, /) along with a wide range of scalar functions can be included in a <b>select</b> column expression.  The complete syntax for column expressions is given below.</p><pre xml:space="preserve" class="Grammar">select_statement:
+		<b>select</b> expression [<i>column_alias</i>] [, expression [<i>column_alias</i>] ]… <b>from</b><i>table_name</i></pre><pre class="Grammar" xml:space="preserve">expression:
+		operand [arith_operator operand]...</pre><pre class="Grammar" xml:space="preserve">operand:
+		<i>constant</i> |&#160;param_ref  |&#160;column_ref&#160;|&#160;function |&#160;(expr)</pre><pre class="Grammar" xml:space="preserve">param_ref:
+		?&#160;|&#160;:<i>param_name</i></pre><pre class="Grammar" xml:space="preserve">column_ref:
+		[{<i>table_name</i> |&#160;<i>correlation_name</i>}.]<i>column_name</i></pre><pre class="Grammar" xml:space="preserve">arith_operator:
+		+&#160;|&#160;- | * |&#160;/</pre><pre class="Grammar" xml:space="preserve">function:
+		aggregate_fcn&#160;|&#160;scalar_fcn</pre><pre class="Grammar" xml:space="preserve">aggregate_fcn:
+		{<b>sum</b> | <b>avg</b> | <b>max</b> | <b>min</b>} (expression) 
+ 	|	<b>count (</b>{* | column_ref }<b>)</b>
+	|	<i>aggregate_udf_name</i> ([expression][, expression]...)</pre><pre class="Grammar" xml:space="preserve">scalar_fcn:
+ 	|	<b>if (</b>conditional_expr, expression, expression<b>)</b>
+ 	|	numeric_function | datetime_function |&#160;string_function
+ 	|	<i>scalar_udf_name</i> ([expression][, expression]...)</pre><pre class="Grammar" xml:space="preserve">numeric_function:
+		<b>abs</b>(arith_expr)
+	|	<b>acos</b>(arith_expr)
+	|	<b>asin</b>(arith_expr)
+	|	<b>atan</b>(arith_expr)
+	|	<b>atan2</b>(arith_expr)
+	|	{<b>ceil</b> |&#160;<b>ceiling</b>}(arith_expr)
+	|	<b>cos</b>(arith_expr)
+	|	<b>cot</b>(arith_expr)
+	|	<b>exp</b>(arith_expr)
+	|	<b>floor</b>(arith_expr)
+	|	{<b>ln</b> |&#160;<b>log</b>}(arith_expr)
+	|	<b>mod</b>(arith_expr)
+	|	<b>pi</b>()
+	|	<b>rand</b>(<i>num</i>)
+	|	<b>sign</b>(arith_expr)
+	|	<b>sin</b>(arith_expr)
+	|	<b>sqrt</b>(arith_expr)
+	|	<b>tan</b>(arith_expr)</pre><pre class="Grammar" xml:space="preserve">datetime_function:
+		<b>age</b>(dt_expr)
+	|	{<b>curdate</b> |&#160;<b>current_date</b>}()
+	|	{<b>curtime</b> |&#160;<b>current_time</b>}()
+	|	<b>dayofmonth</b>(dt_expr)
+	|	<b>dayofyear</b>(dt_expr)
+	|	<b>hour</b>(dt_expr)
+	|	<b>minute</b>(dt_expr)
+	|	<b>month</b>(dt_expr)
+	|	<b>quarter</b>(dt_expr)
+	|	<b>second</b>(dt_expr)
+	|	<b>week</b>(dt_expr)
+	|	<b>year</b>(dt_expr)</pre><pre class="Grammar" xml:space="preserve">string_function:
+		<b>ascii</b>(string_expr)
+	|	<b>char</b>(<i>num</i>)
+	|	<b>concat</b>(string_expr, string_expr)
+	|	<b>convert</b>(expression, {convert_type | {<b>char</b>}, <i>width</i>, convert_format})
+	|	<b>lcase</b>(string_expr)
+	|	<b>left</b>(string_expr, <i>num</i>)
+	|	<b>length</b>(string_expr)
+	|	<b>locate</b>(string_expr, string_expr, <i>num</i>)
+	|	<b>ltrim</b>(string_expr)
+	|	<b>repeat</b>(string_expr, <i>num</i>)
+	|	<b>replace</b>(string_expr, string_expr, string_expr)
+	|	<b>right</b>(string_expr, <i>num</i>)
+	|	<b>rtrim</b>(string_expr)
+	|	<b>substring</b>(string_expr, <i>num</i>, <i>num</i>)
+	|	<b>ucase</b>(string_expr)
+	|	<b>unicode</b>(string_expr)</pre><pre class="Grammar" xml:space="preserve">convert_type:
+		<b>char</b> |<b>smallint</b> | <b>integer</b> | <b>real</b>
+	|	<b>double</b> | <b>date</b> | <b>time</b> | <b>timestamp</b> |&#160;<b>tinyint</b> |&#160;<b>bigint</b>
+
+convert_format:
+		numeric_format | datetime_format
+
+numeric_format:
+		"[&lt;&lt; | &gt;&gt; | &gt;&lt;]['text' | $][- | (][#,]#[.#[#]...][e | E]['text' | $ | %]"
+
+datetime_format:
+		"[&lt;&lt; | &gt;&gt; | &gt;&lt;]['text' | spchar | date_code | time_code]..."
+
+date_code:
+		<b>m</b> | <b>mm</b> | <b>mmm</b> | <b>mon</b> | <b>mmmm</b> | <b>month</b>
+	|	<b>d</b> | <b>dd</b> | <b>ddd</b> | <b>dddd</b> | <b>day</b>
+	|	<b>yy</b> | <b>yyyy</b>
+
+time_code:
+		<b>h</b> | <b>hh</b> | <b>m</b> | <b>mm</b> | <b>s</b> | <b>ss</b> | .<b>f</b>[<b>f</b>]... | [<b>a/p</b> | <b>am/pm</b> | <b>A/P</b> | <b>AM/PM</b>]
+</pre>
+        <p>The built-in numeric functions that are available in <span class="MyVariablesRSQLName">RDM SQL</span> are listed in the following table.</p>
+        <table style="caption-side: top;margin-left: 0;margin-right: auto;mc-table-style: url('../Resources/TableStyles/fncSummary.css');" class="TableStyle-fncSummary" cellspacing="0">
+            <caption><a name="Table6"></a>Table 6. Built-in Numeric Functions</caption>
+            <col class="Column-Column1" />
+            <col class="Column-Column2" />
+            <thead>
+                <tr class="Head-Header1">
+                    <th class="HeadE-Column1-Header1">Function</th>
+                    <th class="HeadD-Column2-Header1">Description</th>
+                </tr>
+            </thead>
+            <tbody>
+                <tr class="Body-Body1">
+                    <td class="BodyE-Column1-Body1"><a href="FNC/Math/abs.htm">abs</a>
+                    </td>
+                    <td class="BodyD-Column2-Body1">Returns the absolute value of an expression.</td>
+                </tr>
+                <tr class="Body-Body1">
+                    <td class="BodyE-Column1-Body1"><a href="FNC/Math/acos.htm">acos</a>
+                    </td>
+                    <td class="BodyD-Column2-Body1">Returns the arccosine of an expression.</td>
+                </tr>
+                <tr class="Body-Body1">
+                    <td class="BodyE-Column1-Body1"><a href="FNC/Math/asin.htm">asin</a>
+                    </td>
+                    <td class="BodyD-Column2-Body1">Returns the arcsine of an expression.</td>
+                </tr>
+                <tr class="Body-Body1">
+                    <td class="BodyE-Column1-Body1"><a href="FNC/Math/atan.htm">atan</a>
+                    </td>
+                    <td class="BodyD-Column2-Body1">Returns the arctangent of an expression.</td>
+                </tr>
+                <tr class="Body-Body1">
+                    <td class="BodyE-Column1-Body1"><a href="FNC/Math/atan2.htm">atan2</a>
+                    </td>
+                    <td class="BodyD-Column2-Body1">Returns the arctangent of an x-y coordinate pair.</td>
+                </tr>
+                <tr class="Body-Body1">
+                    <td class="BodyE-Column1-Body1"><a href="FNC/Math/ceiling.htm">ceil | ceiling</a>
+                    </td>
+                    <td class="BodyD-Column2-Body1">Finds the upper bound for an expression.</td>
+                </tr>
+                <tr class="Body-Body1">
+                    <td class="BodyE-Column1-Body1"><a href="FNC/Math/cos.htm">cos</a>
+                    </td>
+                    <td class="BodyD-Column2-Body1">Returns the cosine of an angle.</td>
+                </tr>
+                <tr class="Body-Body1">
+                    <td class="BodyE-Column1-Body1"><a href="FNC/Math/cot.htm">cot</a>
+                    </td>
+                    <td class="BodyD-Column2-Body1">Returns the cotangent of an angle.</td>
+                </tr>
+                <tr class="Body-Body1">
+                    <td class="BodyE-Column1-Body1"><a href="FNC/Math/exp.htm">exp</a>
+                    </td>
+                    <td class="BodyD-Column2-Body1">Returns the value of an exponential function.</td>
+                </tr>
+                <tr class="Body-Body1">
+                    <td class="BodyE-Column1-Body1"><a href="FNC/Math/floor.htm">floor</a>
+                    </td>
+                    <td class="BodyD-Column2-Body1">Finds the lower bound for an expression.</td>
+                </tr>
+                <tr class="Body-Body1">
+                    <td class="BodyE-Column1-Body1"><a href="FNC/Math/log.htm">ln | log</a>
+                    </td>
+                    <td class="BodyD-Column2-Body1">Returns the natural logarithm of an expression.</td>
+                </tr>
+                <tr class="Body-Body1">
+                    <td class="BodyE-Column1-Body1"><a href="FNC/Math/mod.htm">mod</a>
+                    </td>
+                    <td class="BodyD-Column2-Body1">Returns the remainder of arith_expr1/arith_expr2.</td>
+                </tr>
+                <tr class="Body-Body1">
+                    <td class="BodyE-Column1-Body1"><a href="FNC/Math/pi.htm">pi</a>
+                    </td>
+                    <td class="BodyD-Column2-Body1">Returns the value of pi.</td>
+                </tr>
+                <tr class="Body-Body1">
+                    <td class="BodyE-Column1-Body1"><a href="FNC/Math/rand.htm">rand</a>
+                    </td>
+                    <td class="BodyD-Column2-Body1">Returns next random floating-point number.  Non-zero num is seed.</td>
+                </tr>
+                <tr class="Body-Body1">
+                    <td class="BodyE-Column1-Body1"><a href="FNC/Math/sign.htm">sign</a>
+                    </td>
+                    <td class="BodyD-Column2-Body1">Returns the sign of an expression (-1, 0, +1).</td>
+                </tr>
+                <tr class="Body-Body1">
+                    <td class="BodyE-Column1-Body1"><a href="FNC/Math/sin.htm">sin</a>
+                    </td>
+                    <td class="BodyD-Column2-Body1">Returns the sine of an angle.</td>
+                </tr>
+                <tr class="Body-Body1">
+                    <td class="BodyE-Column1-Body1"><a href="FNC/Math/sqrt.htm">sqrt</a>
+                    </td>
+                    <td class="BodyD-Column2-Body1">Returns the square root of an expression.</td>
+                </tr>
+                <tr class="Body-Body1">
+                    <td class="BodyB-Column1-Body1"><a href="FNC/Math/tan.htm">tan</a>
+                    </td>
+                    <td class="BodyA-Column2-Body1">Returns the tangent of an angle.</td>
+                </tr>
+            </tbody>
+        </table>
+        <p>The <span class="MyVariablesRSQLName">RDM SQL</span> data and time manipulation functions are listed below.  Note that dt_expr is an arith_expr that involves only date, time, and timestamp columns and values.</p>
+        <table style="caption-side: top;margin-left: 0;margin-right: auto;mc-table-style: url('../Resources/TableStyles/fncSummary.css');" class="TableStyle-fncSummary" cellspacing="0">
+            <caption><a name="Table7"></a>Table 7. Built-in Date and Time Functions</caption>
+            <col class="Column-Column1" />
+            <col class="Column-Column2" />
+            <thead>
+                <tr class="Head-Header1">
+                    <th class="HeadE-Column1-Header1">Function</th>
+                    <th class="HeadD-Column2-Header1">Description</th>
+                </tr>
+            </thead>
+            <tbody>
+                <tr class="Body-Body1">
+                    <td class="BodyE-Column1-Body1"><a href="FNC/DateTime/age.htm">age</a>
+                    </td>
+                    <td class="BodyD-Column2-Body1">Returns the age (in full years).</td>
+                </tr>
+                <tr class="Body-Body1">
+                    <td class="BodyE-Column1-Body1"><a href="FNC/DateTime/curdate.htm">curdate</a>
+                        <br /><a href="FNC/DateTime/curdate.htm">current_date</a>
+                    </td>
+                    <td class="BodyD-Column2-Body1">Returns the current date.</td>
+                </tr>
+                <tr class="Body-Body1">
+                    <td class="BodyE-Column1-Body1"><a href="FNC/DateTime/curtime.htm">curtime</a>
+                        <br /><a href="FNC/DateTime/curtime.htm">current_time</a>
+                    </td>
+                    <td class="BodyD-Column2-Body1">Returns the current time.</td>
+                </tr>
+                <tr class="Body-Body1">
+                    <td class="BodyE-Column1-Body1">current_timestamp</td>
+                    <td class="BodyD-Column2-Body1">Returns the current date and time</td>
+                </tr>
+                <tr class="Body-Body1">
+                    <td class="BodyE-Column1-Body1"><a href="FNC/DateTime/dayofmonth.htm">dayofmonth</a>
+                    </td>
+                    <td class="BodyD-Column2-Body1">Returns the day of the month.</td>
+                </tr>
+                <tr class="Body-Body1">
+                    <td class="BodyE-Column1-Body1"><a href="FNC/DateTime/dayofweek.htm">dayofweek</a>
+                    </td>
+                    <td class="BodyD-Column2-Body1">Returns the day of the week.</td>
+                </tr>
+                <tr class="Body-Body1">
+                    <td class="BodyE-Column1-Body1"><a href="FNC/DateTime/dayofyear.htm">dayofyear</a>
+                    </td>
+                    <td class="BodyD-Column2-Body1">Returns the day of the year.</td>
+                </tr>
+                <tr class="Body-Body1">
+                    <td class="BodyE-Column1-Body1"><a href="FNC/DateTime/hour.htm">hour</a>
+                    </td>
+                    <td class="BodyD-Column2-Body1">Returns the hour.</td>
+                </tr>
+                <tr class="Body-Body1">
+                    <td class="BodyE-Column1-Body1"><a href="FNC/DateTime/minute.htm">minute</a>
+                    </td>
+                    <td class="BodyD-Column2-Body1">Returns the minute.</td>
+                </tr>
+                <tr class="Body-Body1">
+                    <td class="BodyE-Column1-Body1"><a href="FNC/DateTime/month.htm">month</a>
+                    </td>
+                    <td class="BodyD-Column2-Body1">Returns the month.</td>
+                </tr>
+                <tr class="Body-Body1">
+                    <td class="BodyE-Column1-Body1"><a href="FNC/DateTime/quarter.htm">quarter</a>
+                    </td>
+                    <td class="BodyD-Column2-Body1">Returns the quarter.</td>
+                </tr>
+                <tr class="Body-Body1">
+                    <td class="BodyE-Column1-Body1"><a href="FNC/DateTime/second.htm">second</a>
+                    </td>
+                    <td class="BodyD-Column2-Body1">Returns the second.</td>
+                </tr>
+                <tr class="Body-Body1">
+                    <td class="BodyE-Column1-Body1"><a href="FNC/DateTime/week.htm">week</a>
+                    </td>
+                    <td class="BodyD-Column2-Body1">Returns the week.</td>
+                </tr>
+                <tr class="Body-Body1">
+                    <td class="BodyB-Column1-Body1"><a href="FNC/DateTime/year.htm">year</a>
+                    </td>
+                    <td class="BodyA-Column2-Body1">Returns the year.</td>
+                </tr>
+            </tbody>
+        </table>
+        <p>The <span class="MyVariablesRSQLName">RDM SQL</span> string manipulation functions are listed below.</p>
+        <table style="caption-side: top;margin-left: 0;margin-right: auto;mc-table-style: url('../Resources/TableStyles/fncSummary.css');" class="TableStyle-fncSummary" cellspacing="0">
+            <caption><a name="Table8"></a>Table 8. Built-in String Functions</caption>
+            <col class="Column-Column1" />
+            <col class="Column-Column2" />
+            <thead>
+                <tr class="Head-Header1">
+                    <th class="HeadE-Column1-Header1">Function</th>
+                    <th class="HeadD-Column2-Header1">Description</th>
+                </tr>
+            </thead>
+            <tbody>
+                <tr class="Body-Body1">
+                    <td class="BodyE-Column1-Body1"><a href="FNC/String/ascii.htm">ascii</a>
+                    </td>
+                    <td class="BodyD-Column2-Body1">Returns the numeric ASCII value of a character</td>
+                </tr>
+                <tr class="Body-Body1">
+                    <td class="BodyE-Column1-Body1"><a href="FNC/String/char.htm">char</a>
+                    </td>
+                    <td class="BodyD-Column2-Body1">Returns the ASCII character with numeric value <i>num</i></td>
+                </tr>
+                <tr class="Body-Body1">
+                    <td class="BodyE-Column1-Body1"><a href="FNC/String/concat.htm">concat</a>
+                    </td>
+                    <td class="BodyD-Column2-Body1">Concatenates two strings</td>
+                </tr>
+                <tr class="Body-Body1">
+                    <td class="BodyE-Column1-Body1"><a href="FNC/convert.htm">convert</a>
+                    </td>
+                    <td class="BodyD-Column2-Body1">Convert an expression to a data type or a character string</td>
+                </tr>
+                <tr class="Body-Body1">
+                    <td class="BodyE-Column1-Body1"><a href="FNC/String/insstr.htm">insstr</a>
+                    </td>
+                    <td class="BodyD-Column2-Body1">Replace <i>num2</i> chars from string_expr2 in string_expr1 beginning at position <i>num1</i> (1st position is 1 not 0)</td>
+                </tr>
+                <tr class="Body-Body1">
+                    <td class="BodyE-Column1-Body1"><a href="FNC/String/lcase.htm">lcase</a>
+                    </td>
+                    <td class="BodyD-Column2-Body1">Converts a string to lowercase</td>
+                </tr>
+                <tr class="Body-Body1">
+                    <td class="BodyE-Column1-Body1"><a href="FNC/String/left.htm">left</a>
+                    </td>
+                    <td class="BodyD-Column2-Body1">Returns the leftmost <i>num</i> characters from the string</td>
+                </tr>
+                <tr class="Body-Body1">
+                    <td class="BodyE-Column1-Body1"><a href="FNC/String/length.htm">length</a>
+                    </td>
+                    <td class="BodyD-Column2-Body1">Returns the length of the string</td>
+                </tr>
+                <tr class="Body-Body1">
+                    <td class="BodyE-Column1-Body1"><a href="FNC/String/locate.htm">locate</a>
+                    </td>
+                    <td class="BodyD-Column2-Body1">Locate string_expr1 from position <i>num</i> in string_expr2</td>
+                </tr>
+                <tr class="Body-Body1">
+                    <td class="BodyE-Column1-Body1"><a href="FNC/String/ltrim.htm">ltrim</a>
+                    </td>
+                    <td class="BodyD-Column2-Body1">Removes all leading spaces from string</td>
+                </tr>
+                <tr class="Body-Body1">
+                    <td class="BodyE-Column1-Body1"><a href="FNC/String/repeat.htm">repeat</a>
+                    </td>
+                    <td class="BodyD-Column2-Body1">Repeats string <i>num</i> times</td>
+                </tr>
+                <tr class="Body-Body1">
+                    <td class="BodyE-Column1-Body1"><a href="FNC/String/replace.htm">replace</a>
+                    </td>
+                    <td class="BodyD-Column2-Body1">Replace string_expr2 with string_expr3 in string_expr1</td>
+                </tr>
+                <tr class="Body-Body1">
+                    <td class="BodyE-Column1-Body1"><a href="FNC/String/right.htm">right</a>
+                    </td>
+                    <td class="BodyD-Column2-Body1">Returns the rightmost <i>num</i> characters from string</td>
+                </tr>
+                <tr class="Body-Body1">
+                    <td class="BodyE-Column1-Body1"><a href="FNC/String/rtrim.htm">rtrim</a>
+                    </td>
+                    <td class="BodyD-Column2-Body1">Removes all trailing spaces from string</td>
+                </tr>
+                <tr class="Body-Body1">
+                    <td class="BodyE-Column1-Body1"><a href="FNC/String/substring.htm">substring</a>
+                    </td>
+                    <td class="BodyD-Column2-Body1">Returns <i>num2</i> characters from string_expr beginning at position <i>num1</i>.</td>
+                </tr>
+                <tr class="Body-Body1">
+                    <td class="BodyE-Column1-Body1"><a href="FNC/String/ucase.htm">ucase</a>
+                    </td>
+                    <td class="BodyD-Column2-Body1">Convert string to uppercase</td>
+                </tr>
+                <tr class="Body-Body1">
+                    <td class="BodyE-Column1-Body1"><a href="FNC/String/unicode.htm">unicode</a>
+                    </td>
+                    <td class="BodyD-Column2-Body1">Returns the numeric Unicode value of a character</td>
+                </tr>
+                <tr class="Body-Body1" MadCap:conditions="">
+                    <td class="BodyB-Column1-Body1"><a href="FNC/String/wchar.htm">wchar(num)</a>
+                    </td>
+                    <td class="BodyA-Column2-Body1">Returns a Unicode character with numeric value <i>num</i>.</td>
+                </tr>
+            </tbody>
+        </table>
+        <p>Arithmetic operators that are specified in an expression are evaluated based on the precedence given in the following table.</p>
+        <table style="caption-side: top;mc-table-style: url('../Resources/TableStyles/BasicTwoCol.css');margin-left: 0;margin-right: auto;" class="TableStyle-BasicTwoCol" cellspacing="0">
+            <caption>Table 9. Precedence of Arithmetic Operators</caption>
+            <col class="Column-Column1" />
+            <col class="Column-Column2" />
+            <col class="Column-Column1" />
+            <thead>
+                <tr class="Head-Header1">
+                    <th class="HeadE-Column1-Header1">Priority</th>
+                    <th class="HeadE-Column2-Header1">Operator</th>
+                    <th class="HeadD-Column1-Header1">Use</th>
+                </tr>
+            </thead>
+            <tbody>
+                <tr class="Body-Body1">
+                    <td class="BodyE-Column1-Body1">Highest</td>
+                    <td class="BodyE-Column2-Body1">()</td>
+                    <td class="BodyD-Column1-Body1">Parenthetical expressions</td>
+                </tr>
+                <tr class="Body-Body1">
+                    <td class="BodyE-Column1-Body1">High</td>
+                    <td class="BodyE-Column2-Body1">+</td>
+                    <td class="BodyD-Column1-Body1">Unary plus</td>
+                </tr>
+                <tr class="Body-Body1">
+                    <td class="BodyE-Column1-Body1">High</td>
+                    <td class="BodyE-Column2-Body1">-</td>
+                    <td class="BodyD-Column1-Body1">Unary minus</td>
+                </tr>
+                <tr class="Body-Body1">
+                    <td class="BodyE-Column1-Body1">Medium</td>
+                    <td class="BodyE-Column2-Body1">*</td>
+                    <td class="BodyD-Column1-Body1">Multiplication</td>
+                </tr>
+                <tr class="Body-Body1">
+                    <td class="BodyE-Column1-Body1">Medium</td>
+                    <td class="BodyE-Column2-Body1">/</td>
+                    <td class="BodyD-Column1-Body1">Division</td>
+                </tr>
+                <tr class="Body-Body1">
+                    <td class="BodyE-Column1-Body1">Lowest</td>
+                    <td class="BodyE-Column2-Body1">+</td>
+                    <td class="BodyD-Column1-Body1">Addition</td>
+                </tr>
+                <tr class="Body-Body1">
+                    <td class="BodyB-Column1-Body1">Lowest</td>
+                    <td class="BodyB-Column2-Body1">-</td>
+                    <td class="BodyA-Column1-Body1">Subtraction</td>
+                </tr>
+            </tbody>
+        </table>
+        <p>Okay, I know.  That's a lot of detail to have to wade through but you're through it now and so we'll illustrate column expressions with a couple of examples.  More sophisticated examples will be given in subsequent sections.</p>
+        <p>The following query computes the sales tax based on a rate of 9.2% for each book.</p><pre xml:space="preserve">select bookid, price, price*0.091 tax from book;
+
+BOOKID                     PRICE                     TAX
+alcott01                 1200.00                  109.20
+alcott02                 1075.00                   97.82
+alcott03                 1550.00                  141.05
+alcott04                 1250.00                  113.75
+alcott05                  850.00                   77.35
+alcott06                  875.00                   79.62
+austen01                12500.00                 1137.50
+austen02                13500.00                 1228.50
+	...
+wilde04                 22500.00                 2047.50
+wilde05                  2000.00                  182.00
+woolf01                  3250.00                  295.75
+woolf02                  1750.00                  159.25
+woolf03                 32500.00                 2957.50</pre>
+        <p>The next query computes both the raw profit and the percentage profit margin for each book based on the price and cost columns in each row of the book table.</p><pre xml:space="preserve">select bookid, price, cost, price-cost profit, ((price-cost)/cost)*100 margin from book;
+
+BOOKID               PRICE            COST           PROFIT          MARGIN
+alcott01           1200.00          960.00           240.00           25.00
+alcott02           1075.00          860.00           215.00           25.00
+alcott03           1550.00         1240.00           310.00           25.00
+alcott04           1250.00         1000.00           250.00           25.00
+alcott05            850.00          708.00           142.00           20.00
+alcott06            875.00          729.00           146.00           20.00
+austen01          12500.00         9615.00          2885.00           30.00
+austen02          13500.00        10384.00          3116.00           30.00
+    ...
+wilde04           22500.00        17307.00          5193.00           30.00
+wilde05            2000.00         1600.00           400.00           25.00
+woolf01            3250.00         2600.00           650.00           25.00
+woolf02            1750.00         1400.00           350.00           25.00
+woolf03           32500.00        25000.00          7500.00           30.00</pre>
+        <p>Notice any pattern when you compare the profit margin percentage with the price?  The higher the price, the larger the profit margin.</p>
+        <h2><a MadCap:generatedBookmark="TOC" name="Conditional_Queries"></a>Conditional Queries</h2>
+        <p>While there are times when one needs to see all of the rows in a table, by far the more common situation is that only some rows of a table are needed.   In order to restrict the rows to be returned by a <b>select</b> statement you can specify a conditional expression in a <b>select</b> statement <b>where</b> clause which specifies that only those rows for which the conditional expression is true are to be retrieved.   The syntax for the <b>select</b> statement containing the <b>where</b> clause is as follows.</p><pre xml:space="preserve" class="Grammar">select_statement:
+		<b>select</b> expression [<i>column_alias</i>] [, expression [<i>column_alias</i>] ]… <b>from</b>       <![CDATA[ ]]><i>table_name</i>
+ 			<b>where</b> conditional_expr</pre><pre class="Grammar" xml:space="preserve">conditional_expr:
+ 		rel_expr [bool_oper rel_expr]...</pre><pre class="Grammar" xml:space="preserve">rel_expr:
+		expression [<b>not</b>] rel_oper expression
+ 	|  	expression [<b>not</b>] <b>between</b>    <![CDATA[ ]]><i>constant</i>    <![CDATA[ ]]><b>and</b>    <![CDATA[ ]]><i>constant</i>
+ 	|  	expression [<b>not</b>] <b>in</b> (<i>constant</i>[, <i>constant</i>]...) 
+ 	|  	column_ref <b>is</b> [<b>not</b>] <b>null</b>
+ 	|  	string_expr [<b>not</b>] <b>like</b> "<i>string</i>"
+ 	|  	<b>not</b> rel_expr
+ 	|  	( conditional_expr )</pre><pre class="Grammar" xml:space="preserve">rel_oper:
+		=  |  ==
+ 	| 	&lt;
+ 	|  	&gt;
+ 	|  	&lt;=
+ 	|  	&gt;=
+ 	|  	&lt;&gt;  |  !=  |  /=</pre><pre class="Grammar" xml:space="preserve">bool_oper:
+		&amp;  |  &amp;&amp;  | <b>and</b>
+ 	|  	"|"  |  "||"  | <b>or</b></pre>
+        <p>The <b>like</b> operation can be used to perform simple pattern matching.  SQL defines two pattern matching symbols.  The "%" can be specified to match zero or more characters.  The "?" can be specified to match any single character.</p>
+        <p>For example, most of the short biographical sketches (column <code>short_bio</code>) contained in the author table specifies the nationality of the author.  Hence, for example, the following query will retrieve only those authors in which "English" is included somewhere in the <code>short_bio</code> column.</p><pre xml:space="preserve">select full_name from author where short_bio like "%English%";
+
+FULL_NAME
+Austen, Jane
+Bacon, Francis
+Bronte, Charlotte
+Bronte, Emily
+Carroll, Lewis
+Chaucer, Geoffrey
+Chesterton, G. K. (Gilbert Keith)
+Coleridge, Samuel Taylor
+Conrad, Joseph
+Defoe, Daniel
+Dickens, Charles
+Eliot, George
+Hardy, Thomas
+Hobbes, Thomas
+Johnson, Samuel
+Milton, John
+Potter, Beatrix
+Raleigh, Walter
+Scott, Walter
+Shakespeare, William
+Tennyson, Alfred
+Trollope, Anthony
+Wells, H. G. (Herbert George)
+Woolf, Virginia</pre>
+        <p>The next query returns those books that are priced over £100,000.</p><pre xml:space="preserve">select bookid, price, title from book where price &gt; 100000.00;
+ 
+BOOKID                    PRICE TITLE
+shakespeare01         175000.00 The Tragicall Historie of Hamlet, Prince of Denmarke.
+shakespeare02         135000.00 Midsummer night's dream
+shakespeare04         250000.00 Plays
+shakespeare05         225000.00 Romeo and Juliet</pre>
+        <p>Books that have not been sold have a <code>null date_sold</code> column value.   Issue the following query to list all those books that have sold.</p><pre xml:space="preserve">select bookid, date_sold, price, title from book where date_sold is not null;
+
+BOOKID      DATE_SOLD      PRICE TITLE
+alcott01    2010-05-04   1200.00 Moods
+alcott04    2010-01-11   1250.00 Little men : life at Plumfield with Jo's boys
+alcott05    2010-08-14    850.00 Eight cousins;
+alcott06    2010-01-06    875.00 Rose in bloom. A sequel to 'Eight cousins.'
+austen03    2009-10-28  13500.00 Mansfield Park: a novel. In three volumes.
+bacon03     2010-04-01   5000.00 Sylva sylvarum. French
+bacon04     2010-02-13   2500.00 History natural and experimental, of life and death.
+burns01     2009-07-12   1250.00 Poems, chiefly in the Scottish dialect...
+carlyle03   2009-12-13    995.00 Chartism.
+    ...
+wells04     2006-12-15   3000.00 The war of the worlds,
+wells05     2010-01-02  25000.00 The first men in the moon, by H.G. Wells ...
+wharton03   2009-03-20   3250.00 Crucial instances,
+wharton05   2010-04-04   4000.00 The descent of man, and other stories
+wharton08   2010-07-13   2500.00 Ethan Frome
+wharton09   2008-12-20   2500.00 The age of innocence
+wharton11   2007-08-08   1500.00 The buccaneers
+wilde04     2007-12-23  22500.00 The ballad of Reading gaol.</pre>
+        <p>Note that the following query does not return any rows even though you might think that it should.</p><pre xml:space="preserve">select bookid, date_sold, title from book where date_sold != null;</pre>
+        <p>SQL uses three-valued conditional results: a condition can be true, or false, or indeterminate.  The processing details are too complicated to get into here but in order to do null value comparisons you must use the <b>is null</b> and <b>is not null</b> operators.</p>
+        <p>The <b>in</b> operator will return all rows in which the left hand expression evaluates to one of the values specified in the list as in the next example which lists those patrons from California and Washington.</p><pre xml:space="preserve">select name, city, email from patron where state in ("CA","WA");
+
+NAME                           CITY              EMAIL
+William Gates, III             Redmond           bill.gates@microsoft.com
+Stephen Jobs                   Cupertino         founder@apple.com
+Scrooge McDuck                 Anaheim           scrooge@disneycorp.com
+Richie Rich                    San Diego         richierich@apecomics.com
+Jed Clampett                   Beverly Hills     richhillbilly@cbs.com
+Lucille Bluth                  Newport Beach     lucille@bluthco.com
+Jean Luc Picard                San Francisco     jlpicard@enterpise.ufp.gov
+Jeffrey Bezos                  Seattle           bezos@amazoncorp.com</pre>
+        <p>The <b>between</b> operator returns those rows where the left hand expression inclusively evaluates to a value between the two values on the right.</p><pre xml:space="preserve">select last_name, publ_year, title from book where publ_year between 1810 and 1820;
+
+LAST_NAME     PUBL_YEAR TITLE
+AustenJ            1813 Pride and prejudice: a novel ...
+AustenJ            1813 Sense and sensibility: a novel.
+AustenJ            1814 Mansfield Park: a novel. In three volumes.
+AustenJ            1816 Emma: a novel. In three volumes.
+CooperJ            1820 Precaution; a novel...
+IrvingW            1814 Biographical memoir of Capt-David Porter.
+ScottW             1810 The lady of the lake. A poem.
+ScottW             1811 The vision of Don Roderick: a poem.
+ScottW             1815 The field of Waterloo; a poem.</pre>
+        <h2><a MadCap:generatedBookmark="TOC" name="Retrieving_Data_from_Multiple_Tables"></a>Retrieving Data from Multiple Tables</h2>
+        <p>I am a lover of historical fiction.  Suppose I wanted to see all of the books of that genre.  You will note that there is nothing in the book table which identifies the genre.  However, there is a table called <code>genres_books</code> that contains a <code>bookid</code> column and a <code>genre</code> column.   The declaration of <code>bookid</code> in <code>genres_books</code> indicates that it references the book table.   So, one could issue the following query to list the <code>bookid</code> for each book that has a genre equal to "Historical fiction".</p><pre xml:space="preserve">select bookid from genre_books where genre = "Historical fiction";
+
+BOOKID
+cather03
+cather07
+cooper03
+cooper04
+defoe02
+eliot04
+hawthorne03
+hawthorne04
+scott01
+scott07
+stevenson06
+twain05
+twain09</pre>
+        <p>Unfortunately, this does not tell you very much about the book.  What you really need is to see the information in the particular row from the book table that has the same <code>bookid</code> listed in the <code>genres_books</code> table.  You can do this using a query that specifies a <i>join</i> operation on the two tables as shown in the following example.</p><pre xml:space="preserve">select last_name, title from book, genre_books 
+    where book.bookid = genre_books.bookid and genre = "Historical fiction";
+
+LAST_NAME     TITLE
+CatherW       O pioneers! By Willa Sibert Cather ...
+CatherW       Shadows on the rock.
+CooperJ       The last of the Mohicans; a narrative of 1757.
+CooperJ       The prairie : a tale
+DefoeD        Memoirs of a cavalier:
+EliotG        Romola.
+HawthorneN    The scarlet letter, a romance.
+HawthorneN    The house of the seven gables, a romance.
+ScottW        Rob Roy.
+ScottW        Ivanhoe; a romance,
+StevensonR    Kidnapped : being memoirs of the adventures of David Balfour
+TwainM        The prince and the pauper : a tale for young people of all ages
+TwainM        Connecticut Yankee in King Arthur's court</pre>
+        <p>The join is specified by listing each table in the <b>from</b> clause and then including in the <b>where</b> clause an equals operation between the <code>bookid</code> columns in each table.  When designing a database (see <a href="Chapter4.htm">Defining a Database</a>), as much as possible you will want to use the same column names between tables which are related in this way.   These relationships can (and should) be explicitly declared through the foreign and primary key specifications in the <b>create table</b> statement.   When you use the same column names in the two tables, the join operation based on those columns containing the same values is called a <i>natural join</i>.  SQL provides a simpler syntax for specifying natural joins.  For example, the above query can also be specified as follows.</p><pre xml:space="preserve">select last_name, title from book natural join genre_books 
+    where genre = "Historical fiction";</pre>
+        <p>Join processing is a fundamental feature of all relational database systems.  As such, SQL defines a rich set of join specification options.   The syntax for specifying joins is given below.</p><pre xml:space="preserve" class="Grammar">select_statement:
+		<b>select</b> expression [<i>column_alias</i>] [, expression [<i>column_alias</i>] ]… 
+ 			<b>from</b> table_ref [, table_ref]…  [<b>where</b> conditional_expr]
+
+table_ref:
+ 		table_primary | table_join
+
+table_primary:
+ 		table_spec | ( table_join )
+
+table_spec:
+ 		[<i>db_name</i>.]<i>table_name</i> [[<b>as</b>] <i>correlation_name</i>]
+
+table_join:
+		table_ref <b>natural</b> [<b>inner</b> | {<b>left</b> | <b>right</b>} [<b>outer</b>]] <b>join</b> table_primary
+ 	|	table_ref [<b>inner</b> | {<b>left</b> | <b>right</b>} [<b>outer</b>]] <b>join</b> table_primary
+ 			[<b>using</b> ( <i>column_name</i>[, <i>column_name</i>]...) | <b>on</b> conditional_expr]</pre>
+        <p>The <b>natural join</b> specification indicates that the join is to be performed based on the common columns (names and types) from the two tables. The join is formed from the columns from the table (or tables) specified on the left side of "<b>natural … join</b>" that have identical values with those columns from the table (or tables) on the right side that have the same name.   Since common column names are used to form the join, sometimes you may not get the expected results because the tables may have unrelated columns that happen to have the same name.  Thus, if you desire to make extensive use of the <b>natural join</b>, care must be taken in naming the columns in your table definitions so that common column names between related tables are only those upon which the joins are based.  It is also best to explicitly declared the relationship using the <b>primary key</b> and <b>foreign key</b>/<b>references</b> clauses in your <b>create table</b> declarations.</p>
+        <p>By default, a <b>natural join</b> specification performs an <i>inner join</i> between two tables. An inner join is a join between those tables that have matching values in the join columns.  However, sometimes it is possible to have values in one table that have no matching entry in the other.  An <i>outer join</i> allows one to see those unmatched rows as wells.  For example, the following query will return the list of all the books in the inventory for each author as well as those authors for which no books are available.</p><pre xml:space="preserve">select bookid, full_name, title from author natural left outer join book;
+
+FULL_NAME                       TITLE
+Alcott, Louisa May              Moods
+Alcott, Louisa May              On picket duty, and other tales.
+Alcott, Louisa May              Little women, or, Meg, Jo, Beth, and Amy
+	...
+Eliot, George                   Middlemarch: a study of provincial life.
+Faulkner, William               *NULL*
+Ferber, Edna                    Dawn O'Hara, the girl who laughed,
+Ferber, Edna                    Show boat; a novel by Edna Ferber.
+Ferber, Edna                    American beauty,
+Franklin, Benjamin              Advice to a young tradesman
+Gaskell, Elizabeth Cleghorn     Mary Barton: a tale of Manchester life ...
+Gaskell, Elizabeth Cleghorn     North and South.
+Gaskell, Elizabeth Cleghorn     The life of Charlotte Bronte, by E.C. Gaskell.
+Gaskell, Elizabeth Cleghorn     Wives and daughters. A novel.
+Gaskell, Elizabeth Cleghorn     Cranford.
+Hardy, Thomas                   A pair of blue eyes; a novel by Thomas Hardy ...
+Hardy, Thomas                   Under the greenwood tree
+Hardy, Thomas                   Far from the madding crowd,
+Hardy, Thomas                   A Laodicean. A novel.
+Hawthorne, Nathaniel            Fanshawe, a tale ...
+Hawthorne, Nathaniel            Twice-told tales.
+Hawthorne, Nathaniel            The scarlet letter, a romance.
+Hawthorne, Nathaniel            The house of the seven gables, a romance.
+Hemingway, Ernest               *NULL*
+Hobbes, Thomas                  Leviathan
+ 	...</pre>
+        <p>A <i>left outer join</i> will include those rows from <code>author</code>  (<code>full_name</code> is a column of <code>author</code>) that do not have a corresponding row in book (author is the left-side table in the join clause).   In this example, our bookshop evidently does not have a book by Faulkner or Hemingway.   To see only the authors that do not have a book in the inventory, enter the query below.</p><pre xml:space="preserve">select full_name, title from author natural left join book where title is null;
+
+FULL_NAME                           TITLE
+Faulkner, William                   *NULL*
+Hemingway, Ernest                   *NULL*
+Steinbeck, John                     *NULL*</pre>
+        <p>When there are common columns between two tables in which some of the columns should not be included in the join you can specify a <i>qualified join</i> where you explicitly identify the join columns.   For example, each bookshop patron is serviced by one account manager.  The account manager is identified by the mgrid column in the patron table.  However, both tables also have a name column but clearly that column should not be used in the join.  So, to see a list of account managers and the patrons each one services, enter the following <b>select</b> statement.</p><pre xml:space="preserve">select acctmgr.name, patron.name from acctmgr inner join patron using(mgrid);
+
+ACCTMGR.NAME             PATRON.NAME
+Fox, Joe                 Bernard Arnult
+Fox, Joe                 Chatsworth Osborne Jr.
+Fox, Joe                 Giorgio Armani
+Kelly, Kathleen          Stephen Jobs
+Kelly, Kathleen          Scrooge McDuck
+Kelly, Kathleen          Jay Gatsby
+Doel, Frank              Warren Buffett
+Doel, Frank              Artimis Fowel II
+Kralik, Alfred           William Gates, III
+Kralik, Alfred           Thurston Howell III
+Kralik, Alfred           Charles Montgomery Burns
+Kralik, Alfred           Jean Luc Picard
+Novac, Klara             Mukesh Ambani
+Novac, Klara             Richie Rich
+Novac, Klara             Lucille Bluth
+Noble, Barney            Carlos Slim Helu
+Noble, Barney            Bruce Wayne
+Zonn, Amy                Jed Clampett
+Zonn, Amy                Jeffrey Bezos</pre>
+        <p>The "inner" does not actually have to be specified as the default is to perform an inner join.  Also notice that the columns in the <b>select</b> expression list are qualified by table name to differentiate the account manager name from the patron name.</p>
+        <p>Where the join columns between the tables do not have the same name use the <b>on</b> clause to provide the join conditions.   Issue the following query on the NSF awards database to list the 2001 NSF grants awards to those sponsors located in North Dakota.</p><pre xml:space="preserve">select name, award_date, title from sponsor join award on(sponsor_nm = name)
+    where state = "ND" and award_date between date "2001-01-01" and date "2001-12-31"
+
+NAME                        AWARD_DATE TITLE
+Bismarck St Coll            2001-07-10 Energy Technology Education Project
+Cankdeska Cikana Community  2001-07-23 Cankdeska Cikana Community College Rural..
+Dakota Technologies, Inc.   2001-06-22 SBIR Phase I: Novel Ultrasensitive Gas..
+North Dakota State U Fargo  2001-06-11 Optics for Scientists and Engineers Lab..
+North Dakota State U Fargo  2001-04-19 GOALI: Sequencing the Assembly Line and Anal..
+North Dakota State U Fargo  2001-08-06 US-Egypt Cooperative Research: Development of..
+North Dakota State U Fargo  2001-05-31 SGER: Evaluation and Modeling of Interlayer..
+North Dakota State U Fargo  2001-09-25 Mathematics and Engineering Scholarships
+North Dakota State U Fargo  2001-11-26 Developing and Assessing Impact of Problem-..
+North Dakota State U Fargo  2001-12-26 Novel Instrumentation and Experimental for ..
+North Dakota State U Fargo  2001-09-26 High Performance Network Connection in Suppo..
+North Dakota State U Fargo  2001-05-11 Molecular Basis of Substrate Specificity, ..
+North Dakota State U Fargo  2001-04-18 Statics: The next generation
+SMC                         2001-11-15 SBIR Phase I: Protective Metal Foam Hybrid..
+Sitting Bull College        2001-03-07 Sitting Bull College Rural Systemic Initiative
+Turtle Mountain Cmty Col    2001-09-20 Rural Systemic Initiatives in Science, Math..
+U of North Dakota           2001-04-26 Red River Geoscience Education Pilot Project
+U of North Dakota           2001-04-10 CAREER: Thermoeconomic Modeling as a Tool for..
+U of North Dakota           2001-08-30 Acquisition of a Variable Temperature Automa..
+U of North Dakota           2001-07-28 Acquisition of an Automated Sequencer
+U of North Dakota           2001-05-02 CAREER: Protein Export in Escherichia coli
+U of North Dakota           2001-02-20 REU Site: Research Experience for Undergradu..
+U of North Dakota           2001-04-27 CAREER: Environmental Heterogeneity, Populat..
+U of North Dakota           2001-11-19 University of North Dakota Computer Science,..
+United Tribes Tech College  2001-07-20 United Tribes- Rural Systemic Initiative</pre>
+        <p>The above examples all involve joins between just two tables.  However, a <b>select</b> statement can involve joins between more than two tables.   Joins still occur in pairs.  The result of a single join operation is a virtual table that is then joined with another table.   Join processing proceeds in a left-to-right manner.  Thus, the left-hand "table" for the second join is the result of the previous join and is joined to the next table.  In the above syntax specification note that a table_ref on the left hand side of the join operator can be a fully specified join whereas the right-hand side is table_primary—a table name.   This processing order can be altered (or clarified) using parentheses.  For example, the query below will return the investigator name and the research title for all NSF awards granted to the University of Colorado at Denver.</p><pre xml:space="preserve">select person.name, title 
+    from (award natural join investigator natural join person)
+ 		join sponsor on (sponsor_nm = sponsor.name) 
+    		where sponsor.name = "U of Colorado Denver";
+
+PERSON.NAME              TITLE
+Hirshman, Elliot         Using Midazolam to Explore the Nature of Implicit Memory
+Zapien, Donald C.        RUI: Investigation of the Relationship of Ferritin's Struct..
+Mandel, Jan              Scalable Submesh Computing
+Andrew., Andrew          Acquisition of a High-Performance Parallel Computer for..
+Mandel, Jan              Acquisition of a High-Performance Parallel Computer for..
+Bennethum, Lynn S.       Acquisition of a High-Performance Parallel Computer for.. 
+Russell, Thomas F.       Acquisition of a High-Performance Parallel Computer for.. 
+Billups, Stephen C.      Acquisition of a High-Performance Parallel Computer for.. 
+Stith, Bradley J.        Lipid Signaling During Fertilization
+Zamudio, Stacy           Ancestry, Altitude and Placental Development in Highlands ..
+Charles.§, Charles M.    REU Site: American Economic Association Summer Training Pr..
+Andrew., Andrew          Preconditioned Algorithms for Large Eigenvalue Problems..
+Sievering, Herman        Sea-Salt Aqueous Phase SO2 Oxidation: Contribution to Mari..
+Tracer, David P.         Breast Feeding Structure and Parental Investment in Papua..
+Jenkins, Peter E.        Toward T3 Tetherless Communications Workshop, University..
+Sanders, Nancy M.        School District Capacity to Support the Mathematics Standar..
+Billups, Stephen C.      Algorithms for Nonsmooth Equations
+Weaver, Gabriela C.      Proof of Concept Proposal for Physical Chemistry in Practi..
+Rens, Kevin L.           Concrete Maturity: A Quantitative Understanding of How..</pre>
+        <p>Notice that both the person and sponsor tables have a column called name.  Thus, references to each name must be qualified with the table name to ensure that SQL uses the correct name.</p>
+        <h2><a MadCap:generatedBookmark="TOC" name="Sorting_Query_Results"></a>Sorting Query Results</h2>
+        <p>Suppose I want to see just the names of the investigators from the University of Colorado at Denver who have been awarded NSF grants.  Scanning the result set for familiar names would be much easier if the results were returned sorted by the person's name.  The <b>order by</b> clause of the <b>select</b> statement allows you to specify the column or columns on which to sort the result set.  The syntax is given below.</p><pre xml:space="preserve" class="Grammar">select_statement:
+		<b>select</b> [<b>distinct</b>] expression [<i>column_alias</i>] [, expression [<i>column_alias</i>] ]… 
+ 			<b>from</b> table_ref [, table_ref]…  [<b>where</b> cond_expr]
+ 			<b>order by</b> {<i>num</i> | <i>column_name</i>} [<b>asc</b> | <b>desc</b>] [,{<i>num</i> | <i>column_name</i>} [<b>asc</b> | <b>desc</b>]]…</pre>
+        <p>The <i>num</i> is the ordinal position of the <b>select</b> expression on which to sort where <i>num</i> = 1 refers to the first expression.  The <i>column_name</i> is either the specified <i>column_alias</i> or the column name when expression is simply a table column name.   The default sort order is <b>asc</b> (ascending) but <b>desc</b> can be specified to reverse the order.   If more than one <b>order by</b> column is specified each subsequent column specifies a sort order within each value from the outer sort column(s).  If <b>select distinct</b> is specified, duplicate rows in the result set will be eliminated.  All of this is actually easier to show than to explain.</p>
+        <p>The next query will return the list of all investigators from the University of Colorado Denver that have been awarded NSF grants.</p><pre xml:space="preserve">select person.name 
+    from award natural join investigator natural join person 
+ 		join sponsor on (sponsor_nm = sponsor.name) 
+ 			where sponsor.name = "U of Colorado Denver" 
+ 			order by 1;
+
+PERSON.NAME
+Alaghband, Gita
+Altman, Tom
+Andrew., Andrew
+Andrew., Andrew
+Andrew., Andrew
+Andrew., Andrew
+Banks, David L.
+Beekman, Christopher S.
+Beekman, Christopher S.
+    ...
+Stith, Bradley J.
+Stith, Bradley J.
+Stith, Bradley J.
+Tagg, Randall P.
+Tagg, Randall P.
+Tagg, Randall P.
+Tang, Michael S.
+Tracer, David P.
+Walker, Kenneth
+Weaver, Gabriela C.
+Weaver, Gabriela C.
+Weaver, Gabriela C.
+Zamudio, Stacy
+Zapien, Donald C.</pre>
+        <p>This list includes some duplicate entries.  To eliminate them add <b>distinct</b> to the <b>select</b> as shown below.</p><pre xml:space="preserve">select distinct person.name 
+    from award natural join investigator natural join person 
+ 		join sponsor on (sponsor_nm = sponsor.name) 
+ 			where sponsor.name = "U of Colorado Denver" 
+ 			order by 1;
+
+PERSON.NAME
+Alaghband, Gita
+Altman, Tom
+Andrew., Andrew
+Banks, David L.
+Beekman, Christopher S.
+Bennethum, Lynn S.
+Billups, Stephen C.
+	...
+Stith, Bradley J.
+Tagg, Randall P.
+Tang, Michael S.
+Tracer, David P.
+Walker, Kenneth
+Weaver, Gabriela C.
+Zamudio, Stacy
+Zapien, Donald C.</pre>
+        <p>The next example will show the list of awards for each investigator in order of when the grant was issued with the most recent listed first.</p><pre xml:space="preserve">select person.name, award_date, title 
+ 	from award natural join investigator natural join person
+   		join sponsor on (sponsor_nm = sponsor.name)
+ 			where sponsor.name = "U of Colorado Denver"
+ 			order by 1, 2 desc;
+
+PERSON.NAME              AWARD_DATE TITLE
+Alaghband, Gita          1993-08-16 RIA: Parametric Modeling Tools for Performance 
+Altman, Tom              1992-09-04 Elimination of Certain Ambiguity Causing Constru..
+Andrew., Andrew          2002-08-28 Preconditioned Algorithms for Large Eigenvalue 
+Andrew., Andrew          2002-07-30 Sixth IMACS International Symposium on Iterative 
+Andrew., Andrew          2000-08-28 Acquisition of a High-Performance Parallel Compu..
+Andrew., Andrew          1995-06-26 Mathematical Sciences: Preconditioned Parallel 
+Banks, David L.          1998-09-11 Group Travel Award to Support U.S Participation in 
+Beekman, Christopher S.  2002-11-06 The Articulation of Political Strategies and Reg..
+Beekman, Christopher S.  2002-06-12 The Articulation of Political Strategies and Reg.. ...
+Stein, Fredrick M.       2002-01-28 Energy 2020: A Teacher Enhancement Workshop To 
+Stith, Bradley J.        2002-04-30 Lipid Signaling During Fertilization
+Stith, Bradley J.        1999-03-22 RUI: Lipid Signaling During Fertilization
+Stith, Bradley J.        1996-05-15 RUI: Induction of Cell Division by Protein Kinas..
+Tagg, Randall P.         2002-01-28 Energy 2020: A Teacher Enhancement Workshop To 
+Tagg, Randall P.         1995-06-30 Course Modules in Apparatus Design and Experime..
+Tagg, Randall P.         1995-06-08 Mathematical Sciences: Patterns, Chaos, and ..
+Tang, Michael S.         1995-02-02 Engineering, Technology and Culture: with an Em..
+Tracer, David P.         1999-12-20 Breast Feeding Structure and Parental Investment..
+Walker, Kenneth          1995-02-02 Engineering, Technology and Culture: with an Em..
+Weaver, Gabriela C.      2002-01-28 Energy 2020: A Teacher Enhancement Workshop To 
+Weaver, Gabriela C.      1999-12-14 Proof of Concept Proposal for Physical Chemistry..
+Weaver, Gabriela C.      1996-05-10 Integration of Novel Laser-Spectroscopy Experim..
+Zamudio, Stacy           2002-07-17 Ancestry, Altitude and Placental Development in 
+Zapien, Donald C.        2002-02-11 RUI: Investigation of the Relationship of Ferri..</pre>
+        <h2><a MadCap:generatedBookmark="TOC" name="Performing_Result_Set_Aggregate_Calculations"></a>Performing Result Set Aggregate Calculations</h2>
+        <p>All of the <b>select</b> statements shown thus far have produced <i>detail</i> rows where each row of the result set corresponds to a single row from the table (a base table or table formed from the set of joined tables in the <b>from</b> clause).   There are often times when you want to perform a calculation on one or more columns from a related set of rows returning only a summary row that includes the calculation result.   The set of rows over which the calculations are performed is called the <i>aggregate</i>.   The <b>select</b> statement <b>group by</b> clause is used to identify the column or columns that define each aggregate—those rows that have identical group by column values.  Five built-in <i>aggregate functions</i> are provided in SQL as defined in the table below.</p>
+        <table style="caption-side: top;mc-table-style: url('../Resources/TableStyles/fncSummary.css');margin-left: 0;margin-right: auto;" class="TableStyle-fncSummary" cellspacing="0">
+            <caption>Table 10. Built-in Aggregate Functions</caption>
+            <col class="Column-Column1" />
+            <col class="Column-Column2" />
+            <thead>
+                <tr class="Head-Header1">
+                    <th class="HeadE-Column1-Header1">Function</th>
+                    <th class="HeadD-Column2-Header1">Description</th>
+                </tr>
+            </thead>
+            <tbody>
+                <tr class="Body-Body1">
+                    <td class="BodyE-Column1-Body1"><a href="FNC/count.htm">count</a>
+                    </td>
+                    <td class="BodyD-Column2-Body1">Returns the number (distinct) of rows in the aggregate.</td>
+                </tr>
+                <tr class="Body-Body1">
+                    <td class="BodyE-Column1-Body1"><a href="FNC/sum.htm">sum</a>
+                    </td>
+                    <td class="BodyD-Column2-Body1">Returns the sum of the (distinct) values of expression in the aggregate.</td>
+                </tr>
+                <tr class="Body-Body1">
+                    <td class="BodyE-Column1-Body1"><a href="FNC/avg.htm">avg</a>
+                    </td>
+                    <td class="BodyD-Column2-Body1">Returns the average of the (distinct) values of expression in the aggregate.</td>
+                </tr>
+                <tr class="Body-Body1">
+                    <td class="BodyE-Column1-Body1"><a href="FNC/min.htm">min</a>
+                    </td>
+                    <td class="BodyD-Column2-Body1">Returns the minimum expression value in the aggregate.</td>
+                </tr>
+                <tr class="Body-Body1">
+                    <td class="BodyB-Column1-Body1"><a href="FNC/max.htm">max</a>
+                    </td>
+                    <td class="BodyA-Column2-Body1">Returns the maximum expression value in the aggregate.</td>
+                </tr>
+            </tbody>
+        </table>
+        <p>The complete syntax for the <b>select</b> statement including <b>group by</b> is as follows.</p><pre class="Grammar" xml:space="preserve">select_stmt:
+ 		<b>select</b> [<b>first</b>] [<b>all</b> | <b>distinct</b>] {* | select_item[, select_item]...}
+ 			<b>from</b> table_ref[, table_ref]...
+ 			[<b>where</b> conditional_expr]
+ 			[grouping | sorting | grouping sorting]
+			[<b>limit (</b><i>num</i> {<b>rows</b> |&#160;<b>mins</b>&#160;|&#160;<b>secs</b>&#160;|&#160;<b>msecs</b>}<b>)</b>]
+			[<b>for</b> {<b>read only</b> |&#160;<b>update</b> [<b>of</b>       <![CDATA[ ]]><i>column_name</i>[, <i>column_name</i>]...]}]</pre><pre class="Grammar" xml:space="preserve">grouping:
+ 		<b>group by</b> sort_col[, sort_col]... [<b>having</b> conditional_expr]</pre><pre class="Grammar" xml:space="preserve">sorting:
+ 		<b>order by</b> sort_col [<b>asc</b> |&#160;<b>desc</b>][, sort_col [<b>asc</b> |&#160;<b>desc</b>]]...</pre><pre class="Grammar" xml:space="preserve">sort_col:
+		num | <i>column_name</i></pre><pre class="Grammar" xml:space="preserve">select_item:
+		expression [alias_name | "column heading"]</pre><pre class="Grammar" xml:space="preserve">table_ref:
+		table_primary | table_join</pre><pre class="Grammar" xml:space="preserve">table_primary:
+ 		table_spec | ( table_join )</pre><pre class="Grammar" xml:space="preserve">table_spec:
+ 		[<i>db_name</i>.]<i>table_name</i> [[<b>as</b>] correlation_name]</pre><pre class="Grammar" xml:space="preserve">table_join:
+		natural_join | qualified_join | cross_join</pre><pre class="Grammar" xml:space="preserve">natural_join:
+		table_ref <b>natural</b> [<b>inner</b> | {<b>left</b> | <b>right</b>} [<b>outer</b>]] <b>join</b> table_primary</pre><pre class="Grammar" xml:space="preserve">qualified _join:
+		table_ref [<b>inner</b> | {<b>left</b> | <b>right</b>} [<b>outer</b>]] <b>join</b> table_primary
+ 			[<b>using</b> (<i>column_name</i>[, <i>column_name</i>]...) | <b>on</b> conditional_expr]</pre><pre class="Grammar" xml:space="preserve">cross_join:
+		table_ref <b>cross join</b> table_primary</pre><pre class="Grammar" xml:space="preserve">arith_expr:
+ 		expression	/*&#160;involving only numeric operands and operations */
+
+dt_expr:
+ 		expression	/*&#160;involving only date/time/timestamp operands and operations */
+
+string_expr:
+ 		expression	/*&#160;involving only string operands and operations */
+</pre><pre class="Grammar" xml:space="preserve">expression:
+		operand [arith_operator operand]...</pre><pre class="Grammar" xml:space="preserve">operand:
+		<i>constant</i> |&#160;param_ref  |&#160;column_ref&#160;|&#160;function |&#160;(expr)</pre><pre class="Grammar" xml:space="preserve">param_ref:
+		?&#160;|&#160;:<i>param_name</i></pre><pre class="Grammar" xml:space="preserve">column_ref:
+		[{<i>table_name</i> |&#160;<i>correlation_name</i>}.]<i>column_name</i></pre><pre class="Grammar" xml:space="preserve">arith_operator:
+		+&#160;|&#160;- | * |&#160;/</pre><pre class="Grammar" xml:space="preserve">function:
+		aggregate_fcn&#160;|&#160;scalar_fcn</pre><pre class="Grammar" xml:space="preserve">aggregate_fcn:
+		{<b>sum</b> | <b>avg</b> | <b>max</b> | <b>min</b>} (expression) 
+ 	|	<b>count (</b>{* | column_ref }<b>)</b>
+	|	<i>aggregate_udf_name</i> ([expression][, expression]...)</pre><pre class="Grammar" xml:space="preserve">scalar_fcn:
+ 	|	<b>if (</b>conditional_expr, expression, expression<b>)</b>
+ 	|	numeric_function | datetime_function |&#160;string_function
+ 	|	<i>scalar_udf_name</i> ([expression][, expression]...)</pre><pre class="Grammar" xml:space="preserve">numeric_function:
+		<b>abs</b>(arith_expr)
+	|	<b>acos</b>(arith_expr)
+	|	<b>asin</b>(arith_expr)
+	|	<b>atan</b>(arith_expr)
+	|	<b>atan2</b>(arith_expr)
+	|	{<b>ceil</b> |&#160;<b>ceiling</b>}(arith_expr)
+	|	<b>cos</b>(arith_expr)
+	|	<b>cot</b>(arith_expr)
+	|	<b>exp</b>(arith_expr)
+	|	<b>floor</b>(arith_expr)
+	|	{<b>ln</b> |&#160;<b>log</b>}(arith_expr)
+	|	<b>mod</b>(arith_expr)
+	|	<b>pi</b>()
+	|	<b>rand</b>(<i>num</i>)
+	|	<b>sign</b>(arith_expr)
+	|	<b>sin</b>(arith_expr)
+	|	<b>sqrt</b>(arith_expr)
+	|	<b>tan</b>(arith_expr)</pre><pre class="Grammar" xml:space="preserve">datetime_function:
+		<b>age</b>(dt_expr)
+	|	{<b>curdate</b> |&#160;<b>current_date</b>}()
+	|	{<b>curtime</b> |&#160;<b>current_time</b>}()
+	|	<b>dayofmonth</b>(dt_expr)
+	|	<b>dayofyear</b>(dt_expr)
+	|	<b>hour</b>(dt_expr)
+	|	<b>minute</b>(dt_expr)
+	|	<b>month</b>(dt_expr)
+	|	<b>quarter</b>(dt_expr)
+	|	<b>second</b>(dt_expr)
+	|	<b>week</b>(dt_expr)
+	|	<b>year</b>(dt_expr)</pre><pre class="Grammar" xml:space="preserve">string_function:
+		<b>ascii</b>(string_expr)
+	|	<b>char</b>(<i>num</i>)
+	|	<b>concat</b>(string_expr, string_expr)
+	|	<b>convert</b>(expression, {convert_type | {<b>char</b>}, <i>width</i>, convert_format})
+	|	<b>lcase</b>(string_expr)
+	|	<b>left</b>(string_expr, <i>num</i>)
+	|	<b>length</b>(string_expr)
+	|	<b>locate</b>(string_expr, string_expr, <i>num</i>)
+	|	<b>ltrim</b>(string_expr)
+	|	<b>repeat</b>(string_expr, <i>num</i>)
+	|	<b>replace</b>(string_expr, string_expr, string_expr)
+	|	<b>right</b>(string_expr, <i>num</i>)
+	|	<b>rtrim</b>(string_expr)
+	|	<b>substring</b>(string_expr, <i>num</i>, <i>num</i>)
+	|	<b>ucase</b>(string_expr)
+	|	<b>unicode</b>(string_expr)</pre><pre class="Grammar" xml:space="preserve">convert_type:
+		<b>char</b> |<b>smallint</b> | <b>integer</b> | <b>real</b>
+	|	<b>double</b> | <b>date</b> | <b>time</b> | <b>timestamp</b> |&#160;<b>tinyint</b> |&#160;<b>bigint</b>
+
+convert_format:
+		numeric_format | datetime_format
+
+numeric_format:
+		"[&lt;&lt; | &gt;&gt; | &gt;&lt;]['text' | $][- | (][#,]#[.#[#]...][e | E]['text' | $ | %]"
+
+datetime_format:
+		"[&lt;&lt; | &gt;&gt; | &gt;&lt;]['text' | spchar | date_code | time_code]..."
+
+date_code:
+		<b>m</b> | <b>mm</b> | <b>mmm</b> | <b>mon</b> | <b>mmmm</b> | <b>month</b>
+	|	<b>d</b> | <b>dd</b> | <b>ddd</b> | <b>dddd</b> | <b>day</b>
+	|	<b>yy</b> | <b>yyyy</b>
+
+time_code:
+		<b>h</b> | <b>hh</b> | <b>m</b> | <b>mm</b> | <b>s</b> | <b>ss</b> | .<b>f</b>[<b>f</b>]... | [<b>a/p</b> | <b>am/pm</b> | <b>A/P</b> | <b>AM/PM</b>]
+</pre>
+        <p>To illustrate the basic operation of aggregate calculations, consider the following example which computes the total sales for each bookshop account manager.</p><pre xml:space="preserve">select name, count(*), sum(price)
+    from (acctmgr join patron using(mgrid)) natural join sale natural join book
+    group by 1;
+
+NAME                        COUNT(*)              SUM(PRICE)
+Doel, Frank                        5                   31745
+Fox, Joe                          19                   95500
+Kelly, Kathleen                   14                   67350
+Kralik, Alfred                    18                   72685
+Noble, Barney                      6                  234700
+Novac, Klara                      21                  221650
+Zonn, Amy                          9                   15660</pre>
+        <p>The <b>from</b> clause needs a little explanation.  A natural join between <code>acctmgr</code> and patron cannot be used because besides the <code>mgrid</code> column which is the correct join column both tables have a column called name which is not a legitimate join column as they never contain the same value.  So the <b>using</b> clause is specified to identify the particular common column name on which to form the join.</p>
+        <p>The <code>count(*)</code> give the number of detail rows (i.e., sold books) in the aggregate for each account manager.  The sum(price) gives the total of all of the price values in the aggregate for each account manager.</p>
+        <p>You can see all of the detail rows that were used in the aggregate calculations by issuing the following query.</p><pre xml:space="preserve">select name, price 
+    from (acctmgr join patron using(mgrid)) natural join sale natural join book 
+    order by 1;
+
+NAME                            PRICE
+Doel, Frank                     25000
+Doel, Frank                       750
+Doel, Frank                      2500
+Doel, Frank                       995
+Doel, Frank                      2500
+Fox, Joe                         3500
+Fox, Joe                        12500
+Fox, Joe                          750
+Fox, Joe                         1200
+	...
+Zonn, Amy                        1250
+Zonn, Amy                        1200
+Zonn, Amy                        4375
+Zonn, Amy                         750
+Zonn, Amy                         325</pre>
+        <p>Figure 7 illustrates how aggregate calculations are performed on the detail rows that are retrieved.</p>
+        <p class="Caption" style="text-align: left;">
+            <img src="../Resources/Images/nsf-fig7_472x269.jpg" style="width: 472;height: 269;" />
+            <br />Figure 7 - Group By Aggregate Calculations</p>
+        <h3><a MadCap:generatedBookmark="TOC" name="NSF_Gender_Study_Example"></a>NSF Gender Study Example</h3>
+        <p>The next example is from the NSF awards database.  This is a rather involved example that shows how you can use SQL to do analytical studies based on historical data contained in a database.  The conclusions that are given are the author's own based on his interpretation of the results of the queries given below.</p>
+        <p>The person table contains a list of all of the individual research investigators (<code>jobclass = "I"</code>) and NSF program managers (<code>jobclass = "P"</code>).   The gender of each person was not included in the original data but was deduced from the person's first name based on a modified version of the list of names available from the following web site:</p>
+        <blockquote>
+            <p><a href="http://www.gpeters.com/names/baby-names.php?report=pop_all&amp;amp;showcount=10000" target="_blank">http://www.gpeters.com/names/baby-names.php?report=pop_all&amp;showcount=10000</a>
+            </p>
+        </blockquote>
+        <p>Not all first names in the person table were in this list and hence the gender could not be deduced.  Thus, the gender column values can be "M", "F", or "U".   You can issue the following queries to see the totals for each gender.</p><pre xml:space="preserve">select count(*) from person where gender = "M";
+
+   COUNT(*)
+      57386
+
+select count(*) from person where gender = "F";
+
+   COUNT(*)
+      17537
+
+select count(*) from person where gender = "U";
+
+   COUNT(*)
+      10983</pre>
+        <p>Alternatively, the next query can be used to compute the same results in one pass through the person table.</p><pre xml:space="preserve">select sum(if(gender="F",1,0)) female, 
+       sum(if(gender="M",1,0)) male, 
+       sum(if(gender="U",1,0)) unknown from person;
+
+     FEMALE        MALE     UNKNOWN
+      17537       57386       10983</pre>
+        <p>It might be interesting to see what difference there is between the ratio of male to female investigators and the ratio of male to female program managers.  The following query uses a group by to group the totals by <code>jobclass</code>.</p><pre xml:space="preserve">select jobclass, sum(if(gender="F",1,0)) female, sum(if(gender="M",1,0)) male 
+    from person where gender != "U" 
+    group by 1;
+
+
+JOBCLASS      FEMALE        MALE
+I              17197       56813
+P                340         573</pre>
+        <p>The ratio of male to female investigators is 3.3 while the ratio for program managers is 1.7.  Assuming that the program managers are NSF employees, it appears that, on a percentage basis, they hire significantly more women to oversee NSF research grants than women to whom they award the grants.</p>
+        <p>To see if there is any trend in the percentage of women granted NSF awards, you can issue the query below to see the percentage of women who were awarded NSF grants by year.</p><pre xml:space="preserve">select year(award_date), 100.*sum(if(gender="F",1,0))/count(gender) pct_females
+    from award natural join investigator natural join person
+    where gender != "U" group by 1;
+
+YEAR(AWARD_DATE)             PCT_FEMALES
+            1989                   21.74
+            1990                   22.21
+            1991                   19.79
+            1992                   17.90
+            1993                   18.81
+            1994                   17.69
+            1995                   19.91
+            1996                   18.82
+            1997                   19.52
+            1998                   20.85
+            1999                   19.61
+            2000                   20.02
+            2001                   20.94
+            2002                   21.04
+            2003                   21.93</pre>
+        <p>Notice that there appears to be no significant variations and certainly no trend to suggest that more women are entering into research in the sciences between the years 1989 and 2003.  As noted above, the NSF does hire a greater percentage of women program managers.  The following query shows the percentage by year and while the percentages are greater than in the prior result no trend is evident here either.</p><pre xml:space="preserve">select year(award_date), 100.0*sum(if(gender="F",1,0))/count(gender) PCT_FEMALE_PMS
+    from award join person on(prgm_mgr = name)
+    where gender != "U" group by 1;
+
+YEAR(AWARD_DATE)          PCT_FEMALE_PMS
+            1989                   22.95
+            1990                   24.57
+            1991                   21.86
+            1992                   18.71
+            1993                   20.11
+            1994                   17.82
+            1995                   20.61
+            1996                   19.50
+            1997                   20.42
+            1998                   21.75
+            1999                   19.60
+            2000                   20.57
+            2001                   21.14
+            2002                   20.83
+            2003                   21.99</pre>
+        <p>This data can be compared to the percentage of women earning doctoral degrees in science, engineering, and health between the years 1989 and 2003 according to the NSF's own data as shown in the following table.</p>
+        <table style="caption-side: top;">
+            <caption>Table 11. Percentage of Science &amp; Engineering Doctorates Earned by Women<span class="MCTextPopup"><span class="MCTextPopupBody_0" style="display: none; ">http://www.nsf.gov/statistics/infbrief/nsf08308/</span><a href="javascript:void(0);" class="popupHead_1" onclick="FMCTextPopup( event, this ); return false;" style="font-size: 0.9em; vertical-align: super">1</a></span></caption>
+            <col style="width: 98px;" />
+            <col style="width: 108px;" />
+            <col style="width: 137px;" />
+            <col style="width: 99px;" />
+            <col style="width: 67px;" />
+            <col style="width: 95px;" />
+            <col style="width: 68px;" />
+            <col style="width: 92px;" />
+            <col style="width: 110px;" />
+            <tr>
+                <th>Year</th>
+                <th>All science,<br />engineering,<br />and health<br />fields</th>
+                <th>Computer sciences</th>
+                <th>Engineering</th>
+                <th>Life sciences</th>
+                <th>Mathematics</th>
+                <th>Physical sciences</th>
+                <th>Psychology</th>
+                <th>Social sciences</th>
+            </tr>
+            <tr>
+                <td>1989</td>
+                <td>29.7</td>
+                <td>17.6</td>
+                <td>8.3</td>
+                <td>38.7</td>
+                <td>18.0</td>
+                <td>19.1</td>
+                <td>56.1</td>
+                <td>34.1</td>
+            </tr>
+            <tr>
+                <td>1990</td>
+                <td>29.2</td>
+                <td>15.6</td>
+                <td>8.5</td>
+                <td>37.9</td>
+                <td>17.7</td>
+                <td>18.8</td>
+                <td>58.3</td>
+                <td>33.3</td>
+            </tr>
+            <tr>
+                <td>1991</td>
+                <td>30.3</td>
+                <td>14.6</td>
+                <td>9.0</td>
+                <td>39.2</td>
+                <td>19.2</td>
+                <td>19.2</td>
+                <td>61.4</td>
+                <td>36.9</td>
+            </tr>
+            <tr>
+                <td>1992</td>
+                <td>30.2</td>
+                <td>13.8</td>
+                <td>9.3</td>
+                <td>39.7</td>
+                <td>19.4</td>
+                <td>20.8</td>
+                <td>59.1</td>
+                <td>36.0</td>
+            </tr>
+            <tr>
+                <td>1993</td>
+                <td>31.6</td>
+                <td>15.7</td>
+                <td>9.2</td>
+                <td>42.0</td>
+                <td>23.0</td>
+                <td>20.9</td>
+                <td>61.1</td>
+                <td>37.7</td>
+            </tr>
+            <tr>
+                <td>1994</td>
+                <td>31.9</td>
+                <td>15.2</td>
+                <td>10.9</td>
+                <td>42.2</td>
+                <td>21.1</td>
+                <td>20.8</td>
+                <td>62.2</td>
+                <td>37.0</td>
+            </tr>
+            <tr>
+                <td>1995</td>
+                <td>32.8</td>
+                <td>18.7</td>
+                <td>11.6</td>
+                <td>42.4</td>
+                <td>22.3</td>
+                <td>22.5</td>
+                <td>63.6</td>
+                <td>37.8</td>
+            </tr>
+            <tr>
+                <td>1996</td>
+                <td>33.3</td>
+                <td>15.1</td>
+                <td>12.3</td>
+                <td>43.8</td>
+                <td>20.6</td>
+                <td>21.8</td>
+                <td>66.7</td>
+                <td>36.5</td>
+            </tr>
+            <tr>
+                <td>1997</td>
+                <td>34.5</td>
+                <td>16.5</td>
+                <td>12.3</td>
+                <td>44.9</td>
+                <td>23.4</td>
+                <td>22.7</td>
+                <td>66.4</td>
+                <td>38.7</td>
+            </tr>
+            <tr>
+                <td>1998</td>
+                <td>36.0</td>
+                <td>17.2</td>
+                <td>13.1</td>
+                <td>45.8</td>
+                <td>25.2</td>
+                <td>24.4</td>
+                <td>66.9</td>
+                <td>41.5</td>
+            </tr>
+            <tr>
+                <td>1999</td>
+                <td>36.5</td>
+                <td>18.3</td>
+                <td>14.8</td>
+                <td>44.8</td>
+                <td>25.6</td>
+                <td>23.6</td>
+                <td>66.8</td>
+                <td>41.7</td>
+            </tr>
+            <tr>
+                <td>2000</td>
+                <td>38.0</td>
+                <td>16.4</td>
+                <td>15.7</td>
+                <td>47.2</td>
+                <td>24.7</td>
+                <td>25.1</td>
+                <td>66.6</td>
+                <td>42.9</td>
+            </tr>
+            <tr>
+                <td>2001</td>
+                <td>38.0</td>
+                <td>18.7</td>
+                <td>16.9</td>
+                <td>47.2</td>
+                <td>27.3</td>
+                <td>25.5</td>
+                <td>66.7</td>
+                <td>42.9</td>
+            </tr>
+            <tr>
+                <td>2002</td>
+                <td>39.2</td>
+                <td>20.6</td>
+                <td>17.6</td>
+                <td>47.8</td>
+                <td>28.9</td>
+                <td>27.3</td>
+                <td>66.6</td>
+                <td>44.5</td>
+            </tr>
+            <tr>
+                <td>2003</td>
+                <td>39.4</td>
+                <td>20.3</td>
+                <td>17.3</td>
+                <td>48.5</td>
+                <td>26.6</td>
+                <td>27.8</td>
+                <td>68.1</td>
+                <td>44.8</td>
+            </tr>
+        </table>
+        <p>Here trends that show an increasing percentage of women who've earned doctorates in every field are clearly evident.   What isn't clear is why these same trends are not also represented in the NSF research grant awards.   Now I suppose that it is possible that those person table rows in which the gender was not deducible could be a higher percentage of female than male but that does not strike me as likely.  One might even ask why the researcher's gender was not included in the data collection.  Perhaps it was but it was not included in the report data in order to avoid just this kind of analysis.  But that is mere speculation.   The culprits, if there really are any, could be anywhere not just who at NSF decides who is awarded research grants.  Other data that could be significant requires tracking the gender of the proposed investigators for all grant requests including those that are rejected.  If that data were to show a trend that corresponds to that in the above table then it would seem that the fault lies in the grant awards process.  However, if no such trend is evident, it is possible that the problem could be  inside the grant requesting institutions where the authority for approving grant requests resides with senior research management.  However, other NSF data<span class="MCTextPopup"><span class="MCTextPopupBody_0" style="display: none; ">http://www.nsf.gov/statistics/seind10/pdf/c05.pdf</span><a href="javascript:void(0);" class="popupHead_1" onclick="FMCTextPopup( event, this ); return false;" style="font-size: 0.9em; vertical-align: super">2</a></span>  does show an historical increase in the percentage of women in senior faculty positions.  So, since we evidently do not have all of the data, it would be "a capital mistake to theorize before one has data."</p>
+        <hr MadCap:conditions="Default.ScreenOnly" width="100%" size="0" align="center" />
+        <p MadCap:conditions="Default.ScreenOnly" style="font-size: 8pt;"><span class="MyVariablesCopyright">Copyright © 2012, Raima Inc. All rights reserved.</span>
+        </p>
+        <script type="text/javascript" src="../SkinSupport/MadCapBodyEnd.js">
+        </script>
+        <p class="MCWebHelpFramesetLink MCWebHelpFramesetLinkBottom" style="display: none;"><a href="../../Default_CSH.htm#SQL/Chapter5.htm" style="">Open topic with navigation</a>
+        </p>
+    </body>
+</html>

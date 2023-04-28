@@ -1,0 +1,362 @@
+<?xml version="1.0" encoding="utf-8"?>
+<!DOCTYPE html PUBLIC "-//W3C//DTD XHTML 1.0 Strict//EN" "http://www.w3.org/TR/xhtml1/DTD/xhtml1-strict.dtd">
+<html xmlns:MadCap="http://www.madcapsoftware.com/Schemas/MadCap.xsd" MadCap:tocPath="TFS Configuration &amp; Extension API" MadCap:InPreviewMode="false" MadCap:PreloadImages="false" MadCap:RuntimeFileType="Topic" MadCap:TargetType="WebHelp" lang="en-us" xml:lang="en-us" class="" MadCap:PathToHelpSystem="../../" MadCap:HelpSystemFileName="Default.xml" MadCap:SearchType="Stem">
+    <head>
+        <meta http-equiv="Content-Type" content="text/html; charset=utf-8" /><title>TFS&#160;Server Extension API</title>
+        <link rel="icon" type="image/png" href="http://docs.raima.com/favicon.png" />
+        <link href="../SkinSupport/MadCap.css" rel="stylesheet" />
+        <link href="../Resources/Stylesheets/raima.css" rel="stylesheet" />
+        <script src="../SkinSupport/MadCapAll.js" type="text/javascript">
+        </script>
+    </head>
+    <body>
+        <p class="MCWebHelpFramesetLink MCWebHelpFramesetLinkTop" style="display: none;"><a href="../../Default_CSH.htm#TFS/Chapter3.htm" style="">Open topic with navigation</a>
+        </p>
+        <div class="MCBreadcrumbsBox_0"><span class="MCBreadcrumbsPrefix">You are here: </span><a class="MCBreadcrumbsLink" href="dbTFSUG.htm">TFS Configuration &amp; Extension API</a><span class="MCBreadcrumbsDivider"> &gt; </span><span class="MCBreadcrumbs">TFS Extension API</span>
+        </div>
+        <h1 class="firstHeading" style="text-align: justify;"><a MadCap:generatedBookmark="TOC" name="TFS&#160;Server_Extension_API"></a>TFS&#160;Server Extension API</h1>
+        <h2><a MadCap:generatedBookmark="TOC" name="Introduction_..2"></a>Introduction</h2>
+        <p>By default, the <span class="MyVariablesProductShortName">RDM</span> TFS program called <code>tfserver</code> will serve static HTML&#160;files to HTTP&#160;clients. However, additional customized functions may be added to your own custom-built HTTP server.</p>
+        <p> In this section, we will create a simple hybrid direct-link configuration (as defined in the <a href="Chapter2.htm#TFS_TFS">Direct-Link Configuration</a> section) that has customized extensions available for use by HTTP&#160;clients. In this example, we will generate HTML so that the HTTP client can be any web browser. The starting point will be the <a href="../TUTORIAL/Examples/MARKETexample.htm">Market</a> example. It is already coded to detect whether it is supposed to run as a TFS or not (using the passed in parameter).</p>
+        <h2><a MadCap:generatedBookmark="TOC" name="Step_1:_Set_Up_Hybrid_Environment"></a>Step 1: Set Up Hybrid Environment</h2>
+        <p>The hybrid environment requires the program that is designated as the server to initialize using the TFST library. Only one program that wants to use databases hosted by this TFS instance may run this way.</p>
+        <p>On Windows, it could look like this:</p><pre xml:space="preserve">marketExample –tfs TFST –d c:\RDM\databases</pre>
+        <p>This instance of <code>marketExample</code> will be acting as a market application and as a TFS to other market applications. All other market application instances should be run using the TFSR library.  On Windows it could look like this:</p><pre xml:space="preserve">marketExample -tfs TFSR</pre>
+        <p>At this point you can verify that the market application is working correctly. Please examine the function <code>startAsTFS</code> in the example code <code>GettingStarted/examples/market/marketExample_main.c</code>.</p>
+        <h2><a MadCap:generatedBookmark="TOC" name="Step_2:_Add_XAPI_Functions"></a>Step 2: Add XAPI Functions</h2>
+        <p>The Market example has no extension functions.  In this step, we will add two functions. The first one will be used to produce an HTML file that lists all investors with their current totals. In that HTML&#160;file will be links to the second extension function which lists the details of a particular investor. The first function we will call <code>investorList</code>, and the second <code>investorDetail</code>. The first function requires no parameters. The second function requires an investor ID.</p>
+        <p>The <code>d_tfsxapiparams</code> function is called to set the XAPI parameters.</p>
+        <p>Here is code that correctly sets up two functions to be called when named by an HTTP client:</p><pre xml:space="preserve">/* marketExample_main.c */
+#include "rdmhttp.h"
+
+int32_t investorList(RHS_HANDLE, PSP_OUTPUTBUFF, const char*, const char*, const char*);
+int32_t investorDetail(RHS_HANDLE, PSP_OUTPUTBUFF, const char*, const char*, const char*);
+
+static const TFS_XAPI_FCNMAP mktfcnmap[] = {
+    { "/investorList",   (TFS_XAPI_FCN *)investorList   },
+    { "/investorDetail", (TFS_XAPI_FCN *)investorDetail }
+};
+#define NUM_MKTFCNS RLEN(mktfcnmap)
+...
+
+/* In the startAsTFS function */ 
+    TFS_XAPI_PARAMS xapi_params;
+...
+    xapi_params.xapifcnmap = mktfcnmap;
+    xapi_params.fcnmapsize = NUM_MKTFCNS;
+    xapi_params.subdocroot = "/mkt";
+
+    rc = d_tfsinitEx(full_docroot, &amp;tparams, hTFS, cmd_status-&gt;tfs_type);
+
+    if(rc == S_OKAY)
+    {
+        /* We check using d_tfsversion so that we can determine what 
+         * TFS_TYPE_DEFAULT resolves to
+         */
+        rc = d_tfsversion(&amp;major, &amp;minor, &amp;tfs_type);    
+        {            
+            if (rc == S_OKAY)
+            {
+                /* Direct linked TFS library, start server */
+                if (tfs_type == TFS_TYPE_TFS)
+                {
+                    rc = d_tfsxapiparams(hTFS, &amp;xapi_params);
+                    if(rc == S_OKAY)
+                    {
+                        rc = d_tfsrun(*hTFS, TRUE, &amp;tfs_done);
+                        if(rc != S_OKAY)
+                        {
+                            printf("Error starting TFS threads - %s (%d): %s\n", 
+                               d_errorname(rc), rc, d_errorstr(rc));
+                        }
+                    }
+                }
+            }
+        }
+    }
+    else
+    {
+        printf("Error initialzing TFS - %s (%d): %s\n", d_errorname(rc), rc, d_errorstr(rc));
+    }
+...
+</pre>
+        <p>When the TFS (your own application which starts up the TFS threads) is built and run, you can access these functions from a web browser. The address for these functions is formed by identifying the domain under which the TFS is running, the correct port, then the function name as identified in the first element if the <code>TFS_XAPI_FCNMAP</code> structure. For these two functions, the full address may look like the following:</p><pre xml:space="preserve">http://localhost:<span class="MyVariablesDefaultPort">21553</span>/investorList</pre>
+        <p>or</p><pre xml:space="preserve">http://localhost:<span class="MyVariablesDefaultPort">21553</span>/investorDetail?invID=3&amp;</pre>
+        <p>Note that the first function, <code>investorList</code>, is shown with no parameters. This is because the function itself will not be affected by parameters, but simply produces the current list of investors.</p>
+        <p>The second function, <code>investorDetail</code>, has one parameter, <code>invID</code>. In the example, the value is 3.</p>
+        <p>The definition of these functions follows their intended use. The <code>investorList</code> function is an entry point that produces a list of investors together with links to the investor details. Thus, the <code>investorDetail</code> function is intended to be used from within hyperlinks in an HTML&#160;page, with the parameter value matching the name of an investor.</p>
+        <p>The functions have the following prototype:</p><pre xml:space="preserve">int32_t <i>fcnName</i>(RHS_HANDLE hRHS, PSP_OUTPUTBUFFoutbuff, const char *args, 
+    const char *raw_args, const char *content);</pre>
+        <p>While the function is active, it can perform any function available to it, especially access to an <span class="MyVariablesProductShortName">RDM</span> database. The PSP_OUTPUTBUFF parameter must be used as input to the <code>http_printf</code> function, as this is the reply that will be sent back to the HTTP client. The first character (<code>args</code>) points to a string representing the parameters that were sent in the URL. . The string in <code>args</code> is URL decoded. The second string (<code>raw_args</code>) points to a string containing the raw (URL encoded) argument list. The third string (<code>context</code>), if not NULL, points to the content portion of the HTTP&#160;message, which will be present with a POST method.</p>
+        <p>Below is an example of how the upper level of these two functions may be coded.</p><pre xml:space="preserve">static void EXTERNAL_FCN HttpErr(int32_t, const char*, void*, DB_TASK*);
+...
+ 
+/* investor list XAPI function */
+int32_t investorList(
+    RHS_HANDLE      hRHS,
+    PSP_OUTPUTBUFF  outbuf,
+    const char     *args,
+    const char     *raw_args,
+    const char     *content)
+{
+    int32_t status;
+    DB_TASK *task;
+
+    /* prepare to use the database */
+    d_opentask(&amp;task);
+    d_set_dberr_ex(HttpErr, (void *)outbuf, task);
+
+    if ((status=d_open("mkt", "s", task)) != S_OKAY) {
+        http_printf(outbuf, "Error %d opening mkt database", status);
+        return S_OKAY;
+    }
+
+    /* bare-bones HTML to surround the output */
+    http_printf(outbuf, "&lt;HTML&gt;&lt;BODY&gt;\n");
+    http_printf(outbuf, "&lt;p&gt;&lt;b&gt;List of Investors&lt;/b&gt;&lt;/p&gt;\n");
+    investor_list_html(outbuf, task);
+    http_printf(outbuf, "&lt;/HTML&gt;&lt;/BODY&gt;\n");
+
+    d_close(task);
+    d_closetask(task);
+
+    return S_OKAY;
+}
+
+/* investor detail XAPI function */
+int32_t investorDetail(
+    RHS_HANDLE      hRHS,
+    PSP_OUTPUTBUFF  outbuf,
+    const char     *args,
+    const char     *raw_args,
+    const char     *content)
+{
+    int32_t status;
+    DB_TASK *task;
+
+    /* prepare to use the database */
+    d_opentask(&amp;task);
+    d_set_dberr_ex(HttpErr, (void *)outbuf, task);
+
+    if ((status=d_open("mkt", "s", task)) != S_OKAY) {
+        http_printf(outbuf, "Error %d opening mkt database", status);
+
+        return S_OKAY;
+    }
+
+    /* bare-bones HTML to surround the output */
+    http_printf(outbuf, "&lt;HTML&gt;&lt;BODY&gt;\n");
+    http_printf(outbuf, "&lt;p&gt;&lt;b&gt;Investor Detail&lt;/b&gt;&lt;/p&gt;\n");
+    investor_detail_html(hRHS, outbuf, args, task);
+    http_printf(outbuf, "&lt;/HTML&gt;&lt;/BODY&gt;\n");
+
+    d_close(task);
+    d_closetask(task);
+
+    return S_OKAY;
+}
+</pre>
+        <p>Any XAPI function may not print to <code>stdout</code> or <code>stderr</code>, because it may appear in the program that is running the TFS. All output is to be generated for the client through the <code>http_printf</code> function.</p>
+        <p>The <code>d_set_dberr_ex</code> function is used to prevent the standard dberr function from printing to <code>stderr</code>. It is optional whether HTML&#160;is generated by the <code>HttpErr</code> function, but an example of it is shown below.</p><pre xml:space="preserve">static void EXTERNAL_FCN HttpErr(
+    int32_t err,
+    const char *errmsg,
+    void *ob,
+    DB_TASK *task)
+{
+    /* avoid printing to stdout */
+    http_printf((PSP_OUTPUTBUFF)ob, "&lt;p&gt;Database error %d: %s&lt;/p&gt;\n", err, errmsg);
+}</pre>
+        <h2><a MadCap:generatedBookmark="TOC" name="Step_3:_Querying_the_Database"></a>Step 3: Querying the Database</h2>
+        <p>In this example, the functions doing the database work are named <code>investor_list_html</code> and <code>investor_detail_html</code>. They will be fetching information from the database and producing HTML&#160;output.</p>
+        <p>First, we will have <code>investor_list_html</code> produce a table row for each investor record that is read. The following code produces a row containing the investor ID, investor name, and the liquid funds. The investor ID field will have a hyperlink added that references the second function, so that the correct reference is generated when the ID is clicked.</p><pre xml:space="preserve">static int32_t investor_list_html(PSP_OUTPUTBUFF, DB_TASK*);
+
+...
+
+static int32_t investor_list_html(
+    PSP_OUTPUTBUFF  outbuf,
+    DB_TASK        *task)
+{
+    int32_t         rc;
+    struct investor investorRec;
+
+    /* Lock the FUND and INVESTOR records for read access see mktfcns.c */
+    if ((rc = d_lock(investor_fund_r_sz, investor_fund_r, task, 0)) != S_OKAY)
+        return -1;
+
+    http_printf(outbuf, "&lt;table&gt;");
+    for (rc = d_keyfrst(INVESTOR_INVID, task, 0); rc == S_OKAY;
+            rc = d_keynext(INVESTOR_INVID, task, 0))
+    {
+        if ((rc = d_recread(&amp;investorRec, task, 0)) != S_OKAY)
+            return -1;
+
+        /* the ID hyperlink, and the ID */
+        http_printf(outbuf, "&lt;tr&gt;&lt;td&gt;&lt;a href=\"investorDetail?invID=%d\"&gt;%d&lt;/a&gt;&lt;/td&gt;",
+                investorRec.invID, investorRec.invID);
+         
+        /* the investor name and liquid funds */
+        http_printf(outbuf, "&lt;td&gt;%s&lt;/td&gt;&lt;td&gt;$%.2f&lt;/td&gt;\n", investorRec.name,
+                investorRec.money_mkt);
+        http_printf(outbuf, "&lt;/tr&gt;\n");
+    }
+    http_printf(outbuf, "&lt;/table&gt;");
+
+    if (rc == S_NOTFOUND)
+        rc = S_OKAY;
+
+    d_freeall(task);
+
+    return rc;
+}
+     <![CDATA[
+]]></pre>
+        <p>The second function, <code>investor_detail_html</code>, must parse the argument string to obtain the investor ID, look up the investor from the ID, then generate HTML&#160;output containing that investor's data. In the code snippet below, the function obtains the ID using <code>http_getURLArgValue</code> from <span class="MyVariablesProductShortName">RDM</span>'s <a href="HTTPAPIReference.htm">HTTP support library functions</a>. First, <code>args</code> is parsed into the <code>urlargs</code> structure. Then this structure is searched for the value matching the <code>invID</code> key. Since this key/value pair is generated by our own <code>investorList</code> function, it <i>should</i> be valid.</p><pre xml:space="preserve">int32_t investor_detail_html(RHS_HANDLE, PSP_OUTPUTBUFF, const char*, DB_TASK*);
+
+...
+
+int32_t investor_detail_html(
+    RHS_HANDLE     hRHS,
+    PSP_OUTPUTBUFF outbuf,
+    const char    *args,
+    DB_TASK       *task)
+{
+    int32_t         rc;
+    const URLARGS  *urlargs;
+    int16_t         invIDVal;
+    const char     *invIDptr;
+    double          total_funds;
+    double          assetsValue;
+    struct investor investorRec;
+    struct fund     fundRec;
+    struct asset    assetRec;
+    struct trans    transRec;
+    struct stock    stockRec;
+    double          current_value;
+
+    /* locate this investor based on ID */
+    if ((rc = http_initURLArgs(hRHS, args, &amp;urlargs)) != S_OKAY)
+        return rc;
+    invIDptr = http_getURLArgValue("invID", urlargs);
+    if (invIDptr == NULL) {
+        http_printf(outbuf, "&lt;p&gt;Invalid parameters&lt;/p&gt;\n");
+        http_freeURLArgs(urlargs);
+        return rc;
+    }
+    invIDVal = atoi(invIDptr);
+    http_freeURLArgs(urlargs);
+
+    /* look up investor and generate HTML */
+    rc = d_lock(investor_fund_asset_trans_stock_r_sz,
+            investor_fund_asset_trans_stock_r, task, 0);
+    if (rc != S_OKAY)
+        return -1;
+
+    if((rc = d_keyfind(INVESTOR_INVID, &amp;invIDVal, task, 0)) != S_OKAY)
+    {
+        d_freeall(task);
+        if(rc != S_NOTFOUND)
+        {
+            http_printf(outbuf, "&lt;p&gt;Error %d looking up investor with ID of %d&lt;/p&gt;", rc, invIDVal);
+        }
+        else
+        {
+            http_printf(outbuf, "&lt;p&gt;Unable to find investor with ID of %d&lt;/p&gt;", invIDVal);
+        }
+        return -1;
+    }
+
+    if ((rc = d_setor(FUNDING, task, 0)) != S_OKAY)
+        return -1;
+
+    if ((rc = d_setor(INV_TRANS, task, 0)) != S_OKAY)
+        return -1;
+
+    if ((rc = d_recread(&amp;investorRec, task, 0)) != S_OKAY)
+        return -1;
+
+    http_printf(outbuf, "\nInvestor (%d) %s\n", investorRec.invID, investorRec.name);
+    
+    total_funds = 0;
+    http_printf(outbuf, "&lt;table&gt;");
+    http_printf(outbuf, "&lt;th&gt;Funding&lt;/th&gt;");
+    for (rc = d_findfm(FUNDING, task, 0); rc == S_OKAY;
+            rc = d_findnm(FUNDING, task, 0))
+    {
+        if ((rc = d_recread(&amp;fundRec, task, 0)) != S_OKAY)
+            return -1;
+
+        http_printf(outbuf, "&lt;tr&gt;&lt;td&gt;$%-7.2f&lt;/td&gt;&lt;/tr&gt;", fundRec.amount);
+        total_funds += fundRec.amount;
+    }
+    http_printf(outbuf, "&lt;table&gt;");
+
+    if (rc != S_EOS) /*lint !e850 */
+        return -1;
+
+    assetsValue = 0;
+
+    /* prerequisite: current owner of INV_TRANS */
+    for (rc = d_findfm(INV_TRANS, task, 0); rc == S_OKAY;
+            rc = d_findnm(INV_TRANS, task, 0))
+    {
+        if ((rc = d_setor(HISTORY, task, 0)) != S_OKAY)
+            return -1;
+
+        if ((rc = d_recread(&amp;assetRec, task, 0)) != S_OKAY)
+            return -1;
+
+        if ((rc = d_findco(STOCK_TRANS, task, 0)) != S_OKAY)
+            return -1;
+
+        if ((rc = d_recread(&amp;stockRec, task, 0)) != S_OKAY)
+            return -1;
+
+        http_printf(outbuf, "&lt;table&gt;");
+        http_printf(outbuf, "&lt;th&gt;ASSET: (%d) %s, currently $%-7.2f\n&lt;/th&gt;", 
+            stockRec.stkID, stockRec.company, stockRec.share_price);
+        http_printf(outbuf, "&lt;tr&gt;&lt;td&gt;Shares owned&lt;/td&gt;&lt;td&gt;"UINT64_SPEC"&lt;/td&gt;&lt;/tr&gt;", 
+            assetRec.shares_owned);
+
+        for (rc = d_findfm(HISTORY, task, 0); rc == S_OKAY;
+                rc = d_findnm(HISTORY, task, 0)) /*lint !e445 */
+        {
+            if ((rc = d_recread(&amp;transRec, task, 0)) != S_OKAY)
+                return -1;
+
+            http_printf(outbuf, "&lt;tr&gt;&lt;td&gt;%s&lt;/td&gt;&lt;td&gt;"INT64_SPEC" @ $%-7.2f&lt;/td&gt;&lt;tr&gt;",
+                    transRec.shares &gt; 0 ? "purchased": "sold",
+                    transRec.shares &gt; 0 ? transRec.shares : -transRec.shares,
+                    transRec.value);
+        }
+
+        if (rc != S_EOS) /*lint !e850 */
+            return -9;
+
+        current_value = (double) assetRec.shares_owned * stockRec.share_price;
+        http_printf(outbuf, "&lt;tr&gt;&lt;td&gt;Current value&lt;/td&gt;&lt;td&gt;$%-7.2f&lt;/td&gt;&lt;/tr&gt;", current_value);
+        assetsValue += current_value;
+        http_printf(outbuf, "&lt;/table&gt;");
+    }
+
+    http_printf(outbuf, "&lt;table&gt;");
+    http_printf(outbuf, "&lt;tr&gt;&lt;td&gt;Liquid funds&lt;/td&gt;&lt;td&gt;$%-7.2f&lt;/td&gt;&lt;/tr&gt;", 
+        investorRec.money_mkt);
+    http_printf(outbuf, "&lt;tr&gt;&lt;td&gt;Net worth:&lt;/td&gt;&lt;td&gt;$%-8.2f&lt;/td&gt;&lt;/tr&gt;", 
+        investorRec.money_mkt + assetsValue);
+    http_printf(outbuf, "&lt;tr&gt;&lt;td&gt;Profit/Loss:&lt;/td&gt;&lt;td&gt;$%-7.2f&lt;/td&gt;&lt;/tr&gt;", 
+        investorRec.money_mkt+assetsValue-total_funds);
+    http_printf(outbuf, "&lt;/table&gt;");
+    d_freeall(task);
+    return S_OKAY;
+}
+
+</pre>
+        <hr MadCap:conditions="Default.ScreenOnly" width="100%" size="0" align="center" />
+        <p MadCap:conditions="Default.ScreenOnly" style="font-size: 8pt;"><span class="MyVariablesCopyright">Copyright © 2012, Raima Inc. All rights reserved.</span>
+        </p>
+        <script type="text/javascript" src="../SkinSupport/MadCapBodyEnd.js">
+        </script>
+        <p class="MCWebHelpFramesetLink MCWebHelpFramesetLinkBottom" style="display: none;"><a href="../../Default_CSH.htm#TFS/Chapter3.htm" style="">Open topic with navigation</a>
+        </p>
+    </body>
+</html>

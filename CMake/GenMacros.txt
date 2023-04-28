@@ -1,0 +1,578 @@
+
+macro (ddlp_cpp_c_d_e)
+  foreach (NAME ${ARGV})
+    add_custom_command (
+      OUTPUT
+        ${CMAKE_CURRENT_BINARY_DIR}/${NAME}.h
+        ${CMAKE_CURRENT_BINARY_DIR}/${NAME}_dbd.c
+        ${CMAKE_CURRENT_BINARY_DIR}/${NAME}_dbd.h
+        ${CMAKE_CURRENT_BINARY_DIR}/${NAME}_api.cpp
+        ${CMAKE_CURRENT_BINARY_DIR}/${NAME}_api.h
+        ${CMAKE_CURRENT_BINARY_DIR}/embed_${NAME}_dbd.c
+        ${CMAKE_CURRENT_BINARY_DIR}/embed_${NAME}_dbd.h
+        ${CMAKE_CURRENT_BINARY_DIR}/${NAME}.ddl.c
+        ${CMAKE_CURRENT_BINARY_DIR}/${NAME}.ddl.h
+      COMMAND native-embedfile -o ${NAME}.ddl ${CMAKE_CURRENT_SOURCE_DIR}/${NAME}.ddl
+      COMMAND native-ddlp -cpp -c -d -e -B -q -nd ${CMAKE_CURRENT_SOURCE_DIR}/${NAME}.ddl
+      DEPENDS 
+        ${CMAKE_CURRENT_SOURCE_DIR}/${NAME}.ddl
+        native-embedfile
+        native-ddlp
+      COMMENT "ddlp_cpp_c_d_e ${NAME}.ddl"
+    )
+    set (SOURCE_FILES ${SOURCE_FILES}
+        ${CMAKE_CURRENT_BINARY_DIR}/${NAME}.h
+        ${CMAKE_CURRENT_BINARY_DIR}/${NAME}_dbd.c
+        ${CMAKE_CURRENT_BINARY_DIR}/${NAME}_dbd.h
+        ${CMAKE_CURRENT_BINARY_DIR}/${NAME}_api.cpp
+        ${CMAKE_CURRENT_BINARY_DIR}/${NAME}_api.h
+        ${CMAKE_CURRENT_BINARY_DIR}/embed_${NAME}_dbd.c
+        ${CMAKE_CURRENT_BINARY_DIR}/embed_${NAME}_dbd.h
+        ${CMAKE_CURRENT_BINARY_DIR}/${NAME}.ddl.c
+        ${CMAKE_CURRENT_BINARY_DIR}/${NAME}.ddl.h
+    )
+  endforeach (NAME)
+endmacro (ddlp_cpp_c_d_e)
+
+macro (ddlp_d_imp)
+  foreach (NAME ${ARGV})
+    add_custom_command (
+      OUTPUT
+        ${CMAKE_CURRENT_BINARY_DIR}/${NAME}.h
+      COMMAND native-ddlp -d -B -q -nd ${CMAKE_CURRENT_SOURCE_DIR}/${NAME}.ddl
+      COMMAND native-ddlp -docroot ${CMAKE_CURRENT_BINARY_DIR}/${CMAKE_CFG_INTDIR} -B -q -nh ${CMAKE_CURRENT_SOURCE_DIR}/${NAME}.ddl
+      COMMAND native-initdb -docroot ${CMAKE_CURRENT_BINARY_DIR}/${CMAKE_CFG_INTDIR} -B -q ${NAME}
+      COMMAND native-dbimp -docroot ${CMAKE_CURRENT_BINARY_DIR}/${CMAKE_CFG_INTDIR} -B -q ${CMAKE_CURRENT_SOURCE_DIR}/${NAME}.imp
+      DEPENDS 
+        ${CMAKE_CURRENT_SOURCE_DIR}/${NAME}.ddl
+        native-ddlp
+        native-initdb
+        native-dbimp
+      COMMENT "ddlp_d_imp ${NAME}.ddl"
+    )
+    set (SOURCE_FILES ${SOURCE_FILES}
+        ${CMAKE_CURRENT_BINARY_DIR}/${NAME}.h
+    )
+  endforeach (NAME)
+endmacro (ddlp_d_imp)
+
+macro (ddlp_d)
+  foreach (NAME ${ARGV})
+    add_custom_command (
+      OUTPUT
+        ${CMAKE_CURRENT_BINARY_DIR}/${NAME}.h
+      COMMAND native-ddlp -d -B -q -nd ${CMAKE_CURRENT_SOURCE_DIR}/${NAME}.ddl
+      DEPENDS 
+        ${CMAKE_CURRENT_SOURCE_DIR}/${NAME}.ddl
+        native-ddlp
+      COMMENT "ddlp_d ${NAME}.ddl"
+    )
+    set (SOURCE_FILES ${SOURCE_FILES}
+        ${CMAKE_CURRENT_BINARY_DIR}/${NAME}.h
+    )
+  endforeach (NAME)
+endmacro (ddlp_d)
+
+macro (ddlp_dbd)
+  foreach (NAME ${ARGV})
+    add_custom_command (
+      OUTPUT
+        ${CMAKE_CURRENT_BINARY_DIR}/${NAME}.h
+      COMMAND native-ddlp -B -q -nd ${CMAKE_CURRENT_SOURCE_DIR}/${NAME}.ddl
+      COMMAND native-ddlp -docroot ${CMAKE_CURRENT_BINARY_DIR}/${CMAKE_CFG_INTDIR} -B -q -nh ${CMAKE_CURRENT_SOURCE_DIR}/${NAME}.ddl
+      COMMAND native-initdb -docroot ${CMAKE_CURRENT_BINARY_DIR}/${CMAKE_CFG_INTDIR} -B -q ${NAME}
+      DEPENDS 
+        ${CMAKE_CURRENT_SOURCE_DIR}/${NAME}.ddl
+        native-ddlp
+        native-initdb
+      COMMENT "ddlp_dbd ${NAME}.ddl"
+    )
+    set (SOURCE_FILES ${SOURCE_FILES}
+        ${CMAKE_CURRENT_BINARY_DIR}/${NAME}.h
+    )
+  endforeach (NAME)
+endmacro (ddlp_dbd)
+
+macro (rdmyacc)
+  foreach (NAME ${ARGV})
+    add_custom_command (
+      OUTPUT
+        ${CMAKE_CURRENT_SOURCE_DIR}/${NAME}.c
+        ${CMAKE_CURRENT_SOURCE_DIR}/${NAME}.h
+      COMMAND native-rdmyacc -birzy -f ${NAME}Actions ${CMAKE_CURRENT_SOURCE_DIR}/${NAME}.y
+      DEPENDS 
+        ${CMAKE_CURRENT_SOURCE_DIR}/${NAME}.y
+        native-rdmyacc
+      COMMENT "rdmyacc ${NAME}.y"
+    )
+    set (SOURCE_FILES ${SOURCE_FILES}
+        ${NAME}.c
+        ${NAME}.h
+    )
+  endforeach (NAME)
+endmacro (rdmyacc)
+
+macro (ddlp_cpp_c_d)
+  foreach (NAME ${ARGV})
+    add_custom_command (
+      OUTPUT
+        ${CMAKE_CURRENT_BINARY_DIR}/${NAME}.h
+        ${CMAKE_CURRENT_BINARY_DIR}/${NAME}_dbd.c
+        ${CMAKE_CURRENT_BINARY_DIR}/${NAME}_dbd.h
+        ${CMAKE_CURRENT_BINARY_DIR}/${NAME}_api.cpp
+        ${CMAKE_CURRENT_BINARY_DIR}/${NAME}_api.h
+      COMMAND native-ddlp -cpp -c -d -B -q -nd ${CMAKE_CURRENT_SOURCE_DIR}/${NAME}.ddl
+      DEPENDS 
+        ${CMAKE_CURRENT_SOURCE_DIR}/${NAME}.ddl
+        native-ddlp
+      COMMENT "ddlp_cpp_c_d ${NAME}.ddl"
+    )
+    set (SOURCE_FILES ${SOURCE_FILES}
+        ${CMAKE_CURRENT_BINARY_DIR}/${NAME}.h
+        ${CMAKE_CURRENT_BINARY_DIR}/${NAME}_dbd.c
+        ${CMAKE_CURRENT_BINARY_DIR}/${NAME}_dbd.h
+        ${CMAKE_CURRENT_BINARY_DIR}/${NAME}_api.cpp
+        ${CMAKE_CURRENT_BINARY_DIR}/${NAME}_api.h
+    )
+  endforeach (NAME)
+endmacro (ddlp_cpp_c_d)
+
+macro (ddlp_cpp_c)
+  foreach (NAME ${ARGV})
+    add_custom_command (
+      OUTPUT
+        ${CMAKE_CURRENT_BINARY_DIR}/${NAME}.h
+        ${CMAKE_CURRENT_BINARY_DIR}/${NAME}_dbd.c
+        ${CMAKE_CURRENT_BINARY_DIR}/${NAME}_dbd.h
+        ${CMAKE_CURRENT_BINARY_DIR}/${NAME}_api.cpp
+        ${CMAKE_CURRENT_BINARY_DIR}/${NAME}_api.h
+      COMMAND native-ddlp -cpp -c -B -q -nd ${CMAKE_CURRENT_SOURCE_DIR}/${NAME}.ddl
+      DEPENDS 
+        ${CMAKE_CURRENT_SOURCE_DIR}/${NAME}.ddl
+        native-ddlp
+      COMMENT "ddlp_cpp_c ${NAME}.ddl"
+    )
+    set (SOURCE_FILES ${SOURCE_FILES}
+        ${CMAKE_CURRENT_BINARY_DIR}/${NAME}.h
+        ${CMAKE_CURRENT_BINARY_DIR}/${NAME}_dbd.c
+        ${CMAKE_CURRENT_BINARY_DIR}/${NAME}_dbd.h
+        ${CMAKE_CURRENT_BINARY_DIR}/${NAME}_api.cpp
+        ${CMAKE_CURRENT_BINARY_DIR}/${NAME}_api.h
+    )
+  endforeach (NAME)
+endmacro (ddlp_cpp_c)
+
+macro (rsql)
+  foreach (NAME ${ARGV})
+    add_custom_command (
+      OUTPUT
+        ${CMAKE_CURRENT_BINARY_DIR}/${NAME}.h
+        ${CMAKE_CURRENT_BINARY_DIR}/${NAME}_cat.c
+        ${CMAKE_CURRENT_BINARY_DIR}/${NAME}_cat.h
+        ${CMAKE_CURRENT_BINARY_DIR}/${NAME}_dbd.c
+        ${CMAKE_CURRENT_BINARY_DIR}/${NAME}_dbd.h
+      COMMAND native-rdmsql -B -q -c ${CMAKE_CURRENT_SOURCE_DIR}/${NAME}.sdl
+      DEPENDS 
+        ${CMAKE_CURRENT_SOURCE_DIR}/${NAME}.sdl
+        native-rdmsql
+      COMMENT "rsql ${NAME}.sdl"
+    )
+    set (SOURCE_FILES ${SOURCE_FILES}
+        ${CMAKE_CURRENT_BINARY_DIR}/${NAME}.h
+        ${CMAKE_CURRENT_BINARY_DIR}/${NAME}_cat.c
+        ${CMAKE_CURRENT_BINARY_DIR}/${NAME}_cat.h
+        ${CMAKE_CURRENT_BINARY_DIR}/${NAME}_dbd.c
+        ${CMAKE_CURRENT_BINARY_DIR}/${NAME}_dbd.h
+    )
+  endforeach (NAME)
+endmacro (rsql)
+
+macro (embed)
+  foreach (NAME ${ARGV})
+    add_custom_command (
+      OUTPUT
+        ${CMAKE_CURRENT_BINARY_DIR}/${NAME}.c
+        ${CMAKE_CURRENT_BINARY_DIR}/${NAME}.h
+      COMMAND native-embedfile -o ${NAME} ${CMAKE_CURRENT_SOURCE_DIR}/${NAME}
+      DEPENDS 
+        ${CMAKE_CURRENT_SOURCE_DIR}/${NAME}
+        native-embedfile
+      COMMENT "embed ${NAME}"
+    )
+    set (SOURCE_FILES ${SOURCE_FILES}
+        ${CMAKE_CURRENT_BINARY_DIR}/${NAME}.c
+        ${CMAKE_CURRENT_BINARY_DIR}/${NAME}.h
+    )
+  endforeach (NAME)
+endmacro (embed)
+
+macro (ddlp_c_e)
+  foreach (NAME ${ARGV})
+    add_custom_command (
+      OUTPUT
+        ${CMAKE_CURRENT_BINARY_DIR}/${NAME}.h
+        ${CMAKE_CURRENT_BINARY_DIR}/${NAME}_dbd.c
+        ${CMAKE_CURRENT_BINARY_DIR}/${NAME}_dbd.h
+        ${CMAKE_CURRENT_BINARY_DIR}/embed_${NAME}_dbd.c
+        ${CMAKE_CURRENT_BINARY_DIR}/embed_${NAME}_dbd.h
+        ${CMAKE_CURRENT_BINARY_DIR}/${NAME}.ddl.c
+        ${CMAKE_CURRENT_BINARY_DIR}/${NAME}.ddl.h
+      COMMAND native-embedfile -o ${NAME}.ddl ${CMAKE_CURRENT_SOURCE_DIR}/${NAME}.ddl
+      COMMAND native-ddlp -c -e -B -q -nd ${CMAKE_CURRENT_SOURCE_DIR}/${NAME}.ddl
+      DEPENDS 
+        ${CMAKE_CURRENT_SOURCE_DIR}/${NAME}.ddl
+        native-embedfile
+        native-ddlp
+      COMMENT "ddlp_c_e ${NAME}.ddl"
+    )
+    set (SOURCE_FILES ${SOURCE_FILES}
+        ${CMAKE_CURRENT_BINARY_DIR}/${NAME}.h
+        ${CMAKE_CURRENT_BINARY_DIR}/${NAME}_dbd.c
+        ${CMAKE_CURRENT_BINARY_DIR}/${NAME}_dbd.h
+        ${CMAKE_CURRENT_BINARY_DIR}/embed_${NAME}_dbd.c
+        ${CMAKE_CURRENT_BINARY_DIR}/embed_${NAME}_dbd.h
+        ${CMAKE_CURRENT_BINARY_DIR}/${NAME}.ddl.c
+        ${CMAKE_CURRENT_BINARY_DIR}/${NAME}.ddl.h
+    )
+  endforeach (NAME)
+endmacro (ddlp_c_e)
+
+macro (ddlp_c)
+  foreach (NAME ${ARGV})
+    add_custom_command (
+      OUTPUT
+        ${CMAKE_CURRENT_BINARY_DIR}/${NAME}.h
+        ${CMAKE_CURRENT_BINARY_DIR}/${NAME}_dbd.c
+        ${CMAKE_CURRENT_BINARY_DIR}/${NAME}_dbd.h
+      COMMAND native-ddlp -c -B -q -nd ${CMAKE_CURRENT_SOURCE_DIR}/${NAME}.ddl
+      DEPENDS 
+        ${CMAKE_CURRENT_SOURCE_DIR}/${NAME}.ddl
+        native-ddlp
+      COMMENT "ddlp_c ${NAME}.ddl"
+    )
+    set (SOURCE_FILES ${SOURCE_FILES}
+        ${CMAKE_CURRENT_BINARY_DIR}/${NAME}.h
+        ${CMAKE_CURRENT_BINARY_DIR}/${NAME}_dbd.c
+        ${CMAKE_CURRENT_BINARY_DIR}/${NAME}_dbd.h
+    )
+  endforeach (NAME)
+endmacro (ddlp_c)
+
+macro (ddlp_cpp_c_e)
+  foreach (NAME ${ARGV})
+    add_custom_command (
+      OUTPUT
+        ${CMAKE_CURRENT_BINARY_DIR}/${NAME}.h
+        ${CMAKE_CURRENT_BINARY_DIR}/${NAME}_dbd.c
+        ${CMAKE_CURRENT_BINARY_DIR}/${NAME}_dbd.h
+        ${CMAKE_CURRENT_BINARY_DIR}/${NAME}_api.cpp
+        ${CMAKE_CURRENT_BINARY_DIR}/${NAME}_api.h
+        ${CMAKE_CURRENT_BINARY_DIR}/embed_${NAME}_dbd.c
+        ${CMAKE_CURRENT_BINARY_DIR}/embed_${NAME}_dbd.h
+        ${CMAKE_CURRENT_BINARY_DIR}/${NAME}.ddl.c
+        ${CMAKE_CURRENT_BINARY_DIR}/${NAME}.ddl.h
+      COMMAND native-embedfile -o ${NAME}.ddl ${CMAKE_CURRENT_SOURCE_DIR}/${NAME}.ddl
+      COMMAND native-ddlp -cpp -c -e -B -q -nd ${CMAKE_CURRENT_SOURCE_DIR}/${NAME}.ddl
+      DEPENDS 
+        ${CMAKE_CURRENT_SOURCE_DIR}/${NAME}.ddl
+        native-embedfile
+        native-ddlp
+      COMMENT "ddlp_cpp_c_e ${NAME}.ddl"
+    )
+    set (SOURCE_FILES ${SOURCE_FILES}
+        ${CMAKE_CURRENT_BINARY_DIR}/${NAME}.h
+        ${CMAKE_CURRENT_BINARY_DIR}/${NAME}_dbd.c
+        ${CMAKE_CURRENT_BINARY_DIR}/${NAME}_dbd.h
+        ${CMAKE_CURRENT_BINARY_DIR}/${NAME}_api.cpp
+        ${CMAKE_CURRENT_BINARY_DIR}/${NAME}_api.h
+        ${CMAKE_CURRENT_BINARY_DIR}/embed_${NAME}_dbd.c
+        ${CMAKE_CURRENT_BINARY_DIR}/embed_${NAME}_dbd.h
+        ${CMAKE_CURRENT_BINARY_DIR}/${NAME}.ddl.c
+        ${CMAKE_CURRENT_BINARY_DIR}/${NAME}.ddl.h
+    )
+  endforeach (NAME)
+endmacro (ddlp_cpp_c_e)
+
+macro (ddlp_d_e)
+  foreach (NAME ${ARGV})
+    add_custom_command (
+      OUTPUT
+        ${CMAKE_CURRENT_BINARY_DIR}/${NAME}.h
+        ${CMAKE_CURRENT_BINARY_DIR}/embed_${NAME}_dbd.c
+        ${CMAKE_CURRENT_BINARY_DIR}/embed_${NAME}_dbd.h
+        ${CMAKE_CURRENT_BINARY_DIR}/${NAME}.ddl.c
+        ${CMAKE_CURRENT_BINARY_DIR}/${NAME}.ddl.h
+      COMMAND native-embedfile -o ${NAME}.ddl ${CMAKE_CURRENT_SOURCE_DIR}/${NAME}.ddl
+      COMMAND native-ddlp -d -e -B -q -nd ${CMAKE_CURRENT_SOURCE_DIR}/${NAME}.ddl
+      DEPENDS 
+        ${CMAKE_CURRENT_SOURCE_DIR}/${NAME}.ddl
+        native-embedfile
+        native-ddlp
+      COMMENT "ddlp_d_e ${NAME}.ddl"
+    )
+    set (SOURCE_FILES ${SOURCE_FILES}
+        ${CMAKE_CURRENT_BINARY_DIR}/${NAME}.h
+        ${CMAKE_CURRENT_BINARY_DIR}/embed_${NAME}_dbd.c
+        ${CMAKE_CURRENT_BINARY_DIR}/embed_${NAME}_dbd.h
+        ${CMAKE_CURRENT_BINARY_DIR}/${NAME}.ddl.c
+        ${CMAKE_CURRENT_BINARY_DIR}/${NAME}.ddl.h
+    )
+  endforeach (NAME)
+endmacro (ddlp_d_e)
+
+macro (ddlp_e)
+  foreach (NAME ${ARGV})
+    add_custom_command (
+      OUTPUT
+        ${CMAKE_CURRENT_BINARY_DIR}/${NAME}.h
+        ${CMAKE_CURRENT_BINARY_DIR}/embed_${NAME}_dbd.c
+        ${CMAKE_CURRENT_BINARY_DIR}/embed_${NAME}_dbd.h
+        ${CMAKE_CURRENT_BINARY_DIR}/${NAME}.ddl.c
+        ${CMAKE_CURRENT_BINARY_DIR}/${NAME}.ddl.h
+      COMMAND native-embedfile -o ${NAME}.ddl ${CMAKE_CURRENT_SOURCE_DIR}/${NAME}.ddl
+      COMMAND native-ddlp -e -B -q -nd ${CMAKE_CURRENT_SOURCE_DIR}/${NAME}.ddl
+      DEPENDS 
+        ${CMAKE_CURRENT_SOURCE_DIR}/${NAME}.ddl
+        native-embedfile
+        native-ddlp
+      COMMENT "ddlp_e ${NAME}.ddl"
+    )
+    set (SOURCE_FILES ${SOURCE_FILES}
+        ${CMAKE_CURRENT_BINARY_DIR}/${NAME}.h
+        ${CMAKE_CURRENT_BINARY_DIR}/embed_${NAME}_dbd.c
+        ${CMAKE_CURRENT_BINARY_DIR}/embed_${NAME}_dbd.h
+        ${CMAKE_CURRENT_BINARY_DIR}/${NAME}.ddl.c
+        ${CMAKE_CURRENT_BINARY_DIR}/${NAME}.ddl.h
+    )
+  endforeach (NAME)
+endmacro (ddlp_e)
+
+macro (ddlp_c_d)
+  foreach (NAME ${ARGV})
+    add_custom_command (
+      OUTPUT
+        ${CMAKE_CURRENT_BINARY_DIR}/${NAME}.h
+        ${CMAKE_CURRENT_BINARY_DIR}/${NAME}_dbd.c
+        ${CMAKE_CURRENT_BINARY_DIR}/${NAME}_dbd.h
+      COMMAND native-ddlp -c -d -B -q -nd ${CMAKE_CURRENT_SOURCE_DIR}/${NAME}.ddl
+      DEPENDS 
+        ${CMAKE_CURRENT_SOURCE_DIR}/${NAME}.ddl
+        native-ddlp
+      COMMENT "ddlp_c_d ${NAME}.ddl"
+    )
+    set (SOURCE_FILES ${SOURCE_FILES}
+        ${CMAKE_CURRENT_BINARY_DIR}/${NAME}.h
+        ${CMAKE_CURRENT_BINARY_DIR}/${NAME}_dbd.c
+        ${CMAKE_CURRENT_BINARY_DIR}/${NAME}_dbd.h
+    )
+  endforeach (NAME)
+endmacro (ddlp_c_d)
+
+macro (ddlp_imp)
+  foreach (NAME ${ARGV})
+    add_custom_command (
+      OUTPUT
+        ${CMAKE_CURRENT_BINARY_DIR}/${NAME}.h
+      COMMAND native-ddlp -B -q -nd ${CMAKE_CURRENT_SOURCE_DIR}/${NAME}.ddl
+      COMMAND native-ddlp -docroot ${CMAKE_CURRENT_BINARY_DIR}/${CMAKE_CFG_INTDIR} -B -q -nh ${CMAKE_CURRENT_SOURCE_DIR}/${NAME}.ddl
+      COMMAND native-initdb -docroot ${CMAKE_CURRENT_BINARY_DIR}/${CMAKE_CFG_INTDIR} -B -q ${NAME}
+      COMMAND native-dbimp -docroot ${CMAKE_CURRENT_BINARY_DIR}/${CMAKE_CFG_INTDIR} -B -q ${CMAKE_CURRENT_SOURCE_DIR}/${NAME}.imp
+      DEPENDS 
+        ${CMAKE_CURRENT_SOURCE_DIR}/${NAME}.ddl
+        ${CMAKE_CURRENT_SOURCE_DIR}/${NAME}.imp
+        native-ddlp
+        native-initdb
+        native-dbimp
+      COMMENT "ddlp_imp ${NAME}.ddl ${NAME}.imp"
+    )
+    set (SOURCE_FILES ${SOURCE_FILES}
+        ${CMAKE_CURRENT_BINARY_DIR}/${NAME}.h
+    )
+  endforeach (NAME)
+endmacro (ddlp_imp)
+
+macro (ddlp_objc_c_e)
+  foreach (NAME ${ARGV})
+    add_custom_command (
+      OUTPUT
+        ${CMAKE_CURRENT_BINARY_DIR}/${NAME}.h
+        ${CMAKE_CURRENT_BINARY_DIR}/${NAME}_dbd.c
+        ${CMAKE_CURRENT_BINARY_DIR}/${NAME}_dbd.h
+        ${CMAKE_CURRENT_BINARY_DIR}/${NAME}_objc.m
+        ${CMAKE_CURRENT_BINARY_DIR}/${NAME}_objc.h
+        ${CMAKE_CURRENT_BINARY_DIR}/embed_${NAME}_dbd.c
+        ${CMAKE_CURRENT_BINARY_DIR}/embed_${NAME}_dbd.h
+        ${CMAKE_CURRENT_BINARY_DIR}/${NAME}.ddl.c
+        ${CMAKE_CURRENT_BINARY_DIR}/${NAME}.ddl.h
+      COMMAND native-embedfile -o ${NAME}.ddl ${CMAKE_CURRENT_SOURCE_DIR}/${NAME}.ddl
+      COMMAND native-ddlp -objc -e -B -q -nd ${CMAKE_CURRENT_SOURCE_DIR}/${NAME}.ddl
+      DEPENDS 
+        ${CMAKE_CURRENT_SOURCE_DIR}/${NAME}.ddl
+        native-embedfile
+        native-ddlp
+      COMMENT "ddlp_objc_c_e ${NAME}.ddl"
+    )
+    set (SOURCE_FILES ${SOURCE_FILES}
+        ${CMAKE_CURRENT_BINARY_DIR}/${NAME}.h
+        ${CMAKE_CURRENT_BINARY_DIR}/${NAME}_dbd.c
+        ${CMAKE_CURRENT_BINARY_DIR}/${NAME}_dbd.h
+        ${CMAKE_CURRENT_BINARY_DIR}/${NAME}_objc.m
+        ${CMAKE_CURRENT_BINARY_DIR}/${NAME}_objc.h
+        ${CMAKE_CURRENT_BINARY_DIR}/embed_${NAME}_dbd.c
+        ${CMAKE_CURRENT_BINARY_DIR}/embed_${NAME}_dbd.h
+        ${CMAKE_CURRENT_BINARY_DIR}/${NAME}.ddl.c
+        ${CMAKE_CURRENT_BINARY_DIR}/${NAME}.ddl.h
+    )
+  endforeach (NAME)
+endmacro (ddlp_objc_c_e)
+
+macro (rsql_ssp)
+  foreach (NAME ${ARGV})
+    add_custom_command (
+      OUTPUT
+        ${CMAKE_CURRENT_BINARY_DIR}/${NAME}.h
+        ${CMAKE_CURRENT_BINARY_DIR}/${NAME}_cat.c
+        ${CMAKE_CURRENT_BINARY_DIR}/${NAME}_cat.h
+        ${CMAKE_CURRENT_BINARY_DIR}/${NAME}_dbd.c
+        ${CMAKE_CURRENT_BINARY_DIR}/${NAME}_dbd.h
+        ${CMAKE_CURRENT_BINARY_DIR}/${NAME}_ssp.c
+        ${CMAKE_CURRENT_BINARY_DIR}/${NAME}_ssp.h
+      COMMAND native-rdmsql -B -q -c ${CMAKE_CURRENT_SOURCE_DIR}/${NAME}.sdl
+      DEPENDS 
+        ${CMAKE_CURRENT_SOURCE_DIR}/${NAME}.sdl
+        native-rdmsql
+      COMMENT "rsql_ssp ${NAME}.sdl"
+    )
+    set (SOURCE_FILES ${SOURCE_FILES}
+        ${CMAKE_CURRENT_BINARY_DIR}/${NAME}.h
+        ${CMAKE_CURRENT_BINARY_DIR}/${NAME}_cat.c
+        ${CMAKE_CURRENT_BINARY_DIR}/${NAME}_cat.h
+        ${CMAKE_CURRENT_BINARY_DIR}/${NAME}_dbd.c
+        ${CMAKE_CURRENT_BINARY_DIR}/${NAME}_dbd.h
+        ${CMAKE_CURRENT_BINARY_DIR}/${NAME}_ssp.c
+        ${CMAKE_CURRENT_BINARY_DIR}/${NAME}_ssp.h
+    )
+  endforeach (NAME)
+endmacro (rsql_ssp)
+
+macro (ddlp_objc_c_d_e)
+  foreach (NAME ${ARGV})
+    add_custom_command (
+      OUTPUT
+        ${CMAKE_CURRENT_BINARY_DIR}/${NAME}.h
+        ${CMAKE_CURRENT_BINARY_DIR}/${NAME}_dbd.c
+        ${CMAKE_CURRENT_BINARY_DIR}/${NAME}_dbd.h
+        ${CMAKE_CURRENT_BINARY_DIR}/${NAME}_objc.m
+        ${CMAKE_CURRENT_BINARY_DIR}/${NAME}_objc.h
+        ${CMAKE_CURRENT_BINARY_DIR}/embed_${NAME}_dbd.c
+        ${CMAKE_CURRENT_BINARY_DIR}/embed_${NAME}_dbd.h
+        ${CMAKE_CURRENT_BINARY_DIR}/${NAME}.ddl.c
+        ${CMAKE_CURRENT_BINARY_DIR}/${NAME}.ddl.h
+      COMMAND native-embedfile -o ${NAME}.ddl ${CMAKE_CURRENT_SOURCE_DIR}/${NAME}.ddl
+      COMMAND native-ddlp -objc -e -d -B -q -nd ${CMAKE_CURRENT_SOURCE_DIR}/${NAME}.ddl
+      DEPENDS 
+        ${CMAKE_CURRENT_SOURCE_DIR}/${NAME}.ddl
+        native-embedfile
+        native-ddlp
+      COMMENT "ddlp_objc_c_d_e ${NAME}.ddl"
+    )
+    set (SOURCE_FILES ${SOURCE_FILES}
+        ${CMAKE_CURRENT_BINARY_DIR}/${NAME}.h
+        ${CMAKE_CURRENT_BINARY_DIR}/${NAME}_dbd.c
+        ${CMAKE_CURRENT_BINARY_DIR}/${NAME}_dbd.h
+        ${CMAKE_CURRENT_BINARY_DIR}/${NAME}_objc.m
+        ${CMAKE_CURRENT_BINARY_DIR}/${NAME}_objc.h
+        ${CMAKE_CURRENT_BINARY_DIR}/embed_${NAME}_dbd.c
+        ${CMAKE_CURRENT_BINARY_DIR}/embed_${NAME}_dbd.h
+        ${CMAKE_CURRENT_BINARY_DIR}/${NAME}.ddl.c
+        ${CMAKE_CURRENT_BINARY_DIR}/${NAME}.ddl.h
+    )
+  endforeach (NAME)
+endmacro (ddlp_objc_c_d_e)
+
+macro (ddlp_d_dbd)
+  foreach (NAME ${ARGV})
+    add_custom_command (
+      OUTPUT
+        ${CMAKE_CURRENT_BINARY_DIR}/${NAME}.h
+      COMMAND native-ddlp -d -B -q -nd ${CMAKE_CURRENT_SOURCE_DIR}/${NAME}.ddl
+      COMMAND native-ddlp -docroot ${CMAKE_CURRENT_BINARY_DIR}/${CMAKE_CFG_INTDIR} -B -q -nh ${CMAKE_CURRENT_SOURCE_DIR}/${NAME}.ddl
+      COMMAND native-initdb -docroot ${CMAKE_CURRENT_BINARY_DIR}/${CMAKE_CFG_INTDIR} -B -q ${NAME}
+      DEPENDS 
+        ${CMAKE_CURRENT_SOURCE_DIR}/${NAME}.ddl
+        native-ddlp
+        native-initdb
+      COMMENT "ddlp_d_dbd ${NAME}.ddl"
+    )
+    set (SOURCE_FILES ${SOURCE_FILES}
+        ${CMAKE_CURRENT_BINARY_DIR}/${NAME}.h
+    )
+  endforeach (NAME)
+endmacro (ddlp_d_dbd)
+
+macro (ddlp)
+  foreach (NAME ${ARGV})
+    add_custom_command (
+      OUTPUT
+        ${CMAKE_CURRENT_BINARY_DIR}/${NAME}.h
+      COMMAND native-ddlp -B -q -nd ${CMAKE_CURRENT_SOURCE_DIR}/${NAME}.ddl
+      DEPENDS 
+        ${CMAKE_CURRENT_SOURCE_DIR}/${NAME}.ddl
+        native-ddlp
+      COMMENT "ddlp ${NAME}.ddl"
+    )
+    set (SOURCE_FILES ${SOURCE_FILES}
+        ${CMAKE_CURRENT_BINARY_DIR}/${NAME}.h
+    )
+  endforeach (NAME)
+endmacro (ddlp)
+
+macro (embed_b)
+  foreach (NAME ${ARGV})
+    add_custom_command (
+      OUTPUT
+        ${CMAKE_CURRENT_BINARY_DIR}/${NAME}.c
+        ${CMAKE_CURRENT_BINARY_DIR}/${NAME}.h
+      COMMAND native-embedfile -b -o ${NAME} ${CMAKE_CURRENT_SOURCE_DIR}/${NAME}
+      DEPENDS 
+        ${CMAKE_CURRENT_SOURCE_DIR}/${NAME}
+        native-embedfile
+      COMMENT "embed_b ${NAME}"
+    )
+    set (SOURCE_FILES ${SOURCE_FILES}
+        ${CMAKE_CURRENT_BINARY_DIR}/${NAME}.c
+        ${CMAKE_CURRENT_BINARY_DIR}/${NAME}.h
+    )
+  endforeach (NAME)
+endmacro (embed_b)
+
+macro (ddlp_c_d_e)
+  foreach (NAME ${ARGV})
+    add_custom_command (
+      OUTPUT
+        ${CMAKE_CURRENT_BINARY_DIR}/${NAME}.h
+        ${CMAKE_CURRENT_BINARY_DIR}/${NAME}_dbd.c
+        ${CMAKE_CURRENT_BINARY_DIR}/${NAME}_dbd.h
+        ${CMAKE_CURRENT_BINARY_DIR}/embed_${NAME}_dbd.c
+        ${CMAKE_CURRENT_BINARY_DIR}/embed_${NAME}_dbd.h
+        ${CMAKE_CURRENT_BINARY_DIR}/${NAME}.ddl.c
+        ${CMAKE_CURRENT_BINARY_DIR}/${NAME}.ddl.h
+      COMMAND native-embedfile -o ${NAME}.ddl ${CMAKE_CURRENT_SOURCE_DIR}/${NAME}.ddl
+      COMMAND native-ddlp -c -d -e -B -q -nd ${CMAKE_CURRENT_SOURCE_DIR}/${NAME}.ddl
+      DEPENDS 
+        ${CMAKE_CURRENT_SOURCE_DIR}/${NAME}.ddl
+        native-embedfile
+        native-ddlp
+      COMMENT "ddlp_c_d_e ${NAME}.ddl"
+    )
+    set (SOURCE_FILES ${SOURCE_FILES}
+        ${CMAKE_CURRENT_BINARY_DIR}/${NAME}.h
+        ${CMAKE_CURRENT_BINARY_DIR}/${NAME}_dbd.c
+        ${CMAKE_CURRENT_BINARY_DIR}/${NAME}_dbd.h
+        ${CMAKE_CURRENT_BINARY_DIR}/embed_${NAME}_dbd.c
+        ${CMAKE_CURRENT_BINARY_DIR}/embed_${NAME}_dbd.h
+        ${CMAKE_CURRENT_BINARY_DIR}/${NAME}.ddl.c
+        ${CMAKE_CURRENT_BINARY_DIR}/${NAME}.ddl.h
+    )
+  endforeach (NAME)
+endmacro (ddlp_c_d_e)

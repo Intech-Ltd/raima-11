@@ -1,0 +1,440 @@
+<?xml version="1.0" encoding="utf-8"?>
+<!DOCTYPE html PUBLIC "-//W3C//DTD XHTML 1.0 Strict//EN" "http://www.w3.org/TR/xhtml1/DTD/xhtml1-strict.dtd">
+<html xmlns:MadCap="http://www.madcapsoftware.com/Schemas/MadCap.xsd" MadCap:tocPath="Utility Programs|Interactive Database Access Utility" MadCap:InPreviewMode="false" MadCap:PreloadImages="false" MadCap:RuntimeFileType="Topic" MadCap:TargetType="WebHelp" lang="en-us" xml:lang="en-us" class="" MadCap:PathToHelpSystem="../../../" MadCap:HelpSystemFileName="Default.xml" MadCap:SearchType="Stem">
+    <head>
+        <meta http-equiv="Content-Type" content="text/html; charset=utf-8" /><title>Entering and Modifying Records </title>
+        <link rel="icon" type="image/png" href="http://docs.raima.com/favicon.png" />
+        <link href="../../SkinSupport/MadCap.css" rel="stylesheet" />
+        <link href="../../Resources/Stylesheets/raima.css" rel="stylesheet" />
+        <script src="../../SkinSupport/MadCapAll.js" type="text/javascript">
+        </script>
+    </head>
+    <body>
+        <p class="MCWebHelpFramesetLink MCWebHelpFramesetLinkTop" style="display: none;"><a href="../../../Default_CSH.htm#util/ida/Chapter3.htm" style="">Open topic with navigation</a>
+        </p>
+        <div class="MCBreadcrumbsBox_0"><span class="MCBreadcrumbsPrefix">You are here: </span><a class="MCBreadcrumbsLink" href="../../dbUTIL.htm">Utility Programs</a><span class="MCBreadcrumbsDivider"> &gt; </span><span class="MCBreadcrumbsSelf">Interactive Database Access Utility</span><span class="MCBreadcrumbsDivider"> &gt; </span><span class="MCBreadcrumbs">Entering and Modifying Records</span>
+        </div>
+        <h1 class="firstHeading">Entering and Modifying Records </h1>
+        <p>To edit or modify a database record, you use the <code>Display/Edit Record</code> submenu. <a href="#8.3.1">Accessing the Display/Edit Record Submenu</a> provides information about the commands on the <code>Display/Edit Record</code> submenu. <a href="#8.3.2">Using the Display/Edit Record Submenu Commands</a> gives instructions for editing a data field and <a href="#8.3.3">Editing a Data Field</a> provides information about <code>ida</code>'s editing modes and describes  field editing commands. </p>
+        <h2><a name="8.3.1"></a>3.1 Accessing the Display/Edit Record Submenu </h2>
+        <p>To access an existing record with the Display/Edit submenu: </p>
+        <ul>
+            <li value="1">Open the database you want. </li>
+            <li value="2">Access the <code>Database Access Commands</code> and <code>Record</code> submenus. </li>
+            <li value="3">Select a record from the database. You may use the <code>Keyscan</code>, <code>Get</code>, or <code>Recscan</code> options to select a record. The record will be made the current record. </li>
+            <li value="4">From the <code>Record Manipulation Functions</code> submenu (Figure 8-4), select <code>Modify</code> to display the <code>Display/Edit Record</code> submenu. </li>
+        </ul>
+        <p>When the <code>Display/Edit Record</code> submenu is accessed, the current record is displayed. Header information identifies the name of the record, its length in bytes, the total number of data fields that can be edited, the current page number, and total pages of data fields for the record. </p>
+        <p>Following the header is the first page of fields. The name of the data field appears on the left, its contents appear on the right. An example display is shown in Figure 8-7 below. </p><pre xml:space="preserve"><b>Display/Edit Record</b>
+Edit Init Next Prev Write Store_key Delete_key Owner Connect X_Exit 
+Edit record 
+
+RECORD: INFO       SIZE: 220   TOTAL FIELDS: 5            PAGE 1 OF 1 
+
+ID_CODE            &gt;sw001&lt; 
+INFO_TITLE         &gt;Software Reliability Principles &amp; Practices&lt; 
+PUBLISHER          &gt;Wiley-Interscience&lt; 
+PUB_DATE           &gt;1976&lt; 
+INFO_TYPE          &gt;0&lt; </pre>
+        <p class="Caption"><b>Fig. 8-7. An Example Display/Edit Record Screen</b>
+        </p>
+        <p>To create a new record with the Display/Edit submenu: </p>
+        <ul>
+            <li value="1">Open the database you want. </li>
+            <li value="2">Access the <code>Database Access Commands</code> and <code>Record</code> submenus. </li>
+            <li value="3">Select the <code>Enter</code> submenu and select a record type from the list. </li>
+            <li value="4">The <code>Display/Edit</code> submenu will show the record information (as in Figure 8-7) with empty field contents. </li>
+        </ul>
+        <p>A field can be edited if it is not the sub-field of a <code>struct</code>. Select the <code>Edit</code> submenu command to change individual field contents. </p>
+        <h2><a name="8.3.2"></a>3.2 Using the Display/Edit Record Submenu Commands </h2>
+        <p>Figure 8-8 shows the <code>Display/Edit Record</code> submenu commands. </p><pre xml:space="preserve"><b>Display/Edit Record</b>
+Edit Init Next Prev Write Store_key Delete_key Owner Connect X_exit</pre>
+        <p class="Caption"><b>Fig. 8-8. The Display/Edit Record Submenu</b>
+        </p>
+        <p>The first line is the menu title, and the second line lists the menu commands. This section describes each of these commands. </p>
+        <p class="Heading">Edit command </p>
+        <p>Selecting this command invokes field-level editing of the displayed record. The field edit commands are listed in Table 8-2. The first field is highlighted and displayed in the data field edit area. Field editing is initially entered in Command mode. For information about <code>ida</code> editing modes, see <a href="#8.3.4">Using Edit Modes and Field Edit Commands</a>. </p>
+        <p class="Heading">Init command </p>
+        <p>Use this command to initialize a new record. Selecting this command clears the displayed record and enters field editing (see <a href="#8.3.4">Using Edit Modes and Field Edit Commands</a>) in Insert mode. </p>
+        <p class="Heading">Next command </p>
+        <p>If the displayed record type consists of more data fields than can be shown on one screen, this command can be used to display the next page of fields. Note that when entering data, each page of data fields must be entered before the record is stored. Use the Next command to access each page. </p>
+        <p class="Heading">Prev command </p>
+        <p>Selecting this command displays the previous page of data fields. Each page of data fields must be entered before the record is stored. </p>
+        <p class="Heading">Write command </p>
+        <p>Selecting this command writes the entered or modified record to the database. If the automatic set connection feature is enabled, then the record will also be connected to each set of which it is a member and for which a current owner has previously been set. </p>
+        <p class="Heading">Store_key command </p>
+        <p>This command is used to store optional keys in the key file. A selection list of optional keys will be displayed. Select the one to be stored for the current record. </p>
+        <p class="Heading">Delete_key command </p>
+        <p>This command is used to delete optional keys from the key file. A selection list of optional keys will be displayed. Select the one to be deleted from the current record. </p>
+        <p class="Heading">Owner command </p>
+        <p>This command is used to assign, from the current record, the current owner of the selected set. It is provided here to facilitate data entry. Note that all sets are listed, but not all sets will allow the current record to be the owner record. </p>
+        <p class="Heading">Connect command </p>
+        <p>Selecting this command connects the current record to the set selected from the displayed list of sets. It is provided here to facilitate data entry. Note that all sets are listed, but not all sets will allow the current record to be a member record. To succeed, the current record must be of the correct type, must not already be connected to the set, and a current owner for the set instance must already be established. </p>
+        <h2><a name="8.3.3"></a>3.3 Editing a Data Field </h2>
+        <p>In the <code>Display/Edit Record</code> submenu, selecting the Edit or the Init command allows you to edit a record one data field at a time. <code>ida</code> editing incorporates many of the VI editor commands (see Table 8-2). </p>
+        <p>All editing is performed in the editing field. Just above the editing field, the name of the field being edited is displayed. If this field already contains data, the data will be displayed in the editing field. Arrows on either end of the editing field point inward if all the data in the field fits on the screen, or outward in the direction where more data can be found. The entire contents of the field are accessed by horizontally scrolling or repositioning through the field, using cursor-positioning field edit commands. </p>
+        <p>You can move to different data fields by using the up and down arrow keys, or by pressing &lt;Enter&gt; to move to the next field. Pressing &lt;Enter&gt; on the last field, or pressing &lt;Esc&gt; at any point, will return you to the <code>Display/Edit Record</code> submenu. </p>
+        <p>The format of the displayed data is similar to the format that would be used if the data were statically initialized in a C variable declaration. Each item of an arrayed (non- string) data field is separated by commas and specified in its natural sequence. Structure fields must be enclosed by braces ({ }). Character strings do not need to be delimited by quotation marks except when included as part of a struct field. Sub-fields of struct fields cannot be edited independently and, in fact, they are displayed only in the struct field. All C escape codes (for example, <code>\n, \f, \r, \ddd</code>) can be entered into character fields. </p>
+        <p>One-dimensional character arrays are always treated as strings, terminated by a null byte (\0). Multi-dimensional character arrays will display the entire length of the field. </p>
+        <p>Fields of type DB_ADDR are displayed and entered as [<code>f :r</code>], where f is the file number and r is the record number. As an example, [<code>3:11717</code>] is the database address of the record located at slot number 11717 in file number 3. </p>
+        <p>Repeating data items in arrayed data fields are indicated with a <code>d*</code> prefix where <code>d</code> is the decimal number of repetitions and "*" indicates a repeating field. </p>
+        <p>The following table lists some examples of the above requirements. </p>
+        <table class="errcode_table" style="caption-side: top;border-left-style: solid;border-left-width: 1px;border-left-color: #c0c0c0;border-right-style: solid;border-right-width: 1px;border-right-color: #c0c0c0;border-top-style: solid;border-top-width: 1px;border-top-color: #c0c0c0;border-bottom-style: solid;border-bottom-width: 1px;border-bottom-color: #c0c0c0;border-collapse: collapse;margin-left: 0;margin-right: auto;">
+            <caption>Table 8-1. Example Data Field Contents</caption>
+            <col />
+            <col />
+            <tr>
+                <th>
+                    <p>Field Spec </p>
+                </th>
+                <th>
+                    <p>Display </p>
+                </th>
+            </tr>
+            <tr>
+                <td><pre>char str[255]; </pre>
+                </td>
+                <td>
+                    <p>This needs to be scrolled to see the &gt; </p>
+                </td>
+            </tr>
+            <tr>
+                <td><pre>int array[10]; </pre>
+                </td>
+                <td>
+                    <p>&gt;12,15,312,74,5,5*0&lt; </p>
+                </td>
+            </tr>
+            <tr>
+                <td><pre>struct { 
+  char name[15]; 
+  int age; 
+} children[7]; </pre>
+                </td>
+                <td>
+                    <p>&gt;{"Joelle",6},{"Rebecca",4},{"Scott",2},{"K&amp; &gt; </p>
+                </td>
+            </tr>
+            <tr>
+                <td><pre>DB_ADDR tree[2]; </pre>
+                </td>
+                <td>
+                    <p>&gt;[2:1377],[2:1381]&lt; </p>
+                </td>
+            </tr>
+            <tr>
+                <td><pre>char lines[10][10] </pre>
+                </td>
+                <td>
+                    <p>&gt;line 1\n\0\0\0line 2\n\0\0\0line3\n\&gt; </p>
+                </td>
+            </tr>
+        </table>
+        <h2><a name="8.3.4"></a>3.4 Using Edit Modes and Field Edit Commands </h2>
+        <p>The current editing mode is shown in the upper right corner of the screen. There are three modes: </p>
+        <p><i>Command mode</i>: Indicates that the field edit commands are enabled. (Table 8-2 lists edit commands available in Command mode.) Insert mode:  Initiated by the <code>i</code>, <code>a</code>, and <code>A</code> commands. Allows data to be inserted into the field. Pressing &lt;Esc&gt; returns to Command mode. </p>
+        <p><i>Replace mode</i>: R command. Allows a type-over capability, where characters under the cursor are replaced by those typed at the keyboard. Pressing &lt;Esc&gt; returns to Command mode. </p>
+        <table class="errcode_table" style="caption-side: top;border-left-style: solid;border-left-width: 1px;border-left-color: #c0c0c0;border-right-style: solid;border-right-width: 1px;border-right-color: #c0c0c0;border-top-style: solid;border-top-width: 1px;border-top-color: #c0c0c0;border-bottom-style: solid;border-bottom-width: 1px;border-bottom-color: #c0c0c0;border-collapse: collapse;margin-left: 0;margin-right: auto;">
+            <caption>Table 8-2. <code>ida</code> Field Edit Commands and Descriptions</caption>
+            <col style="width: 100px;" />
+            <col />
+            <tr>
+                <th>
+                    <p>Command </p>
+                </th>
+                <th>
+                    <p>Description </p>
+                </th>
+            </tr>
+            <tr>
+                <td>
+                    <p>i </p>
+                </td>
+                <td>
+                    <p>Insert characters before the cursor. </p>
+                </td>
+            </tr>
+            <tr>
+                <td>
+                    <p>a </p>
+                </td>
+                <td>
+                    <p>Append characters after the cursor. </p>
+                </td>
+            </tr>
+            <tr>
+                <td>
+                    <p>A </p>
+                </td>
+                <td>
+                    <p>Append characters to the end of the field. </p>
+                </td>
+            </tr>
+            <tr>
+                <td>
+                    <p>r </p>
+                </td>
+                <td>
+                    <p>Replace one character. </p>
+                </td>
+            </tr>
+            <tr>
+                <td>
+                    <p>R </p>
+                </td>
+                <td>
+                    <p>Replace (types over) existing characters. </p>
+                </td>
+            </tr>
+            <tr>
+                <td>
+                    <p>h </p>
+                </td>
+                <td>
+                    <p>Move the cursor one character to the left. </p>
+                </td>
+            </tr>
+            <tr>
+                <td>
+                    <p>l </p>
+                </td>
+                <td>
+                    <p>Move the cursor one character to the right. </p>
+                </td>
+            </tr>
+            <tr>
+                <td>
+                    <p>w </p>
+                </td>
+                <td>
+                    <p>Move the cursor forward one "small" word, delimited by anything other than letters, digits, or underscores. </p>
+                </td>
+            </tr>
+            <tr>
+                <td>
+                    <p>W </p>
+                </td>
+                <td>
+                    <p>Move cursor forward one "big" word, delimited by spaces. </p>
+                </td>
+            </tr>
+            <tr>
+                <td>
+                    <p>b </p>
+                </td>
+                <td>
+                    <p>Move the cursor back one small word. </p>
+                </td>
+            </tr>
+            <tr>
+                <td>
+                    <p>B </p>
+                </td>
+                <td>
+                    <p>Move the cursor back one big word. </p>
+                </td>
+            </tr>
+            <tr>
+                <td>
+                    <p>^ </p>
+                </td>
+                <td>
+                    <p>Position the cursor at the beginning of the field. </p>
+                </td>
+            </tr>
+            <tr>
+                <td>
+                    <p>$ </p>
+                </td>
+                <td>
+                    <p>Position the cursor at the end of the field. </p>
+                </td>
+            </tr>
+            <tr>
+                <td>
+                    <p>x </p>
+                </td>
+                <td>
+                    <p>Delete the character beneath the cursor. </p>
+                </td>
+            </tr>
+            <tr>
+                <td>
+                    <p>u </p>
+                </td>
+                <td>
+                    <p>Undo the last change. </p>
+                </td>
+            </tr>
+            <tr>
+                <td>
+                    <p>f&lt;c&gt; </p>
+                </td>
+                <td>
+                    <p>Find the next occurrence of character &lt;c&gt; to the right. </p>
+                </td>
+            </tr>
+            <tr>
+                <td>
+                    <p>F&lt;c&gt;</p>
+                </td>
+                <td>
+                    <p>Find the next occurrence of character &lt;c&gt; to the left.</p>
+                </td>
+            </tr>
+            <tr>
+                <td colspan="2">
+                    <p>Additionally, some field edit commands can be preceded by a command repetition number. These commands are: <code>h, l, w, W, b, B, x, f</code>, and <code>F</code>. For example typing <code>30h</code> moves the cursor 30 characters to the left.</p>
+                    <p>Table 8-3 lists the function keys (if available on your keyboard), that have been assigned the above edit commands.</p>
+                    <table class="errcode_table" style="border-left-style: solid;border-left-width: 1px;border-left-color: #c0c0c0;border-right-style: solid;border-right-width: 1px;border-right-color: #c0c0c0;border-top-style: solid;border-top-width: 1px;border-top-color: #c0c0c0;border-bottom-style: solid;border-bottom-width: 1px;border-bottom-color: #c0c0c0;border-collapse: collapse;margin-left: 0;margin-right: auto;">
+                        <col style="width: 100px;" />
+                        <col />
+                        <tr>
+                            <th>
+                                <p>Command</p>
+                            </th>
+                            <th>
+                                <p>Function Key</p>
+                            </th>
+                        </tr>
+                        <tr>
+                            <td>
+                                <p>h</p>
+                            </td>
+                            <td>
+                                <p>&lt;Left Arrow&gt;</p>
+                            </td>
+                        </tr>
+                        <tr>
+                            <td>
+                                <p>l</p>
+                            </td>
+                            <td>
+                                <p>&lt;Right Arrow&gt;</p>
+                            </td>
+                        </tr>
+                        <tr>
+                            <td>
+                                <p>^</p>
+                            </td>
+                            <td>
+                                <p>&lt;Home&gt;</p>
+                            </td>
+                        </tr>
+                        <tr>
+                            <td>
+                                <p>$</p>
+                            </td>
+                            <td>
+                                <p>&lt;End&gt;</p>
+                            </td>
+                        </tr>
+                        <tr>
+                            <td>
+                                <p>i</p>
+                            </td>
+                            <td>
+                                <p>&lt;Ins&gt;</p>
+                            </td>
+                        </tr>
+                        <tr>
+                            <td>
+                                <p>x</p>
+                            </td>
+                            <td>
+                                <p>&lt;Del&gt;</p>
+                            </td>
+                        </tr>
+                        <tr>
+                            <td>
+                                <p>u</p>
+                            </td>
+                            <td>
+                                <p>&lt;F1&gt;</p>
+                            </td>
+                        </tr>
+                        <tr>
+                            <td>
+                                <p>;</p>
+                            </td>
+                            <td>
+                                <p>&lt;F2&gt;</p>
+                            </td>
+                        </tr>
+                        <tr>
+                            <td>
+                                <p>W </p>
+                            </td>
+                            <td>
+                                <p>&lt;F3&gt;</p>
+                            </td>
+                        </tr>
+                        <tr>
+                            <td>
+                                <p>w</p>
+                            </td>
+                            <td>
+                                <p>&lt;F4&gt;</p>
+                            </td>
+                        </tr>
+                        <tr>
+                            <td>
+                                <p>B </p>
+                            </td>
+                            <td>
+                                <p>&lt;F5&gt;</p>
+                            </td>
+                        </tr>
+                        <tr>
+                            <td>
+                                <p>b</p>
+                            </td>
+                            <td>
+                                <p>&lt;F6&gt;</p>
+                            </td>
+                        </tr>
+                        <tr>
+                            <td>
+                                <p>R</p>
+                            </td>
+                            <td>
+                                <p>&lt;F7&gt;</p>
+                            </td>
+                        </tr>
+                        <tr>
+                            <td>
+                                <p>r</p>
+                            </td>
+                            <td>
+                                <p>&lt;F8&gt;</p>
+                            </td>
+                        </tr>
+                        <tr>
+                            <td>
+                                <p>A</p>
+                            </td>
+                            <td>
+                                <p>&lt;F9&gt;</p>
+                            </td>
+                        </tr>
+                        <tr>
+                            <td>
+                                <p>a</p>
+                            </td>
+                            <td>
+                                <p>&lt;F10&gt;</p>
+                            </td>
+                        </tr>
+                    </table>
+                </td>
+            </tr>
+        </table>
+        <hr MadCap:conditions="Default.ScreenOnly" width="100%" size="0" align="center" />
+        <p MadCap:conditions="Default.ScreenOnly" style="font-size: 8pt;"><span class="MyVariablesCopyright">Copyright © 2012, Raima Inc. All rights reserved.</span>
+        </p>
+        <script type="text/javascript" src="../../SkinSupport/MadCapBodyEnd.js">
+        </script>
+        <p class="MCWebHelpFramesetLink MCWebHelpFramesetLinkBottom" style="display: none;"><a href="../../../Default_CSH.htm#util/ida/Chapter3.htm" style="">Open topic with navigation</a>
+        </p>
+    </body>
+</html>

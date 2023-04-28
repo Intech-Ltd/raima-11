@@ -1,0 +1,251 @@
+<?xml version="1.0" encoding="utf-8"?>
+<!DOCTYPE html PUBLIC "-//W3C//DTD XHTML 1.0 Strict//EN" "http://www.w3.org/TR/xhtml1/DTD/xhtml1-strict.dtd">
+<html xmlns:MadCap="http://www.madcapsoftware.com/Schemas/MadCap.xsd" MadCap:tocPath="SQL API|RSQL User's Guide|RSQL API Function Reference" MadCap:InPreviewMode="false" MadCap:PreloadImages="false" MadCap:RuntimeFileType="Topic" MadCap:TargetType="WebHelp" lang="en-us" xml:lang="en-us" MadCap:PathToHelpSystem="../../" MadCap:HelpSystemFileName="Default.xml" MadCap:SearchType="Stem">
+    <head>
+        <meta http-equiv="Content-Type" content="text/html; charset=utf-8" /><title>rsqlGetData</title>
+        <link rel="icon" type="image/png" href="http://docs.raima.com/favicon.png" />
+        <link href="../SkinSupport/MadCap.css" rel="stylesheet" />
+        <link href="../Resources/TableStyles/FunctionArgs.css" rel="stylesheet" />
+        <link href="../Resources/TableStyles/SQLErrorCodes.css" rel="stylesheet" />
+        <link href="../Resources/Stylesheets/raima.css" rel="stylesheet" />
+        <script src="../SkinSupport/MadCapAll.js" type="text/javascript">
+        </script>
+    </head>
+    <body>
+        <p class="MCWebHelpFramesetLink MCWebHelpFramesetLinkTop" style="display: none;"><a href="../../Default_CSH.htm#SQLRM/rsqlGetData.htm" style="">Open topic with navigation</a>
+        </p>
+        <div class="MCBreadcrumbsBox_0"><span class="MCBreadcrumbsPrefix">You are here: </span><a class="MCBreadcrumbsLink" href="../dbRSQL.htm">SQL API</a><span class="MCBreadcrumbsDivider"> &gt; </span><a class="MCBreadcrumbsLink" href="../RSQLUG/dbSQLUG.htm">RSQL User's Guide</a><span class="MCBreadcrumbsDivider"> &gt; </span><a class="MCBreadcrumbsLink" href="SQLAPIReference.htm">RSQL API Function Reference</a><span class="MCBreadcrumbsDivider"> &gt; </span><span class="MCBreadcrumbs">rsqlGetData</span>
+        </div>
+        <h3 class="newpage"><a name="kanchor282"></a>rsqlGetData</h3>
+        <p>Get the value for one of the <b>select</b> statement result set columns</p>
+        <p class="Heading">Prototype</p><pre xml:space="preserve">RSQL_ERRCODE EXTERNAL_FCN rsqlGetData(
+    HSTMT              hStmt,
+    uint16_t           colno,    
+    const RSQL_VALUE **pResult,
+    uint32_t           maxlen,
+    uint32_t          *pRemlen)
+</pre>
+        <p class="Heading">Arguments</p>
+        <table style="width: 100%;mc-table-style: url('../Resources/TableStyles/FunctionArgs.css');margin-left: 0;margin-right: auto;" class="TableStyle-FunctionArgs" cellspacing="0">
+            <col class="Column-Column1">
+            </col>
+            <col class="Column-Column3">
+            </col>
+            <col class="Column-Column2">
+            </col>
+            <tbody>
+                <tr class="Body-Body1">
+                    <td class="BodyE-Column1-Body1">hStmt </td>
+                    <td class="BodyE-Column3-Body1">(input)</td>
+                    <td class="BodyD-Column2-Body1">Statement handle associated with the select statement whose rows are currently being fetched (<code>rsqlFetch</code>).</td>
+                </tr>
+                <tr class="Body-Body1">
+                    <td class="BodyE-Column1-Body1">colno</td>
+                    <td class="BodyE-Column3-Body1">(input)</td>
+                    <td class="BodyD-Column2-Body1">The number of the result set column whose value is to be returned (beginning at 1).</td>
+                </tr>
+                <tr class="Body-Body1">
+                    <td class="BodyE-Column1-Body1">pResult </td>
+                    <td class="BodyE-Column3-Body1">(output)</td>
+                    <td class="BodyD-Column2-Body1">A pointer to a <code>RSQL_VALUE</code> pointer variable into which a pointer to the column result value will be returned.</td>
+                </tr>
+                <tr class="Body-Body1">
+                    <td class="BodyE-Column1-Body1">maxlen</td>
+                    <td class="BodyE-Column3-Body1">(input)</td>
+                    <td class="BodyD-Column2-Body1">The maximum size in bytes of the amount of blob data to be read.</td>
+                </tr>
+                <tr class="Body-Body1">
+                    <td class="BodyB-Column1-Body1">pRemlen</td>
+                    <td class="BodyB-Column3-Body1">(output)</td>
+                    <td class="BodyA-Column2-Body1">The amount of blob data that was remains to be read at the time the function is called.</td>
+                </tr>
+            </tbody>
+        </table>
+        <p class="Heading">Description</p>
+        <p>Function <code>rsqlGetData</code> can be used to return the currently fetched value of any column from the <b>select</b> statement result set whose rows are currently being fetched via calls to <code>rsqlFetch</code>. While it can be called for columns of any data type it is primarily designed to be used to retrieve blob (<b>long varchar</b>, <b>long wvarchar</b>, <b>long varbinary</b>) data values which may require multiple calls to <code>rsqlGetData</code> in order to retrieve particularly large blob data values.</p>
+        <p>The <b>select</b> statement result column whose data is to be returned is specified by the column number, <code>colno</code> which must be a value between 1 and the number of result columns in the <b>select</b> statement.</p>
+        <p>The <code>pResult</code> argument is a pointer to a <code>RSQL_VALUE</code> pointer variable that will contain a pointer to the result value container.  Access to the actual data value is through this container based on its result data type.  For example, for blob data current access data is found in the <code>*pResult-&gt;vt.lvv LONGVAR struct</code> where <code>*pResult-&gt;vt.lvv.buf</code> is a pointer to the blob data value of number of bytes.  Note that for <b>long varchar</b> or <b>long wvarchar</b> blob data, the entire blob value is considered to be a single string so that the null terminator will only be the last byte returned by the final call to <code>rsqlGetData</code>.</p>
+        <p>The <code>maxlen</code> argument specifies the maximum number of bytes of blob data to be returned at a time.  An application would typically allocate a buffer of size <code>maxlen</code> and then after calling <code>rsqlGetData</code> do a <code>memcpy</code> of <code>pResult-&gt;len</code> bytes from <code>*result-&gt;vt.lvv.buf</code> into the allocated buffer.</p>
+        <p>The amount of blob data that remains to be read at the time of the call is output to the <code>uint32_t</code> variable pointed to by the <code>pRemlen</code> argument. This allows you to make an initial call <code>rsqlGetData</code> passing a <code>NULL</code> for <code>pResult</code> but with a valid <code>pRemlen</code> argument in order to discover the actual size of the blob data that can guide whether or not you need to fetch the blob in blocks.</p>
+        <p>When making multiple calls to <code>rsqlGetData</code> to retrieve large blob data values a "chunk" at a time you should continue the function calls, processing <code>pResult-&gt;len</code> amount of data each time, until either <code>rsqlGetData</code> returns status <code>errNOMOREDATA</code> or <code>*Remlen = 0</code>.</p>
+        <p>Access to the column value in the RSQL_VALUE&#160;container is described in the <a href="../SQL/Chapter11.htm#RSQL_VALUE">SQL&#160;Data Types</a> section of the SQL&#160;User Guide.</p>
+        <p class="Heading">Example</p><pre xml:space="preserve">#include "rsql.h"
+    ...
+HSTMT        hstmt;
+    ...
+
+static void DisplayAuthors()
+{
+    RSQL_RESULT *val;
+    char         biobuf[66];
+    uint32_t     len_left;
+	
+    rsqlExecDirect(hstmt, "select full_name, short_bio from author");
+    while ( rsqlFetch(hstmt, NULL, NULL) == errSUCCESS ) {
+	 /* get and display author's full name string */
+        rsqlGetData(hstmt, 1, &amp;val, 0, NULL);
+        printf("Author name: %s\nShort bio  : ", val-&gt;vt.cv);
+
+        /* get author's bio a chunk at a time */
+        while ( rsqlGetData(hstmt, 2, &amp;val, 65, &amp;len_left) == errSUCCESS ) {
+            if ( val-&gt;type == tNULL || len_left == 0 )
+                break;  /* no short_bio was entered */
+
+            /* copy blob data block and add the null terminator */
+            memcpy(biobuf, val-&gt;vt.lvv.buf, val-&gt;len);
+            biobuf[val-&gt;len] = '\0';
+            printf("            : %s\n", biobuf);
+        }
+    }
+}
+    ...		
+</pre>
+        <p class="Heading">SQL&#160;User's Guide</p>
+        <p><a href="../SQL/Chapter11.htm#Retrievi">Retrieving Select Statement Results</a>
+        </p>
+        <p><a href="../SQL/Chapter11.htm#Retrievi2">Retrieving Blob Data Values</a>
+        </p>
+        <p class="Heading">Required Headers</p><pre xml:space="preserve">#include "rsql.h"</pre>
+        <p class="Heading">Libraries</p>
+        <table style="width: 100%; margin-left: 0; margin-right: auto;">
+            <col style="width: 200px;">
+            </col>
+            <col>
+            </col>
+            <thead>
+                <tr>
+                    <th>Library Name</th>
+                    <th>Description</th>
+                </tr>
+            </thead>
+            <tbody>
+                <tr>
+                    <td><code>rdmrsql<span class="MyVariablesLibraryVersion">11</span></code>
+                    </td>
+                    <td>RSQL&#160;API Library</td>
+                </tr>
+            </tbody>
+        </table>
+        <p>See <a href="../GS/distrib.htm#Library">Library Naming Conventions</a> section for full library name and a list of library dependencies.</p>
+        <p class="Heading">Return Codes</p>
+        <table class="TableStyle-SQLErrorCodes" cellspacing="0" style="mc-table-style: url('../Resources/TableStyles/SQLErrorCodes.css');">
+            <col class="Column-Column1" />
+            <col class="Column-Column2" />
+            <col class="Column-Column3" />
+            <col class="Column-Column4" />
+            <tbody>
+                <tr class="Body-Body1">
+                    <th class="BodyB-Column1-Body1" style="font-weight: bold;">Error Code</th>
+                    <th class="BodyB-Column2-Body1" style="font-weight: bold;">Enum Identifier</th>
+                    <th class="BodyB-Column3-Body1" style="font-weight: bold;">SQL State</th>
+                    <th class="BodyA-Column4-Body1" style="font-weight: bold;">Description</th>
+                </tr>
+            </tbody>
+        </table>
+        <table class="TableStyle-SQLErrorCodes" cellspacing="0" style="mc-table-style: url('../Resources/TableStyles/SQLErrorCodes.css');">
+            <col class="Column-Column1" />
+            <col class="Column-Column2" />
+            <col class="Column-Column3" />
+            <col class="Column-Column4" />
+            <tbody>
+                <tr class="Body-Body1">
+                    <td class="BodyB-Column1-Body1">0</td>
+                    <td class="BodyB-Column2-Body1">errSUCCESS</td>
+                    <td class="BodyB-Column3-Body1">00000</td>
+                    <td class="BodyA-Column4-Body1">no error was detected</td>
+                </tr>
+            </tbody>
+        </table>
+        <table class="TableStyle-SQLErrorCodes" cellspacing="0" style="mc-table-style: url('../Resources/TableStyles/SQLErrorCodes.css');">
+            <col class="Column-Column1" />
+            <col class="Column-Column2" />
+            <col class="Column-Column3" />
+            <col class="Column-Column4" />
+            <tbody>
+                <tr class="Body-Body1">
+                    <td class="BodyB-Column1-Body1">-1</td>
+                    <td class="BodyB-Column2-Body1">errNOMOREDATA</td>
+                    <td class="BodyB-Column3-Body1">02000</td>
+                    <td class="BodyA-Column4-Body1">no more data</td>
+                </tr>
+            </tbody>
+        </table>
+        <table class="TableStyle-SQLErrorCodes" cellspacing="0" style="mc-table-style: url('../Resources/TableStyles/SQLErrorCodes.css');">
+            <col class="Column-Column1" />
+            <col class="Column-Column2" />
+            <col class="Column-Column3" />
+            <col class="Column-Column4" />
+            <tbody>
+                <tr class="Body-Body1">
+                    <td class="BodyB-Column1-Body1">-5</td>
+                    <td class="BodyB-Column2-Body1">errINVHANDLE</td>
+                    <td class="BodyB-Column3-Body1">02002</td>
+                    <td class="BodyA-Column4-Body1">invalid connection or statement handle</td>
+                </tr>
+            </tbody>
+        </table>
+        <table class="TableStyle-SQLErrorCodes" cellspacing="0" style="mc-table-style: url('../Resources/TableStyles/SQLErrorCodes.css');">
+            <col class="Column-Column1" />
+            <col class="Column-Column2" />
+            <col class="Column-Column3" />
+            <col class="Column-Column4" />
+            <tbody>
+                <tr class="Body-Body1">
+                    <td class="BodyB-Column1-Body1">33</td>
+                    <td class="BodyB-Column2-Body1">errCOLNUMBER</td>
+                    <td class="BodyB-Column3-Body1">07009</td>
+                    <td class="BodyA-Column4-Body1">invalid descriptor index (column number)</td>
+                </tr>
+            </tbody>
+        </table>
+        <table class="TableStyle-SQLErrorCodes" cellspacing="0" style="mc-table-style: url('../Resources/TableStyles/SQLErrorCodes.css');">
+            <col class="Column-Column1" />
+            <col class="Column-Column2" />
+            <col class="Column-Column3" />
+            <col class="Column-Column4" />
+            <tbody>
+                <tr class="Body-Body1">
+                    <td class="BodyB-Column1-Body1">52</td>
+                    <td class="BodyB-Column2-Body1">errCURSTATE</td>
+                    <td class="BodyB-Column3-Body1">24000</td>
+                    <td class="BodyA-Column4-Body1">invalid cursor state</td>
+                </tr>
+            </tbody>
+        </table>
+        <table class="TableStyle-SQLErrorCodes" cellspacing="0" style="mc-table-style: url('../Resources/TableStyles/SQLErrorCodes.css');">
+            <col class="Column-Column1" />
+            <col class="Column-Column2" />
+            <col class="Column-Column3" />
+            <col class="Column-Column4" />
+            <tbody>
+                <tr class="Body-Body1">
+                    <td class="BodyB-Column1-Body1">53</td>
+                    <td class="BodyB-Column2-Body1">errNOTSELECT</td>
+                    <td class="BodyB-Column3-Body1">24000</td>
+                    <td class="BodyA-Column4-Body1">current/cursor's statement is not SELECT</td>
+                </tr>
+            </tbody>
+        </table>
+        <table class="TableStyle-SQLErrorCodes" cellspacing="0" style="mc-table-style: url('../Resources/TableStyles/SQLErrorCodes.css');">
+            <col class="Column-Column1" />
+            <col class="Column-Column2" />
+            <col class="Column-Column3" />
+            <col class="Column-Column4" />
+            <tbody>
+                <tr class="Body-Body1">
+                    <td class="BodyB-Column1-Body1">141</td>
+                    <td class="BodyB-Column2-Body1">errBLOBEXPR</td>
+                    <td class="BodyB-Column3-Body1">42000</td>
+                    <td class="BodyA-Column4-Body1">blobs cannot be referenced in expressions in deferred mode</td>
+                </tr>
+            </tbody>
+        </table>
+        <hr MadCap:conditions="Default.ScreenOnly" width="100%" size="0" align="center" />
+        <p MadCap:conditions="Default.ScreenOnly" style="font-size: 8pt;"><span class="MyVariablesCopyright">Copyright © 2012, Raima Inc. All rights reserved.</span>
+        </p>
+        <script type="text/javascript" src="../SkinSupport/MadCapBodyEnd.js">
+        </script>
+        <p class="MCWebHelpFramesetLink MCWebHelpFramesetLinkBottom" style="display: none;"><a href="../../Default_CSH.htm#SQLRM/rsqlGetData.htm" style="">Open topic with navigation</a>
+        </p>
+    </body>
+</html>

@@ -1,0 +1,144 @@
+<?xml version="1.0" encoding="utf-8"?>
+<!DOCTYPE html PUBLIC "-//W3C//DTD XHTML 1.0 Strict//EN" "http://www.w3.org/TR/xhtml1/DTD/xhtml1-strict.dtd">
+<html xmlns:MadCap="http://www.madcapsoftware.com/Schemas/MadCap.xsd" MadCap:tocPath="SQL API|RSQL User's Guide|RSQL API Function Reference" MadCap:InPreviewMode="false" MadCap:PreloadImages="false" MadCap:RuntimeFileType="Topic" MadCap:TargetType="WebHelp" lang="en-us" xml:lang="en-us" MadCap:PathToHelpSystem="../../" MadCap:HelpSystemFileName="Default.xml" MadCap:SearchType="Stem">
+    <head>
+        <meta http-equiv="Content-Type" content="text/html; charset=utf-8" /><title>rsqlCloseStmt</title>
+        <link rel="icon" type="image/png" href="http://docs.raima.com/favicon.png" />
+        <link href="../SkinSupport/MadCap.css" rel="stylesheet" />
+        <link href="../Resources/TableStyles/FunctionArgs.css" rel="stylesheet" />
+        <link href="../Resources/TableStyles/SQLErrorCodes.css" rel="stylesheet" />
+        <link href="../Resources/Stylesheets/raima.css" rel="stylesheet" />
+        <script src="../SkinSupport/MadCapAll.js" type="text/javascript">
+        </script>
+    </head>
+    <body>
+        <p class="MCWebHelpFramesetLink MCWebHelpFramesetLinkTop" style="display: none;"><a href="../../Default_CSH.htm#SQLRM/rsqlCloseStmt.htm" style="">Open topic with navigation</a>
+        </p>
+        <div class="MCBreadcrumbsBox_0"><span class="MCBreadcrumbsPrefix">You are here: </span><a class="MCBreadcrumbsLink" href="../dbRSQL.htm">SQL API</a><span class="MCBreadcrumbsDivider"> &gt; </span><a class="MCBreadcrumbsLink" href="../RSQLUG/dbSQLUG.htm">RSQL User's Guide</a><span class="MCBreadcrumbsDivider"> &gt; </span><a class="MCBreadcrumbsLink" href="SQLAPIReference.htm">RSQL API Function Reference</a><span class="MCBreadcrumbsDivider"> &gt; </span><span class="MCBreadcrumbs">rsqlCloseStmt</span>
+        </div>
+        <h3 class="newpage"><a name="kanchor270"></a>rsqlCloseStmt</h3>
+        <p>Close or free a statement handle</p>
+        <p class="Heading">Prototype</p><pre xml:space="preserve">RSQL_ERRCODE EXTERNAL_FCN rsqlCloseStmt(
+    HSTMT             hStmt)</pre>
+        <p class="Heading">Arguments</p>
+        <table style="width: 100%;mc-table-style: url('../Resources/TableStyles/FunctionArgs.css');border-spacing: 0px 0px;margin-left: 0;margin-right: auto;" class="TableStyle-FunctionArgs" cellspacing="0">
+            <col class="Column-Column1" />
+            <col class="Column-Column3" />
+            <col class="Column-Column2" />
+            <tbody>
+                <tr class="Body-Body1">
+                    <td class="BodyB-Column1-Body1">hStmt </td>
+                    <td class="BodyB-Column3-Body1">(input)</td>
+                    <td class="BodyA-Column2-Body1">Statement handle.</td>
+                </tr>
+            </tbody>
+        </table>
+        <p class="Heading">Description</p>
+        <p>Function <code>rsqlCloseStmt</code> is used to close a statement handle. The associated statement is returned to the prepared (compiled) but not executed state. </p>
+        <p class="Heading">Example</p><pre xml:space="preserve">#include "rsql.h"
+&#160;&#160;&#160;&#160;...
+static void DisplayResult(void *, RSQL_VALUE *);
+static void HandleError(void *, RSQL_ERRCODE);
+&#160;&#160;&#160;&#160;...
+HCONN hdbc;
+HSTMT hstmt;
+RSQL_ERRCODE stat;
+&#160;&#160;&#160;&#160;...
+&#160;&#160;&#160;&#160;stat = rsqlAllocStmt(hdbc, &amp;hstmt);
+&#160;&#160;&#160;&#160;...
+&#160;&#160;&#160;&#160;stat = rsqlPrepare(hstmt, "select * from salesperson");
+&#160;&#160;&#160;&#160;if ( stat == errSUCCESS ) {
+	stat = rsqlExecute(hstmt);
+	if ( stat == errSUCCESS ) {
+	&#160;&#160;&#160;&#160;while ( (stat = rsqlFetch(hstmt, row)) == errSUCCESS ) {
+		DisplayResult(hstmt, row);
+		if ( user_cancelled ) {
+		&#160;&#160;&#160;&#160;stat = rsqlCloseStmt(hstmt);
+		&#160;&#160;&#160;&#160;break;
+		}
+	&#160;&#160;&#160;&#160;}
+	}
+&#160;&#160;&#160;&#160;}
+&#160;&#160;&#160;&#160;if ( stat != errSUCCESS ) HandleError(hstmt, stat);
+&#160;&#160;&#160;&#160;...
+&#160;&#160;&#160;&#160;stat = rsqlFreeStmt(hstmt);
+&#160;&#160;&#160;&#160;...</pre>
+        <p class="Heading">Required Headers</p><pre xml:space="preserve">#include "rsql.h"</pre>
+        <p class="Heading">Libraries</p>
+        <table style="width: 100%; margin-left: 0; margin-right: auto;">
+            <col style="width: 200px;">
+            </col>
+            <col>
+            </col>
+            <thead>
+                <tr>
+                    <th>Library Name</th>
+                    <th>Description</th>
+                </tr>
+            </thead>
+            <tbody>
+                <tr>
+                    <td><code>rdmrsql<span class="MyVariablesLibraryVersion">11</span></code>
+                    </td>
+                    <td>RSQL&#160;API Library</td>
+                </tr>
+            </tbody>
+        </table>
+        <p>See <a href="../GS/distrib.htm#Library">Library Naming Conventions</a> section for full library name and a list of library dependencies.</p>
+        <p class="Heading">Return Codes</p>
+        <table class="TableStyle-SQLErrorCodes" cellspacing="0" style="mc-table-style: url('../Resources/TableStyles/SQLErrorCodes.css');">
+            <col class="Column-Column1" />
+            <col class="Column-Column2" />
+            <col class="Column-Column3" />
+            <col class="Column-Column4" />
+            <tbody>
+                <tr class="Body-Body1">
+                    <th class="BodyB-Column1-Body1" style="font-weight: bold;">Error Code</th>
+                    <th class="BodyB-Column2-Body1" style="font-weight: bold;">Enum Identifier</th>
+                    <th class="BodyB-Column3-Body1" style="font-weight: bold;">SQL State</th>
+                    <th class="BodyA-Column4-Body1" style="font-weight: bold;">Description</th>
+                </tr>
+            </tbody>
+        </table>
+        <table class="TableStyle-SQLErrorCodes" cellspacing="0" style="mc-table-style: url('../Resources/TableStyles/SQLErrorCodes.css');">
+            <col class="Column-Column1" />
+            <col class="Column-Column2" />
+            <col class="Column-Column3" />
+            <col class="Column-Column4" />
+            <tbody>
+                <tr class="Body-Body1">
+                    <td class="BodyB-Column1-Body1">0</td>
+                    <td class="BodyB-Column2-Body1">errSUCCESS</td>
+                    <td class="BodyB-Column3-Body1">00000</td>
+                    <td class="BodyA-Column4-Body1">no error was detected</td>
+                </tr>
+            </tbody>
+        </table>
+        <table class="TableStyle-SQLErrorCodes" cellspacing="0" style="mc-table-style: url('../Resources/TableStyles/SQLErrorCodes.css');">
+            <col class="Column-Column1" />
+            <col class="Column-Column2" />
+            <col class="Column-Column3" />
+            <col class="Column-Column4" />
+            <tbody>
+                <tr class="Body-Body1">
+                    <td class="BodyB-Column1-Body1">-5</td>
+                    <td class="BodyB-Column2-Body1">errINVHANDLE</td>
+                    <td class="BodyB-Column3-Body1">02002</td>
+                    <td class="BodyA-Column4-Body1">invalid connection or statement handle</td>
+                </tr>
+            </tbody>
+        </table>
+        <p class="Heading">See Also</p>
+        <p><a href="rsqlAllocStmt.htm">rsqlAllocStmt</a>
+        </p>
+        <p><a href="rsqlFreeStmt.htm">rsqlFreeStmt</a>
+        </p>
+        <hr MadCap:conditions="Default.ScreenOnly" width="100%" size="0" align="center" />
+        <p MadCap:conditions="Default.ScreenOnly" style="font-size: 8pt;"><span class="MyVariablesCopyright">Copyright © 2012, Raima Inc. All rights reserved.</span>
+        </p>
+        <script type="text/javascript" src="../SkinSupport/MadCapBodyEnd.js">
+        </script>
+        <p class="MCWebHelpFramesetLink MCWebHelpFramesetLinkBottom" style="display: none;"><a href="../../Default_CSH.htm#SQLRM/rsqlCloseStmt.htm" style="">Open topic with navigation</a>
+        </p>
+    </body>
+</html>

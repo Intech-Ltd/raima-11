@@ -1,0 +1,118 @@
+<?xml version="1.0" encoding="utf-8"?>
+<!DOCTYPE html PUBLIC "-//W3C//DTD XHTML 1.0 Strict//EN" "http://www.w3.org/TR/xhtml1/DTD/xhtml1-strict.dtd">
+<html xmlns:MadCap="http://www.madcapsoftware.com/Schemas/MadCap.xsd" MadCap:tocPath="SQL API|JDBC User's Guide|RDMDatabaseMetaData class" MadCap:InPreviewMode="false" MadCap:PreloadImages="false" MadCap:RuntimeFileType="Topic" MadCap:TargetType="WebHelp" lang="en-us" xml:lang="en-us" MadCap:PathToHelpSystem="../../../../" MadCap:HelpSystemFileName="Default.xml" MadCap:SearchType="Stem">
+    <head>
+        <meta http-equiv="Content-Type" content="text/html; charset=utf-8" /><title>getIndexInfo(String catalog, String schema, String table, boolean unique, boolean approximate) </title>
+        <link rel="icon" type="image/png" href="http://docs.raima.com/favicon.png" />
+        <link href="../../../SkinSupport/MadCap.css" rel="stylesheet" />
+        <link href="../../../Resources/TableStyles/FunctionArgs.css" rel="stylesheet" />
+        <link href="../../../Resources/Stylesheets/raima.css" rel="stylesheet" />
+        <script src="../../../SkinSupport/MadCapAll.js">
+        </script>
+    </head>
+    <body>
+        <p class="MCWebHelpFramesetLink MCWebHelpFramesetLinkTop" style="display: none;"><a href="../../../../Default_CSH.htm#JAVARM/DatabaseMetaData/Method/getIndexInfo.htm" style="">Open topic with navigation</a>
+        </p>
+        <div class="MCBreadcrumbsBox_0"><span class="MCBreadcrumbsPrefix">You are here: </span><a class="MCBreadcrumbsLink" href="../../../dbRSQL.htm">SQL API</a><span class="MCBreadcrumbsDivider"> &gt; </span><a class="MCBreadcrumbsLink" href="../../dbJDBC.htm">JDBC User's Guide</a><span class="MCBreadcrumbsDivider"> &gt; </span><a class="MCBreadcrumbsLink" href="../RDMDatabaseMetaData.htm">RDMDatabaseMetaData class</a><span class="MCBreadcrumbsDivider"> &gt; </span><span class="MCBreadcrumbs">getIndexInfo(String catalog, String schema, String table, boolean unique, boolean approximate)</span>
+        </div>
+        <h3 class="newpage">getIndexInfo(String catalog, String schema, String table, boolean unique, boolean approximate) </h3>
+        <p class="Heading">Syntax:</p><pre xml:space="preserve">ResultSet getIndexInfo(String catalog,
+                       String schema,
+                       String table,
+                       boolean unique,
+                       boolean approximate)
+                       throws SQLException</pre>
+        <p class="Heading">Description:</p>
+        <p>Retrieves a description of the given table's indices and statistics. They are ordered by NON_UNIQUE, TYPE, INDEX_NAME, and ORDINAL_POSITION.</p>
+        <p>Each index column description has the following columns:</p>
+        <table style="width: 100%;margin-left: 0;margin-right: auto;mc-table-style: url('../../../Resources/TableStyles/FunctionArgs.css');" class="TableStyle-FunctionArgs" cellspacing="0">
+            <col class="Column-Column1" />
+            <col class="Column-Column3" />
+            <col class="Column-Column2" />
+            <tbody>
+                <tr class="Body-Body1">
+                    <td class="BodyE-Column1-Body1">TABLE_CAT</td>
+                    <td class="BodyE-Column3-Body1">String</td>
+                    <td class="BodyD-Column2-Body1">table catalog (may be null)</td>
+                </tr>
+                <tr class="Body-Body1">
+                    <td class="BodyE-Column1-Body1">TABLE_SCHEM</td>
+                    <td class="BodyE-Column3-Body1">String</td>
+                    <td class="BodyD-Column2-Body1"> table schema (may be null)</td>
+                </tr>
+                <tr class="Body-Body1">
+                    <td class="BodyE-Column1-Body1">TABLE_NAME</td>
+                    <td class="BodyE-Column3-Body1">String</td>
+                    <td class="BodyD-Column2-Body1">table name</td>
+                </tr>
+                <tr class="Body-Body1">
+                    <td class="BodyE-Column1-Body1">NON_UNIQUE</td>
+                    <td class="BodyE-Column3-Body1">boolean</td>
+                    <td class="BodyD-Column2-Body1">Can index values be non-unique. false when TYPE is tableIndexStatistic</td>
+                </tr>
+                <tr class="Body-Body1">
+                    <td class="BodyE-Column1-Body1">INDEX_QUALIFIER</td>
+                    <td class="BodyE-Column3-Body1">String</td>
+                    <td class="BodyD-Column2-Body1">index catalog (may be null); null when TYPE is tableIndexStatistic</td>
+                </tr>
+                <tr class="Body-Body1">
+                    <td class="BodyE-Column1-Body1">INDEX_NAME</td>
+                    <td class="BodyE-Column3-Body1">String</td>
+                    <td class="BodyD-Column2-Body1"> index name; null when TYPE is tableIndexStatistic</td>
+                </tr>
+                <tr class="Body-Body1">
+                    <td class="BodyE-Column1-Body1">TYPE</td>
+                    <td class="BodyE-Column3-Body1">short</td>
+                    <td class="BodyD-Column2-Body1"> index type:<ul><li value="1">tableIndexStatistic - this identifies table statistics that are returned in conjuction with a table's index descriptions</li><li value="2">tableIndexClustered - this is a clustered index</li><li value="3">tableIndexHashed - this is a hashed index</li><li value="4">tableIndexOther - this is some other style of index</li></ul></td>
+                </tr>
+                <tr class="Body-Body1">
+                    <td class="BodyE-Column1-Body1">ORDINAL_POSITION</td>
+                    <td class="BodyE-Column3-Body1">short</td>
+                    <td class="BodyD-Column2-Body1">column sequence number within index; zero when TYPE is tableIndexStatistic</td>
+                </tr>
+                <tr class="Body-Body1">
+                    <td class="BodyE-Column1-Body1">COLUMN_NAME</td>
+                    <td class="BodyE-Column3-Body1">String</td>
+                    <td class="BodyD-Column2-Body1">column name; null when TYPE is tableIndexStatistic</td>
+                </tr>
+                <tr class="Body-Body1">
+                    <td class="BodyE-Column1-Body1">ASC_OR_DESC</td>
+                    <td class="BodyE-Column3-Body1">String</td>
+                    <td class="BodyD-Column2-Body1">column sort sequence, "A" =&gt; ascending, "D" =&gt; descending, may be null if sort sequence is not supported; null when TYPE is tableIndexStatistic</td>
+                </tr>
+                <tr class="Body-Body1">
+                    <td class="BodyE-Column1-Body1">CARDINALITY</td>
+                    <td class="BodyE-Column3-Body1">int</td>
+                    <td class="BodyD-Column2-Body1">When TYPE is tableIndexStatistic, then this is the number of rows in the table; otherwise, it is the number of unique values in the index.</td>
+                </tr>
+                <tr class="Body-Body1">
+                    <td class="BodyE-Column1-Body1">PAGES</td>
+                    <td class="BodyE-Column3-Body1">int</td>
+                    <td class="BodyD-Column2-Body1">When TYPE is tableIndexStatisic then this is the number of pages used for the table, otherwise it is the number of pages used for the current index.</td>
+                </tr>
+                <tr class="Body-Body1">
+                    <td class="BodyB-Column1-Body1">FILTER_CONDITION</td>
+                    <td class="BodyB-Column3-Body1">String</td>
+                    <td class="BodyA-Column2-Body1">Filter condition, if any. (may be null)</td>
+                </tr>
+            </tbody>
+        </table>
+        <p class="Heading">Parameters:</p>
+        <p class="ParamIndent">catalog - a catalog name; must match the catalog name as it is stored in this database; "" retrieves those without a catalog; null means that the catalog name should not be used to narrow the search</p>
+        <p class="ParamIndent">schema - a schema name; must match the schema name as it is stored in this database; "" retrieves those without a schema; null means that the schema name should not be used to narrow the search</p>
+        <p class="ParamIndent">table - a table name; must match the table name as it is stored in this database</p>
+        <p class="ParamIndent">unique - when true, return only indices for unique values; when false, return indices regardless of whether unique or not</p>
+        <p class="ParamIndent">approximate - when true, result is allowed to reflect approximate or out of data values; when false, results are requested to be accurate</p>
+        <p class="Heading">Returns:</p>
+        <p><code>ResultSet</code> - each row is an index column description</p>
+        <p class="Heading">Throws:</p>
+        <p><span class="MCPopup"><a href="javascript:void(0);" MadCap:src="http://docs.oracle.com/javase/6/docs/api/java/sql/SQLException.html" onclick="FMCPopup( event, this ); return false;" class="MCPopupSpot_0">SQLException</a></span> - if a database access error occurs</p>
+        <hr MadCap:conditions="Default.ScreenOnly" width="100%" size="0" align="center" />
+        <p MadCap:conditions="Default.ScreenOnly" style="font-size: 8pt;"><span class="MyVariablesCopyright">Copyright © 2012, Raima Inc. All rights reserved.</span>
+        </p>
+        <script type="text/javascript" src="../../../SkinSupport/MadCapBodyEnd.js">
+        </script>
+        <p class="MCWebHelpFramesetLink MCWebHelpFramesetLinkBottom" style="display: none;"><a href="../../../../Default_CSH.htm#JAVARM/DatabaseMetaData/Method/getIndexInfo.htm" style="">Open topic with navigation</a>
+        </p>
+    </body>
+</html>

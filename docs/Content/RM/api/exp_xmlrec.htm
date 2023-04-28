@@ -1,0 +1,195 @@
+<?xml version="1.0" encoding="utf-8"?>
+<!DOCTYPE html PUBLIC "-//W3C//DTD XHTML 1.0 Strict//EN" "http://www.w3.org/TR/xhtml1/DTD/xhtml1-strict.dtd">
+<html xmlns:MadCap="http://www.madcapsoftware.com/Schemas/MadCap.xsd" MadCap:tocPath="Native API|Reference Manual|Core API Function Descriptions" MadCap:InPreviewMode="false" MadCap:PreloadImages="false" MadCap:RuntimeFileType="Topic" MadCap:TargetType="WebHelp" lang="en-us" xml:lang="en-us" MadCap:PathToHelpSystem="../../../" MadCap:HelpSystemFileName="Default.xml" MadCap:SearchType="Stem">
+    <head>
+        <meta http-equiv="Content-Type" content="text/html; charset=utf-8" /><title>exp_xmlrec</title>
+        <link rel="icon" type="image/png" href="http://docs.raima.com/favicon.png" />
+        <link href="../../SkinSupport/MadCap.css" rel="stylesheet" />
+        <link href="../../Resources/TableStyles/FunctionArgs.css" rel="stylesheet" />
+        <link href="../../Resources/TableStyles/CoreErrCodes.css" rel="stylesheet" />
+        <link href="../../Resources/Stylesheets/raima.css" rel="stylesheet" />
+        <script src="../../SkinSupport/MadCapAll.js" type="text/javascript">
+        </script>
+    </head>
+    <body>
+        <p class="MCWebHelpFramesetLink MCWebHelpFramesetLinkTop" style="display: none;"><a href="../../../Default_CSH.htm#RM/api/exp_xmlrec.htm" style="">Open topic with navigation</a>
+        </p>
+        <div class="MCBreadcrumbsBox_0"><span class="MCBreadcrumbsPrefix">You are here: </span><a class="MCBreadcrumbsLink" href="../../dbCore.htm">Native API</a><span class="MCBreadcrumbsDivider"> &gt; </span><a class="MCBreadcrumbsLink" href="../dbRM.htm">Reference Manual</a><span class="MCBreadcrumbsDivider"> &gt; </span><a class="MCBreadcrumbsLink" href="../Chapter33.htm">Core API Function Descriptions</a><span class="MCBreadcrumbsDivider"> &gt; </span><span class="MCBreadcrumbs">exp_xmlrec</span>
+        </div>
+        <h3 class="newpage"><a name="kanchor136"></a>exp_xmlrec</h3>
+        <p>Export a record from the database to XML format</p>
+        <p class="Heading">Prototype</p><pre xml:space="preserve">int32_t <b>exp_xmlrec</b>(
+    size_t    *<i>nbytes</i>, 
+    char     **<i>xmlbuf</i>, 
+    DB_ADDR    <i>addr</i>, 
+    DB_EXPENV *<i>env</i>);</pre>
+        <p class="Heading">Parameters</p>
+        <table style="width: 100%;mc-table-style: url('../../Resources/TableStyles/FunctionArgs.css');margin-left: 0;margin-right: auto;" class="TableStyle-FunctionArgs" cellspacing="0">
+            <col style="width: 140px;" class="Column-Column1" />
+            <col style="width: 80px;" class="Column-Column3" />
+            <col class="Column-Column2" />
+            <tbody>
+                <tr class="Body-Body1">
+                    <td class="BodyE-Column1-Body1">nbytes</td>
+                    <td class="BodyE-Column3-Body1">(output)</td>
+                    <td class="BodyD-Column2-Body1">number of bytes, including null terminator, returned in xmlbuf – the caller may pass NULL if this result is not required</td>
+                </tr>
+                <tr class="Body-Body1">
+                    <td class="BodyE-Column1-Body1">xmlbuf</td>
+                    <td class="BodyE-Column3-Body1">(output)</td>
+                    <td class="BodyD-Column2-Body1">buffer containing XML representation of record being exported – the caller may pass NULL if this result is not required</td>
+                </tr>
+                <tr class="Body-Body1">
+                    <td class="BodyE-Column1-Body1">addr</td>
+                    <td class="BodyE-Column3-Body1">(input)</td>
+                    <td class="BodyD-Column2-Body1">database address of record to export</td>
+                </tr>
+                <tr class="Body-Body1">
+                    <td class="BodyB-Column1-Body1">env</td>
+                    <td class="BodyB-Column3-Body1">(input)</td>
+                    <td class="BodyA-Column2-Body1">export state data</td>
+                </tr>
+            </tbody>
+        </table>
+        <p class="Heading">Description</p>
+        <p>This function reads the record at the specified database address and converts it to XML. If there are no unique key fields in the record, a rowid value derived from its database address is included in the XML output. If the record is a member of sets then appropriate relational references to the owners are included in the XML output. Since a relational reference may consist of a reference to a unique key value in the owner record, this function may have to read some owner records. The calling application must ensure that these owner records are read-locked, unless dirty reads are acceptable. The function <code>exp_xmlgetownertypes</code> can be used to determine which record types must be locked prior to calling this function.</p>
+        <p>The XML output is generated in the encoding format specified (default is UTF-8). The value returned in <code>nbytes</code> always specifies a number of bytes.</p>
+        <p>Before generating any XML, this function allocates a large internal buffer for the XML output, unless one has already been allocated during a prior call to an export function. As the XML record is generated and text is appended to the output, the function may reallocate and extend the internal buffer as required.</p>
+        <p>The address returned in <code>xmlbuf</code> points to this internal buffer, which is allocated by the export functions and freed by <code>exp_term</code>. The contents of the buffer may be overwritten by the next call to <code>exp_xmlrec</code>, <code>exp_xmlschema</code> or <code>exp_xmlschemarec</code>, so the calling application should copy the contents if it needs to preserve them.</p>
+        <p class="Heading">Locking Requirements</p>
+        <p>No locks required, but, to avoid dirty reads, read locks should be placed on the record type being exported and all owner record types, as returned by <code>exp_xmlgetownertypes</code>.</p>
+        <p class="Heading">User's Guide</p>
+        <p><a href="../../UG/Chapter10.htm#10.2.3">XML Export</a>
+        </p>
+        <p class="Heading">Required Headers</p><pre xml:space="preserve">#include "rdm.h"
+#include "expxml.h"</pre>
+        <p class="Heading">Libraries</p>
+        <table style="width: 100%; margin-left: 0; margin-right: auto;">
+            <col style="width: 200px;" />
+            <col />
+            <thead>
+                <tr>
+                    <th>Library Name</th>
+                    <th>Description</th>
+                </tr>
+            </thead>
+            <tbody>
+                <tr>
+                    <td><code>rdmxml<span class="MyVariablesLibraryVersion">11</span></code>
+                    </td>
+                    <td><span class="MyVariablesProductShortName">RDM</span> XML&#160;Library</td>
+                </tr>
+            </tbody>
+        </table>
+        <p>See <a href="../../GS/distrib.htm#Library">Library Naming Conventions</a> section for full library name and a list of library dependencies.</p>
+        <p class="Heading">Return Codes</p>
+        <table class="TableStyle-CoreErrCodes" cellspacing="0" style="mc-table-style: url('../../Resources/TableStyles/CoreErrCodes.css');">
+            <col class="Column-Column1" />
+            <col class="Column-Column2" />
+            <col class="Column-Column3" />
+            <thead>
+                <tr class="Head-Header1">
+                    <th class="HeadE-Column1-Header1">Value</th>
+                    <th class="HeadE-Column2-Header1">Name</th>
+                    <th class="HeadD-Column3-Header1">Description</th>
+                </tr>
+            </thead>
+            <tbody>
+                <tr class="Body-Body1">
+                    <td class="BodyB-Column1-Body1">0</td>
+                    <td class="BodyB-Column2-Body1">S_OKAY</td>
+                    <td class="BodyA-Column3-Body1">normal return, okay</td>
+                </tr>
+            </tbody>
+        </table>
+        <table class="TableStyle-CoreErrCodes" cellspacing="0" style="mc-table-style: url('../../Resources/TableStyles/CoreErrCodes.css');">
+            <col class="Column-Column1" />
+            <col class="Column-Column2" />
+            <col class="Column-Column3" />
+            <tbody>
+                <tr class="Body-Body1">
+                    <td class="BodyB-Column1-Body1">6</td>
+                    <td class="BodyB-Column2-Body1">S_DELETED</td>
+                    <td class="BodyA-Column3-Body1">record/set deleted since last accessed</td>
+                </tr>
+            </tbody>
+        </table>
+        <table class="TableStyle-CoreErrCodes" cellspacing="0" style="mc-table-style: url('../../Resources/TableStyles/CoreErrCodes.css');">
+            <col class="Column-Column1" />
+            <col class="Column-Column2" />
+            <col class="Column-Column3" />
+            <tbody>
+                <tr class="Body-Body1">
+                    <td class="BodyB-Column1-Body1">-1</td>
+                    <td class="BodyB-Column2-Body1">S_DBOPEN</td>
+                    <td class="BodyA-Column3-Body1">database not opened</td>
+                </tr>
+            </tbody>
+        </table>
+        <table class="TableStyle-CoreErrCodes" cellspacing="0" style="mc-table-style: url('../../Resources/TableStyles/CoreErrCodes.css');">
+            <col class="Column-Column1" />
+            <col class="Column-Column2" />
+            <col class="Column-Column3" />
+            <tbody>
+                <tr class="Body-Body1">
+                    <td class="BodyB-Column1-Body1">-904</td>
+                    <td class="BodyB-Column2-Body1">S_NOMEMORY</td>
+                    <td class="BodyA-Column3-Body1">out of memory</td>
+                </tr>
+            </tbody>
+        </table>
+        <p xml:space="preserve" class="Heading">Example</p><pre xml:space="preserve">
+    #include "tims.h"
+
+    DB_TASK     *task;
+    DB_EXPENV   *env;
+    int32_t      numtypes;
+    int32_t     *types;
+    int32_t      ii;
+    int32_t      stat;
+    DB_ADDR      dba;
+    char        *xmlbuf;
+    size_t       bytes;
+
+    d_opentask(&amp;task);
+    d_open("tims", "s", task);
+
+    exp_init(&amp;env, "UTF-8", task, CURR_DB);
+
+    /* Output the description of the INTERSECT record */    
+    exp_xmlschemarec(&amp;bytes, &amp;xmlbuf, DB_EXP_XML_SCHEMA, INTERSECT, env);
+    fprintf(stdout, "%s\n", xmlbuf);
+    
+    exp_xmlgetownertypes(&amp;numtypes, &amp;types, INTERSECT, NULL_DBA, env);
+    for (ii = 0; ii &lt; numtypes; ++ii)
+    {
+        /* Must get read locks on owner records */
+        if ((stat = d_reclock(types[ii], "r", task, CURR_DB)) != S_OKAY)
+            return stat;
+    }
+    
+    /* Output all INTERSECT records */
+    for (stat = d_recfrst(INTERSECT, task, CURR_DB);
+         stat == S_OKAY;
+         stat = d_recnext(task, CURR_DB))
+    {
+        d_crget(&amp;dba, task, CURR_DB);
+        if (exp_xmlrec(&amp;bytes, &amp;xmlbuf, dba, env) == S_OKAY)
+            fprintf(stdout, "%s\n", xmlbuf);
+    }
+    
+    d_freeall(task);
+    exp_term(env);
+    
+    d_close(task);
+    d_closetask(task);
+</pre>
+        <hr MadCap:conditions="Default.ScreenOnly" width="100%" size="0" align="center" />
+        <p MadCap:conditions="Default.ScreenOnly" style="font-size: 8pt;"><span class="MyVariablesCopyright">Copyright © 2012, Raima Inc. All rights reserved.</span>
+        </p>
+        <script type="text/javascript" src="../../SkinSupport/MadCapBodyEnd.js">
+        </script>
+        <p class="MCWebHelpFramesetLink MCWebHelpFramesetLinkBottom" style="display: none;"><a href="../../../Default_CSH.htm#RM/api/exp_xmlrec.htm" style="">Open topic with navigation</a>
+        </p>
+    </body>
+</html>

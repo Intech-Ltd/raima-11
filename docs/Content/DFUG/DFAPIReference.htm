@@ -1,0 +1,82 @@
+<?xml version="1.0" encoding="utf-8"?>
+<!DOCTYPE html PUBLIC "-//W3C//DTD XHTML 1.0 Strict//EN" "http://www.w3.org/TR/xhtml1/DTD/xhtml1-strict.dtd">
+<html xmlns:MadCap="http://www.madcapsoftware.com/Schemas/MadCap.xsd" MadCap:tocPath="Replication and Mirroring Guide" MadCap:InPreviewMode="false" MadCap:PreloadImages="false" MadCap:RuntimeFileType="Topic" MadCap:TargetType="WebHelp" lang="en-us" xml:lang="en-us" class="" MadCap:PathToHelpSystem="../../" MadCap:HelpSystemFileName="Default.xml" MadCap:SearchType="Stem">
+    <head>
+        <meta http-equiv="Content-Type" content="text/html; charset=utf-8" /><title>Replication and Mirroring API&#160;Functions</title>
+        <link rel="icon" type="image/png" href="http://docs.raima.com/favicon.png" />
+        <link href="../SkinSupport/MadCap.css" rel="stylesheet" />
+        <link href="../Resources/TableStyles/fncSummary.css" rel="stylesheet" />
+        <link href="../Resources/Stylesheets/raima.css" rel="stylesheet" />
+        <script src="../SkinSupport/MadCapAll.js" type="text/javascript">
+        </script>
+    </head>
+    <body>
+        <p class="MCWebHelpFramesetLink MCWebHelpFramesetLinkTop" style="display: none;"><a href="../../Default_CSH.htm#DFUG/DFAPIReference.htm" style="">Open topic with navigation</a>
+        </p>
+        <div class="MCBreadcrumbsBox_0"><span class="MCBreadcrumbsPrefix">You are here: </span><a class="MCBreadcrumbsLink" href="../dbDataFlow.htm">Replication and Mirroring Guide</a><span class="MCBreadcrumbsDivider"> &gt; </span><span class="MCBreadcrumbs">Replication and Mirroring API&#160;Functions</span>
+        </div>
+        <h1><a MadCap:generatedBookmark="TOC" name="Replication_and_Mirroring_API&#160;Functions"></a>Replication and Mirroring API&#160;Functions</h1>
+        <p>The functions beginning with "d_db" are used to control the execution of the Replication utilities as in-process functions or threads. The Replication utilities include <a href="../util/dbmirror.htm">dbmirror</a>, <a href="../util/dbrep.htm">dbrep</a>, and <a href="../util/dbrep.htm">dbrepsql</a>. The utilities are initialized through the <code>d_dbmir_init</code>, <code>d_dbrep_init</code> or <code>d_dbrepsql_init</code> functions, respectively. All three utilities are controlled by the <code>d_dbrep_start</code>, <code>d_dbrep_stop</code> and <code>d_dbrep_term</code> functions. The <a href="../util/dbget.htm">dbget</a> utility initiates and terminates mirroring or replication connections between master and slave Replication utilities. It is implemented through the two functions <code>d_dbrep_connect</code> and <code>d_dbrep_disconnect</code>.</p>
+        <table style="width: 100%;border-left-style: solid;border-left-width: 1px;border-left-color: #c0c0c0;border-right-style: solid;border-right-width: 1px;border-right-color: #c0c0c0;border-top-style: solid;border-top-width: 1px;border-top-color: #c0c0c0;border-bottom-style: solid;border-bottom-width: 1px;border-bottom-color: #c0c0c0;border-collapse: collapse;mc-table-style: url('../Resources/TableStyles/fncSummary.css');margin-left: 0;margin-right: auto;" class="TableStyle-fncSummary" cellspacing="0">
+            <col class="Column-Column1">
+            </col>
+            <col class="Column-Column2">
+            </col>
+            <thead>
+                <tr class="Head-Header1">
+                    <th class="HeadE-Column1-Header1">Function</th>
+                    <th class="HeadD-Column2-Header1">Description </th>
+                </tr>
+            </thead>
+            <tbody>
+                <tr class="Body-Body1">
+                    <td class="BodyE-Column1-Body1"><a href="../RM/api/d_dbmir_init.htm">d_dbmir_init</a>
+                    </td>
+                    <td class="BodyD-Column2-Body1">Provide the mirroring utility with parameters to start up as a server</td>
+                </tr>
+                <tr class="Body-Body1">
+                    <td class="BodyE-Column1-Body1"><a href="../RM/api/d_dbrep_connect.htm">d_dbrep_connect</a>
+                    </td>
+                    <td class="BodyD-Column2-Body1">Initiate a mirroring or replication connection between master and slave (<code>dbget -b</code>).</td>
+                </tr>
+                <tr class="Body-Body1">
+                    <td class="BodyE-Column1-Body1"><a href="../RM/api/d_dbrep_disconnect.htm">d_dbrep_disconnect</a>
+                    </td>
+                    <td class="BodyD-Column2-Body1">Terminate a mirroring or replication connection between master and slave (<code>dbget -e</code>).</td>
+                </tr>
+                <tr class="Body-Body1">
+                    <td class="BodyE-Column1-Body1"><a href="../RM/api/d_dbrep_init.htm">d_dbrep_init</a>
+                    </td>
+                    <td class="BodyD-Column2-Body1">Provide the replication utility with parameters to start up as a server</td>
+                </tr>
+                <tr class="Body-Body1">
+                    <td class="BodyE-Column1-Body1"><a href="../RM/api/d_dbrep_start.htm">d_dbrep_start</a>
+                    </td>
+                    <td class="BodyD-Column2-Body1">Begin execution of an initialized Replication utility</td>
+                </tr>
+                <tr class="Body-Body1">
+                    <td class="BodyE-Column1-Body1"><a href="../RM/api/d_dbrep_stop.htm">d_dbrep_stop</a>
+                    </td>
+                    <td class="BodyD-Column2-Body1">Terminate Replication utility thread</td>
+                </tr>
+                <tr class="Body-Body1">
+                    <td class="BodyE-Column1-Body1"><a href="../RM/api/d_dbrep_term.htm">d_dbrep_term</a>
+                    </td>
+                    <td class="BodyD-Column2-Body1">Clean up resources allocated by Replication utility initialization</td>
+                </tr>
+                <tr class="Body-Body1">
+                    <td class="BodyB-Column1-Body1"><a href="../RM/api/d_dbrepsql_init.htm">d_dbrepsql_init</a>
+                    </td>
+                    <td class="BodyA-Column2-Body1">Provide the mirroring utility with parameters to start up as a server</td>
+                </tr>
+            </tbody>
+        </table>
+        <hr MadCap:conditions="Default.ScreenOnly" width="100%" size="0" align="center" />
+        <p MadCap:conditions="Default.ScreenOnly" style="font-size: 8pt;"><span class="MyVariablesCopyright">Copyright © 2012, Raima Inc. All rights reserved.</span>
+        </p>
+        <script type="text/javascript" src="../SkinSupport/MadCapBodyEnd.js">
+        </script>
+        <p class="MCWebHelpFramesetLink MCWebHelpFramesetLinkBottom" style="display: none;"><a href="../../Default_CSH.htm#DFUG/DFAPIReference.htm" style="">Open topic with navigation</a>
+        </p>
+    </body>
+</html>

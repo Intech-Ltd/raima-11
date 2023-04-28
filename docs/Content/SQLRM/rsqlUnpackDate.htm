@@ -1,0 +1,164 @@
+<?xml version="1.0" encoding="utf-8"?>
+<!DOCTYPE html PUBLIC "-//W3C//DTD XHTML 1.0 Strict//EN" "http://www.w3.org/TR/xhtml1/DTD/xhtml1-strict.dtd">
+<html xmlns:MadCap="http://www.madcapsoftware.com/Schemas/MadCap.xsd" MadCap:tocPath="SQL API|RSQL User's Guide|RSQL API Function Reference" MadCap:InPreviewMode="false" MadCap:PreloadImages="false" MadCap:RuntimeFileType="Topic" MadCap:TargetType="WebHelp" lang="en-us" xml:lang="en-us" MadCap:PathToHelpSystem="../../" MadCap:HelpSystemFileName="Default.xml" MadCap:SearchType="Stem">
+    <head>
+        <meta http-equiv="Content-Type" content="text/html; charset=utf-8" /><title>rsqlUnpackDate</title>
+        <link rel="icon" type="image/png" href="http://docs.raima.com/favicon.png" />
+        <link href="../SkinSupport/MadCap.css" rel="stylesheet" />
+        <link href="../Resources/TableStyles/FunctionArgs.css" rel="stylesheet" />
+        <link href="../Resources/TableStyles/SQLErrorCodes.css" rel="stylesheet" />
+        <link href="../Resources/Stylesheets/raima.css" rel="stylesheet" />
+        <script src="../SkinSupport/MadCapAll.js" type="text/javascript">
+        </script>
+    </head>
+    <body>
+        <p class="MCWebHelpFramesetLink MCWebHelpFramesetLinkTop" style="display: none;"><a href="../../Default_CSH.htm#SQLRM/rsqlUnpackDate.htm" style="">Open topic with navigation</a>
+        </p>
+        <div class="MCBreadcrumbsBox_0"><span class="MCBreadcrumbsPrefix">You are here: </span><a class="MCBreadcrumbsLink" href="../dbRSQL.htm">SQL API</a><span class="MCBreadcrumbsDivider"> &gt; </span><a class="MCBreadcrumbsLink" href="../RSQLUG/dbSQLUG.htm">RSQL User's Guide</a><span class="MCBreadcrumbsDivider"> &gt; </span><a class="MCBreadcrumbsLink" href="SQLAPIReference.htm">RSQL API Function Reference</a><span class="MCBreadcrumbsDivider"> &gt; </span><span class="MCBreadcrumbs">rsqlUnpackDate</span>
+        </div>
+        <h3 class="newpage"><a name="kanchor338"></a>rsqlUnpackDate</h3>
+        <p>Unpack a binary DATE_VAL into a CAL_DATE structure</p>
+        <p class="Heading">Prototype</p><pre xml:space="preserve">RSQL_ERRCODE EXTERNAL_FCN rsqlUnpackDate(
+    DATE_VAL       *pPDt,
+    CAL_DATE       *pUDt)
+</pre>
+        <p class="Heading">Arguments</p>
+        <table style="width: 100%;mc-table-style: url('../Resources/TableStyles/FunctionArgs.css');caption-side: top;margin-left: 0;margin-right: auto;" class="TableStyle-FunctionArgs" cellspacing="0">
+            <col class="Column-Column1" />
+            <col class="Column-Column3" />
+            <col class="Column-Column2" />
+            <tbody>
+                <tr class="Body-Body1">
+                    <td class="BodyE-Column1-Body1">pPDt</td>
+                    <td class="BodyE-Column3-Body1">(input)</td>
+                    <td class="BodyD-Column2-Body1">Pointer to variable containing packed date value.</td>
+                </tr>
+                <tr class="Body-Body1">
+                    <td class="BodyB-Column1-Body1">pUDt</td>
+                    <td class="BodyB-Column3-Body1">(output)</td>
+                    <td class="BodyA-Column2-Body1">Pointer variable to contained unpacked date value.</td>
+                </tr>
+            </tbody>
+        </table>
+        <p class="Heading">Description</p>
+        <p>Call <code>rsqlUnpackDate</code> to convert the packed <code>DATE_VAL</code> value pointed to by <code>pPDt</code> into an unpacked date value which will be returned into the <code>CAL_DATE struct</code> variable pointed to by <code>pUDt</code>.  The <code>CAL_DATE struct</code> and <code>DATE_VAL typedef</code> are given below.</p><pre xml:space="preserve">typedef uint32_t DATE_VAL;
+
+typedef struct tagCAL_DATE {
+    int32_t  year;      /* 1 - ???? */
+    uint16_t month;     /* 1 - 12 */
+    uint16_t day;       /* 1 - 31 */
+} CAL_DATE;
+</pre>
+        <p>This function is needed to unpack date values from the packed <code>tDATE</code> format when retrieving <code>RSQL_VALUE</code> date result column values via calls to <code>rsqlFetch</code> and <code>rsqlGetData</code>.</p>
+        <p>The error messages associated with the error codes returned by this function can only be retrieved by calling <code>rsqlGetErrorMsg</code> as <code>rsqlGetErrorInfo</code> only returns error info associated with connection or statement handles.</p>
+        <p class="Heading">Required Headers</p><pre xml:space="preserve">#include "rsql.h"</pre>
+        <p class="Heading">Libraries</p>
+        <table style="width: 100%; margin-left: 0; margin-right: auto;">
+            <col style="width: 200px;">
+            </col>
+            <col>
+            </col>
+            <thead>
+                <tr>
+                    <th>Library Name</th>
+                    <th>Description</th>
+                </tr>
+            </thead>
+            <tbody>
+                <tr>
+                    <td><code>rdmrsql<span class="MyVariablesLibraryVersion">11</span></code>
+                    </td>
+                    <td>RSQL&#160;API Library</td>
+                </tr>
+            </tbody>
+        </table>
+        <p>See <a href="../GS/distrib.htm#Library">Library Naming Conventions</a> section for full library name and a list of library dependencies.</p>
+        <p class="Heading">Example</p><pre xml:space="preserve"><b>#include "rsql.h"</b>
+...
+HSTMT hstmt;
+RSQL_ERRCODE stat;
+<b>RSQL_VALUE *row;</b><b>CAL_DATE  acqndt, solddt;</b>
+	...
+	rsqlExecDirect(hstmt, "select date_acqd, date_sold, bookid from book order by 1");
+	while ( rsqlFetch(hstmt, &amp;row, NULL) == errSUCCESS ) {
+		<b>rsqlUnpackDate(row[0].vt.dtv, &amp;acqndt);</b><b>rsqlUnpackDate(row[1].vt.dtv, &amp;solddt);</b>
+		printf("acquired: %02d/%02d/%d sold: %02d/%02d/%d id: %s\n",
+			acqndt.month, acqndt.day, acqndt.year, 
+			solddt.month, solddt.day, solddt.year,
+			row[2].vt.cv)
+	}
+	...
+</pre>
+        <p class="Heading">Return Codes</p>
+        <table class="TableStyle-SQLErrorCodes" cellspacing="0" style="mc-table-style: url('../Resources/TableStyles/SQLErrorCodes.css');">
+            <col class="Column-Column1" />
+            <col class="Column-Column2" />
+            <col class="Column-Column3" />
+            <col class="Column-Column4" />
+            <tbody>
+                <tr class="Body-Body1">
+                    <th class="BodyB-Column1-Body1" style="font-weight: bold;">Error Code</th>
+                    <th class="BodyB-Column2-Body1" style="font-weight: bold;">Enum Identifier</th>
+                    <th class="BodyB-Column3-Body1" style="font-weight: bold;">SQL State</th>
+                    <th class="BodyA-Column4-Body1" style="font-weight: bold;">Description</th>
+                </tr>
+            </tbody>
+        </table>
+        <table class="TableStyle-SQLErrorCodes" cellspacing="0" style="mc-table-style: url('../Resources/TableStyles/SQLErrorCodes.css');">
+            <col class="Column-Column1" />
+            <col class="Column-Column2" />
+            <col class="Column-Column3" />
+            <col class="Column-Column4" />
+            <tbody>
+                <tr class="Body-Body1">
+                    <td class="BodyB-Column1-Body1">0</td>
+                    <td class="BodyB-Column2-Body1">errSUCCESS</td>
+                    <td class="BodyB-Column3-Body1">00000</td>
+                    <td class="BodyA-Column4-Body1">no error was detected</td>
+                </tr>
+            </tbody>
+        </table>
+        <table class="TableStyle-SQLErrorCodes" cellspacing="0" style="mc-table-style: url('../Resources/TableStyles/SQLErrorCodes.css');">
+            <col class="Column-Column1" />
+            <col class="Column-Column2" />
+            <col class="Column-Column3" />
+            <col class="Column-Column4" />
+            <tbody>
+                <tr class="Body-Body1">
+                    <td class="BodyB-Column1-Body1">15</td>
+                    <td class="BodyB-Column2-Body1">errDATETIMEOVF</td>
+                    <td class="BodyB-Column3-Body1">22008</td>
+                    <td class="BodyA-Column4-Body1">date/time value overflow</td>
+                </tr>
+            </tbody>
+        </table>
+        <table class="TableStyle-SQLErrorCodes" cellspacing="0" style="mc-table-style: url('../Resources/TableStyles/SQLErrorCodes.css');">
+            <col class="Column-Column1" />
+            <col class="Column-Column2" />
+            <col class="Column-Column3" />
+            <col class="Column-Column4" />
+            <tbody>
+                <tr class="Body-Body1">
+                    <td class="BodyB-Column1-Body1">29</td>
+                    <td class="BodyB-Column2-Body1">errINVNULL</td>
+                    <td class="BodyB-Column3-Body1">HY009</td>
+                    <td class="BodyA-Column4-Body1">invalid use of null pointer</td>
+                </tr>
+            </tbody>
+        </table>
+        <p class="Heading">See Also</p>
+        <p><a href="rsqlPackDate.htm">rsqlPackDate</a>
+        </p>
+        <p><a href="rsqlUnpackTime.htm">rsqlUnpackTime</a>
+        </p>
+        <p><a href="rsqlUnpackTimestamp.htm">rsqlUnpackTimestamp</a>
+        </p>
+        <hr MadCap:conditions="Default.ScreenOnly" width="100%" size="0" align="center" />
+        <p MadCap:conditions="Default.ScreenOnly" style="font-size: 8pt;"><span class="MyVariablesCopyright">Copyright © 2012, Raima Inc. All rights reserved.</span>
+        </p>
+        <script type="text/javascript" src="../SkinSupport/MadCapBodyEnd.js">
+        </script>
+        <p class="MCWebHelpFramesetLink MCWebHelpFramesetLinkBottom" style="display: none;"><a href="../../Default_CSH.htm#SQLRM/rsqlUnpackDate.htm" style="">Open topic with navigation</a>
+        </p>
+    </body>
+</html>

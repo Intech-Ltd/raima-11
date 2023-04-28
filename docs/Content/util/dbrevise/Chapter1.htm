@@ -1,0 +1,158 @@
+<?xml version="1.0" encoding="utf-8"?>
+<!DOCTYPE html PUBLIC "-//W3C//DTD XHTML 1.0 Strict//EN" "http://www.w3.org/TR/xhtml1/DTD/xhtml1-strict.dtd">
+<html xmlns:MadCap="http://www.madcapsoftware.com/Schemas/MadCap.xsd" MadCap:tocPath="Utility Programs|DBRevise Utility" MadCap:InPreviewMode="false" MadCap:PreloadImages="false" MadCap:RuntimeFileType="Topic" MadCap:TargetType="WebHelp" lang="en-us" xml:lang="en-us" MadCap:PathToHelpSystem="../../../" MadCap:HelpSystemFileName="Default.xml" MadCap:SearchType="Stem">
+    <head>
+        <meta http-equiv="Content-Type" content="text/html; charset=utf-8" /><title>Chapter 1 Introduction</title>
+        <link rel="icon" type="image/png" href="http://docs.raima.com/favicon.png" />
+        <link href="../../SkinSupport/MadCap.css" rel="stylesheet" />
+        <link href="../../Resources/Stylesheets/raima.css" rel="stylesheet" />
+        <script src="../../SkinSupport/MadCapAll.js" type="text/javascript">
+        </script>
+    </head>
+    <body>
+        <p class="MCWebHelpFramesetLink MCWebHelpFramesetLinkTop" style="display: none;"><a href="../../../Default_CSH.htm#util/dbrevise/Chapter1.htm" style="">Open topic with navigation</a>
+        </p>
+        <div class="MCBreadcrumbsBox_0"><span class="MCBreadcrumbsPrefix">You are here: </span><a class="MCBreadcrumbsLink" href="../../dbUTIL.htm">Utility Programs</a><span class="MCBreadcrumbsDivider"> &gt; </span><span class="MCBreadcrumbsSelf">DBRevise Utility</span><span class="MCBreadcrumbsDivider"> &gt; </span><span class="MCBreadcrumbs">Introduction</span>
+        </div>
+        <h1 class="firstHeading"><a MadCap:generatedBookmark="TOC" name="Introduction"></a>Introduction</h1>
+        <h2 class="Heading2"><a MadCap:generatedBookmark="TOC" name="1.1_Overview"></a>1.1 Overview </h2>
+        <p>The <span class="MyVariablesProductShortName">RDM</span> database management system (DBMS) is designed to provide powerful, flexible, high-performance capabilities for developing C language database applications.&#160; <span class="MyVariablesShortCompanyName">Raima</span>'s db_REVISE is a member of our database product family. A powerful companion program to the DBMS products, db_REVISE performs automatic revisions on any <span class="MyVariablesProductShortName">RDM</span> database. </p>
+        <p>High performance in our products is achieved through the direct linkage between an application's code and the <span class="MyVariablesProductShortName">RDM</span> database.&#160; Because of our DBMS design, dynamic revision of the database structure is a complex process.&#160; With db_REVISE, <span class="MyVariablesShortCompanyName">Raima</span> database family products can be extensively altered with ease, without losing any existing data.&#160;&#160; </p>
+        <p>New requirements, enhancements, optimizations, and bug fixes occur constantly in both the application software and in the database structure.&#160; With db_REVISE you can create keys, insert or delete field types, add new record and set types, or join two record types into one.&#160; Your task is to edit a copy of your schema (the DDL specification) and db_REVISE will do the rest, making the old data fit the new schema.&#160; </p>
+        <p>The major features of the db_REVISE program include: </p>
+        <ul>
+            <li style="font-family: Arial;font-size: 11pt;" value="1">Adding record, set, and field types </li>
+            <li style="font-family: Arial;font-size: 11pt;" value="2">Deleting record, set, and field types </li>
+            <li style="font-family: Arial;font-size: 11pt;" value="3">Changing field types </li>
+            <li style="font-family: Arial;font-size: 11pt;" value="4">Changing, adding, or deleting keys </li>
+            <li style="font-family: Arial;font-size: 11pt;" value="5">Redistributing record types within files </li>
+            <li style="font-family: Arial;font-size: 11pt;" value="6">Changing database page sizes </li>
+            <li style="font-family: Arial;font-size: 11pt;" value="7">Projecting records into two or more component records </li>
+            <li style="font-family: Arial;font-size: 11pt;" value="8">Reinitializing selected record and set types </li>
+            <li style="font-family: Arial;font-size: 11pt;" value="9">Joining records through a path into a single record </li>
+            <li style="font-family: Arial;font-size: 11pt;" value="10">Initializing field values </li>
+            <li style="font-family: Arial;font-size: 11pt;" value="11">Splitting multiple-member set types </li>
+            <li style="font-family: Arial;font-size: 11pt;" value="12">Combining multiple set types into multiple-member set types </li>
+            <li style="font-family: Arial;font-size: 11pt;" value="13">Duplicating set connections </li>
+            <li style="font-family: Arial;font-size: 11pt;" value="14">Normalizing sets during record projections                   <![CDATA[ ]]></li>
+        </ul>
+        <p>The db_REVISE program is written in C, with complete source code available.&#160; It will operate within most of the same environments as other <span class="MyVariablesShortCompanyName">Raima</span> database family products. In addition, db_REVISE comes in an object library form so that you can link it with your own field conversion function. Thus you are able to convert data fields in ways that are not pre-defined in db_REVISE. </p>
+        <p>db_REVISE and the db_REVISE User's Guide are intended for software engineers in the development of database application software.&#160; As with the rest of <span class="MyVariablesShortCompanyName">Raima</span>'s family product members, db_REVISE was designed primarily for use in developing commercial applications and not as an end-user product. </p>
+        <p>db_REVISE must be used in conjunction with any 3.xx or later version of <span class="MyVariablesProductShortName">RDM</span>.&#160; Where <span class="MyVariablesProductShortName">RDM</span> is used to design and manage a database, db_REVISE can be used to restructure that database.&#160; You must be able to access the schema of the database you wish to revise.&#160; </p>
+        <p>If the database was designed with a version of <span class="MyVariablesProductShortName">RDM</span> earlier than 3.xx, you must run the ddlp corresponding to your version of <span class="MyVariablesProductShortName">RDM</span> on a copy of the database schema file for use during the database revision process.&#160;&#160; </p>
+        <h2 class="Heading2"><a MadCap:generatedBookmark="TOC" name="1.2_RDM_Documentation"></a>1.2 <span class="MyVariablesProductShortName">RDM</span> Documentation </h2>
+        <p><span class="MyVariablesProductShortName">RDM</span> documentation is a three-manual set and includes this db_REVISE User's Guide, the <a href="../../UG/Chapter1.htm"><span class="MyVariablesProductShortName">RDM</span> User's Guide</a> and the <a href="../../RM/Chapter1.htm"><span class="MyVariablesProductShortName">RDM</span> Reference Manual</a>.&#160; </p>
+        <p>The full set is provided online as HTML.&#160;&#160;&#160; </p>
+        <h3 class="Heading3"><a MadCap:generatedBookmark="TOC" name="1.2.1_About_This_Manual"></a>1.2.1 About This Manual </h3>
+        <p>This manual was designed to be self-instructional.&#160; If this is your first encounter with db_REVISE, we recommend that you read all the sections.&#160; Each section is a prerequisite to the next. </p>
+        <p>This manual documents the functions of the current version of db_REVISE.&#160; Each section begins with an Introduction that gives a general idea of the section's subject matter.&#160; </p>
+        <p>The manual is divided into sections as follows: </p>
+        <blockquote><a href="Chapter2.htm">The Basics of Database Revision</a>
+        </blockquote>
+        <blockquote>
+            <blockquote>Provides a quick overview of the usage of db_REVISE.&#160; In a tutorial mode, it discusses the motivations for common database revisions and gives examples of how they can be performed.  Also, the full set of command line options is explained. </blockquote>
+        </blockquote>
+        <blockquote><a href="Chapter3.htm">The Three Classes of Revision</a>
+        </blockquote>
+        <blockquote>
+            <blockquote>Provides the full functional specification of db_REVISE.&#160; The three classes of revision (static, derived, and specified) are fully defined. </blockquote>
+        </blockquote>
+        <blockquote><a href="Chapter4.htm">Examples of Common Operations</a>
+        </blockquote>
+        <blockquote>
+            <blockquote>Provides examples of the most common uses of db_REVISE, using the tims database already familiar to users of <span class="MyVariablesProductShortName">RDM</span>. </blockquote>
+        </blockquote>
+        <blockquote><a href="AppendixA.htm">Errors and Warnings</a>
+        </blockquote>
+        <blockquote>
+            <blockquote>Summarizes the error and warning messages db_REVISE prints, with some suggested causes and solutions. </blockquote>
+        </blockquote>
+        <h3 class="Heading3"><a MadCap:generatedBookmark="TOC" name="1.2.2_Conventions"></a>1.2.2 Conventions </h3>
+        <p>Table 1-1 describes the notational conventions used in this guide. </p>
+        <table class="errcode_table" style="border-left-style: solid;border-left-width: 1px;border-left-color: #c0c0c0;border-right-style: solid;border-right-width: 1px;border-right-color: #c0c0c0;border-top-style: solid;border-top-width: 1px;border-top-color: #c0c0c0;border-bottom-style: solid;border-bottom-width: 1px;border-bottom-color: #c0c0c0;border-collapse: collapse;margin-left: 0;margin-right: auto;caption-side: top;">
+            <caption>Table 1-1.&#160; Document Notational Conventions</caption>
+            <col style="width: 186px;" />
+            <col />
+            <tr>
+                <th>Convention</th>
+                <th>Description</th>
+            </tr>
+            <tr>
+                <td>
+                    <p><b>Bold Text </b>
+                    </p>
+                </td>
+                <td>
+                    <p>Indicates the names of functions, commands, data structures, statements, databases, utilities, files, etc.&#160; Note that the case distinctions used in the names are not significant for all operating systems.&#160;&#160; </p>
+                </td>
+            </tr>
+            <tr>
+                <td>
+                    <p><i>Italic Text </i>
+                    </p>
+                </td>
+                <td>
+                    <p>Represents the names of variables, such as parameters and command options.&#160; The <span class="MyVariablesProductShortName">RDM</span> documents also use italics for the names of books.&#160;&#160; </p>
+                </td>
+            </tr>
+            <tr>
+                <td>
+                    <p><span style="font-family: 'Courier New';">Courier Text </span>
+                    </p>
+                </td>
+                <td>
+                    <p>Indicates a programming example or a command line entry.&#160; Programming examples in this book are enclosed in boxes. </p>
+                </td>
+            </tr>
+            <tr>
+                <td>
+                    <p>Brackets ([ ]) </p>
+                </td>
+                <td>
+                    <p>Indicate optional fields or parameters in command lines and syntax statements. </p>
+                </td>
+            </tr>
+            <tr>
+                <td>
+                    <p>Bar Symbol (|) </p>
+                </td>
+                <td>
+                    <p>Separates alternative selections.&#160; You should enter one of the items separated by the bar. </p>
+                </td>
+            </tr>
+            <tr>
+                <td>
+                    <p>Ellipsis (...) </p>
+                </td>
+                <td>
+                    <p>Indicates that you can repeat the preceding item.&#160; Both horizontal and vertical ellipses are used in programming examples to indicate omitted code. </p>
+                </td>
+            </tr>
+            <tr>
+                <td>
+                    <p>Arrow Symbols (&lt; &gt;) </p>
+                </td>
+                <td>
+                    <p>Indicate information that you must supply.&#160; For example, &lt;filename&gt;.h represents a header file that you name.&#160; Arrow symbols are also used in text to set off keyboard key names, as in &lt;Ctrl&gt;. </p>
+                </td>
+            </tr>
+        </table>
+        <h4><a MadCap:generatedBookmark="TOC" name="Graphics_Conventions"></a>Graphics Conventions </h4>
+        <p>The definitions of record, field, and set types are illustrated with two-dimensional diagrams as shown in Figure 1-1.&#160; The SOURCE and DESTINATION headings are used throughout the manual to contrast the original, or source, database and the new, or destination, database.&#160; </p>
+        <p>&#160;</p>
+        <p class="Caption">
+            <img src="../../Resources/Images/db_revise/02000002.jpg" class="img_1" />
+            <br />Figure 1-1.&#160; Representation of Schemas </p>
+        <p>Instances of records, fields, and sets are illustrated with three-dimensional diagrams as shown in Figure 1-2.&#160; The SOURCE and DESTINATION headings show the instances as they would appear both before and after a revision by db_REVISE. </p>
+        <p class="Caption">
+            <img src="../../Resources/Images/db_revise/02000003.jpg" class="img_1" />
+            <br />Figure 1-2.&#160; Representation of Database Object Instances </p>
+        <hr MadCap:conditions="Default.ScreenOnly" width="100%" size="0" align="center" />
+        <p MadCap:conditions="Default.ScreenOnly" style="font-size: 8pt;"><span class="MyVariablesCopyright">Copyright © 2012, Raima Inc. All rights reserved.</span>
+        </p>
+        <script type="text/javascript" src="../../SkinSupport/MadCapBodyEnd.js">
+        </script>
+        <p class="MCWebHelpFramesetLink MCWebHelpFramesetLinkBottom" style="display: none;"><a href="../../../Default_CSH.htm#util/dbrevise/Chapter1.htm" style="">Open topic with navigation</a>
+        </p>
+    </body>
+</html>

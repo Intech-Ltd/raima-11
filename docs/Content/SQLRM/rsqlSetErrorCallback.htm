@@ -1,0 +1,203 @@
+<?xml version="1.0" encoding="utf-8"?>
+<!DOCTYPE html PUBLIC "-//W3C//DTD XHTML 1.0 Strict//EN" "http://www.w3.org/TR/xhtml1/DTD/xhtml1-strict.dtd">
+<html xmlns:MadCap="http://www.madcapsoftware.com/Schemas/MadCap.xsd" MadCap:tocPath="SQL API|RSQL User's Guide|RSQL API Function Reference" MadCap:InPreviewMode="false" MadCap:PreloadImages="false" MadCap:RuntimeFileType="Topic" MadCap:TargetType="WebHelp" lang="en-us" xml:lang="en-us" MadCap:PathToHelpSystem="../../" MadCap:HelpSystemFileName="Default.xml" MadCap:SearchType="Stem">
+    <head>
+        <meta http-equiv="Content-Type" content="text/html; charset=utf-8" /><title>rsqlSetErrorCallback</title>
+        <link rel="icon" type="image/png" href="http://docs.raima.com/favicon.png" />
+        <link href="../SkinSupport/MadCap.css" rel="stylesheet" />
+        <link href="../Resources/TableStyles/FunctionArgs.css" rel="stylesheet" />
+        <link href="../Resources/TableStyles/SQLErrorCodes.css" rel="stylesheet" />
+        <link href="../Resources/Stylesheets/raima.css" rel="stylesheet" />
+        <script src="../SkinSupport/MadCapAll.js" type="text/javascript">
+        </script>
+    </head>
+    <body>
+        <p class="MCWebHelpFramesetLink MCWebHelpFramesetLinkTop" style="display: none;"><a href="../../Default_CSH.htm#SQLRM/rsqlSetErrorCallback.htm" style="">Open topic with navigation</a>
+        </p>
+        <div class="MCBreadcrumbsBox_0"><span class="MCBreadcrumbsPrefix">You are here: </span><a class="MCBreadcrumbsLink" href="../dbRSQL.htm">SQL API</a><span class="MCBreadcrumbsDivider"> &gt; </span><a class="MCBreadcrumbsLink" href="../RSQLUG/dbSQLUG.htm">RSQL User's Guide</a><span class="MCBreadcrumbsDivider"> &gt; </span><a class="MCBreadcrumbsLink" href="SQLAPIReference.htm">RSQL API Function Reference</a><span class="MCBreadcrumbsDivider"> &gt; </span><span class="MCBreadcrumbs">rsqlSetErrorCallback</span>
+        </div>
+        <h3 class="newpage"><a name="kanchor321"></a>rsqlSetErrorCallback</h3>
+        <p>Set an <span class="MyVariablesRSQLName">RDM SQL</span> error callback function</p>
+        <p class="Heading">Prototype</p><pre xml:space="preserve">RSQL_ERRCODE EXTERNAL_FCN rsqlSetErrorCallback(
+ 	HCONN      	    hConn,
+	RSQL_ERRHANDLER     errfcn,
+       void               *data)
+</pre>
+        <p class="Heading">Arguments</p>
+        <table style="width: 100%;mc-table-style: url('../Resources/TableStyles/FunctionArgs.css');margin-left: 0;margin-right: auto;" class="TableStyle-FunctionArgs" cellspacing="0">
+            <col class="Column-Column1" />
+            <col class="Column-Column3" />
+            <col class="Column-Column2" />
+            <tbody>
+                <tr class="Body-Body1">
+                    <td class="BodyE-Column1-Body1">hConn</td>
+                    <td class="BodyE-Column3-Body1">(input)</td>
+                    <td class="BodyD-Column2-Body1">The connection handle.</td>
+                </tr>
+                <tr class="Body-Body1">
+                    <td class="BodyE-Column1-Body1" style="font-family: monospace;">errfcn</td>
+                    <td class="BodyE-Column3-Body1">(input)</td>
+                    <td class="BodyD-Column2-Body1">User error function to be called by <span class="MyVariablesRSQLName">RDM SQL</span> when an error occurs.</td>
+                </tr>
+                <tr class="Body-Body1">
+                    <td style="font-family: monospace;" class="BodyB-Column1-Body1">data</td>
+                    <td class="BodyB-Column3-Body1">(input)</td>
+                    <td class="BodyA-Column2-Body1">Pointer to a user data area that will be passed by SQL to the error handler function when an error occurs. </td>
+                </tr>
+            </tbody>
+        </table>
+        <p class="Heading">Description</p>
+        <p>This function registers an application's error handling function that will be called by <span class="MyVariablesRSQLName">RDM SQL</span> whenever an error occurs.  SQL will call the registered function after it has completed all of its own error handling and clean up.   </p>
+        <p>All errors except <code>errINVHANDLE</code> <![CDATA[ ]]>will cause the error handling function to be called.   Additionally, errors returned from the following functions cannot call the error handling function:</p>
+        <ul>
+            <li value="1">rsqlTFSInit</li>
+            <li value="2">rsqlAllocConn</li>
+            <li value="3">rsqlGetErrorMsg</li>
+            <li value="4">rsqlGetErrorInfo</li>
+            <li value="5">rsqlSetErrorCallback</li>
+        </ul>
+        <p>The error handling function that is passed into <code>rsqlSetErrorCallback</code> must be declared to exactly match the following prototype:</p>
+        <p class="Heading">Error Handler Prototype</p><pre xml:space="preserve">RSQL_ERRCODE EXTERNAL_FCN MyErrorHandler(
+    HRSQL           hndl,
+    RSQL_ERRCODE    stat,
+    void           *data)
+</pre>
+        <p class="Heading">Error Handler Arguments</p>
+        <table style="width: 100%;mc-table-style: url('../Resources/TableStyles/FunctionArgs.css');margin-left: 0;margin-right: auto;" class="TableStyle-FunctionArgs" cellspacing="0">
+            <col class="Column-Column1" />
+            <col class="Column-Column3" />
+            <col class="Column-Column2" />
+            <tbody>
+                <tr class="Body-Body1">
+                    <td class="BodyE-Column1-Body1">hndl</td>
+                    <td class="BodyE-Column3-Body1">(input)</td>
+                    <td class="BodyD-Column2-Body1">The connection handle or the statement handle for which the error occurred.</td>
+                </tr>
+                <tr class="Body-Body1">
+                    <td class="BodyE-Column1-Body1" style="font-family: monospace;">stat</td>
+                    <td class="BodyE-Column3-Body1">(input)</td>
+                    <td class="BodyD-Column2-Body1">Error code returned from the most recent <span class="MyVariablesRSQLName">RDM SQL</span> API call.</td>
+                </tr>
+                <tr class="Body-Body1">
+                    <td style="font-family: monospace;" class="BodyB-Column1-Body1">data</td>
+                    <td class="BodyB-Column3-Body1">(input)</td>
+                    <td class="BodyA-Column2-Body1">Pointer to a user data area that will be passed by SQL to the error handler function when an error occurs. </td>
+                </tr>
+            </tbody>
+        </table>
+        <p>  The contents of the data area is totally up to the developer.   Typical uses would be to include a statement handle, connection handle, error count (see example below).</p>
+        <p>The error handler can be disabled by calling <code>rsqlSetErrorCallback</code> with the <code>errfcn</code> argument set to NULL.</p>
+        <p>The error handler is free to use a <code>longjmp</code> call to exit out of the    context in which the <span class="MyVariablesRSQLName">RDM SQL</span> API function was called.    You are allowed to call <code>rsql</code> functions from the error handler.  Care    should be taken to avoid infinite recursion as any error from these    calls may invoke the error handler again.</p>
+        <p>The error code returned by the error handler will be delivered back to the API function for which the error happened.  This error code will not be stored in the connection or statement handle.  Querying any of these handles will yield the last error code set by the SQL engine.</p>
+        <p>The developer can use an error handler to get a full stack trace for your application and the SQL engine when errors happen.
+    Set a break point from a debugger in the error handler.  When the break point is hit the debugger
+    can give you a stack trace.  When appropriate, please attach such a stack trace if you file a bug.</p>
+        <p class="Heading">Example</p><pre xml:space="preserve"><b>#include "rsql.h"</b>
+...
+struct mydata_t {
+    char *myContext
+};
+
+#define MSGLEN 133
+
+<b>static RSQL_ERRCODE EXTERNAL_FCN MySQLErr (HRSQL hndl, RSQL_ERRCODE code, void *data) {
+    struct mydata_t *md= (struct mydata_t *)data;
+    RSQL_ERRCODE status;
+    char    errmsg[MSGLEN];
+
+    status= rsqlGetErrorInfo(hndl, errmsg, MSGLEN);
+    if (status == errSUCCESS) {
+        printf("*** error: %s (%s)\n", errmsg, myContex);
+        ...
+    }
+    return code;
+}</b>
+
+... MyFunction (...) {
+    struct mydata_t mydata;
+    mydata.myContext = "MyApplication";
+
+    <b>rsqlSetErrorCallback (hdbc, MySQLErr, &amp;mydata);</b>
+    ...
+}
+</pre>
+        <p class="Heading">Required Headers</p><pre xml:space="preserve">#include "rsql.h"</pre>
+        <p class="Heading">Libraries</p>
+        <table style="width: 100%; margin-left: 0; margin-right: auto;">
+            <col style="width: 200px;">
+            </col>
+            <col>
+            </col>
+            <thead>
+                <tr>
+                    <th>Library Name</th>
+                    <th>Description</th>
+                </tr>
+            </thead>
+            <tbody>
+                <tr>
+                    <td><code>rdmrsql<span class="MyVariablesLibraryVersion">11</span></code>
+                    </td>
+                    <td>RSQL&#160;API Library</td>
+                </tr>
+            </tbody>
+        </table>
+        <p>See <a href="../GS/distrib.htm#Library">Library Naming Conventions</a> section for full library name and a list of library dependencies.</p>
+        <p class="Heading">Return Codes</p>
+        <p>Error code returned from the most recent <span class="MyVariablesRSQLName">RDM SQL</span> API call</p>
+        <table class="TableStyle-SQLErrorCodes" cellspacing="0" style="mc-table-style: url('../Resources/TableStyles/SQLErrorCodes.css');">
+            <col class="Column-Column1" />
+            <col class="Column-Column2" />
+            <col class="Column-Column3" />
+            <col class="Column-Column4" />
+            <tbody>
+                <tr class="Body-Body1">
+                    <th class="BodyB-Column1-Body1" style="font-weight: bold;">Error Code</th>
+                    <th class="BodyB-Column2-Body1" style="font-weight: bold;">Enum Identifier</th>
+                    <th class="BodyB-Column3-Body1" style="font-weight: bold;">SQL State</th>
+                    <th class="BodyA-Column4-Body1" style="font-weight: bold;">Description</th>
+                </tr>
+            </tbody>
+        </table>
+        <table class="TableStyle-SQLErrorCodes" cellspacing="0" style="mc-table-style: url('../Resources/TableStyles/SQLErrorCodes.css');">
+            <col class="Column-Column1" />
+            <col class="Column-Column2" />
+            <col class="Column-Column3" />
+            <col class="Column-Column4" />
+            <tbody>
+                <tr class="Body-Body1">
+                    <td class="BodyB-Column1-Body1">0</td>
+                    <td class="BodyB-Column2-Body1">errSUCCESS</td>
+                    <td class="BodyB-Column3-Body1">00000</td>
+                    <td class="BodyA-Column4-Body1">no error was detected</td>
+                </tr>
+            </tbody>
+        </table>
+        <table class="TableStyle-SQLErrorCodes" cellspacing="0" style="mc-table-style: url('../Resources/TableStyles/SQLErrorCodes.css');">
+            <col class="Column-Column1" />
+            <col class="Column-Column2" />
+            <col class="Column-Column3" />
+            <col class="Column-Column4" />
+            <tbody>
+                <tr class="Body-Body1">
+                    <td class="BodyB-Column1-Body1">-5</td>
+                    <td class="BodyB-Column2-Body1">errINVHANDLE</td>
+                    <td class="BodyB-Column3-Body1">02002</td>
+                    <td class="BodyA-Column4-Body1">invalid connection or statement handle</td>
+                </tr>
+            </tbody>
+        </table>
+        <p class="Heading">See Also</p>
+        <p><a href="rsqlAllocConn.htm">rsqlAllocConn</a>
+        </p>
+        <p><a href="rsqlGetConnHandle.htm">rsqlGetConnHandle</a>
+        </p>
+        <hr MadCap:conditions="Default.ScreenOnly" width="100%" size="0" align="center" />
+        <p MadCap:conditions="Default.ScreenOnly" style="font-size: 8pt;"><span class="MyVariablesCopyright">Copyright © 2012, Raima Inc. All rights reserved.</span>
+        </p>
+        <script type="text/javascript" src="../SkinSupport/MadCapBodyEnd.js">
+        </script>
+        <p class="MCWebHelpFramesetLink MCWebHelpFramesetLinkBottom" style="display: none;"><a href="../../Default_CSH.htm#SQLRM/rsqlSetErrorCallback.htm" style="">Open topic with navigation</a>
+        </p>
+    </body>
+</html>

@@ -1,0 +1,118 @@
+<?xml version="1.0" encoding="utf-8"?>
+<!DOCTYPE html PUBLIC "-//W3C//DTD XHTML 1.0 Strict//EN" "http://www.w3.org/TR/xhtml1/DTD/xhtml1-strict.dtd">
+<html xmlns:MadCap="http://www.madcapsoftware.com/Schemas/MadCap.xsd" MadCap:tocPath="TFS Configuration &amp; Extension API|Summary Listing of TFS API Functions" MadCap:InPreviewMode="false" MadCap:PreloadImages="false" MadCap:RuntimeFileType="Topic" MadCap:TargetType="WebHelp" lang="en-us" xml:lang="en-us" MadCap:PathToHelpSystem="../../../" MadCap:HelpSystemFileName="Default.xml" MadCap:SearchType="Stem">
+    <head>
+        <meta http-equiv="Content-Type" content="text/html; charset=utf-8" /><title>d_tfsversion</title>
+        <link rel="icon" type="image/png" href="http://docs.raima.com/favicon.png" />
+        <link href="../../SkinSupport/MadCap.css" rel="stylesheet" />
+        <link href="../../Resources/TableStyles/FunctionArgs.css" rel="stylesheet" />
+        <link href="../../Resources/TableStyles/CoreErrCodes.css" rel="stylesheet" />
+        <link href="../../Resources/Stylesheets/raima.css" rel="stylesheet" />
+        <script src="../../SkinSupport/MadCapAll.js" type="text/javascript">
+        </script>
+    </head>
+    <body>
+        <p class="MCWebHelpFramesetLink MCWebHelpFramesetLinkTop" style="display: none;"><a href="../../../Default_CSH.htm#RM/utilapi/d_tfsversion.htm" style="">Open topic with navigation</a>
+        </p>
+        <div class="MCBreadcrumbsBox_0"><span class="MCBreadcrumbsPrefix">You are here: </span><a class="MCBreadcrumbsLink" href="../../TFS/dbTFSUG.htm">TFS Configuration &amp; Extension API</a><span class="MCBreadcrumbsDivider"> &gt; </span><a class="MCBreadcrumbsLink" href="../../TFS/TFSAPIReference.htm">Summary Listing of TFS API Functions</a><span class="MCBreadcrumbsDivider"> &gt; </span><span class="MCBreadcrumbs">d_tfsversion</span>
+        </div>
+        <h3 class="newpage"><a name="kanchor415"></a>d_tfsversion</h3>
+        <p>Query TFS library version and configuration information</p>
+        <p class="Heading">Prototype</p><pre xml:space="preserve">int32_t <b>d_tfsversion</b>(
+    uint16_t     *<i>major</i>, 
+    uint16_t     *<i>minor</i>, 
+    TFS_LIB_TYPE *<i>type</i>);</pre>
+        <p class="Heading">Parameters</p>
+        <table style="width: 100%;mc-table-style: url('../../Resources/TableStyles/FunctionArgs.css');margin-left: 0;margin-right: auto;" class="TableStyle-FunctionArgs" cellspacing="0">
+            <col style="width: 140px;" class="Column-Column1" />
+            <col style="width: 80px;" class="Column-Column3" />
+            <col class="Column-Column2" />
+            <tbody>
+                <tr class="Body-Body1">
+                    <td class="BodyE-Column1-Body1">major</td>
+                    <td class="BodyE-Column3-Body1">(output)</td>
+                    <td class="BodyD-Column2-Body1">The major version number of <span class="MyVariablesProductShortName">RDM</span>.</td>
+                </tr>
+                <tr class="Body-Body1">
+                    <td class="BodyE-Column1-Body1">minor</td>
+                    <td class="BodyE-Column3-Body1">(output)</td>
+                    <td class="BodyD-Column2-Body1">The minor version (revision) number of <span class="MyVariablesProductShortName">RDM</span>.</td>
+                </tr>
+                <tr class="Body-Body1">
+                    <td class="BodyB-Column1-Body1">type</td>
+                    <td class="BodyB-Column3-Body1">(output)</td>
+                    <td class="BodyA-Column2-Body1">The underlying TFS type: RPC, Direct-link or Standalone.</td>
+                </tr>
+            </tbody>
+        </table>
+        <p class="Heading">Description</p>
+        <p>This function asks the TFS library which configuration it is. The type parameter receives an enumerated value back. There are three possible values:</p>
+        <ul>
+            <li value="1">TFS_LIB_TYPE_RPC - [DEFAULT] The TFS is running as a separate server and the runtime accesses the TFS through Remote Procedure Calls.</li>
+            <li value="2">TFS_LIB_TYPE_TFS - The TFS has been linked directly into this program.</li>
+            <li value="3">TFS_LIB_TYPE_STANDALONE - The TFS supports only a single user and single thread. Meant for specialized environments.</li>
+        </ul>
+        <p>In addition, the major and minor version of <span class="MyVariablesProductShortName">RDM</span> are returned.</p>
+        <p class="Heading">TFS&#160;User's Guide</p>
+        <p><a href="../../TFS/Chapter2.htm#2.3">Direct-Link Configuration</a>
+        </p>
+        <p class="Heading">Required Headers</p><pre xml:space="preserve">#include "rdm.h"</pre>
+        <p class="Heading">Libraries</p>
+        <table style="width: 100%; margin-left: 0; margin-right: auto;">
+            <col style="width: 200px;">
+            </col>
+            <col>
+            </col>
+            <thead>
+                <tr>
+                    <th>Library Name</th>
+                    <th>Description</th>
+                </tr>
+            </thead>
+            <tbody>
+                <tr>
+                    <td><code>rdmrdm<span class="MyVariablesLibraryVersion">11</span></code>
+                    </td>
+                    <td><span class="MyVariablesProductShortName">RDM</span> Runtime Library</td>
+                </tr>
+            </tbody>
+        </table>
+        <p>See <a href="../../GS/distrib.htm#Library">Library Naming Conventions</a> section for full library name and a list of library dependencies.</p>
+        <p class="Heading">Return Codes</p>
+        <table class="TableStyle-CoreErrCodes" cellspacing="0" style="mc-table-style: url('../../Resources/TableStyles/CoreErrCodes.css');">
+            <col class="Column-Column1" />
+            <col class="Column-Column2" />
+            <col class="Column-Column3" />
+            <thead>
+                <tr class="Head-Header1">
+                    <th class="HeadE-Column1-Header1">Value</th>
+                    <th class="HeadE-Column2-Header1">Name</th>
+                    <th class="HeadD-Column3-Header1">Description</th>
+                </tr>
+            </thead>
+            <tbody>
+                <tr class="Body-Body1">
+                    <td class="BodyB-Column1-Body1">0</td>
+                    <td class="BodyB-Column2-Body1">S_OKAY</td>
+                    <td class="BodyA-Column3-Body1">normal return, okay</td>
+                </tr>
+            </tbody>
+        </table>
+        <p class="Heading">See Also</p>
+        <p><a href="d_tfsinit.htm">d_tfsinit</a>
+        </p>
+        <p><a href="d_tfsrun.htm">d_tfsrun</a>
+        </p>
+        <p><a href="d_tfsstop.htm">d_tfsstop</a>
+        </p>
+        <p><a href="d_tfsterm.htm">d_tfsterm</a>
+        </p>
+        <hr MadCap:conditions="Default.ScreenOnly" width="100%" size="0" align="center" />
+        <p MadCap:conditions="Default.ScreenOnly" style="font-size: 8pt;"><span class="MyVariablesCopyright">Copyright © 2012, Raima Inc. All rights reserved.</span>
+        </p>
+        <script type="text/javascript" src="../../SkinSupport/MadCapBodyEnd.js">
+        </script>
+        <p class="MCWebHelpFramesetLink MCWebHelpFramesetLinkBottom" style="display: none;"><a href="../../../Default_CSH.htm#RM/utilapi/d_tfsversion.htm" style="">Open topic with navigation</a>
+        </p>
+    </body>
+</html>

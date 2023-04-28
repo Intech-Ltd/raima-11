@@ -1,0 +1,89 @@
+<?xml version="1.0" encoding="utf-8"?>
+<!DOCTYPE html PUBLIC "-//W3C//DTD XHTML 1.0 Strict//EN" "http://www.w3.org/TR/xhtml1/DTD/xhtml1-strict.dtd">
+<html xmlns:MadCap="http://www.madcapsoftware.com/Schemas/MadCap.xsd" MadCap:tocPath="Installation Guide and Release Notes|Release Notes" MadCap:InPreviewMode="false" MadCap:PreloadImages="false" MadCap:RuntimeFileType="Topic" MadCap:TargetType="WebHelp" lang="en-us" xml:lang="en-us" class="" MadCap:PathToHelpSystem="../../" MadCap:HelpSystemFileName="Default.xml" MadCap:SearchType="Stem">
+    <head>
+        <meta http-equiv="Content-Type" content="text/html; charset=utf-8" /><title>Green Hills INTEGRITY 10.0.x Platform Release Notes</title>
+        <link rel="icon" type="image/png" href="http://docs.raima.com/favicon.png" />
+        <link href="../SkinSupport/MadCap.css" rel="stylesheet" />
+        <link href="../Resources/Stylesheets/raima.css" rel="stylesheet" />
+        <script src="../SkinSupport/MadCapAll.js" type="text/javascript">
+        </script>
+    </head>
+    <body>
+        <p class="MCWebHelpFramesetLink MCWebHelpFramesetLinkTop" style="display: none;"><a href="../../Default_CSH.htm#GS/RelNotes-ghs.htm" style="">Open topic with navigation</a>
+        </p>
+        <div class="MCBreadcrumbsBox_0"><span class="MCBreadcrumbsPrefix">You are here: </span><span class="MCBreadcrumbsSelf">Installation Guide and Release Notes</span><span class="MCBreadcrumbsDivider"> &gt; </span><a class="MCBreadcrumbsLink" href="RelNotes.htm">Release Notes</a><span class="MCBreadcrumbsDivider"> &gt; </span><span class="MCBreadcrumbs">Green Hills INTEGRITY 10.0.x Platform Release Notes</span>
+        </div>
+        <h2 class="newpage">Green Hills INTEGRITY 10.0.x Platform Release Notes</h2>
+        <h3>	Introduction 
+&#160;</h3>
+        <p>This PS (Platform-Specific) Guide focuses on the INTEGRITY 10.0.x
+operating system using "Single Address Space POSIX" for RDM. This
+section explains:
+   <![CDATA[
+]]></p>
+        <ul>
+            <li value="1">Integrity</li>
+            <li value="2">Creating an Integrity kernel
+    </li>
+            <li value="3">Building RDM for Integrity
+    </li>
+        </ul>
+        <p>RDM for Integrity is set up as a host/target install with a cross compiling procedure. Supported host platforms are Linux or Windows.</p>
+        <p>This release of <span class="MyVariablesProductShortName">RDM</span> is supported for Green Hills INTEGRITY 10.0.x on
+x86.</p>
+        <h3>INTEGRITY</h3>
+        <p>INTEGRITY is a POSIX like operating system for the embedded space. An
+applications can use a number of address spaces with protection
+between them or they can be linked directly into the kernel. INTEGRITY
+also supports downloading of address spaces. Each address space is a
+fully linked (possibly with use of shared libraries between the
+address spaces). Applications must be put together using an
+integration tool before they can be downloaded to the target.</p>
+        <p>With INTEGRITY you have the option to use a real target or a
+simulator. The simulators are simulators that actually
+simulates the instruction set of the architecture. It is not
+an environment using you host instruction set with a BSP on top of
+your host OS to emulate the INTEGRITY environment.</p>
+        <p>With INTEGRITY there are different options on how to get your code
+running on a board or a simulator:</p>
+        <ul>
+            <li value="1">A kernel that is able to dynamically download and load
+      applications. When you are done the application can be unloaded.</li>
+            <li value="2">Compile your application together with the kernel using the
+      kernel's address space.</li>
+            <li value="3">Use a number of address spaces. E.g. One for the kernel, one for
+      the virtual file system server, one for the TCPIP stack, and one
+      for the application.</li>
+        </ul>
+        <p>Our project files use the first approach using "Single
+Address Space POSIX".</p>
+        <h3>Creating an INTEGRITY kernel</h3>
+        <p>Configuring and compiling an INTEGRITY kernel for "Single Address
+Space POSIX" is done from within the Multi Project Manager.  Make sure
+to include ffs, socket, net, and rpc.</p>
+        <h3>Building RDM for INTEGRITY</h3>
+        <p>For a Pentium target open the project file in the Multi Project
+ Manager:</p><pre xml:space="preserve">  target/integrity/pcx86/default.gpj</pre>
+        <p class="Notes">You may need to change the location of the INTEGRITY target OS to
+    match your installation.  Please edit the project file before
+    opening it or set the build options inside the Multi Project
+    Manager to reflect your installation.</p>
+        <p class="Notes">There are some sub projects that are greyed out.  These are not
+    included in the package you have.  They are either sub projects
+    for internal tests and tools that are not distributed or sub
+    projects that are not included in the particular package you have.</p>
+        <p>Build the project from within the Multi Project Manager.</p>
+        <p>Tools and examples will show up under target/integrity/pcx86/mod.  The
+files with extension '.ael' are INTEGRITY applications you can load
+and run on the target.  You will not be able to set program
+arguments so most of the tools will not be applicable for INTEGRITY.</p>
+        <hr MadCap:conditions="Default.ScreenOnly" width="100%" size="0" align="center" />
+        <p MadCap:conditions="Default.ScreenOnly" style="font-size: 8pt;"><span class="MyVariablesCopyright">Copyright © 2012, Raima Inc. All rights reserved.</span>
+        </p>
+        <script type="text/javascript" src="../SkinSupport/MadCapBodyEnd.js">
+        </script>
+        <p class="MCWebHelpFramesetLink MCWebHelpFramesetLinkBottom" style="display: none;"><a href="../../Default_CSH.htm#GS/RelNotes-ghs.htm" style="">Open topic with navigation</a>
+        </p>
+    </body>
+</html>

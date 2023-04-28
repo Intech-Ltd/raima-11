@@ -1,0 +1,138 @@
+<?xml version="1.0" encoding="utf-8"?>
+<!DOCTYPE html PUBLIC "-//W3C//DTD XHTML 1.0 Strict//EN" "http://www.w3.org/TR/xhtml1/DTD/xhtml1-strict.dtd">
+<html xmlns:MadCap="http://www.madcapsoftware.com/Schemas/MadCap.xsd" MadCap:tocPath="SQL API" MadCap:InPreviewMode="false" MadCap:PreloadImages="false" MadCap:RuntimeFileType="Topic" MadCap:TargetType="WebHelp" lang="en-us" xml:lang="en-us" MadCap:PathToHelpSystem="../../" MadCap:HelpSystemFileName="Default.xml" MadCap:SearchType="Stem">
+    <head>
+        <meta http-equiv="Content-Type" content="text/html; charset=utf-8" /><title>Registering RDM ODBC&#160;Driver</title>
+        <link rel="icon" type="image/png" href="http://docs.raima.com/favicon.png" />
+        <link href="../SkinSupport/MadCap.css" rel="stylesheet" />
+        <link href="../Resources/TableStyles/TwoColNoLines.css" rel="stylesheet" />
+        <link href="../Resources/Stylesheets/raima.css" rel="stylesheet" />
+        <script src="../SkinSupport/MadCapAll.js" type="text/javascript">
+        </script>
+    </head>
+    <body>
+        <p class="MCWebHelpFramesetLink MCWebHelpFramesetLinkTop" style="display: none;"><a href="../../Default_CSH.htm#ODBCRM/DriverRegistration.htm" style="">Open topic with navigation</a>
+        </p>
+        <div class="MCBreadcrumbsBox_0"><span class="MCBreadcrumbsPrefix">You are here: </span><a class="MCBreadcrumbsLink" href="../dbRSQL.htm">SQL API</a><span class="MCBreadcrumbsDivider"> &gt; </span><span class="MCBreadcrumbs">Registering ODBC&#160;Driver Manager</span>
+        </div>
+        <h1><a MadCap:generatedBookmark="TOC" name="Registering_RDM_ODBC&#160;Driver"></a>Registering <span class="MyVariablesProductShortName">RDM</span> ODBC&#160;Driver</h1>
+        <h2><a MadCap:generatedBookmark="TOC" name="Overview"></a>Overview</h2>
+        <p>On Microsoft Windows, the <span class="MyVariablesProductShortName">RDM</span> ODBC Driver will be registered with Microsoft ODBC Driver Manager (ODBC DM). This allows any application built with the Microsoft ODBC libraries to access <span class="MyVariablesProductShortName">RDM</span> databases through ODBC DM. The registration will be performed automatically as part of the product installation. The registration will create one default Data Source Name (DSN) entry for the <span class="MyVariablesProductShortName">RDM</span> ODBC Driver. The user will be able to configure the default DSN entry or create one or more new DSN entries as necessary.</p>
+        <h2><a MadCap:generatedBookmark="TOC" name="Opening_the_ODBC_Driver_Manager"></a>Opening the ODBC Driver Manager</h2>
+        <p>To access the registered ODBC driver entries, take the following steps. Windows 7 is used for this purpose.</p>
+        <ol>
+            <li value="1">Click the Start Button on the Windows task bar.</li>
+            <li value="2">Click "Control Panel."</li>
+            <li value="3">Make sure your "View By" selection shows "Category."</li>
+            <li value="4">Click "System and Security."</li>
+            <li value="5">Click "Administrative Tools."</li>
+            <li value="6">Double-click "Data Sources (ODBC)."</li>
+        </ol>
+        <p>A dialog box that looks like this should be displayed (Figure 1).</p>
+        <p class="Caption">
+            <img src="../Resources/Images/ODBCDataSourceAdmin.png" />
+            <br />Figure 1: ODBC Data Source Administrator</p>
+        <h2><a MadCap:generatedBookmark="TOC" name="Configuring_the_default_DSN_entry"></a>Configuring the default DSN entry</h2>
+        <p>To configure the default DSN entry for <span class="MyVariablesProductShortName">RDM</span> ODBC, highlight the entry named “RDM” on one of the DSN tabs ("User DSN," "System DSN" or "File DSN") and click "Configure." Each tab its own default entry for <span class="MyVariablesProductShortName">RDM</span>. Changes made with the entry in one tab will not affect those in other tabs.</p>
+        <p>The "ODBC <span class="MyVariablesProductName">Raima Database Manager</span> Setup" dialog box will be displayed (Figure 2).</p>
+        <p class="Caption">
+            <img src="../Resources/Images/ODBCRDMeSetup.png" />
+            <br />Figure 2: ODBC RDM Setup</p>
+        <table style="width: 100%;mc-table-style: url('../Resources/TableStyles/TwoColNoLines.css');margin-left: 0;margin-right: auto;" class="TableStyle-TwoColNoLines" cellspacing="0">
+            <col class="Column-Column1" style="width: 175px;" />
+            <col class="Column-Column2" />
+            <tbody>
+                <tr class="Body-Body1">
+                    <td class="BodyE-Column1-Body1" style="font-weight: bold;font-style: italic;">Data Source Name</td>
+                    <td class="BodyD-Column2-Body1">Data Source Name is a unique identifier of the DSN entry. The default value is "RDM". To change the value, type in the desired text in the edit box and click "OK."</td>
+                </tr>
+                <tr class="Body-Body1">
+                    <td class="BodyE-Column1-Body1" style="font-weight: bold;font-style: italic;">Description</td>
+                    <td class="BodyD-Column2-Body1">Description is a text description of the DSN entry. To change the value, type in the desired text in the edit box and click “OK.”</td>
+                </tr>
+                <tr class="Body-Body1">
+                    <td class="BodyE-Column1-Body1" style="font-weight: bold;font-style: italic;">Databases</td>
+                    <td class="BodyD-Column2-Body1">The <span class="MyVariablesProductShortName">RDM</span> ODBC Driver requires that one or more default databases be specified with ODBC DM. <span class="MyVariablesProductShortName">RDM</span> ODBC will open the specified databases once it successfully connects to the <span class="MyVariablesProductShortName">RDM</span> server. To add, modify or remove default databases, click "Databases." The "Database Configuration" dialog will be displayed (Figure 3).</td>
+                </tr>
+                <tr class="Body-Body1">
+                    <td class="BodyB-Column1-Body1" style="font-weight: bold;font-style: italic;">Options</td>
+                    <td class="BodyA-Column2-Body1">Click the "Options" button to configure the advanced options, such as the driver connection type. The "ODBC RDM Setup" dialog will expand as shown in Figure 5.</td>
+                </tr>
+            </tbody>
+        </table>
+        <h3><a MadCap:generatedBookmark="TOC" name="Working_with_Default_Databases"></a>Working with Default Databases</h3>
+        <p class="Caption">
+            <img src="../Resources/Images/ODBCDBConfig.png" />
+            <br />Figure 3: Database Configuration</p>
+        <table style="width: 100%;mc-table-style: url('../Resources/TableStyles/TwoColNoLines.css');margin-left: 0;margin-right: auto;" class="TableStyle-TwoColNoLines" cellspacing="0">
+            <col class="Column-Column1" style="width: 175px;" />
+            <col class="Column-Column2" />
+            <tbody>
+                <tr class="Body-Body1">
+                    <td class="BodyE-Column1-Body1" style="font-weight: bold;font-style: italic;">Default Server</td>
+                    <td class="BodyD-Column2-Body1">Default Server is the default alias of the <span class="MyVariablesProductShortName">RDM</span> TFServer the database is stored on. When you click "Add" to add a new default database, the value specified here will be used as the default server name.</td>
+                </tr>
+                <tr class="Body-Body1">
+                    <td class="BodyB-Column1-Body1" style="font-weight: bold;font-style: italic;">Default Port Number</td>
+                    <td class="BodyA-Column2-Body1">Default Port Number is the default TCP/IP port number the <span class="MyVariablesProductShortName">RDM</span> TFServer is listening on. TFServer the database is stored on. When you click "Add" to add a new default database, the value specified here will be used as the default TCP/IP port number.</td>
+                </tr>
+            </tbody>
+        </table>
+        <p>To add a new database, click "Add." To modify an existing database, highlight the database to modify and click "Modify." To remove an existing database, highlight it and click "Remove."</p>
+        <p>Clicking "Add" or "Modify" will display the "New/Modify Database" dialog box. The "New Database" dialog box will be displayed (Figure 4).</p>
+        <p class="Caption">
+            <img src="../Resources/Images/ODBCNewDB.png" />
+            <br />Figure 4: New Database</p>
+        <p>To add a new default database, type the desired name in the Name edit box. Modify the Server and Port Number values if necessary. When finished, click "OK."</p>
+        <p>To modify an existing default database, modify the Name, Server and Port Number entries as necessary. When finished, click "OK."</p>
+        <h3><a MadCap:generatedBookmark="TOC" name="Changing_the_Advanced_Options"></a>Changing the Advanced Options</h3>
+        <p>Click the "Options" button on the "ODBC <span class="MyVariablesProductName">Raima Database Manager</span> Setup" dialog box (shown in Figure 2) in order to access the advanced configuration options. The dialog box will expand as follows.</p>
+        <p class="Caption">
+            <img src="../Resources/Images/ODBCAdvancedSetup.png" />
+            <br />Figure 5: ODBC RDM Setup with Advanced Options</p>
+        <table style="width: 100%;mc-table-style: url('../Resources/TableStyles/TwoColNoLines.css');margin-left: 0;margin-right: auto;" class="TableStyle-TwoColNoLines" cellspacing="0">
+            <col class="Column-Column1" style="width: 175px;" />
+            <col class="Column-Column2" />
+            <tbody>
+                <tr class="Body-Body1">
+                    <td class="BodyE-Column1-Body1" style="font-weight: bold;font-style: italic;">Connection Type</td>
+                    <td class="BodyD-Column2-Body1">The <span class="MyVariablesProductShortName">RDM</span> ODBC Driver allows the application to access <span class="MyVariablesProductShortName">RDM</span> databases locally through TFServer or remotely through our remote server (called <code><span class="MyVariablesUrdmsqlserver">rdmsqlserver</span></code>). The default connection type is "Local." Change this option to "Remote" in order to connect to a remote server.</td>
+                </tr>
+                <tr class="Body-Body1">
+                    <td class="BodyE-Column1-Body1" style="font-weight: bold;font-style: italic;">Remote Server</td>
+                    <td class="BodyD-Column2-Body1">Specify the name of the host where the remote server is running here when selecting the "Remote" connection type. This value is ignored when the connection type is "Local." The default value is "localhost."</td>
+                </tr>
+                <tr class="Body-Body1">
+                    <td class="BodyB-Column1-Body1" style="font-weight: bold;font-style: italic;">Use Database Name As</td>
+                    <td class="BodyA-Column2-Body1">This option enables/disables the schema name support in the <span class="MyVariablesProductShortName">RDM</span> ODBC Driver. Some third-party ODBC tools may require this option to be set one way or the other in order to access <span class="MyVariablesProductShortName">RDM</span> databases. The support is disabled by default. We recommend that this option not be changed unless your ODBC tool does not correctly work with <span class="MyVariablesProductShortName">RDM</span> ODBC with the default value.</td>
+                </tr>
+            </tbody>
+        </table>
+        <h2><a MadCap:generatedBookmark="TOC" name="Adding_a_new_DSN_entry"></a>Adding a new DSN entry</h2>
+        <p>To add a new DSN entry for <span class="MyVariablesProductShortName">RDM</span> ODBC, highlight the entry named "RDM" on one of the DSN tabs ("User DSN," "System DSN" or "File DSN") and click "Add." The "Create New Data Source" dialog box will be displayed (Figure 6).</p>
+        <p class="Caption">
+            <img src="../Resources/Images/ODBCNewDSN.png" />
+            <br />Figure 6: Create New Data Source</p>
+        <p>Highlight "RDM" and click "Finish." The "ODBC RDM Setup" dialog box (Figure 2) will be displayed.</p>
+        <p>See the Configuring the default DSN Entry” section for details on the options.</p>
+        <h2><a MadCap:generatedBookmark="TOC" name="Removing_an_existing_DSN_entry"></a>Removing an existing DSN entry</h2>
+        <p>To remove an existing DSN entry for <span class="MyVariablesProductShortName">RDM</span> ODBC, highlight the entry you wish to remove on one of the DSN tabs ("User DSN," "System DSN" or "File DSN") and click "Remove." The confirmation dialog will be displayed (Figure 7).</p>
+        <p class="Caption">
+            <img src="../Resources/Images/ODBCDSNRemove.png" />
+            <br />Figure 7: Confirmation Dialog</p>
+        <p>Click "Yes" to remove the selected DSN entry.</p>
+        <h2><a MadCap:generatedBookmark="TOC" name="Using_the_ODBC_Driver"></a>Using the ODBC Driver</h2>
+        <p>In order to use the RDM ODBC Driver, you must first start an instance of rdmsqlserver in the location of the document root, or by passing in the location with <code>-d</code>. Note that by default, rdmsqlserver will start it's own TFS internally.</p><pre xml:space="preserve">
+&gt;cd database\
+&gt;start rdmsqlserver.exe</pre>
+        <p>or</p><pre xml:space="preserve">&gt;start rdmsqlserver.exe -d c:\database\
+</pre>
+        <hr MadCap:conditions="Default.ScreenOnly" width="100%" size="0" align="center" />
+        <p MadCap:conditions="Default.ScreenOnly" style="font-size: 8pt;"><span class="MyVariablesCopyright">Copyright © 2012, Raima Inc. All rights reserved.</span>
+        </p>
+        <script type="text/javascript" src="../SkinSupport/MadCapBodyEnd.js">
+        </script>
+        <p class="MCWebHelpFramesetLink MCWebHelpFramesetLinkBottom" style="display: none;"><a href="../../Default_CSH.htm#ODBCRM/DriverRegistration.htm" style="">Open topic with navigation</a>
+        </p>
+    </body>
+</html>

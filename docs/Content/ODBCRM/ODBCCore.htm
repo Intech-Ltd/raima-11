@@ -1,0 +1,338 @@
+<?xml version="1.0" encoding="utf-8"?>
+<!DOCTYPE html PUBLIC "-//W3C//DTD XHTML 1.0 Strict//EN" "http://www.w3.org/TR/xhtml1/DTD/xhtml1-strict.dtd">
+<html xmlns:MadCap="http://www.madcapsoftware.com/Schemas/MadCap.xsd" MadCap:tocPath="SQL API|ODBC User's Guide" MadCap:InPreviewMode="false" MadCap:PreloadImages="false" MadCap:RuntimeFileType="Topic" MadCap:TargetType="WebHelp" lang="en-us" xml:lang="en-us" MadCap:PathToHelpSystem="../../" MadCap:HelpSystemFileName="Default.xml" MadCap:SearchType="Stem">
+    <head>
+        <meta http-equiv="Content-Type" content="text/html; charset=utf-8" /><title>RDM ODBC API&#160;Reference</title>
+        <link rel="icon" type="image/png" href="http://docs.raima.com/favicon.png" />
+        <link href="../SkinSupport/MadCap.css" rel="stylesheet" />
+        <link href="../Resources/TableStyles/fncSummary.css" rel="stylesheet" />
+        <link href="../Resources/Stylesheets/raima.css" rel="stylesheet" />
+        <script src="../SkinSupport/MadCapAll.js" type="text/javascript">
+        </script>
+    </head>
+    <body>
+        <p class="MCWebHelpFramesetLink MCWebHelpFramesetLinkTop" style="display: none;"><a href="../../Default_CSH.htm#ODBCRM/ODBCCore.htm" style="">Open topic with navigation</a>
+        </p>
+        <div class="MCBreadcrumbsBox_0"><span class="MCBreadcrumbsPrefix">You are here: </span><a class="MCBreadcrumbsLink" href="../dbRSQL.htm">SQL API</a><span class="MCBreadcrumbsDivider"> &gt; </span><a class="MCBreadcrumbsLink" href="dbODBCUG.htm">ODBC User's Guide</a><span class="MCBreadcrumbsDivider"> &gt; </span><span class="MCBreadcrumbs">RDM ODBC API&#160;Reference</span>
+        </div>
+        <h1><a MadCap:generatedBookmark="TOC" name="RDM_ODBC_API&#160;Reference"></a><span class="MyVariablesProductShortName">RDM</span> ODBC API&#160;Reference</h1>
+        <p>The topics in this section describe each ODBC function in alphabetical order. Each function is defined as a C programming language function. Descriptions include the following:</p>
+        <ul>
+            <li value="1">Purpose</li>
+            <li value="2">Conformance</li>
+            <li value="3">Syntax</li>
+            <li value="4">Arguments</li>
+            <li value="5">Return values</li>
+        </ul>
+        <p>All of the following APIs conform to the ODBC&#160;3.51 specification unless otherwise noted. <span class="MyVariablesProductShortName">RDM</span> specific extensions to the APIs will be documented in the <b>Diagnostics</b> or <b>Comments</b> sections of the page. If function does not contain a <b>Diagnostics</b> or <b>Comments</b> section, the MSDN&#160;documentation applies to that specific function.</p>
+        <p class="Heading">Unicode API&#160;Functions</p>
+        <p>The <span class="MyVariablesProductShortName">RDM</span> ODBC&#160;API&#160;supports both ANSI and Unicode versions of all functions that accept pointers to character strings or SQLPOINTER in their arguments. The Unicode functions are implemented as functions with a suffix of "W", such as <b>SQLExecDirectW</b> and <b>SQLGetInfoW</b>.</p>
+        <p class="Heading">Function Reference Pages</p>
+        <p>This section contains topics for the following functions:</p>
+        <table style="mc-table-style: url('../Resources/TableStyles/fncSummary.css');margin-left: 0;margin-right: auto;width: 100%;" class="TableStyle-fncSummary" cellspacing="0">
+            <col class="Column-Column1" />
+            <col class="Column-Column2" />
+            <thead>
+                <tr class="Head-Header1">
+                    <th class="HeadE-Column1-Header1">Function Name</th>
+                    <th class="HeadD-Column2-Header1">Description</th>
+                </tr>
+            </thead>
+            <tbody>
+                <tr class="Body-Body1">
+                    <td class="BodyE-Column1-Body1"><a href="api/SQLAllocHandle.htm">SQLAllocHandle</a>
+                    </td>
+                    <td class="BodyD-Column2-Body1">Allocates an environment, connection, statement, or descriptor handle</td>
+                </tr>
+                <tr class="Body-Body1">
+                    <td class="BodyE-Column1-Body1"><a href="api/SQLBindCol.htm">SQLBindCol</a>
+                    </td>
+                    <td class="BodyD-Column2-Body1">Binds application data buffers to columns in the result set.</td>
+                </tr>
+                <tr class="Body-Body1">
+                    <td class="BodyE-Column1-Body1"><a href="api/SQLBindParameter.htm">SQLBindParameter</a>
+                    </td>
+                    <td class="BodyD-Column2-Body1">Binds a buffer to a parameter marker in an SQL statement.</td>
+                </tr>
+                <tr class="Body-Body1">
+                    <td class="BodyE-Column1-Body1"><a href="api/SQLCancel.htm">SQLCancel</a>
+                    </td>
+                    <td class="BodyD-Column2-Body1">Cancels the processing on a statement.</td>
+                </tr>
+                <tr class="Body-Body1">
+                    <td class="BodyE-Column1-Body1"><a href="api/SQLCloseCursor.htm">SQLCloseCursor</a>
+                    </td>
+                    <td class="BodyD-Column2-Body1">Closes a cursor that has been opened on a statement and discards pending results.</td>
+                </tr>
+                <tr class="Body-Body1">
+                    <td class="BodyE-Column1-Body1"><a href="api/SQLColAttribute.htm">SQLColAttribute</a>
+                    </td>
+                    <td class="BodyD-Column2-Body1">Returns descriptor information for a column in a result set. Descriptor information is returned as a character string, a 32-bit descriptor-dependent value, or an integer value.</td>
+                </tr>
+                <tr class="Body-Body1">
+                    <td class="BodyE-Column1-Body1"><a href="api/SQLColumns.htm">SQLColumns</a>
+                    </td>
+                    <td class="BodyD-Column2-Body1">Returns the list of column names in specified tables. The driver returns this information as a result set on the specified <code>StatementHandle</code>.</td>
+                </tr>
+                <tr class="Body-Body1">
+                    <td class="BodyE-Column1-Body1"><a href="api/SQLConnect.htm">SQLConnect</a>
+                    </td>
+                    <td class="BodyD-Column2-Body1">Establishes connections to <span class="MyVariablesProductShortName">RDM</span> databases via <span class="MyVariablesProductShortName">RDM</span> ODBC.</td>
+                </tr>
+                <tr class="Body-Body1">
+                    <td class="BodyE-Column1-Body1"><a href="api/SQLCopyDesc.htm">SQLCopyDesc</a>
+                    </td>
+                    <td class="BodyD-Column2-Body1">Copies descriptor information from one descriptor handle to another.</td>
+                </tr>
+                <tr class="Body-Body1">
+                    <td class="BodyE-Column1-Body1"><a href="api/SQLDescribeCol.htm">SQLDescribeCol</a>
+                    </td>
+                    <td class="BodyD-Column2-Body1">Retrieves the basic result data set for a column</td>
+                </tr>
+                <tr class="Body-Body1">
+                    <td class="BodyE-Column1-Body1"><a href="api/SQLDescribeParam.htm">SQLDescribeParam</a>
+                    </td>
+                    <td class="BodyD-Column2-Body1">Retrieves description of a parameter marker</td>
+                </tr>
+                <tr class="Body-Body1">
+                    <td class="BodyE-Column1-Body1"><a href="api/SQLDescribeStmt.htm">SQLDescribeStmt</a>
+                    </td>
+                    <td class="BodyD-Column2-Body1">Retrieves the type of the SQL statement executed on the handle.</td>
+                </tr>
+                <tr class="Body-Body1">
+                    <td class="BodyE-Column1-Body1"><a href="api/SQLDisconnect.htm">SQLDisconnect</a>
+                    </td>
+                    <td class="BodyD-Column2-Body1">Closes the connection associated with a specified handle</td>
+                </tr>
+                <tr class="Body-Body1">
+                    <td class="BodyE-Column1-Body1"><a href="api/SQLDriverConnect.htm">SQLDriverConnect</a>
+                    </td>
+                    <td class="BodyD-Column2-Body1">Establishes connections to <span class="MyVariablesProductShortName">RDM</span> databases via <span class="MyVariablesProductShortName">RDM</span> ODBC. Accepts more connection options than <code>SQLConnect</code>.</td>
+                </tr>
+                <tr class="Body-Body1">
+                    <td class="BodyE-Column1-Body1"><a href="api/SQLEndTran.htm">SQLEndTran</a>
+                    </td>
+                    <td class="BodyD-Column2-Body1">Requests a commit or rollback for active transactions</td>
+                </tr>
+                <tr class="Body-Body1">
+                    <td class="BodyE-Column1-Body1"><a href="api/SQLExecDirect.htm">SQLExecDirect</a>
+                    </td>
+                    <td class="BodyD-Column2-Body1">Prepares and executes an SQL statement</td>
+                </tr>
+                <tr class="Body-Body1">
+                    <td class="BodyE-Column1-Body1"><a href="api/SQLExecute.htm">SQLExecute</a>
+                    </td>
+                    <td class="BodyD-Column2-Body1">Executes a previously prepared SQL statement</td>
+                </tr>
+                <tr class="Body-Body1">
+                    <td class="BodyE-Column1-Body1"><a href="api/SQLExtendedTran.htm">SQLExtendedTran</a>
+                    </td>
+                    <td class="BodyD-Column2-Body1">Performs a transaction operation</td>
+                </tr>
+                <tr class="Body-Body1">
+                    <td class="BodyE-Column1-Body1"><a href="api/SQLFetch.htm">SQLFetch</a>
+                    </td>
+                    <td class="BodyD-Column2-Body1">Fetches data from a bound column to an application variable</td>
+                </tr>
+                <tr class="Body-Body1">
+                    <td class="BodyE-Column1-Body1"><a href="api/SQLFetchScroll.htm">SQLFetchScroll</a>
+                    </td>
+                    <td class="BodyD-Column2-Body1">Fetches the specified rowset of data from the result set and returns data for all bound columns.</td>
+                </tr>
+                <tr class="Body-Body1">
+                    <td class="BodyE-Column1-Body1"><a href="api/SQLForeignKeys.htm">SQLForeignKeys</a>
+                    </td>
+                    <td class="BodyD-Column2-Body1"><code>SQLForeignKeys</code> can return a list of foreign keys in the specified table (columns in the specified table that refer to primary keys in other tables) or a list of foreign keys in other tables that refer to the primary key in the specified table.
+The driver returns each list as a result set on the specified statement.</td>
+                </tr>
+                <tr class="Body-Body1">
+                    <td class="BodyE-Column1-Body1"><a href="api/SQLFreeHandle.htm">SQLFreeHandle</a>
+                    </td>
+                    <td class="BodyD-Column2-Body1">Frees resources associated with a specific environment, connection, statement, or descriptor handle.</td>
+                </tr>
+                <tr class="Body-Body1">
+                    <td class="BodyE-Column1-Body1"><a href="api/SQLFreeStmt.htm">SQLFreeStmt</a>
+                    </td>
+                    <td class="BodyD-Column2-Body1">Stops processing associated with a specific statement, closes any open cursors associated with the statement, discards pending results, or, optionally, frees all resources associated with the statement handle.</td>
+                </tr>
+                <tr class="Body-Body1">
+                    <td class="BodyE-Column1-Body1"><a href="api/SQLGetConnectAttr.htm">SQLGetConnectAttr</a>
+                    </td>
+                    <td class="BodyD-Column2-Body1">Returns the current setting of a connection attribute.</td>
+                </tr>
+                <tr class="Body-Body1">
+                    <td class="BodyE-Column1-Body1"><a href="api/SQLGetCursorName.htm">SQLGetCursorName</a>
+                    </td>
+                    <td class="BodyD-Column2-Body1">Retrieves the cursor name of an SQL statement handle</td>
+                </tr>
+                <tr class="Body-Body1">
+                    <td class="BodyE-Column1-Body1"><a href="api/SQLGetData.htm">SQLGetData</a>
+                    </td>
+                    <td class="BodyD-Column2-Body1">Retrieves data for a single column in the result set. It can be called multiple times to retrieve variable-length data in parts.</td>
+                </tr>
+                <tr class="Body-Body1">
+                    <td class="BodyE-Column1-Body1"><a href="api/SQLGetDescField.htm">SQLGetDescField</a>
+                    </td>
+                    <td class="BodyD-Column2-Body1">Returns the current setting or value of a single field of a descriptor record.</td>
+                </tr>
+                <tr class="Body-Body1">
+                    <td class="BodyE-Column1-Body1"><a href="api/SQLGetDescRec.htm">SQLGetDescRec</a>
+                    </td>
+                    <td class="BodyD-Column2-Body1">Returns the current settings or values of multiple fields of a descriptor record. The fields returned describe the name, data type, and storage of column or parameter data.</td>
+                </tr>
+                <tr class="Body-Body1">
+                    <td class="BodyE-Column1-Body1"><a href="api/SQLGetDiagField.htm">SQLGetDiagField</a>
+                    </td>
+                    <td class="BodyD-Column2-Body1">Retrieves current field value of a status record</td>
+                </tr>
+                <tr class="Body-Body1">
+                    <td class="BodyE-Column1-Body1"><a href="api/SQLGetDiagRec.htm">SQLGetDiagRec</a>
+                    </td>
+                    <td class="BodyD-Column2-Body1">Retrieves current values of several common fields of a status record</td>
+                </tr>
+                <tr class="Body-Body1">
+                    <td class="BodyE-Column1-Body1"><a href="api/SQLGetEnvAttr.htm">SQLGetEnvAttr</a>
+                    </td>
+                    <td class="BodyD-Column2-Body1">Returns the current setting of an environment attribute.</td>
+                </tr>
+                <tr class="Body-Body1">
+                    <td class="BodyE-Column1-Body1"><a href="api/SQLGetFunctions.htm">SQLGetFunctions</a>
+                    </td>
+                    <td class="BodyD-Column2-Body1">Returns information about whether a driver supports a specific ODBC function.</td>
+                </tr>
+                <tr class="Body-Body1">
+                    <td class="BodyE-Column1-Body1"><a href="api/SQLGetInfo.htm">SQLGetInfo</a>
+                    </td>
+                    <td class="BodyD-Column2-Body1">Returns general information about the driver and data source associated with a connection.</td>
+                </tr>
+                <tr class="Body-Body1">
+                    <td class="BodyE-Column1-Body1"><a href="api/SQLGetStmtAttr.htm">SQLGetStmtAttr</a>
+                    </td>
+                    <td class="BodyD-Column2-Body1">Returns the current setting of a statement attribute.</td>
+                </tr>
+                <tr class="Body-Body1">
+                    <td class="BodyE-Column1-Body1"><a href="api/SQLGetTypeInfo.htm">SQLGetTypeInfo</a>
+                    </td>
+                    <td class="BodyD-Column2-Body1">Returns information about data types supported by the data source.</td>
+                </tr>
+                <tr class="Body-Body1">
+                    <td class="BodyE-Column1-Body1"><a href="api/SQLMoreResults.htm">SQLMoreResults</a>
+                    </td>
+                    <td class="BodyD-Column2-Body1">Determines whether more results are available on a statement containing <b>SELECT</b>, <b>UPDATE</b>, <b>INSERT</b>, or <b>DELETE</b> statements and, if so, initializes processing for those results.</td>
+                </tr>
+                <tr class="Body-Body1">
+                    <td class="BodyE-Column1-Body1"><a href="api/SQLNativeSql.htm">SQLNativeSql</a>
+                    </td>
+                    <td class="BodyD-Column2-Body1">Returns the SQL string as modified by the driver. <code>SQLNativeSql</code> does not execute the SQL statement.</td>
+                </tr>
+                <tr class="Body-Body1">
+                    <td class="BodyE-Column1-Body1"><a href="api/SQLNumParams.htm">SQLNumParams</a>
+                    </td>
+                    <td class="BodyD-Column2-Body1">Determines the number of parameters in a prepared statement</td>
+                </tr>
+                <tr class="Body-Body1">
+                    <td class="BodyE-Column1-Body1"><a href="api/SQLNumResultCols.htm">SQLNumResultCols</a>
+                    </td>
+                    <td class="BodyD-Column2-Body1">Returns the number of columns in a result set.</td>
+                </tr>
+                <tr class="Body-Body1">
+                    <td class="BodyE-Column1-Body1"><a href="api/SQLParamData.htm">SQLParamData</a>
+                    </td>
+                    <td class="BodyD-Column2-Body1"><code>SQLParamData</code> is used together with <code>SQLPutData</code> to supply parameter data at statement execution time, and with <code>SQLGetData</code> to retrieve streamed output parameter data.</td>
+                </tr>
+                <tr class="Body-Body1">
+                    <td class="BodyE-Column1-Body1"><a href="api/SQLPrepare.htm">SQLPrepare</a>
+                    </td>
+                    <td class="BodyD-Column2-Body1">Prepares an SQL string for execution.</td>
+                </tr>
+                <tr class="Body-Body1">
+                    <td class="BodyE-Column1-Body1"><a href="api/SQLPrimaryKeys.htm">SQLPrimaryKeys</a>
+                    </td>
+                    <td class="BodyD-Column2-Body1">Returns the column names that make up the primary key for a table. The driver returns the information as a result set. This function does not support returning primary keys from multiple tables in a single call.</td>
+                </tr>
+                <tr class="Body-Body1">
+                    <td class="BodyE-Column1-Body1"><a href="api/SQLProcedureColumns.htm">SQLProcedureColumns</a>
+                    </td>
+                    <td class="BodyD-Column2-Body1">Returns the parameter and column information about the specified procedures.</td>
+                </tr>
+                <tr class="Body-Body1">
+                    <td class="BodyE-Column1-Body1"><a href="api/SQLProcedures.htm">SQLProcedures</a>
+                    </td>
+                    <td class="BodyD-Column2-Body1">Returns the list of procedure names stored in a specific data source. Procedure is a generic term used to describe an executable object, or a named entity that can be invoked using input and output parameters.</td>
+                </tr>
+                <tr class="Body-Body1">
+                    <td class="BodyE-Column1-Body1"><a href="api/SQLPutData.htm">SQLPutData</a>
+                    </td>
+                    <td class="BodyD-Column2-Body1">Allows an application to send data for a parameter or column to the driver at statement execution time. This function can be used to send character or binary data values in parts to a column with a character, binary, or data source–specific data type (for example, parameters of the <code>SQL_LONGVARBINARY</code> or <code>SQL_LONGVARCHAR</code> types).</td>
+                </tr>
+                <tr class="Body-Body1">
+                    <td class="BodyE-Column1-Body1"><a href="api/SQLRowCount.htm">SQLRowCount</a>
+                    </td>
+                    <td class="BodyD-Column2-Body1">Gets row count in a table following an <b>INSERT</b>, <b>UPDATE</b>, or <b>DELETE</b></td>
+                </tr>
+                <tr class="Body-Body1">
+                    <td class="BodyE-Column1-Body1"><a href="api/SQLSetConnectAttr.htm">SQLSetConnectAttr</a>
+                    </td>
+                    <td class="BodyD-Column2-Body1">Sets attributes that govern aspects of connections.</td>
+                </tr>
+                <tr class="Body-Body1">
+                    <td class="BodyE-Column1-Body1"><a href="api/SQLSetCursorName.htm">SQLSetCursorName</a>
+                    </td>
+                    <td class="BodyD-Column2-Body1">Associates a cursor name with an active statement.</td>
+                </tr>
+                <tr class="Body-Body1">
+                    <td class="BodyE-Column1-Body1"><a href="api/SQLSetDescField.htm">SQLSetDescField</a>
+                    </td>
+                    <td class="BodyD-Column2-Body1">Sets the value of a single field of a descriptor record.</td>
+                </tr>
+                <tr class="Body-Body1">
+                    <td class="BodyE-Column1-Body1"><a href="api/SQLSetDescRec.htm">SQLSetDescRec</a>
+                    </td>
+                    <td class="BodyD-Column2-Body1">Sets multiple descriptor fields that affect the data type and buffer bound to a column or parameter data.</td>
+                </tr>
+                <tr class="Body-Body1">
+                    <td class="BodyE-Column1-Body1"><a href="api/SQLSetEnvAttr.htm">SQLSetEnvAttr</a>
+                    </td>
+                    <td class="BodyD-Column2-Body1">Sets attributes that govern aspects of environments.</td>
+                </tr>
+                <tr class="Body-Body1">
+                    <td class="BodyE-Column1-Body1"><a href="api/SQLSetError.htm">SQLSetError</a>
+                    </td>
+                    <td class="BodyD-Column2-Body1">Registers user-defined status/error handling functions.</td>
+                </tr>
+                <tr class="Body-Body1">
+                    <td class="BodyE-Column1-Body1"><a href="api/SQLSetStmtAttr.htm">SQLSetStmtAttr</a>
+                    </td>
+                    <td class="BodyD-Column2-Body1">Sets attributes related to a statement</td>
+                </tr>
+                <tr class="Body-Body1">
+                    <td class="BodyE-Column1-Body1"><a href="api/SQLSpecialColumns.htm">SQLSpecialColumns</a>
+                    </td>
+                    <td class="BodyD-Column2-Body1">Returns the information about the set of columns that uniquely identifies a row in the table.</td>
+                </tr>
+                <tr class="Body-Body1">
+                    <td class="BodyE-Column1-Body1"><a href="api/SQLStatistics.htm">SQLStatistics</a>
+                    </td>
+                    <td class="BodyD-Column2-Body1">Retrieves a list of statistics about a single table and the indexes associated with the table. The driver returns the information as a result set.</td>
+                </tr>
+                <tr class="Body-Body1">
+                    <td class="BodyE-Column1-Body1"><a href="api/SQLTables.htm">SQLTables</a>
+                    </td>
+                    <td class="BodyD-Column2-Body1">Returns the list of table, catalog, or schema names, and table types, stored in a specific data source.</td>
+                </tr>
+                <tr class="Body-Body1">
+                    <td class="BodyB-Column1-Body1"><a href="api/SQLTransactStatus.htm">SQLTransactStatus</a>
+                    </td>
+                    <td class="BodyA-Column2-Body1">Retrieves the type and status of the transaction possibly executed on the handle.</td>
+                </tr>
+            </tbody>
+        </table>
+        <hr MadCap:conditions="Default.ScreenOnly" width="100%" size="0" align="center" />
+        <p MadCap:conditions="Default.ScreenOnly" style="font-size: 8pt;"><span class="MyVariablesCopyright">Copyright © 2012, Raima Inc. All rights reserved.</span>
+        </p>
+        <script type="text/javascript" src="../SkinSupport/MadCapBodyEnd.js">
+        </script>
+        <p class="MCWebHelpFramesetLink MCWebHelpFramesetLinkBottom" style="display: none;"><a href="../../Default_CSH.htm#ODBCRM/ODBCCore.htm" style="">Open topic with navigation</a>
+        </p>
+    </body>
+</html>

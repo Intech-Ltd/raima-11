@@ -1,0 +1,1001 @@
+<?xml version="1.0" encoding="utf-8"?>
+<!DOCTYPE html PUBLIC "-//W3C//DTD XHTML 1.0 Strict//EN" "http://www.w3.org/TR/xhtml1/DTD/xhtml1-strict.dtd">
+<html xmlns:MadCap="http://www.madcapsoftware.com/Schemas/MadCap.xsd" MadCap:tocPath="Native API|User's Guide" MadCap:InPreviewMode="false" MadCap:PreloadImages="false" MadCap:RuntimeFileType="Topic" MadCap:TargetType="WebHelp" lang="en-us" xml:lang="en-us" class="" MadCap:PathToHelpSystem="../../" MadCap:HelpSystemFileName="Default.xml" MadCap:SearchType="Stem">
+    <head>
+        <meta http-equiv="Content-Type" content="text/html; charset=utf-8" /><title>Import / Export</title>
+        <link rel="icon" type="image/png" href="http://docs.raima.com/favicon.png" />
+        <link href="../SkinSupport/MadCap.css" rel="stylesheet" />
+        <link href="../Resources/TableStyles/ArgsTwoCol.css" rel="stylesheet" />
+        <link href="../Resources/TableStyles/fncSummary.css" rel="stylesheet" />
+        <link href="../Resources/Stylesheets/raima.css" rel="stylesheet" />
+        <script src="../SkinSupport/MadCapAll.js" type="text/javascript">
+        </script>
+    </head>
+    <body>
+        <p class="MCWebHelpFramesetLink MCWebHelpFramesetLinkTop" style="display: none;"><a href="../../Default_CSH.htm#UG/Chapter10.htm" style="">Open topic with navigation</a>
+        </p>
+        <div class="MCBreadcrumbsBox_0"><span class="MCBreadcrumbsPrefix">You are here: </span><a class="MCBreadcrumbsLink" href="../dbCore.htm">Native API</a><span class="MCBreadcrumbsDivider"> &gt; </span><a class="MCBreadcrumbsLink" href="dbUG.htm">User's Guide</a><span class="MCBreadcrumbsDivider"> &gt; </span><span class="MCBreadcrumbs">Import / Export Support</span>
+        </div>
+        <h1 class="firstHeading"><a MadCap:generatedBookmark="TOC" name="Import___Export_Support"></a>Import / Export Support</h1>
+        <h2 class="Heading2"><a MadCap:generatedBookmark="TOC" name="10.1_Introduction"></a>10.1 Introduction </h2>
+        <p>The <span class="MyVariablesProductShortName">RDM</span> product stores all its data in a special-purpose format. This format is specific to the product and all data in an <span class="MyVariablesProductShortName">RDM</span> database must exist in this proprietary format. In the development of a system, data often already exists in a format other than that used by <span class="MyVariablesProductShortName">RDM</span>.  Historically, the most common format has been the ASCII format, however, XML is becoming an increasingly popular format for data storage, and as such, the <span class="MyVariablesProductShortName">RDM</span> Import/Export functionality has been enhanced to allow the import and export of XML formatted data, in addition to the ASCII format which has long been supported.  By exporting data into an XML format, consumers of the data can be <span class="MyVariablesProductShortName">RDM</span> (e.g. for database restructuring or archiving), RDM Server, RDM Mobile XML, or other XML consumers, including other database products such as ADO.NET.   </p>
+        <p>The utility that imports data to an <span class="MyVariablesProductShortName">RDM</span> database is called <code>dbimp</code>, while the utility that exports data is called <code>dbexp</code>.  In adding XML Import/Export capability to <span class="MyVariablesProductShortName">RDM</span>, <code>dbimp</code> and <code>dbexp</code> have both been enhanced to work not only with ASCII files, but also with XML files.  Further, the XML Import and Export functionality is provided via a C/C++ API for users with a C/C++ application.   </p>
+        <p>This section is divided into two parts.  The first addresses the XML Import/Export functionality, the second addresses ASCII Import/Export.  </p>
+        <h2 class="Heading2"><a MadCap:generatedBookmark="TOC" name="10.2_XML_Import_Export"></a><a name="10.2"></a>10.2 XML Import/Export </h2>
+        <p>XML consumption normally requires a definition of the XML structure.  The standard definition has been in the form of DTD's embedded at the start of an XML document, however, the newer XML Schema form of data definition is becoming the standard.  <span class="MyVariablesProductShortName">RDM</span> provides the user with a choice of DTD or XML Schema. </p>
+        <p>The XML produced by the <span class="MyVariablesProductShortName">RDM</span> Export functionality is produced from native data, and the XML consumed by the <span class="MyVariablesProductShortName">RDM</span> Import functionality is consumed into native data.  This means that it is schema specific, and it is not possible to consume (import) any arbitrary XML document.  Only documents which have tags and structure that match the schema of the database are importable.  The XML content created by the XML Export functionality will allow reconstruction of sets (in the case of <span class="MyVariablesProductShortName">RDM</span> as the consumer), or interpretation by any normal XML consumer. </p>
+        <h3 class="Heading3"><a MadCap:generatedBookmark="TOC" name="10.2.1_XML_Document_Format"></a>10.2.1 XML Document Format  </h3>
+        <p>The XML exported by <span class="MyVariablesProductShortName">RDM</span> is encoded in UTF-8 format by default. The supported encodings are UTF-8 and ISO-8859-1. Unsupported encodings encountered in the XML&#160;import files will return an error.</p>
+        <h4 class="Heading4"><a MadCap:generatedBookmark="TOC" name="10.2.1.1_XML_Document"></a>10.2.1.1 XML Document </h4>
+        <p>The following section describes the format of an <span class="MyVariablesProductShortName">RDM</span> XML document.  This is the format that will be created by the export utility and export API, and it is expected that XML documents to be imported will also be in this general format. </p>
+        <p>The following code is DDL for a simple many-to-many relationship.  This DDL is the example on which this section will be based. </p><pre>database moviedb {
+    data file "moviedb.000" contains movierec;
+    data file "moviedb.001" contains patronrec;
+    data file "moviedb.002" contains reviewrec;
+    key file  "moviedb.003" contains mkey;
+    key file  "moviedb.004" contains mnkey;
+    key file  "moviedb.005" contains pkey;
+    key file  "moviedb.006" contains pnkey;
+
+    record movierec {
+        int32_t mid;
+        char mname[31];
+        compound unique key mkey {
+            mid asc;
+        }
+        compound key mnkey {
+            mname asc;
+        }
+    }
+
+    record patronrec {
+        int32_t pid;
+        char pname[31];
+        compound unique key pkey {
+            pid asc;
+        }
+        compound key pnkey {
+            pname asc;
+        }
+    }
+
+    record reviewrec {
+        short rating;
+    }
+
+    set movie_to_review {
+        order last;
+        owner movierec;
+        member reviewrec;
+    }
+
+    set patron_to_review {
+        order last;
+        owner patronrec;
+        member reviewrec;
+    }
+}</pre>
+        <p>The following figure shows some sample data in a <code>moviedb</code> database. </p>
+        <p class="Caption">
+            <img src="../Resources/Images/UsersGuide/UG-Fig-10-1_515x371.png" style="width: 515;height: 371;" />
+            <br />Fig. 10-1 Sample moviedb data</p>
+        <p>The rules for construction of an XML document from database contents are as follows: </p>
+        <ol>
+            <li value="1">The RDM product name and version number are specified in a comment at the start of the XML document, immediately after the XML version.     <![CDATA[ ]]></li>
+            <li value="2">The body of the data is within an element tagged with the database name, e.g. <code>&lt;MOVIEDB&gt;</code>. </li><pre>&lt;?xml version="1.0" encoding="utf-8"?&gt; 
+&lt;!-- <span class="MyVariablesProductShortName">RDM</span> <![CDATA[ ]]><span class="MyVariablesProductVersion">11.0</span> --&gt;  
+&lt;MOVIEDB&gt;  
+...  
+&lt;/MOVIEDB&gt; </pre>
+            <li value="3">A linear sequence of records are exported, each one tagged by its record type, e.g. <code>&lt;PATRONREC&gt;</code>, enclosing record content elements.  The order of appearance is immaterial, but will likely follow the physical order in the source database. </li><pre>...  
+&lt;PATRONREC&gt;  
+...  
+&lt;/PATRONREC&gt;  
+...                                              <![CDATA[ ]]></pre>
+            <li value="4">Enclosed within the record element are its fields, with each value represented by a tag enclosing a text string representing the value. </li><pre xml:space="preserve">                                              <![CDATA[ ]]>...  
+&lt;PATRONREC&gt;   
+    &lt;PID&gt;3&lt;/PID&gt;   
+    &lt;PNAME&gt;John&lt;/PNAME&gt;  
+&lt;/PATRONREC&gt;  
+...                                              <![CDATA[ ]]></pre>
+            <li value="5">Structured fields are represented as groups of XML elements, the group name being derived from the name of the containing structure field, as in the following example. A DDL schema might define a record containing a structure as below. </li><pre xml:space="preserve">record fileentry {
+    char filename[256];
+    struct {
+        int32_t created;
+        int32_t modified;
+    } datestamp;
+}</pre>
+            <p>The XML data corresponding to this might be as follows.  </p><pre xml:space="preserve">&lt;FILEENTRY&gt;
+    &lt;FILENAME&gt;names.txt&lt;/FILENAME&gt;
+    &lt;DATESTAMP&gt;
+        &lt;CREATED&gt;20020916&lt;/CREATED&gt;
+        &lt;MODIFIED&gt;20020916&lt;/MODIFIED&gt;
+    &lt;/DATESTAMP&gt;
+&lt;/FILEENTRY&gt;</pre>
+            <li value="6">Arrays are output in multiple XML elements. An example of a DDL schema containing character string arrays is shown below.  </li><pre xml:space="preserve">record langrec {
+    char langname[32];
+    char daynames[7][32];
+}</pre>
+            <p>An instance of the XML data corresponding to this schema is shown below.  </p><pre xml:space="preserve">&lt;LANGREC&gt;
+    &lt;LANGNAME&gt;English&lt;/LANGNAME&gt;
+    &lt;DAYNAMES&gt;Monday &lt;/DAYNAMES&gt;
+    &lt;DAYNAMES&gt;Tuesday&lt;/DAYNAMES&gt;
+    &lt;DAYNAMES&gt;Wednesday&lt;/DAYNAMES&gt;
+    &lt;DAYNAMES&gt;Thursday&lt;/DAYNAMES&gt;
+    &lt;DAYNAMES&gt;Friday&lt;/DAYNAMES&gt;
+    &lt;DAYNAMES&gt;Saturday&lt;/DAYNAMES&gt;
+    &lt;DAYNAMES&gt;Sunday&lt;/DAYNAMES&gt;
+&lt;/LANGREC&gt; </pre>
+            <li value="7">Binary data is output in Base 64 Encoding.  Binary data is identified as an array where the last dimension contains only one element, e.g. <code>char grades[10][1]</code>.  Also, if a character string contains one or more non-printable characters, the entire string will be output on Base 64 Encoding.  The following example shows DDL definitions of these array types.  </li><pre>char grades[10][1]; 
+char masks[2][4][1];  
+char blob[2048][1]; </pre>
+            <p>These fields are output in Base 64 encoding. </p>
+            <li value="8">Set membership is represented in one of two ways, each of which will allow reconstruction of the set by the dbimp utility.  If a field is defined with a set attribute, the value of the attribute is a set name.  Note that this attribute may easily be ignored by other DBMS XML imports.  The field's value is intended to locate the owner of the set to which the current record instance is connected.  Two location methods are used.   First is a primary key value.  Second is the database address. </li>
+            <br />
+            <ol style="list-style-type: lower-alpha;">
+                <li value="1"><b>Primary key method</b>: This method is used if the owner record type has a primary key (a unique, single field key).  If two or more such keys exist, only the first one will be used.  The field name in the member record is the name of the primary key of the owner record.  In this sense, it is a virtual key, which doesn't really exist in the member record.  This also allows connections to records that exist prior to the start of the import. </li><pre xml:space="preserve">&lt;MOVIEREC&gt; 
+    &lt;MID&gt;1&lt;/MID&gt; 
+    &lt;MNAME&gt;Godfather&lt;/MNAME&gt; 
+&lt;/MOVIEREC&gt;
+... 
+&lt;PATRONREC&gt; 
+    &lt;PID&gt;3&lt;/PID&gt; 
+    &lt;PNAME&gt;John&lt;/PNAME&gt; 
+&lt;/PATRONREC&gt; 
+... 
+&lt;REVIEWREC&gt; 
+    &lt;RATING&gt;0&lt;/RATING&gt; 
+    &lt;MID set="MOVIE_TO_REVIEW"&gt;1&lt;/MID&gt; 
+    &lt;PID set="PATRON_TO_REVIEW"&gt;3&lt;/PID&gt; 
+&lt;/REVIEWREC&gt;</pre>
+                <li value="2"><b>Database address method</b>: When the owner record type does not have a primary key, the database address method will be used.  When the owner record is exported, it will have an additional field inserted into its definition called ROWID.  Members will have virtual field(s) also named ROWID, which will refer to the correct set and contain the slot in the data portion of the field. </li><pre xml:space="preserve">&lt;MOVIEREC&gt;   
+    &lt;ROWID&gt;1&lt;/ROWID&gt;   
+    &lt;MID&gt;1&lt;/MID&gt;   
+    &lt;MNAME&gt;Godfather&lt;/MNAME&gt;  
+&lt;/MOVIEREC&gt;  
+...  
+&lt;PATRONREC&gt;   
+    &lt;ROWID&gt;3&lt;/ROWID&gt;   
+    &lt;PID&gt;3&lt;/PID&gt;   
+    &lt;PNAME&gt;John&lt;/PNAME&gt;  
+&lt;/PATRONREC&gt;
+...
+&lt;REVIEWREC&gt;   
+    &lt;RATING&gt;0&lt;/RATING&gt;   
+    &lt;ROWID set="MOVIE_TO_REVIEW"&gt;1&lt;/ROWID&gt;   
+    &lt;ROWID set="PATRON_TO_REVIEW"&gt;3&lt;/ROWID&gt;  
+&lt;/REVIEWREC&gt; </pre>
+            </ol>
+        </ol>
+        <h4 class="Heading4"><a MadCap:generatedBookmark="TOC" name="10.2.1.2_XML_Schema"></a>10.2.1.2 XML Schema </h4>
+        <p>If the XML Schema option (-xsd) was selected, the following XML Schema document would be created and named, by default, "moviedb.xsd".  The Schema document refers to the standard XML Schema namespace (<a href="http://www.w3.org/2001/XMLSchema">www.w3.org/2001/XMLSchema</a>), then defines the <b>targetNamespace</b> for use by the instance document. The following XML Schema document represents the Primary Key method of set connection </p><pre xml:space="preserve">&lt;schema xmlns="http://www.w3.org/2001/XMLSchema"
+    xmlns:rdm="http://www.raima.com/schema/moviedb"
+    targetNamespace="http://www.raima.com/schema/moviedb"&gt;
+
+&lt;annotation&gt;
+    &lt;documentation xml:lang="en"&gt;
+    Raima RDM Database Export of moviedb.
+    &lt;/documentation&gt;
+&lt;/annotation&gt;
+
+&lt;element name="MOVIEDB" type="rdm:moviedbtype"/&gt;
+&lt;complexType name="moviedbtype"&gt;
+    &lt;sequence&gt;
+        &lt;element name="MOVIEREC" minOccurs="0" maxOccurs="unbounded"&gt;
+            &lt;complexType&gt;
+                &lt;sequence&gt;
+                    &lt;element name="MID" type="long"/&gt;
+                    &lt;element name="MNAME" type="string"/&gt;
+                &lt;/sequence&gt;
+            &lt;/complexType&gt;
+        &lt;/element&gt;
+        &lt;element name="PATRONREC" minOccurs="0" maxOccurs="unbounded"&gt;
+            &lt;complexType&gt;
+                &lt;sequence&gt;
+                    &lt;element name="PID" type="long"/&gt;
+                    &lt;element name="PNAME" type="string"/&gt;
+                &lt;/sequence&gt;
+            &lt;/complexType&gt;
+        &lt;/element&gt;
+        &lt;element name="REVIEWREC" minOccurs="0" maxOccurs="unbounded"&gt;
+            &lt;complexType&gt;
+               &lt;sequence&gt;
+                  &lt;element name="RATING" type="short"/&gt;
+                 &lt;element name="MID" &gt;
+                    &lt;complexType&gt;
+                       &lt;simpleContent&gt;
+                      &lt;extension base="long"&gt;
+                 &lt;attribute name="set" type="string" use="required"/&gt;
+                      &lt;/extension&gt;
+                       &lt;/simpleContent&gt;
+                    &lt;/complexType&gt;
+                 &lt;/element&gt;
+                 &lt;element name="PID" &gt;
+                    &lt;complexType&gt;
+                       &lt;simpleContent&gt;
+                      &lt;extension base="long"&gt;
+                 &lt;attribute name="set" type="string" use="required"/&gt;
+                      &lt;/extension&gt;
+                             &lt;/simpleContent&gt;
+                    &lt;/complexType&gt;
+                &lt;/element&gt;
+            &lt;/sequence&gt;
+        &lt;/complexType&gt;
+    &lt;/element&gt;
+    &lt;/sequence&gt; 
+&lt;/complexType&gt;
+&lt;/schema&gt;</pre>
+        <p> The XML (instance) document needs to refer to the XML Schema.  This is done by referring to the same namespace as was declared to be the <b>targetNamespace</b> in the XML Schema document (above). A minimal XML export from this data would look like this:</p><pre xml:space="preserve">&lt;?xml version="1.0" encoding="utf-8"?&gt;
+&lt;!-- <span class="MyVariablesProductShortName">RDM</span>           <![CDATA[ ]]><span class="MyVariablesProductVersion">11.0</span> --&gt;
+
+&lt;moviedb xmlns:dt=schemas-microsoft-com:datatypes"&gt;
+    &lt;MOVIEREC&gt;
+        &lt;MID&gt;1&lt;/MID&gt;
+        &lt;MNAME&gt;Godfather&lt;/MNAME&gt;
+    &lt;/MOVIEREC&gt;
+    &lt;MOVIEREC&gt;
+        &lt;MID&gt;2&lt;/MID&gt;
+        &lt;MNAME&gt;Casablanca&lt;/MNAME&gt;
+    &lt;/MOVIEREC&gt;
+    &lt;MOVIEREC&gt;
+        &lt;MID&gt;3&lt;/MID&gt;
+        &lt;MNAME&gt;Star Wars&lt;/MNAME&gt;
+    &lt;/MOVIEREC&gt;
+    &lt;MOVIEREC&gt;
+        &lt;MID&gt;4&lt;/MID&gt;
+        &lt;MNAME&gt;Vertigo&lt;/MNAME&gt;
+    &lt;/MOVIEREC&gt;
+    &lt;PATRONREC&gt;
+        &lt;PID&gt;1&lt;/PID&gt;
+        &lt;PNAME&gt;Joe&lt;/PNAME&gt;
+    &lt;/PATRONREC&gt;
+    &lt;PATRONREC&gt;
+        &lt;PID&gt;2&lt;/PID&gt;
+        &lt;PNAME&gt;Bob&lt;/PNAME&gt;
+    &lt;/PATRONREC&gt;
+    &lt;PATRONREC&gt;
+        &lt;PID&gt;3&lt;/PID&gt;
+        &lt;PNAME&gt;John&lt;/PNAME&gt;
+    &lt;/PATRONREC&gt;
+    &lt;REVIEWREC&gt;
+        &lt;RATING&gt;0&lt;/RATING&gt;
+        &lt;MID set="MOVIE_TO_REVIEW"&gt;1&lt;/MID&gt;
+        &lt;PID set="PATRON_TO_REVIEW"&gt;1&lt;/PID&gt;
+    &lt;/REVIEWREC&gt;
+    &lt;REVIEWREC&gt;
+        &lt;RATING&gt;1&lt;/RATING&gt;
+        &lt;MID set="MOVIE_TO_REVIEW"&gt;3&lt;/MID&gt;
+        &lt;PID set="PATRON_TO_REVIEW"&gt;1&lt;/PID&gt;
+    &lt;/REVIEWREC&gt;
+    &lt;REVIEWREC&gt;
+        &lt;RATING&gt;2&lt;/RATING&gt;
+        &lt;MID set="MOVIE_TO_REVIEW"&gt;3&lt;/MID&gt;
+        &lt;PID set="PATRON_TO_REVIEW"&gt;2&lt;/PID&gt;
+    &lt;/REVIEWREC&gt;
+    &lt;REVIEWREC&gt;
+        &lt;RATING&gt;0&lt;/RATING&gt;
+        &lt;MID set="MOVIE_TO_REVIEW"&gt;1&lt;/MID&gt;
+        &lt;PID set="PATRON_TO_REVIEW"&gt;3&lt;/PID&gt;
+    &lt;/REVIEWREC&gt;
+    &lt;REVIEWREC&gt;
+        &lt;RATING&gt;1&lt;/RATING&gt;
+        &lt;MID set="MOVIE_TO_REVIEW"&gt;2&lt;/MID&gt;
+ 
+     &lt;/REVIEWREC&gt;
+    &lt;REVIEWREC&gt;
+        &lt;RATING&gt;1&lt;/RATING&gt;
+        &lt;ROWID set="MOVIEREC_TO_REVIEW"&gt;2&lt;/ROWID&gt;
+        &lt;ROWID set="PATRONREC_TO_REVIEW"&gt;3&lt;/ROWID&gt;
+    &lt;/REVIEWREC&gt;
+    &lt;REVIEWREC&gt;
+        &lt;RATING&gt;2&lt;/RATING&gt;
+        &lt;ROWID set="MOVIE_TO_REVIEW"&gt;4&lt;/ROWID&gt;
+        &lt;ROWID set="PATRON_TO_REVIEW"&gt;3&lt;/ROWID&gt;
+    &lt;/REVIEWREC&gt;
+&lt;/MOVIEDB&gt;</pre>
+        <p> Structured field definitions would be generated in an XML schema (using the –xsd option) as follows.  </p><pre>&lt;element name="FILEENTRY" minOccurs="0" maxOccurs="unbounded"&gt;
+    &lt;complexType&gt;
+        &lt;sequence&gt;
+            &lt;element name="FILENAME" type="string"/&gt;
+            &lt;group name="DATESTAMP"&gt;
+                &lt;sequence&gt;
+                    &lt;element name="CREATED" type="long"/&gt;
+                    &lt;element name="MODIFIED" type="long"/&gt;
+                &lt;/sequence&gt;
+            &lt;/group&gt;
+        &lt;/sequence&gt;
+    &lt;/complexType&gt;
+&lt;/element&gt;</pre>
+        <p> Array fields would be defined as below.  </p><pre xml:space="preserve">&lt;element name="LANGREC" minOccurs="0" maxOccurs="unbounded"&gt;
+    &lt;complexType&gt;
+        &lt;sequence&gt;
+            &lt;element name="LANGNAME" type="string"/&gt;
+            &lt;element name="DAYNAMES" type="string" minOccurs="7" maxOccurs="7"/&gt;
+        &lt;/sequence&gt;
+    &lt;/complexType&gt;
+&lt;/element&gt;</pre>
+        <p> In general, the size of arrays will be specified explicitly in the XML schema. This is consistent with the implicit requirement that all non-array fields must be present once and only once, because of the default values of <code>minOccurs</code> and <code>maxOccurs</code> (both equal to 1). However, the import program will not require all array elements to be present unless an XML schema is provided specifying that all elements must be present. </p>
+        <p>The definitions of binary fields in XML schema are the same as for character string fields. In an example DDL shown earlier, fields would be defined as below in an XML schema.  </p><pre>&lt;element name="GRADES" type="string"/&gt; 
+&lt;element name="X" type="string"/&gt; 
+&lt;element name="MASKS" type="string" minOccurs="2" maxOccurs="2"/&gt; 
+&lt;element name="BLOB" type="string"/&gt; </pre>
+        <h4 class="Heading4"><a MadCap:generatedBookmark="TOC" name="10.2.1.3_DTD"></a>10.2.1.3 DTD </h4>
+        <p>If the Document Type Definition (DTD) option <code>-dtd</code> was selected, the following DTD document would be created and named, by default, "moviedb.dtd".  The following document type definition represents the Database Address method of set connection. </p><pre>&lt;!ELEMENT MOVIEDB (MOVIEREC|PATRONREC|REVIEWREC)*&gt;
+&lt;!ELEMENT MOVIEREC (ROWID,MID,MNAME)&gt; 
+&lt;!ELEMENT PATRONREC (ROWID,PID,PNAME)&gt; 
+&lt;!ELEMENT REVIEWREC (RATING,ROWID*)&gt; 
+&lt;!ELEMENT ROWID (#PCDATA)&gt; 
+&lt;!ELEMENT MID (#PCDATA)&gt; 
+&lt;!ELEMENT MNAME (#PCDATA)&gt; 
+&lt;!ELEMENT PID (#PCDATA)&gt; 
+&lt;!ELEMENT PNAME (#PCDATA)&gt; 
+&lt;!ATTLIST ROWID set CDATA #IMPLIED&gt; </pre>
+        <p>The instance document produced together with the above DTD would refer to the DTD in the <code>!DOCTYPE</code> element.  The same data is shown below in the Database Address form of set connection. </p><pre xml:space="preserve">&lt;?xml version="1.0" encoding="utf-8"?&gt;
+&lt;!-- <span class="MyVariablesProductShortName">RDM</span> 7.2 --&gt;
+&lt;!DOCTYPE MOVIEDB SYSTEM "moviedb.dtd"&gt;
+
+&lt;MOVIEDB&gt;
+    &lt;MOVIEREC&gt;
+        &lt;ROWID&gt;1&lt;/ROWID&gt;
+        &lt;MID&gt;1&lt;/MID&gt;
+        &lt;MNAME&gt;Godfather&lt;/MNAME&gt;
+    &lt;/MOVIEREC&gt;
+    &lt;MOVIEREC&gt;
+        &lt;ROWID&gt;2&lt;/ROWID&gt;
+        &lt;MID&gt;2&lt;/MID&gt;
+        &lt;MNAME&gt;Casablanca&lt;/MNAME&gt;
+    &lt;/MOVIEREC&gt;
+    &lt;MOVIEREC&gt;
+        &lt;ROWID&gt;3&lt;/ROWID&gt;
+        &lt;MID&gt;3&lt;/MID&gt;
+        &lt;MNAME&gt;Star Wars&lt;/MNAME&gt;
+    &lt;/MOVIEREC&gt;
+    &lt;MOVIEREC&gt;
+        &lt;ROWID&gt;4&lt;/ROWID&gt;
+        &lt;MID&gt;4&lt;/MID&gt;
+        &lt;MNAME&gt;Vertigo&lt;/MNAME&gt;
+    &lt;/MOVIEREC&gt;
+    &lt;PATRONREC&gt;
+        &lt;ROWID&gt;1&lt;/ROWID&gt;
+        &lt;PID&gt;1&lt;/PID&gt;
+        &lt;PNAME&gt;Joe&lt;/PNAME&gt;
+    &lt;/PATRONREC&gt;
+        &lt;PATRONREC&gt;
+        &lt;ROWID&gt;2&lt;/ROWID&gt;
+        &lt;PID&gt;2&lt;/PID&gt;
+        &lt;PNAME&gt;Bob&lt;/PNAME&gt;
+    &lt;/PATRONREC&gt;
+    &lt;PATRONREC&gt;
+        &lt;ROWID&gt;3&lt;/ROWID&gt;
+        &lt;PID&gt;3&lt;/PID&gt;
+        &lt;PNAME&gt;John&lt;/PNAME&gt;
+    &lt;/PATRONREC&gt;
+    &lt;REVIEWREC&gt;
+        &lt;RATING&gt;0&lt;/RATING&gt;
+        &lt;ROWID set="MOVIE_TO_REVIEW"&gt;1&lt;/ROWID&gt;
+        &lt;ROWID set="PATRON_TO_REVIEW"&gt;1&lt;/ROWID&gt;
+    &lt;/REVIEWREC&gt;
+    &lt;REVIEWREC&gt;
+        &lt;RATING&gt;1&lt;/RATING&gt;
+        &lt;ROWID set="MOVIE_TO_REVIEW"&gt;3&lt;/ROWID&gt;
+        &lt;ROWID set="PATRON_TO_REVIEW"&gt;1&lt;/ROWID&gt;
+    &lt;/REVIEWREC&gt;
+    &lt;REVIEWREC&gt;
+        &lt;RATING&gt;2&lt;/RATING&gt;
+        &lt;ROWID set="MOVIE_TO_REVIEW"&gt;3&lt;/ROWID&gt;
+        &lt;ROWID set="PATRON_TO_REVIEW"&gt;2&lt;/ROWID&gt;
+    &lt;/REVIEWREC&gt;
+    &lt;REVIEWREC&gt;
+        &lt;RATING&gt;0&lt;/RATING&gt;
+        &lt;ROWID set="MOVIE_TO_REVIEW"&gt;1&lt;/ROWID&gt;
+        &lt;ROWID set="PATRON_TO_REVIEW"&gt;3&lt;/ROWID&gt;
+    &lt;/REVIEWREC&gt;
+    &lt;REVIEWREC&gt;
+        &lt;RATING&gt;1&lt;/RATING&gt;
+        &lt;ROWID set="MOVIEREC_TO_REVIEW"&gt;2&lt;/ROWID&gt;
+        &lt;ROWID set="PATRONREC_TO_REVIEW"&gt;3&lt;/ROWID&gt;
+    &lt;/REVIEWREC&gt;
+    &lt;REVIEWREC&gt;
+        &lt;RATING&gt;2&lt;/RATING&gt;
+        &lt;ROWID set="MOVIE_TO_REVIEW"&gt;4&lt;/ROWID&gt;
+        &lt;ROWID set="PATRON_TO_REVIEW"&gt;3&lt;/ROWID&gt;
+    &lt;/REVIEWREC&gt;
+&lt;/MOVIEDB&gt;    
+</pre>
+        <p> Structured field definitions would be generated in DTD (using the –dtd option) as follows. </p><pre>&lt;!ELEMENT FILEENTRY (FILENAME,DATESTAMP)&gt; 
+&lt;!ELEMENT DATESTAMP (CREATED,MODIFIED)&gt; 
+&lt;!ELEMENT FILENAME (#PCDATA)&gt; 
+&lt;!ELEMENT CREATED (#PCDATA)&gt; 
+&lt;!ELEMENT MODIFIED (#PCDATA)&gt; </pre>
+        <p> Array fields would be defined as below.  </p><pre>&lt;!ELEMENT LANGREC (LANGNAME,DAYNAMES+)&gt;
+&lt;!ELEMENT LANGNAME (#PCDATA)&gt; 
+&lt;!ELEMENT DAYNAMES (#PCDATA)&gt; </pre>
+        <p> The DTD definition states only that there must be one or more elements, because there is no way of specifying in a DTD that there should be an exact number of  elements. </p>
+        <p>The definitions of binary fields in DTD are the same as for character string fields. In an example DDL shown earlier, fields would be defined as below in a DTD.  </p><pre>&lt;!ELEMENT GRADES (#PCDATA)&gt;
+&lt;!ELEMENT X(#PCDATA)&gt; 
+
+&lt;!ELEMENT MASKS (#PCDATA)&gt; 
+&lt;!ELEMENT BLOB (#PCDATA)&gt; </pre>
+        <h3 class="Heading3"><a MadCap:generatedBookmark="TOC" name="10.2.2_XML_Import"></a><a name="10.2.2"></a>10.2.2 XML Import </h3>
+        <p>Importing <span class="MyVariablesProductShortName">RDM</span> native data from XML requires data translation functions. These functions
+are provided as part of the <span class="MyVariablesProductShortName">RDM</span> Core enabling the <span class="MyVariablesProductShortName">RDM</span> C/C++ programmer to work with XML. The <code>dbimp</code> utility uses this same API to import XML data. While the
+utility has a limited set of options (it always works with complete XML documents), the API allows the
+programmer to work at a lower level in order to coordinate multi-user locking and transaction control, or
+to select subsets of a database. The import/export API is implemented as a separate library from the
+runtime library, which allows programmers to easily include or exclude it from their applications as
+required.</p>
+        <h4 class="Heading4"><a MadCap:generatedBookmark="TOC" name="10.2.2.1_Importing_XML_via_the_core_API"></a>10.2.2.1 Importing XML via the core API </h4>
+        <p>The core API for import consists of the functions listed below. These accept XML data in a buffer passed as an argument, and convert it into database records. The calling application is responsible for storing these records in the target database. </p>
+        <table class="TableStyle-fncSummary" style="border-collapse: collapse;mc-table-style: url('../Resources/TableStyles/fncSummary.css');border-left-style: solid;border-left-width: 1px;border-left-color: #c0c0c0;border-right-style: solid;border-right-width: 1px;border-right-color: #c0c0c0;border-top-style: solid;border-top-width: 1px;border-top-color: #c0c0c0;border-bottom-style: solid;border-bottom-width: 1px;border-bottom-color: #c0c0c0;margin-left: 0;margin-right: auto;" cellspacing="0">
+            <col class="Column-Column1" />
+            <col class="Column-Column2" />
+            <tr class="Body-Body1">
+                <td class="BodyE-Column1-Body1"><a href="../RM/api/imp_init.htm">imp_init</a> <![CDATA[ ]]></td>
+                <td class="BodyD-Column2-Body1">Initiate import </td>
+            </tr>
+            <tr class="Body-Body1">
+                <td class="BodyE-Column1-Body1"><a href="../RM/api/imp_term.htm">imp_term</a> <![CDATA[ ]]></td>
+                <td class="BodyD-Column2-Body1">Terminate import </td>
+            </tr>
+            <tr class="Body-Body1">
+                <td class="BodyE-Column1-Body1"><a href="../RM/api/imp_xmlParse.htm">imp_xmlparse</a> <![CDATA[ ]]></td>
+                <td class="BodyD-Column2-Body1">Convert an XML record into database record format </td>
+            </tr>
+            <tr class="Body-Body1">
+                <td class="BodyE-Column1-Body1"><a href="../RM/api/imp_xmlGetErrors.htm">imp_xmlgeterrors</a> <![CDATA[ ]]></td>
+                <td class="BodyD-Column2-Body1">Get details of most recent XML conversion error </td>
+            </tr>
+        </table>
+        <h5><a MadCap:generatedBookmark="TOC" name="Callback_functions"></a>Callback functions </h5>
+        <p>User defined callback functions can replace or enhance the default behavior of the import function.   The return code from the callback function signals the import to continue with the default processing or signals that processing is complete. </p>
+        <table class="TableStyle-fncSummary" style="border-collapse: collapse;margin-left: 0;margin-right: auto;mc-table-style: url('../Resources/TableStyles/fncSummary.css');" cellspacing="0">
+            <col class="Column-Column1" />
+            <col class="Column-Column2" />
+            <tr class="Body-Body1">
+                <td class="BodyE-Column1-Body1"><a href="../RM/api/imp_xmlSetRecordCallback.htm">imp_xmlSetRecordCallback</a> <![CDATA[ ]]></td>
+                <td class="BodyD-Column2-Body1">Set customer record processing callback. </td>
+            </tr>
+            <tr class="Body-Body1">
+                <td class="BodyE-Column1-Body1"><a href="../RM/api/imp_xmlSetErrorCallback.htm">imp_xmlSetErrorCallback</a> <![CDATA[ ]]></td>
+                <td class="BodyD-Column2-Body1">Set database error callback. </td>
+            </tr>
+            <tr class="Body-Body1">
+                <td class="BodyE-Column1-Body1"><a href="../RM/api/imp_xmlSetConversionCallback.htm">imp_xmlSetConversionCallback</a> <![CDATA[ ]]></td>
+                <td class="BodyD-Column2-Body1">Set custom data conversion callback. </td>
+            </tr>
+        </table>
+        <h5><a MadCap:generatedBookmark="TOC" name="Temporary_files"></a>Temporary files </h5>
+        <p>During the import <span class="MyVariablesProductShortName">RDM</span> may use temporary files to store and resolve rowid references and forward references to records that have not yet been imported.  These temporary files will be stored in the system temp directory, and will be deleted by <code><a href="../RM/api/imp_term.htm">imp_term</a></code>. </p>
+        <h5 class="Heading4"><a MadCap:generatedBookmark="TOC" name="Importing_XML_via_dbimp"></a>Importing XML via dbimp </h5>
+        <p>The <code><a href="../util/dbimp.htm">dbimp</a></code> utility has been enhanced to import the contents of an XML file into an <span class="MyVariablesProductShortName">RDM</span> database.  The XML document must be in the format discussed above in  XML Document Format </p>
+        <p>The <code>dbimp</code> utility is invoked as follows:  </p>
+        <p class="Notes">Only the options relevant to importing XML are shown here.  Other options are available, but are only relevant if you are importing from ASCII format.  For details on importing from ASCII format, see 10.3.2 Importing ASCII Data). </p><pre>dbimp [-xml] [-o dbname] [-t] file</pre>
+        <table style="width: 100%;border-collapse: collapse;mc-table-style: url('../Resources/TableStyles/ArgsTwoCol.css');margin-left: 0;margin-right: auto;" class="TableStyle-ArgsTwoCol" cellspacing="0">
+            <col style="width: 86px;" class="Column-Column1" />
+            <col class="Column-Column2" />
+            <tbody>
+                <tr class="Body-Body1">
+                    <td class="BodyE-Column1-Body1">-xml</td>
+                    <td class="BodyD-Column2-Body1">causes 'file' to be parsed as an XML import file</td>
+                </tr>
+                <tr class="Body-Body1">
+                    <td class="BodyE-Column1-Body1">-o</td>
+                    <td class="BodyD-Column2-Body1">dbname - dbname opened as output database</td>
+                </tr>
+                <tr class="Body-Body1">
+                    <td class="BodyB-Column1-Body1">-t</td>
+                    <td class="BodyA-Column2-Body1">causes 'file' to be tested for 'well-formedness'.  If this option is not provided, dbimp assumes the base name of the XML input file is the database name.  <br /></td>
+                </tr>
+            </tbody>
+        </table>
+        <p>Examples:</p><pre>dbimp –xml moviedb.xml
+dbimp –xml –o moviedb export1.xml</pre>
+        <h3 class="Heading3"><a MadCap:generatedBookmark="TOC" name="10.2.3_XML_Export"></a><a name="10.2.3"></a>10.2.3 XML Export </h3>
+        <p>Exporting <span class="MyVariablesProductShortName">RDM</span> native data into XML requires data translation functions.  These functions are provided as part of the <span class="MyVariablesProductShortName">RDM</span> Core  enabling the <span class="MyVariablesProductShortName">RDM</span> C/C++ programmer to work with XML.  The dbexp utility uses this same API to export XML data.  While the utility has a limited set of options, the API allows the programmer to work at a lower level in order to coordinate multi-user locking and transaction control. The import/export API is implemented as a separate library from the runtime library, which allows programmers to easily include or exclude it from their applications as required. </p>
+        <h4 class="Heading4"><a MadCap:generatedBookmark="TOC" name="10.2.3.1_Exporting_XML_via_the_core_API"></a>10.2.3.1 Exporting XML via the core API </h4>
+        <p>The core API for export consists of the functions listed below. These functions convert database records, specified by database address, to XML format. The XML output is placed in a buffer.</p>
+        <table class="TableStyle-fncSummary" style="border-collapse: collapse;border-left-style: solid;border-left-width: 1px;border-left-color: #c0c0c0;border-right-style: solid;border-right-width: 1px;border-right-color: #c0c0c0;border-top-style: solid;border-top-width: 1px;border-top-color: #c0c0c0;border-bottom-style: solid;border-bottom-width: 1px;border-bottom-color: #c0c0c0;mc-table-style: url('../Resources/TableStyles/fncSummary.css');margin-left: 0;margin-right: auto;" cellspacing="0">
+            <col class="Column-Column1" style="width: 200px;" />
+            <col class="Column-Column2" />
+            <tr class="Body-Body1">
+                <td class="BodyE-Column1-Body1"><a href="../RM/api/exp_init.htm">exp_init</a> <![CDATA[ ]]></td>
+                <td class="BodyD-Column2-Body1">Initiate export</td>
+            </tr>
+            <tr class="Body-Body1">
+                <td class="BodyE-Column1-Body1"><a href="../RM/api/exp_term.htm">exp_term</a> <![CDATA[ ]]></td>
+                <td class="BodyD-Column2-Body1">Terminate export </td>
+            </tr>
+            <tr class="Body-Body1">
+                <td class="BodyE-Column1-Body1"><a href="../RM/api/exp_xmlschema.htm">exp_xmlschema</a> <![CDATA[ ]]></td>
+                <td class="BodyD-Column2-Body1">Export a database dictionary to XML Schema or DTD format </td>
+            </tr>
+            <tr class="Body-Body1">
+                <td class="BodyE-Column1-Body1"><a href="../RM/api/exp_xmlschemarec.htm">exp_xmlschemarec</a> <![CDATA[ ]]></td>
+                <td class="BodyD-Column2-Body1">Export a record definition to XML Schema or DTD format. </td>
+            </tr>
+            <tr class="Body-Body1">
+                <td class="BodyE-Column1-Body1"><a href="../RM/api/exp_xmlrec.htm">exp_xmlrec</a> <![CDATA[ ]]></td>
+                <td class="BodyD-Column2-Body1">Export a record from the database to XML format </td>
+            </tr>
+            <tr class="Body-Body1">
+                <td class="BodyE-Column1-Body1"><a href="../RM/api/exp_xmlgetownertypes.htm">exp_xmlgetownertypes</a> <![CDATA[ ]]></td>
+                <td class="BodyD-Column2-Body1">Get a list of record types that will be read from the database when the specified record is exported (for locking). </td>
+            </tr>
+        </table>
+        <h4><a MadCap:generatedBookmark="TOC" name="10.2.3.1_Exporting_XML_via_dbexp"></a>10.2.3.1 Exporting XML via dbexp</h4>
+        <p>The <code>dbexp</code> utility has been enhanced to export the full or partial contents of an <span class="MyVariablesProductShortName">RDM</span> database into XML according to the format discussed above in  XML Document Format.  <code>dbexp</code> will export the entire database unless a table name list is provided, and will export set reconnection information if it exists in the database. </p>
+        <p>The <code>dbexp</code> utility is invoked as follows:  </p>
+        <p class="Notes">Only the options relevant to exporting XML are shown here.  Other options are available, but are only relevant if you are exporting to ASCII format.  For details on exporting to ASCII format, see Exporting ASCII Data. </p><pre xml:space="preserve">dbexp [-xml] [-xsd|-dtd] [-o &lt;filename&gt;] dbname [record type...] </pre>
+        <table style="width: 100%;border-collapse: collapse;mc-table-style: url('../Resources/TableStyles/ArgsTwoCol.css');margin-left: 0;margin-right: auto;" class="TableStyle-ArgsTwoCol" cellspacing="0">
+            <col class="Column-Column1" />
+            <col class="Column-Column2" />
+            <tbody>
+                <tr class="Body-Body1">
+                    <td class="BodyE-Column1-Body1">-xml</td>
+                    <td class="BodyD-Column2-Body1">Instructs dbexp to export data to an XML file.</td>
+                </tr>
+                <tr class="Body-Body1">
+                    <td class="BodyE-Column1-Body1">-xsd</td>
+                    <td class="BodyD-Column2-Body1">Instructs dbexp to create an XML Schema with name &lt;dbname&gt;.xsd.</td>
+                </tr>
+                <tr class="Body-Body1">
+                    <td class="BodyB-Column1-Body1">-dtd</td>
+                    <td class="BodyA-Column2-Body1">Instructs dbexp to create an XML DTD with name &lt;dbname&gt;.dtd.</td>
+                </tr>
+            </tbody>
+        </table>
+        <p style="font-weight: bold;">Examples:</p><pre>dbexp –xml –xsd moviedb 
+dbexp –xml moviedb –o export1.xml</pre>
+        <h2 class="Heading2"><a MadCap:generatedBookmark="TOC" name="10.3_ASCII_Import_Export"></a><a name="10.3"></a>10.3 ASCII Import/Export </h2>
+        <p>It is possible to write <span class="MyVariablesProductShortName">RDM</span> applications to read data from a text file and enter it into <span class="MyVariablesProductShortName">RDM</span> records, or vice versa. Entering bulk data from an external source into a database is called importing. Reading data from <span class="MyVariablesProductShortName">RDM</span> and writing it in a different format is called exporting. To accomplish these tasks, two general-purpose utilities are provided as a part of the <span class="MyVariablesProductShortName">RDM</span> tool set.  </p>
+        <p>These utilities use ASCII text files as the standard external representation of data. These files can be created or modified by text editors or string manipulation programs. Most database management systems have the ability to export data into ASCII (see Figure 10-2). This is also commonly referred to as Comma-Separated-Values (CSV). The <span class="MyVariablesProductShortName">RDM</span> default file suffix is ".txt", but the import utility will normally accept ".csv" files produced by other systems.</p>
+        <p>Both <code>dbexp</code> and <code>dbimp</code> view an ASCII record as one line of text, terminated by a newline character (the Enter key), with fields separated by a standard separator character. Our utilities use the comma as a separator character.  Numeric fields are represented by ASCII digits, in base 10. Character fields are represented by ASCII alphanumeric characters, optionally enclosed by double quotation marks. The fields (or records) are not fixed-length. </p>
+        <p class="Caption">
+            <img src="../Resources/Images/UsersGuide/UG-Fig-10-2_630x451.png" style="width: 630;height: 451;" />
+            <br />Fig. 10-2. Importing and Exporting Data</p>
+        <p>All ASCII records in one file must be of the same type. This means that there are the same number of fields on each line, and the same sequence of field types is maintained from line to line. For example, if one record has a numeric field followed by two character fields, all records must have this format. One character field followed by two numeric fields is not permitted. All output from <code>dbexp</code> will be created in the same format. All input read by <code>dbimp</code> is expected in this format. The following text shows six records of the same record type, each containing seven fields. The first two fields and the last field are numeric, while all the other fields are character strings. (The NULL field represents no owner pointer for the set article_list as declared in the <code>tims.ddl</code>.) </p><pre xml:space="preserve">1:1,NULL,"db001","Fourth-Generation...","Prentice-Hall","1985",0
+1:1,NULL,"db002","Fourth-Generation...","Prentice-Hall","1986",0
+1:2,NULL,"sw001","Software Reliability...","Wiley-Interscience","1976",0
+1:3,NULL,"db003","Design of Database ...","Prentice-Hall","1982",0
+1:4,NULL,"db004","Fundamental Concepts ...","Yourdon Press","1981",0
+1:5,NULL,"db005","Principles of Database ...","Computer Science Press","1982",0
+</pre>
+        <p>The file format above was created using the following:</p><pre>dbexp  -m  tims  info </pre>
+        <p> A second record type shown below would be stored in a different text file: </p><pre>0:2,"4GL" 
+0:3,"languages" 
+0:4,"reliability" 
+0:5,"debugging" 
+0:6,"testing" 
+0:7,"database design" </pre>
+        <p>The above file format was created using: </p><pre xml:space="preserve">dbexp  -r  tims  key_word</pre>
+        <h3 class="Heading3"><a MadCap:generatedBookmark="TOC" name="10.3.1_Exporting_ASCII_Data"></a>10.3.1 Exporting ASCII Data </h3>
+        <p>The <span class="MyVariablesProductShortName">RDM</span> exporting utility, <code>dbexp</code>, will convert all instances of selected record types into ASCII text files. You can select all the record types in the database for export. The resulting text files can in turn be used by the import utility, <code>dbimp</code>, by a text editor, or by any other text manipulation software. Since ASCII text is well suited for transmission to other platforms, this feature allows databases to be moved to computers of different types. </p>
+        <p>An example execution of <code>dbexp</code> might look like the example below: </p><pre>dbexp tims info </pre>
+        <p>This would export data from the <code>info</code> record type of the TIMS database. The info record type looks like the following: </p><pre xml:space="preserve">record info { 
+    unique key char id_code[16]; 
+    char info_title[80]; 
+    char publisher[32]; 
+    char pub_date[12]; 
+    int info_type; 
+} </pre>
+        <p>The file created by <code>dbexp</code> would be named info.txt and would contain records created from the contents of the corresponding <span class="MyVariablesProductShortName">RDM</span> data file, as follows: </p><pre>"db001","Database Design","McGraw Hill","1983",0 
+"db002","An Intro...","Addison Wesley","1981",0 
+"db005","Fundamental ...","Yourdan","1981",0 </pre>
+        <p>The <code>dbexp</code> utility is invoked as follows: </p>
+        <p class="Notes">Only the options relevant to exporting in ASCII format are shown here.  Other options are available, but are only relevant if you are exporting to XML format.  For details on exporting to XML format, see Exporting XML via dbexp). </p><pre xml:space="preserve">dbexp [-r] [-m] [-d] [-s "&lt;char&gt;"] [-e "&lt;char&gt;"] [-x] dbname [rtype...] </pre>
+        <p>When no record types (<i>rtype</i>) are listed following the database name (<i>dbname</i>), dbexp will export all record types in the database. If one or more record types are listed, only those record types will be exported. </p>
+        <p>The -s option indicates that the following argument is a character to be used as a separator character. If the character is a system character recognized on the command line (like "|"), it must be enclosed in quotes.The default separator is a comma. For example, if a vertical bar character were desired, the following command could be used: </p><pre>dbexp -s "|" tims info </pre>
+        <p>The resulting file would contain the data below: </p><pre>"db001"|"Database Design"|"McGraw Hill"|"1983"|0 
+"db002"|"An Intro..."|"Addison Wesley"|"1981"|0 
+"db005"|"Fundamental ..."|"Yourdan"|"1981"|0 </pre>
+        <p>The -e option changes the escape character (default is backslash), which is to be used in front of each quotation mark character contained within a character string, or each backslash character contained in a string. For example, if a field contains the following string: </p><pre xml:space="preserve">Your "filing cabinet" is called C:\DRAWERS. </pre>
+        <p>With <code>dbexp</code>, the string converts to the following format as it is written into the ASCII file: </p><pre xml:space="preserve">"Your \"filing cabinet\" is called C:\\DRAWERS." </pre>
+        <p>You may wish to change the escape character if text in your database contains many backslashes. This would prevent each backslash from becoming a double backslash. Note, however, that if the exported data will be used as input to <code>dbimp</code>, the same escape character must be specified in the <code>dbimp</code> command. </p>
+        <p>The -r option causes <code>dbexp</code> to include the record's database address (see "Data File Organization") as the first field in each ASCII record. For example, look at the following statement: </p><pre>dbexp -r tims info </pre>
+        <p>The result will display the records as follows: </p><pre>1:3,"db001","Database Design","McGraw Hill","1983",0 
+1:7,"db002","An Intro...","Addison Wesley","1981",0 
+1:20,"db005","Fundamental ...","Yourdan","1981",0 </pre>
+        <p>Since the database address of each record is unique, this field can be used as a unique identifier of each record. The import utility can take advantage of this field. </p>
+        <p>The -m option causes set membership information to be included with each record. This information consists of a list of database addresses, which are placed after the record's own database address (if -r is specified) and before the ASCII data fields. One database address field is created for each set for which this record type is a member. The value of each field is the database address of the owner record for that set. If the record is not connected to the set, the field value is zero. </p>
+        <p>The -d option causes a database address to be printed as long integers, rather than in the standard format. Note that a database address may appear as a very large number (the maximum is 18,446,744,073,709,551,615) because of the internal format of a database address. The -x option causes extended ASCII characters to be printed (by default, in octal). </p>
+        <p>The order of the database address fields is the same as the order of the sets in the DDL. If a record is a member of three sets, three database addresses would be included in each ASCII record. The first database address would represent the owner of the first set in the schema that lists this record type as a member. This ordering information is important when using the import utility to recreate the set connections, because it can be used to create a logical connection between fields with identical values. </p>
+        <p>The command below: </p><pre>dbexp -r -m tims info </pre>
+        <p>would create the following: </p><pre>1:18,1:1,NULL,"db001","Fourth-Gen...","Prentice-Hall","1985",0
+1:19,1:1,NULL,"db002","Fourth-Gen...","Prentice-Hall","1986",0 
+1:20,1:2,NULL,"sw001","Software Rel...","Wiley-Interscience","1976",0 </pre>
+        <p>The <code>info</code> record type is a member of two sets. This data has been connected in the first set (<code>has_published</code>), but not in the second (<code>article_list</code>), as indicated by the NULL in the third field. </p>
+        <h3 class="Heading3"><a MadCap:generatedBookmark="TOC" name="10.3.2_Importing_ASCII_Data"></a>10.3.2 Importing ASCII Data </h3>
+        <p>This section describes the usage of the <span class="MyVariablesProductShortName">RDM</span> import utility, <code>dbimp</code>. The purpose of <code>dbimp</code> is to import data from an ASCII-formatted file into an <span class="MyVariablesProductShortName">RDM</span> database. The import utility is simple enough to allow great quantities of raw ASCII data to be entered into an <span class="MyVariablesProductShortName">RDM</span> database with very little specification. With more complex requirements, <code>dbimp</code> can be instructed to perform mappings between the input data and <span class="MyVariablesProductShortName">RDM</span> records and to make set connections based upon matching field values. </p>
+        <p>All instructions to <code>dbimp</code> are placed into a text file in the form of an import specification language (ISL). An ISL specification identifies the database and the files containing ASCII data to be imported. It also contains mappings between the ASCII data fields and the <span class="MyVariablesProductShortName">RDM</span> record fields. Figure 10-3 shows the general operation of <code>dbimp</code>. </p>
+        <p class="Caption">
+            <img src="../Resources/Images/UsersGuide/UG-Fig-10-3_609x237.png" style="width: 609;height: 237;" />
+            <br />Fig. 10-3. Import Utility Usage</p>
+        <p>ASCII text files can be created by a wide variety of software programs, including dbexp, text editors, and most other DBMS products. </p>
+        <p>Databases that are built with certain restrictions (see "Using Export and Import Together") can be exported, then imported again without losing any information. This allows simple restructuring of a database. Also, a database in ASCII format can be transferred to another computer and then imported into an <span class="MyVariablesProductShortName">RDM</span> database, even though the source and target computers have different processors and internal representations of data. </p>
+        <h4 class="Heading4"><a MadCap:generatedBookmark="TOC" name="10.3.2.1_Import_Program_Usage"></a>10.3.2.1 Import Program Usage </h4>
+        <p>The full definition of the usage of <code>dbimp</code> is shown below. </p><pre>dbimp [-s "&lt;<i>char</i>&gt;"] [-e "&lt;<i>char</i>&gt;"] [-<i>kn</i>] [-<i>pn</i>] <i>impspec </i></pre>
+        <p>The <code>-s</code> and <code>-e</code> specify alternate separator characters and escape characters for the ASCII file. For examples, refer to the discussion of these characters in "ASCII Import/Export". If <code>dbexp</code> has been used to create the text files that are to be imported, any alternate separator or escape characters specified on the <code>dbexp</code> command line should also be used on the <code>dbimp</code> command line. </p>
+        <p>The <code>-kn</code> option makes <code>n</code> the key size in the created record index (see <a href="#Example">Example Two</a>). By default, <code>n</code> is 25. If your data requires more characters to be unique, you can specify up to 228 characters. Note that the larger the number, the larger the temporary key file needs to be. To decrease the size of the CRI keys, use a value of <code>n</code> less than 25. </p>
+        <p>The <code>-pn</code> option makes <code>dbimp</code> call <code>d_setpages</code> with <code>n</code> as the number for the database pages. By default, <code>n</code> is 64. To increase performance, increase <code>n</code>. To save on memory, <code>n</code> may be set as low as five. </p>
+        <p>The import specification language is contained in the file <i>impspec</i>. This is a text file containing the specification that has been written by the dbimp user. It may have any legal file name, but we recommend the following naming convention: </p><pre>dbname.imp </pre>
+        <p>The suffix of <code>.imp</code> is a suggested convention to distinguish this file as an import specification for the database dbname. </p>
+        <h4 class="Heading4"><a MadCap:generatedBookmark="TOC" name="10.3.2.2_Import_Specification_Language"></a>10.3.2.2 Import Specification Language </h4>
+        <p>This section fully defines the usage and syntax of the import specification language. The examples in the following paragraphs introduce the language's features in a stepwise manner, with growing complexity. The complete grammar is given at the end of this section. </p>
+        <h5><a MadCap:generatedBookmark="TOC" name="Example_One:_Simple_family_information_database"></a>Example One: Simple family information database </h5>
+        <p>The first example contains the following elements: a set of person names in the ASCII text file <code>person.asc</code>: </p><pre>"Warner","Micah Wayne",9761101 
+"Warner","Jesse David",9800706 
+"Warner","Wayne Lawrence",9540530 
+"Wood","Anita Joan",9531214 
+"Warner","Paul Russell",9860904  </pre>
+        <p>and an <span class="MyVariablesProductShortName">RDM</span> record definition in a database named tree: </p><pre xml:space="preserve">record person {    
+    char p_last[20];    
+    char p_first[30]; 
+    long p_birth; 
+    compound key p_name { 
+        p_first; 
+        p_last;
+    } 
+} </pre>
+        <p>The goal is to import the ASCII records into the <span class="MyVariablesProductShortName">RDM</span> records. The first ASCII field is a last name, the second is a first and middle name, and the third is an encoded birth date (format YYY MM DD, where 1900 must be added to the year). The fields in the <span class="MyVariablesProductShortName">RDM</span> record happen to be in the same order. Our import specification will be stored in file tree.imp, and will contain the following statements: </p><pre xml:space="preserve">database tree; 
+foreach "person.asc" { 
+    record person { 
+        field p_last = 1; 
+        field p_first = 2;
+        field p_birth = 3; 
+    } 
+} 
+end; </pre>
+        <p>The import utility is invoked as follows: </p><pre>dbimp tree.imp </pre>
+        <p>The output would look similar to the listing below: </p><pre xml:space="preserve">Database Import Utility
+<span class="MyVariablesProductName">Raima Database Manager</span>  <![CDATA[ ]]><span class="MyVariablesReleaseVersion">11.0.0</span> Build <span class="MyVariablesBuild">412</span>  <![CDATA[ ]]><span class="MyVariablesVersionDate">[2-15-2012]</span>  <![CDATA[ ]]><span class="MyVariablesURLHome">http://www.raima.com</span><br />Copyright (c) <span class="MyVariablesCopyrightYear">2012</span>  <![CDATA[ ]]><span class="MyVariablesCompanyName">Raima Inc.</span>, All rights reserved. 
+
+Compilation complete 
+
+Starting data import 
+"Warner","Micah Wayne",9761101 
+"Warner","Jesse David",9800706 
+"Warner","Wayne Lawrence",9540530 
+"Wood","Anita Joan",9531214 
+"Warner","Thomas James",9850404 
+"Warner","Paul Russell",9860904 
+Successful import </pre>
+        <p>Note that there are two phases in the execution of the import utility. The first phase is the compilation phase, where the import specification is read and compiled. If there are any errors or warnings in the specification, messages will be printed before the "Compilation complete" message, and the import will be terminated. The specification must compile correctly before the utility will open and update the database. This second phase is the import phase. Its activity is logged between the "Starting data import" and "Successful import" messages. Normal output is a copy of the input records. If there are any problems during the import, error and warning messages will appear between the input records. Often, the warnings can be ignored, but all should be examined for potential problems in the input data. </p>
+        <p>This first example has illustrated the use of five import specification statements: <b>database</b>, <b>foreach</b>, <b>record</b>, <b>field</b>, and <b>end</b>. </p>
+        <p>The <b>database</b> statement identifies the database to be opened and updated. Records may exist in a database if they will not collide with unique keys that are being imported. Existing records will not be altered by the import, nor can they be accessed; the new data will be completely disjoint from existing data. </p>
+        <p>The <b>foreach</b> statement specifies an ASCII text file (within quotation marks), followed by a block of statements enclosed in braces. It may be interpreted as saying, "for each line in this file, perform the following operations." During the import phase of the utility, it will repeatedly read one line from the named file and process its contents according to the enclosed statements. When the last line of text has been read, the statement following the closing brace will be executed. In this simple example, the next statement is an end statement. </p>
+        <p>The <b>record</b> statement names an <span class="MyVariablesProductShortName">RDM</span> record type, followed by a block of statements enclosed in braces. Each time the record statement is executed, a record of the named type is conditionally created. There is a way to skip the creation of a record if a record with the same contents has already been created. This capability will be discussed below. In this example, a record will be created for each input line of text. </p>
+        <p>A <b>field</b> statement defines a mapping between an <span class="MyVariablesProductShortName">RDM</span> record field (named left of the equals sign), and an ASCII field (identified by its numeric position in the record). The input field is converted into the type of the <span class="MyVariablesProductShortName">RDM</span> field. In this example, the first and second fields in the input record are converted into strings (by adding a null terminator following the last character), and placed into the <code>p_last</code> and <code>p_first</code> fields. Then the third input field is converted into a long integer, and placed into the <code>p_birth</code> field. The record is actually created with the <code>d_fillnew</code> function, so that all keys are automatically created along with the record. The field statement implements the mapping between the ASCII and <span class="MyVariablesProductShortName">RDM</span> records. For each record statement, zero or more field statements may be used, not to exceed the number of fields defined in the record. Not all fields in the <span class="MyVariablesProductShortName">RDM</span> record require a field statement. Unspecified fields are zero-filled. Likewise, it is not necessary to use all ASCII fields in a field statement. The ordering of the fields is irrelevant. </p>
+        <p>If <code>dbimp</code> is unable to fully convert the input data into the <span class="MyVariablesProductShortName">RDM</span> field type, it will print a warning message, do the best it can, and go on. All other fields are filled. For example, the length of the text in an input field may be longer than the space allowed for it in the record. The utility will fill the <span class="MyVariablesProductShortName">RDM</span> field to its maximum length, and ignore any remaining characters. </p>
+        <h5><a MadCap:generatedBookmark="TOC" name="Example_Two:_Simple_library_database"></a><a name="Example"></a>Example Two: Simple library database </h5>
+        <p>Example two will illustrate the conditional creation of records. Suppose that the input text contains redundant data, as follows: </p><pre>"Knuth, D.",1968,"Fundamental Algorithms" 
+"Ullman, J.",1982,"Principles of Database Systems" 
+"Knuth, D.",1969,"Seminumerical Algorithms" 
+"Knuth, D.",1973,"Searching and Sorting" </pre>
+        <p>Your schema will not contain redundant data but will instead utilize a set construct: </p><pre>record author {
+    key char name[32];
+}
+record book {
+    char title[52];
+    long pub_date;
+}
+set published {
+    order ascending;
+    owner author;
+    member book by pub_date;
+}</pre>
+        <p>In this example, each line of text contains parts of two record types. This implies that two record statements should be included within the one <b>foreach</b> statement. The resulting database should contain four <code>book</code> records, but only two author records. The first <code>author</code> record should be connected, via the published set, to three book records, while the second <code>author</code> record should be connected to only one. The following import specification will do just that: </p><pre>database books;
+foreach "books.asc" {
+    record author {
+        create on 1;
+        field name = 1;
+    }
+    record book {
+        field title = 3;
+        field pub_date = 2;
+    }
+    connect published;
+}
+end;                                                                           <![CDATA[ ]]></pre>
+        <p>In this example, two records are conditionally created for each ASCII text line. The <b>create on</b> statement is used to make sure that a new author record is created only if an identical record has not already been created. Another statement, connect, is used to perform a <code>d_connect</code> function between the two records created in the loop. </p>
+        <p>The <b>create on</b> statement causes <code>dbimp</code> to search its internal created record index (CRI) for the existence of a record with the same record type and field value. The field value stored in the CRI may or may not be stored in the record itself. In this example, the field used in the <b>create on</b> statement is also used in the record. Other import specifications may use the field values only to establish connections, and not for storage in the <span class="MyVariablesProductShortName">RDM</span> record. </p>
+        <p>If the create on statement searches the CRI for a matching record type and field value and does not find it, it will create the record and an entry in the CRI, storing the database address of the created record in the CRI entry. If it finds a match, it does not create a new record, but uses the database address stored in the entry to represent the record that would have been created. </p>
+        <p>The import utility maintains another internal list, called current of record type (CRT). This is a currency table similar to the current set, owner, and member tables maintained by the <span class="MyVariablesProductShortName">RDM</span> runtime functions. Whenever a record is created, the database address of that record is stored as the current record of its type. The connect statement will search the schema tables for the correct owner and member types, then extract the database addresses of those types from the CRT table. If there are no current records of both types, <code>dbimp</code> will not attempt a connection, and will skip to the next iteration of the <b>foreach</b> loop. Because only one record of each type is being tracked, <code>dbimp</code> cannot connect recursive sets; that would require two records of that one type to be tracked. </p>
+        <p>We will perform the above example, showing the CRI and CRT list at key points. The statement to be executed is shown, followed by a description of the actions performed by dbimp in processing the statement. </p>
+        <p class="Heading">Statement: </p>
+        <p>Read the first line of <code>books.asc</code> into memory: </p><pre>"Knuth, D.",1968,"Fundamental Algorithms" </pre>
+        <p class="Heading">Statement:</p><pre>record author {
+    create on 1;</pre>
+        <p>Search CRI (which is empty) for match. </p>
+        <p>Create the record (database address = [0:1]). </p>
+        <p class="Heading">Create entry in CRI: </p><pre>key={author,"Knuth, D."}, data=[0:1] </pre>
+        <p class="Heading">Save CRT: </p><pre xml:space="preserve">author: [0:1] 
+book:   NULL_DBA </pre>
+        <p class="Heading">Statement: </p><pre>field name = 1; </pre>
+        <p>The name field in author record is set to "Knuth, D". </p>
+        <p class="Heading">Statement: </p><pre>record book { 
+    field title = 3; 
+    field pub_date = 2; 
+} </pre>
+        <p>Unconditionally create <code>book</code> record ([1:1]). No entry created in CRI. Save CRT: </p><pre>author:   [0:1] 
+book:     [1:1] </pre>
+        <p>Field title set to "Fundamental Algorithms". Field <code>pub_date</code> set to <code>1968</code>. </p>
+        <p class="Heading">Statement: </p><pre>connect published; </pre>
+        <p> Determine that author is owner, book is member. Make current book, [1:1], the current record. Make current author, [0:1], the current owner of set published. Call <code>d_connect(PUBLISHED)</code>. </p>
+        <p class="Heading">Statement: </p><pre>foreach "books.asc" { </pre>
+        <p>Read the second line of <code>books.asc</code> into memory: </p><pre>"Ullman, J.",1982,"Principles of Database Systems" </pre>
+        <p class="Heading">Statement: </p><pre xml:space="preserve">record author { 
+    create on 1; 
+    field name = 1; 
+} </pre>
+        <p>Search CRI for match (no match). Create author record (database address [0:2]), and add it to the CRI: </p><pre>key={author,"Knuth, D."}, data=[0:1] 
+key={author,"Ullman, J."}, data=[0:2] </pre>
+        <p class="Heading">Update CRT: </p><pre xml:space="preserve">author: [0:2] 
+book:   [1:1]</pre>
+        <p>Store "Ullman, J." in name field. </p>
+        <p class="Heading">Statement: </p><pre xml:space="preserve">record book { 
+    field title = 3; 
+    field pub_date = 2; 
+} </pre>
+        <p>Unconditionally create book record ([1:2]). No entry is created in the CRI. Save CRT: </p><pre>   author: [0:2] 
+   book:   [1:2] </pre>
+        <p>Set field title to "Principles of Database Systems". Set field <code>pub_date</code> to 1982. </p>
+        <p class="Heading">Statement: </p><pre>connect published; </pre>
+        <p>Determine that <code>author</code> is owner, <code>book</code> is member. Make current <code>book</code>, [1:2], the current record. Make current <code>author</code>, [0:2], the current owner of set <code>published</code>. Call <code>d_connect(PUBLISHED)</code>. </p>
+        <p class="Heading">Statement: </p><pre>foreach "books.asc" { </pre>
+        <p>Read the third line of <code>books.asc</code> into memory: </p><pre>"Knuth, D.",1969,"Seminumerical Algorithms" </pre>
+        <p class="Heading">Statement: </p><pre xml:space="preserve">record author { 
+    create on 1; </pre>
+        <p>Search CRI for match on: {author,"Knuth, D."}. Match is <code>found</code>; set CRT: </p><pre>    author:   [0:1]   
+    book:   [1:1] </pre>
+        <p class="Heading">Statement: </p><pre>   field name = 1; </pre>
+        <p>Statement skipped. </p>
+        <p class="Heading">Statement: </p><pre xml:space="preserve">record book { 
+    field title = 3; 
+    field pub_date = 2; 
+} </pre>
+        <p>Unconditionally create <code>book</code> record ([1:3]). No entry is created in the CRI. Save CRT: </p><pre>author: [0:1]  
+book:   [1:3] </pre>
+        <p>Field <code>title</code> is set to "Seminumerical Algorithms". Field <code>pub_date</code> is set to 1969. </p>
+        <p class="Heading">Statement: </p><pre>connect published; </pre>
+        <p>Determine that <code>author</code> is owner, <code>book</code> is member. Make current <code>book</code>, [1:3], the current record. Make current <code>author</code>, [0:1], the current owner of set <code>published</code>. Call <code>d_connect(PUBLISHED)</code>. </p>
+        <p>The last iteration of the <b>foreach</b> loop will have the same effect as the third, where a third book record is connected to the first author record. </p>
+        <h5 class="newpage"><a MadCap:generatedBookmark="TOC" name="Example_Three:_Full_family_tree_database"></a>Example Three: Full family tree database </h5>
+        <p>Our final example demonstrates the use of the remaining two import specification language statement types. The first is called <b>update on</b>, and is used to find an existing CRI entry and update the existing record with new field values. This statement will create the record for which there is not already a CRI entry. The last statement is called <b>find on</b>, and is used to locate a record that has already been created with a <b>create on</b> or <b>update on</b> statement, and make it the current record of type. It is used to locate records that will be involved in connect statements. Note that <b>update on</b> and <b>find on</b> cannot detect the presence of a record that existed in the database prior to this import! </p>
+        <p>This example is an expansion of Example One above, which represents a family tree. Figure 10-4 shows the schema for building a family tree database. </p>
+        <p class="Caption">
+            <img src="../Resources/Images/UsersGuide/UG-Fig-10-4_268x240.png" style="width: 268;height: 240;" />
+            <br />Fig. 10-4. Family Tree Schema</p>
+        <p>The data definition language for this schema follows: </p><pre>database tree {
+    data file "tree.dat" contains person, marriage;
+    key file "tree.key" contains p_num, p_name;
+
+    record person {
+        unique key int p_num;
+        char p_last[20];
+        char p_first[30];
+        long p_birth;
+        long p_death;
+        compound key p_name {
+            p_last;
+            p_first;
+        }
+    }
+
+    record marriage {
+        long m_date;
+        long m_term;
+    }
+    set husband {
+        order ascending;
+        owner person;
+        member marriage by m_date;
+    }
+    set wife {
+        order ascending;
+        owner person;
+        member marriage by m_date;
+    }
+    set offspring {
+        order ascending;
+        owner marriage;
+        member person by p_birth;
+    }
+}</pre>
+        <p>The input data contains field-value relationships that will be converted into set relationships during the import. There are two data files: one for definitions of people in the tree and a second for the definitions of marriages in the tree. One person may be either a husband or wife in a marriage, and a person may be the offspring of a marriage. The definitions of the person fields in file <code>person.asc</code> are as follows: </p>
+        <ol>
+            <li value="1">Numerical reference to the marriage from which this person is the offspring. </li>
+            <li value="2">Unique numerical identifier of this person. </li>
+            <li value="3">Person's last name. </li>
+            <li value="4">Person's first and middle name. </li>
+            <li value="5">Person's birth date, if known.</li>
+            <li value="6">Person's death date, if applicable and known. </li>
+        </ol>
+        <p>The <code>marriage.asc</code> file contains fields defined as follows: </p>
+        <ol>
+            <li value="1">Unique numerical identifier of this marriage. </li>
+            <li value="2">Reference to the person record of husband. </li>
+            <li value="3">Reference to the person record of wife. </li>
+            <li value="4">Marriage date. </li>
+            <li value="5">Marriage termination date, if applicable and known. </li>
+        </ol>
+        <p>See the sample data below: </p>
+        <p class="Heading">File: <code>person.asc</code> <![CDATA[ ]]></p><pre>2,1,"Warner","Micah Wayne",9761101,0 
+2,3,"Warner","Jesse David",9800706,0 
+5,4,"Warner","Wayne Lawrence",9540530,0 
+5,6,"Warner","Walter Bartlett",9560226,0 
+5,7,"Warner","Laurel Ann",9590520,0 
+5,8,"Warner","Roger James",9601025,0 
+10,9,"Warner","Lawrence James",9270603,0 
+12,11,"Warner","Clarence R.",9010313,9270516 
+14,13,"James","Pauline May",9040723,0 
+16,15,"Morgan","Leslie Bartlet",8971128,0 
+18,17,"Carte","Dorothy Lois",8890802,0 
+20,19,"Morgan","Elizabeth Jane",9330412,0 
+22,21,"Wood","Anita Joan",9531214,0 
+22,23,"Kepler","Michael",0,0 
+22,24,"Martin","Dinah",0,0 
+22,25,"Pools","Janice",0,0 
+22,26,"Adams","Judy",0,0 
+2,27,"Warner","Thomas James",9850404,0 
+2,28,"Warner","Paul Russell",9860904,0 
+30,29,"Kepler","Patrick Michael",9870509,0 </pre>
+        <p class="Heading">File: <code>marriage.asc</code></p><pre>2,4,21,9731215,0 
+5,9,19,9511013,0 
+10,11,13,9260313,9270561 
+20,15,17,9290324,0 
+30,23,7,9841013,0 
+31,8,24,9840512,0 
+32,9,25,9740000,0 
+33,9,26,9820000,0 </pre>
+        <p>As these data are imported, we want to be able to connect each <code>person</code> record to the <code>marriage</code> record(s) it is related to in two ways. A person may be a spouse in one marriage, and may be the offspring of another marriage. In each line of ASCII <code>person</code> data is a unique identifier of the person, plus the identifier of the marriage of which this person is the offspring. Hence it is possible to create up to two records for each line of person data. As the <code>person</code> and <code>marriage</code> records are created or found, the <code>offspring</code> set can be connected. </p>
+        <p>The loop through <code>person.asc</code> will cause all <code>person</code> and <code>marriage</code> records to be created, and all <code>offspring</code> connections to be made. A loop through <code>marriage.asc</code> will allow each marriage record to be found and updated with full information about the marriage. It will also allow the husband and wife set connections to be made. </p>
+        <p>The following import specification demonstrates the <b>update on</b> and <b>find on</b> statements, as it updates marriage information and creates husband and wife connections, both in the second <b>foreach</b> loop. </p><pre xml:space="preserve">database tree;
+    foreach "person.asc" {
+        record person {
+            create on 2;
+            field p_num = 2;
+            field p_last = 3;
+            field p_first = 4;
+            field p_birth = 5;
+            field p_death = 6;
+        }
+        record marriage {
+            create on 1;
+        }
+        connect offspring;
+}
+foreach "marriage.asc" {
+    record marriage {
+        update on 1;
+        field m_date = 4;
+        field m_term = 5;
+    }
+    record person {
+        find on 2;
+    }
+    connect husband;
+        record person {
+        find on 3;
+    }
+    connect wife;
+}
+end;                                         </pre>
+        <h4 class="Heading4"><a MadCap:generatedBookmark="TOC" name="10.3.2.3_Import_Specification_Language_Definition"></a>10.3.2.3 Import Specification Language Definition </h4>
+        <h5><a MadCap:generatedBookmark="TOC" name="Import_Specification"></a>Import Specification </h5><pre>database <i>dbname </i>;
+    foreach_loop
+    ...
+end ;</pre>
+        <p>The database named <i>dbname</i> is opened, and all record, field, and set type names are read into memory for verification against the names included in this specification. The database is opened through the TFS. Then each <b>foreach_loop</b> is executed in order. </p>
+        <h5><a MadCap:generatedBookmark="TOC" name="Foreach_Loop"></a>Foreach Loop </h5><pre>foreach <i>input_file</i> {
+    import_statement
+    ...
+}</pre>
+        <p>Read each line of ASCII text from <i>input_file</i> and make the text available to the import statements enclosed in the loop. When an end-of-file is detected in <i>input_file</i>, exit the loop and execute the next statement. </p>
+        <h5><a MadCap:generatedBookmark="TOC" name="Import_Statement"></a>Import Statement </h5><pre>foreach_loop | record_statement | connect_statement </pre>
+        <p>Note that a <b>foreach_loop</b> can contain a <b>foreach_loop</b>. This will cause an inner <i>input_file</i> to be read and processed repetitively. Any number of <b>import_statements</b> may be included within one <b>foreach_loop</b>. </p>
+        <h5><a MadCap:generatedBookmark="TOC" name="Record_Statement"></a>Record Statement </h5><pre>record <i>recname </i>{ 
+
+[ field_statement ] 
+   ... 
+} </pre>
+        <p>Depending on the handling, create record type <i>recname</i>, read it to be updated, or find a previously created record instance. If <b>field_statements</b> are present, convert the ASCII data into the proper types, and copy the values into the record. </p>
+        <h5><a MadCap:generatedBookmark="TOC" name="Handling"></a>Handling </h5><pre>create on <i>field_number</i> ; </pre>
+        <p>or </p><pre>update on <i>field_number</i> ; </pre>
+        <p>or </p><pre>find on field_number ; </pre>
+        <p>If the handling is <b>create on</b>, search the created record index (CRI) for a record of the same type and field value. If found, make the existing record the current of record type (CRT) and do not create a new record and ignore any <b style="font-style: italic; font-weight: normal;">field_statements</b>. If not found, create a new record, enter its type and field value into the CRI, make it the new CRT, and perform the following <i>field_statements</i>, if present. </p>
+        <p>If <b>update on</b>, search the CRI for a record of the same type and field value. If such a record is found, read in the existing contents of the record and update them from the following <i>field_statements</i>. Otherwise, create a new record and enter it into the CRI. Make the record the CRT. </p>
+        <p>If <b>find on</b>, search the CRI for a record of the same type and field value. If found, make it the CRT. Otherwise, nullify the CRT for this record type. Ignore any <i>field_statements</i> that follow. </p>
+        <h5><a MadCap:generatedBookmark="TOC" name="Field_Statement"></a>Field Statement </h5><pre>field field_name = [input_file]field_number; </pre>
+        <p>Convert the ASCII data in field <b style="font-weight: normal;font-style: italic;">field_number</b> into the type defined in the schema for field <i>field_name</i>, and copy the value into the record being created. </p>
+        <p>If more than one <b>foreach_loop</b> level exists, data can be used from any active line of ASCII text. The default text comes from the inner-most loop. To refer to other active lines of text, precede the field number with the <i>input_file</i>. For example: </p><pre>foreach "invoice.asc" {
+    ...
+    foreach "item.asc" {
+        record item {
+            ...
+            field inv_no = "invoice.asc".1;
+            field item_no = 1;
+...</pre>
+        <p>The <i>field_name </i>may be composed of a structure name and an element name, if the field is in a structured field. The structure name and element name may be subscripted, if they are defined as arrays. </p>
+        <p>If a partial specification is given (for example the structure name only, with no element), the whole structure is implied. The <i>field_number </i>points to the first field that will be used, with the others immediately following. For example, a record type may be defined with the following field: </p><pre xml:space="preserve">struct { 
+    char street[20]; 
+    char city[20]; 
+    long zip 
+} address; </pre>
+        <p>Then, the following groups of statements are equivalent: </p><pre>field street = 2; 
+field city = 3; 
+field zip = 4; 
+
+field address.street = 2; 
+field address.city = 3; 
+field address.zip = 4; 
+
+field address = 2; </pre>
+        <p>Arrays are handled similarly. If a complete reference is given, only one field value is used. If a partial reference is given, the field numbers following the <i>field_number </i>in the statement are utilized to satisfy the assignment. Consider the following field definition: </p><pre xml:space="preserve">struct { 
+    int16_t code; 
+    int32_t message[10]; 
+    int16_t marker; 
+} packet[3]; </pre>
+        <p>The following examples demonstrate the number of input fields automatically referenced: </p>
+        <table style="border-left-style: solid;border-left-width: 1px;border-left-color: #c0c0c0;border-right-style: solid;border-right-width: 1px;border-right-color: #c0c0c0;border-top-style: solid;border-top-width: 1px;border-top-color: #c0c0c0;border-bottom-style: solid;border-bottom-width: 1px;border-bottom-color: #c0c0c0;border-collapse: collapse;margin-left: 0;margin-right: auto;">
+            <col style="width: 271px;" />
+            <col />
+            <tr>
+                <th style="font-weight: bold;">Field statement </th>
+                <th style="font-weight: bold;">Number of input fields </th>
+            </tr>
+            <tr>
+                <td>field message = 2; </td>
+                <td>       10 </td>
+            </tr>
+            <tr>
+                <td>field message[3] = 5; </td>
+                <td>        1 </td>
+            </tr>
+            <tr>
+                <td>field packet[0].message = 2; </td>
+                <td>       10 </td>
+            </tr>
+            <tr>
+                <td>field packet[2].marker = 36; </td>
+                <td>        1 </td>
+            </tr>
+            <tr>
+                <td>field packet[1] = 13; </td>
+                <td>       12 </td>
+            </tr>
+            <tr>
+                <td>field packet = 1; </td>
+                <td>       36 </td>
+            </tr>
+        </table>
+        <p>Character strings are treated differently than other types of arrays. The last dimension in a character field definition represents the length of a string, which is read from just one ASCII field. If a character field definition contains more than one dimension, it is assumed to be an array (or matrix) of character strings. The only exception to this rule is when the last dimension is one. This defines the field as binary data, which is to be interpreted as hexadecimal data in the input text (see <a href="#10.3.2.4">Data Conversion</a>). An example multi-dimensional character string field follows: </p><pre>char memo[20][80];</pre>
+        <p>A <b>field</b> statement using only the name <b>memo</b>, with no subscripts, would imply that 20 fields would be read from an ASCII record, each containing strings up to 80 characters long. If the statement used one subscript, then one text field would be read into the <span class="MyVariablesProductShortName">RDM</span> field. Using two subscripts with the name would be invalid. </p>
+        <h5><a MadCap:generatedBookmark="TOC" name="Connect_Statement"></a>Connect Statement </h5><pre>connect <i>setname</i>; </pre>
+        <p>Look up the owner and member types in the database dictionary. If the CRT table contains database addresses of these types, make the owner type the current owner of set <i>setname</i>, and make the member type the current record. Then perform a <code>d_connect</code> function with set <i>setname</i>. If owner and member do not exist as the CRT, then do not perform the connect. If the current record is already connected to the set, ignore the connect. </p>
+        <h4 class="Heading4"><a MadCap:generatedBookmark="TOC" name="10.3.2.4_Data_Conversion"></a><a name="10.3.2.4"></a>10.3.2.4 Data Conversion </h4>
+        <p>When an ASCII field is selected by a <b>field</b> statement to be assigned to an <span class="MyVariablesProductShortName">RDM</span> field, dbimp does two things. First, it scans the ASCII text until it finds the specified field and makes a copy of the field. Second, it attempts to convert those ASCII characters into the target data type. </p>
+        <p>To find the selected field number <code>N</code>, <code>dbimp</code> scans the input line, looking for <code>N-1</code> separator characters (usually commas). A comma that appears within a set of quotation marks or is preceded with an escape character (default "\") is not counted. The length of a field spans from the character following a comma through the character preceding the next comma. Blanks are significant. Quotation mark characters, if used, will define the actual beginning and ending of a string, even if there are leading or trailing blanks. If a field contains a number preceded by blanks, the blanks will be ignored. Null fields may be represented by a pair of quotation mark characters or by adjacent commas. </p>
+        <p>After the field contents have been located and copied from the ASCII text, <code>dbimp</code> converts it into the target type. If the target type is a character string, <code>dbimp</code> copies it into the target field directly, truncating it if it is too long. If the target type is numeric, the input field is given to the standard C library function called <code>sscanf</code>. The format specification provided to <code>sscanf</code> depends on the target type. If the target type is a single byte <b>character</b>, or an <b>integer</b>, <b>short</b>, or <b>long</b>, then the format will be <b>%ld</b>, which will convert the ASCII field into a long variable. Then the long variable is shortened, if necessary, and assigned to the actual target data type. If the target type is float or double, the format will be <code>%lf</code>, which will convert the string into a double type variable. It is then assigned to the actual target data type. </p>
+        <p class="Notes">Single-byte character fields can be imported as their ASCII value in <b style="font-weight: normal;">decimal</b> or <b style="font-weight: normal;">octal</b> or as the character. The standard C escaped characters are also supported. </p>
+        <p>Binary data is defined when the last dimension of a character field is 1. See the example below. </p><pre>char picture[256][1]; </pre>
+        <p>Since a standard C character string cannot be represented by one character, <span class="MyVariablesProductShortName">RDM</span> will interpret this type of definition as binary data without null terminators. The input string expected by <code>dbimp</code> will consist of a string of hexadecimal values, two characters per hexadecimal byte value, with no blanks between them. For example, to read the string "Hello world" (including the null terminator) into a binary field 12 characters long, the input field should be: </p><pre>48656c6c6f20776f726c6400 </pre>
+        <p>The export utility, <code>dbexp</code>, will create this representation from any binary fields. </p>
+        <h3 class="Heading3"><a MadCap:generatedBookmark="TOC" name="10.3.3_Using_Export_and_Import_Together"></a>10.3.3 Using Export and Import Together </h3>
+        <p>The export and import utilities have been designed to operate on the same intermediate form of data: the ASCII text file. Because of this, it is possible to use the output of <code>dbexp</code> as the input to <code>dbimp</code>. This process, called a database transfer, facilitates moving a database to another computer. It also allows you to change a schema. </p>
+        <p>To perform either function, the combination of the ASCII data and the schema must contain enough information to be able to fully reconstruct the database. Not all information stored in a database can be retained through a transfer. Certain types of information must be avoided if it is important to be able to transfer the database by using <code>dbimp</code> and <code>dbexp</code>. </p>
+        <p>Note the following two restrictions concerning transferable databases: </p>
+        <ol>
+            <li value="1"><code>dbimp</code> cannot maintain the original set ordering for orders first, next, or last. </li>
+            <li value="2">For all sets, the owner and member must be different record types. </li>
+        </ol>
+        <p>In <span class="MyVariablesProductShortName">RDM</span>, sets often contain vital information in their ordering. A set that is defined as "order last" will often maintain a chronological ordering on the set members. A set defined as "order next" will often have an ordering that is determined by an application program. But, as noted above, <code>dbimp</code> will not maintain first, next, or last original set ordering. Thus the first condition for a fully transferable database is that it does not depend on the ordering of any of these types of sets. Both ascending and descending set types will be transferred, because they are sorted during the <code>d_connect</code> call performed by <code>dbimp</code>. </p>
+        <p>The second restriction exists because <code>dbimp</code> has no mechanism to perform connections where both owner and member are the same type of record (recursive sets). Note that these types of sets may exist in the database; they just cannot be re-connected during an import. </p>
+        <hr MadCap:conditions="Default.ScreenOnly" width="100%" size="0" align="center" />
+        <p MadCap:conditions="Default.ScreenOnly" style="font-size: 8pt;"><span class="MyVariablesCopyright">Copyright © 2012, Raima Inc. All rights reserved.</span>
+        </p>
+        <script type="text/javascript" src="../SkinSupport/MadCapBodyEnd.js">
+        </script>
+        <p class="MCWebHelpFramesetLink MCWebHelpFramesetLinkBottom" style="display: none;"><a href="../../Default_CSH.htm#UG/Chapter10.htm" style="">Open topic with navigation</a>
+        </p>
+    </body>
+</html>

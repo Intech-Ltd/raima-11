@@ -1,0 +1,281 @@
+<?xml version="1.0" encoding="utf-8"?>
+<!DOCTYPE html PUBLIC "-//W3C//DTD XHTML 1.0 Strict//EN" "http://www.w3.org/TR/xhtml1/DTD/xhtml1-strict.dtd">
+<html xmlns:MadCap="http://www.madcapsoftware.com/Schemas/MadCap.xsd" MadCap:tocPath="SQL API|RSQL User's Guide|RSQL API Function Reference" MadCap:InPreviewMode="false" MadCap:PreloadImages="false" MadCap:RuntimeFileType="Topic" MadCap:TargetType="WebHelp" lang="en-us" xml:lang="en-us" MadCap:PathToHelpSystem="../../" MadCap:HelpSystemFileName="Default.xml" MadCap:SearchType="Stem">
+    <head>
+        <meta http-equiv="Content-Type" content="text/html; charset=utf-8" /><title>rsqlLockTables</title>
+        <link rel="icon" type="image/png" href="http://docs.raima.com/favicon.png" />
+        <link href="../SkinSupport/MadCap.css" rel="stylesheet" />
+        <link href="../Resources/TableStyles/FunctionArgs.css" rel="stylesheet" />
+        <link href="../Resources/TableStyles/SQLErrorCodes.css" rel="stylesheet" />
+        <link href="../Resources/Stylesheets/raima.css" rel="stylesheet" />
+        <script src="../SkinSupport/MadCapAll.js" type="text/javascript">
+        </script>
+    </head>
+    <body>
+        <p class="MCWebHelpFramesetLink MCWebHelpFramesetLinkTop" style="display: none;"><a href="../../Default_CSH.htm#SQLRM/rsqlLockTables.htm" style="">Open topic with navigation</a>
+        </p>
+        <div class="MCBreadcrumbsBox_0"><span class="MCBreadcrumbsPrefix">You are here: </span><a class="MCBreadcrumbsLink" href="../dbRSQL.htm">SQL API</a><span class="MCBreadcrumbsDivider"> &gt; </span><a class="MCBreadcrumbsLink" href="../RSQLUG/dbSQLUG.htm">RSQL User's Guide</a><span class="MCBreadcrumbsDivider"> &gt; </span><a class="MCBreadcrumbsLink" href="SQLAPIReference.htm">RSQL API Function Reference</a><span class="MCBreadcrumbsDivider"> &gt; </span><span class="MCBreadcrumbs">rsqlLockTables</span>
+        </div>
+        <h3 class="newpage"><a name="kanchor303"></a>rsqlLockTables</h3>
+        <p>Issue an explicit lock request for one or more database tables</p>
+        <p class="Heading">Prototype</p><pre xml:space="preserve">RSQL_ERRCODE EXTERNAL_FCN rsqlLockTables(
+    HCONN           hConn,
+    const char     *dbname,
+    int16_t         noTablocks,
+    TABLE_LOCK     *tablocks) 
+</pre>
+        <p class="Heading">Arguments</p>
+        <table style="width: 100%;mc-table-style: url('../Resources/TableStyles/FunctionArgs.css');caption-side: top;margin-left: 0;margin-right: auto;" class="TableStyle-FunctionArgs" cellspacing="0">
+            <col class="Column-Column1">
+            </col>
+            <col class="Column-Column3">
+            </col>
+            <col class="Column-Column2">
+            </col>
+            <tbody>
+                <tr class="Body-Body1">
+                    <td class="BodyE-Column1-Body1">hdbc</td>
+                    <td class="BodyE-Column3-Body1">(input)</td>
+                    <td class="BodyD-Column2-Body1">The connection handle.</td>
+                </tr>
+                <tr class="Body-Body1">
+                    <td class="BodyE-Column1-Body1">dbname</td>
+                    <td class="BodyE-Column3-Body1">(input)</td>
+                    <td class="BodyD-Column2-Body1">Pointer to string containing the name of the database containing the tables to be locked.</td>
+                </tr>
+                <tr class="Body-Body1">
+                    <td class="BodyE-Column1-Body1">noTablocks</td>
+                    <td class="BodyE-Column3-Body1">(input)</td>
+                    <td class="BodyD-Column2-Body1">The number of tables in the <code>tablocks</code> array.</td>
+                </tr>
+                <tr class="Body-Body1">
+                    <td class="BodyB-Column1-Body1">tablocks</td>
+                    <td class="BodyB-Column3-Body1">(input)</td>
+                    <td class="BodyA-Column2-Body1">Array of <code>TABLE_LOCK</code> entries specifying the tables to be locked and the type of lock to be applied.</td>
+                </tr>
+            </tbody>
+        </table>
+        <p class="Heading">Description</p>
+        <p>You can call <code>rsqlTableLocks</code> to explicitly request locks on one or more tables in a given database.  Normally, SQL automatically issues any needed lock requests in the processing of each <b>select</b>, <b>insert</b>, <b>update</b>, and <b>delete</b> statement and in the execution of a stored procedure.  However, if you believe it is important to explicitly lock specific tables, then you may use this function to do so.</p>
+        <p>When you have explicitly issued table locks through either a call to this function or execution of the <b>lock table</b> SQL statement you disable SQL's automatic lock mode.  This means that the execution of any SQL statement that does not have all of the reference tables locked will return an error (<code>errNOTLOCKED</code>) indicating that the table must first be explicitly locked. Note that the values of foreign key columns are retrieved from the referenced row in the primary key table (<span class="MyVariablesRSQLName">RDM SQL</span> does not actually store them in the foreign key table).  Hence, <i>both</i> the foreign and primary key tables must be explicitly locked when accessing foreign key column values.</p>
+        <p>If any implicit locks are active on the connection then explicit locking is not allowed and <code>rsqlLockTables</code> will return error code <code>errLOCKMODE</code>.</p>
+        <p>Error code <code>errROTRACT</code> will be returned when a read-only transaction is active.  Read-only transactions only allow database reading and locks are not required.</p>
+        <p>Error code <code>errAUTOCOMMIT</code> will be returned if auto commit mode is enabled as explicit locking is not allowed in auto commit mode.</p>
+        <p>Individual table locks are specified through the <code>tablocks</code> array.  The <code>TABLE_LOCK</code> structure and declaration is given below along with the <code>LOCK_TYPE</code> declaration.</p><pre xml:space="preserve">typedef enum _lock_type {
+    lockDEFAULT = 0,                /* not specified */
+    lockREAD = 'r',                 /* read lock */
+    lockWRITE = 'w'                 /* write lock */
+} LOCK_TYPE;
+
+/* table lock request packet definition */
+typedef struct table_lock {
+    char           name[NAMELEN];   /* name of the table to be locked */
+    LOCK_TYPE      type;            /* kind of lock to apply: read, write, default */
+} TABLE_LOCK;
+</pre>
+        <p>For each <code>tablocks</code> array entry you need to specify the name of the table and the lock type.  The <code>lockDEFAULT</code> type will be interpreted as a write lock if a transaction is active and as a read lock if a transaction is not active.    An attempt to request a write lock when a transaction is not active will result in an error.</p>
+        <p>Either all of the locks will be granted or none will be.  Status code <code>errTIMEOUT</code> is returned in the event that one or more of the locks are not granted (due to some other connection already having the table locked) within the timeout period associated with the connection.</p>
+        <p>Read locks that were granted prior to a transaction or read and write locks that were granted within a transaction are freed when the transaction ends, through execution of a transaction commit or rollback.   </p>
+        <p>Read locks granted outside of a transaction must be freed either through a call to <code>rsqlUnlockTable</code>, to free a read lock on a specific table, or through a call to <code>rsqlUnlockTableAll</code> which frees all table read locks, or through an explicit call to <code>rsqlTransCommit</code>.</p>
+        <p>Executing one or more select statements without explicitly requesting locks will implicitly acquire the necessary locks. These read locks will be free when all the result rows have been fetched, the statement handles have been closed or freed, or with an explicit commit.</p>
+        <p>An insert, delete, or searched update will acquire the needed write locks.  Read locks held prior to execution of these statements will instead be upgraded to write locks and when the execution is completed downgrade back to read locks.</p>
+        <p>A positioned update will temporarily upgrade the read lock to a write lock and when the update is completed downgrade it back to a read lock.</p>
+        <p class="Heading">Example</p><pre xml:space="preserve"><b>#include "rsql.h"</b>
+    ...
+<b>RSQL_ERRCODE stat;
+void *hdbc;
+TABLE_LOCK lock_request[] = {
+	{"author", lockREAD},
+ 	{"book", lockREAD}
+};
+int16_t notabs = sizeof(lock_request)/sizeof(TABLE_LOCK);</b>
+    ...
+    <b>stat = rsqlLockTables(hdbc, "bookshop", notabs, lock_request);</b>
+    if ( stat == errSUCCESS ) {
+        ... /* issue and process SELECT statement on author and book tables */
+        rsqlUnlockTableAll(hdbc);
+    }
+    ...		
+</pre>
+        <p class="Heading">Required Headers</p><pre xml:space="preserve">#include "rsql.h"</pre>
+        <p class="Heading">Libraries</p>
+        <table style="width: 100%; margin-left: 0; margin-right: auto;">
+            <col style="width: 200px;">
+            </col>
+            <col>
+            </col>
+            <thead>
+                <tr>
+                    <th>Library Name</th>
+                    <th>Description</th>
+                </tr>
+            </thead>
+            <tbody>
+                <tr>
+                    <td><code>rdmrsql<span class="MyVariablesLibraryVersion">11</span></code>
+                    </td>
+                    <td>RSQL&#160;API Library</td>
+                </tr>
+            </tbody>
+        </table>
+        <p>See <a href="../GS/distrib.htm#Library">Library Naming Conventions</a> section for full library name and a list of library dependencies.</p>
+        <p class="Heading">Return Codes</p>
+        <table class="TableStyle-SQLErrorCodes" cellspacing="0" style="mc-table-style: url('../Resources/TableStyles/SQLErrorCodes.css');">
+            <col class="Column-Column1" />
+            <col class="Column-Column2" />
+            <col class="Column-Column3" />
+            <col class="Column-Column4" />
+            <tbody>
+                <tr class="Body-Body1">
+                    <th class="BodyB-Column1-Body1" style="font-weight: bold;">Error Code</th>
+                    <th class="BodyB-Column2-Body1" style="font-weight: bold;">Enum Identifier</th>
+                    <th class="BodyB-Column3-Body1" style="font-weight: bold;">SQL State</th>
+                    <th class="BodyA-Column4-Body1" style="font-weight: bold;">Description</th>
+                </tr>
+            </tbody>
+        </table>
+        <table class="TableStyle-SQLErrorCodes" cellspacing="0" style="mc-table-style: url('../Resources/TableStyles/SQLErrorCodes.css');">
+            <col class="Column-Column1" />
+            <col class="Column-Column2" />
+            <col class="Column-Column3" />
+            <col class="Column-Column4" />
+            <tbody>
+                <tr class="Body-Body1">
+                    <td class="BodyB-Column1-Body1">0</td>
+                    <td class="BodyB-Column2-Body1">errSUCCESS</td>
+                    <td class="BodyB-Column3-Body1">00000</td>
+                    <td class="BodyA-Column4-Body1">no error was detected</td>
+                </tr>
+            </tbody>
+        </table>
+        <table class="TableStyle-SQLErrorCodes" cellspacing="0" style="mc-table-style: url('../Resources/TableStyles/SQLErrorCodes.css');">
+            <col class="Column-Column1" />
+            <col class="Column-Column2" />
+            <col class="Column-Column3" />
+            <col class="Column-Column4" />
+            <tbody>
+                <tr class="Body-Body1">
+                    <td class="BodyB-Column1-Body1">-5</td>
+                    <td class="BodyB-Column2-Body1">errINVHANDLE</td>
+                    <td class="BodyB-Column3-Body1">02002</td>
+                    <td class="BodyA-Column4-Body1">invalid connection or statement handle</td>
+                </tr>
+            </tbody>
+        </table>
+        <table class="TableStyle-SQLErrorCodes" cellspacing="0" style="mc-table-style: url('../Resources/TableStyles/SQLErrorCodes.css');">
+            <col class="Column-Column1" />
+            <col class="Column-Column2" />
+            <col class="Column-Column3" />
+            <col class="Column-Column4" />
+            <tbody>
+                <tr class="Body-Body1">
+                    <td class="BodyB-Column1-Body1">14</td>
+                    <td class="BodyB-Column2-Body1">errTABNOTFOUND</td>
+                    <td class="BodyB-Column3-Body1">42S02</td>
+                    <td class="BodyA-Column4-Body1">table not found</td>
+                </tr>
+            </tbody>
+        </table>
+        <table class="TableStyle-SQLErrorCodes" cellspacing="0" style="mc-table-style: url('../Resources/TableStyles/SQLErrorCodes.css');">
+            <col class="Column-Column1" />
+            <col class="Column-Column2" />
+            <col class="Column-Column3" />
+            <col class="Column-Column4" />
+            <tbody>
+                <tr class="Body-Body1">
+                    <td class="BodyB-Column1-Body1">41</td>
+                    <td class="BodyB-Column2-Body1">errDBNOTOPEN</td>
+                    <td class="BodyB-Column3-Body1">42000</td>
+                    <td class="BodyA-Column4-Body1">database not open</td>
+                </tr>
+            </tbody>
+        </table>
+        <table class="TableStyle-SQLErrorCodes" cellspacing="0" style="mc-table-style: url('../Resources/TableStyles/SQLErrorCodes.css');">
+            <col class="Column-Column1" />
+            <col class="Column-Column2" />
+            <col class="Column-Column3" />
+            <col class="Column-Column4" />
+            <tbody>
+                <tr class="Body-Body1">
+                    <td class="BodyB-Column1-Body1">28</td>
+                    <td class="BodyB-Column2-Body1">errINVARG</td>
+                    <td class="BodyB-Column3-Body1">HY009</td>
+                    <td class="BodyA-Column4-Body1">invalid argument value</td>
+                </tr>
+            </tbody>
+        </table>
+        <table class="TableStyle-SQLErrorCodes" cellspacing="0" style="mc-table-style: url('../Resources/TableStyles/SQLErrorCodes.css');">
+            <col class="Column-Column1" />
+            <col class="Column-Column2" />
+            <col class="Column-Column3" />
+            <col class="Column-Column4" />
+            <tbody>
+                <tr class="Body-Body1">
+                    <td class="BodyB-Column1-Body1">118</td>
+                    <td class="BodyB-Column2-Body1">errTIMEOUT</td>
+                    <td class="BodyB-Column3-Body1">HYT00</td>
+                    <td class="BodyA-Column4-Body1">timeout expired</td>
+                </tr>
+            </tbody>
+        </table>
+        <table class="TableStyle-SQLErrorCodes" cellspacing="0" style="mc-table-style: url('../Resources/TableStyles/SQLErrorCodes.css');">
+            <col class="Column-Column1" />
+            <col class="Column-Column2" />
+            <col class="Column-Column3" />
+            <col class="Column-Column4" />
+            <tbody>
+                <tr class="Body-Body1">
+                    <td class="BodyB-Column1-Body1">129</td>
+                    <td class="BodyB-Column2-Body1">errROTRACT</td>
+                    <td class="BodyB-Column3-Body1">25000</td>
+                    <td class="BodyA-Column4-Body1">read-only transaction is active</td>
+                </tr>
+            </tbody>
+        </table>
+        <table class="TableStyle-SQLErrorCodes" cellspacing="0" style="mc-table-style: url('../Resources/TableStyles/SQLErrorCodes.css');">
+            <col class="Column-Column1" />
+            <col class="Column-Column2" />
+            <col class="Column-Column3" />
+            <col class="Column-Column4" />
+            <tbody>
+                <tr class="Body-Body1">
+                    <td class="BodyB-Column1-Body1">162</td>
+                    <td class="BodyB-Column2-Body1">errLOCKMODE</td>
+                    <td class="BodyB-Column3-Body1">RX026</td>
+                    <td class="BodyA-Column4-Body1">illegal locking mode</td>
+                </tr>
+            </tbody>
+        </table>
+        <table class="TableStyle-SQLErrorCodes" cellspacing="0" style="mc-table-style: url('../Resources/TableStyles/SQLErrorCodes.css');">
+            <col class="Column-Column1" />
+            <col class="Column-Column2" />
+            <col class="Column-Column3" />
+            <col class="Column-Column4" />
+            <tbody>
+                <tr class="Body-Body1">
+                    <td class="BodyB-Column1-Body1">164</td>
+                    <td class="BodyB-Column2-Body1">errAUTOCOMMIT</td>
+                    <td class="BodyB-Column3-Body1">42000</td>
+                    <td class="BodyA-Column4-Body1">operation not allowed when autocommit is enabled</td>
+                </tr>
+            </tbody>
+        </table>
+        <p class="Heading">SQL&#160;User's Guide</p>
+        <p><a href="../SQL/Chapter9.htm#Locking">Locking in <span class="MyVariablesRSQLName">RDM SQL</span></a>
+        </p>
+        <p class="Heading">See Also</p>
+        <p><a href="rsqlSetTimeout.htm">rsqlSetTimeout</a>
+        </p>
+        <p><a href="rsqlUnlockTable.htm">rsqlUnlockTable</a>
+        </p>
+        <p><a href="rsqlUnlockTableAll.htm">rsqlUnlockTableAll</a>
+        </p>
+        <hr MadCap:conditions="Default.ScreenOnly" width="100%" size="0" align="center" />
+        <p MadCap:conditions="Default.ScreenOnly" style="font-size: 8pt;"><span class="MyVariablesCopyright">Copyright © 2012, Raima Inc. All rights reserved.</span>
+        </p>
+        <script type="text/javascript" src="../SkinSupport/MadCapBodyEnd.js">
+        </script>
+        <p class="MCWebHelpFramesetLink MCWebHelpFramesetLinkBottom" style="display: none;"><a href="../../Default_CSH.htm#SQLRM/rsqlLockTables.htm" style="">Open topic with navigation</a>
+        </p>
+    </body>
+</html>

@@ -1,0 +1,123 @@
+<?xml version="1.0" encoding="utf-8"?>
+<!DOCTYPE html PUBLIC "-//W3C//DTD XHTML 1.0 Strict//EN" "http://www.w3.org/TR/xhtml1/DTD/xhtml1-strict.dtd">
+<html xmlns:MadCap="http://www.madcapsoftware.com/Schemas/MadCap.xsd" MadCap:tocPath="Installation Guide and Release Notes|Release Notes" MadCap:InPreviewMode="false" MadCap:PreloadImages="false" MadCap:RuntimeFileType="Topic" MadCap:TargetType="WebHelp" lang="en-us" xml:lang="en-us" class="" MadCap:PathToHelpSystem="../../" MadCap:HelpSystemFileName="Default.xml" MadCap:SearchType="Stem">
+    <head>
+        <meta http-equiv="Content-Type" content="text/html; charset=utf-8" /><title>Microsoft Windows Platform Release Notes</title>
+        <link rel="icon" type="image/png" href="http://docs.raima.com/favicon.png" />
+        <link href="../SkinSupport/MadCap.css" rel="stylesheet" />
+        <link href="../Resources/TableStyles/ArgsTwoCol.css" rel="stylesheet" />
+        <link href="../Resources/Stylesheets/raima.css" rel="stylesheet" />
+        <script src="../SkinSupport/MadCapAll.js" type="text/javascript">
+        </script>
+    </head>
+    <body>
+        <p class="MCWebHelpFramesetLink MCWebHelpFramesetLinkTop" style="display: none;"><a href="../../Default_CSH.htm#GS/RelNotes-Windows.htm" style="">Open topic with navigation</a>
+        </p>
+        <div class="MCBreadcrumbsBox_0"><span class="MCBreadcrumbsPrefix">You are here: </span><span class="MCBreadcrumbsSelf">Installation Guide and Release Notes</span><span class="MCBreadcrumbsDivider"> &gt; </span><a class="MCBreadcrumbsLink" href="RelNotes.htm">Release Notes</a><span class="MCBreadcrumbsDivider"> &gt; </span><span class="MCBreadcrumbs">Microsoft Windows Platform</span>
+        </div>
+        <h2 class="newpage">Microsoft Windows Platform Release Notes</h2>
+        <h3>Introduction</h3>
+        <p>This PS (Platform-Specific) Guide focuses on the Microsoft Windows operating system for RDM. This section explains:</p>
+        <ul>
+            <li style="font-family: Arial;font-size: 11pt;" value="1">How to set up the Windows development platform
+</li>
+            <li style="font-family: Arial;font-size: 11pt;" value="2">How to build <span class="MyVariablesProductShortName">RDM</span> Source &amp; Examples</li>
+            <li style="font-family: Arial; font-size: 11pt;" value="3">Other issues specific to Windows
+</li>
+        </ul>
+        <h3>Development Environment</h3>
+        <p>The build scripts for <span class="MyVariablesProductShortName">RDM</span> examples and source assume that the paths and environment variables for the desired compiler have already been setup. The following table lists the compiler versions supported and the environment variable used to indicate which compiler is being used.</p>
+        <p>The environment variables listed below can be found in the <span class="MyVariablesProductShortName">RDM</span> setup script files used for setting the needed environment variables for <span class="MyVariablesProductShortName">RDM</span> compiling.</p>
+        <p>Visual Studio Project Files (VS2008 and VS2010) and CMake support have also been provided for building and running examples and tutorials. To access the VS Project files, look in the <span class="MyVariablesProductShortName">RDM</span> shortcut menu under GettingStarted. For instructions using CMake, see <a href="CMake.htm">here</a>.</p>
+        <h4 class="firstHeading"><a name="RDM&#160;Embe"></a><span class="MyVariablesProductShortName">RDM</span> Setup Script Files</h4><pre xml:space="preserve">rdm.bat [home] [DEBUG] [target] [tfs] [VERBOSE] </pre>
+        <p style="font-weight: bold;">Parameters</p>
+        <table style="width: 100%;mc-table-style: url('../Resources/TableStyles/ArgsTwoCol.css');margin-left: 0;margin-right: auto;" class="TableStyle-ArgsTwoCol" cellspacing="0">
+            <col class="Column-Column1" />
+            <col class="Column-Column2" />
+            <tbody>
+                <tr class="Body-Body1">
+                    <td class="BodyE-Column1-Body1">home</td>
+                    <td class="BodyD-Column2-Body1">Root directory of the <span class="MyVariablesProductShortName">RDM</span> directory structure. Defaults to the current directory.</td>
+                </tr>
+                <tr class="Body-Body1">
+                    <td class="BodyE-Column1-Body1">[NO]DEBUG</td>
+                    <td class="BodyD-Column2-Body1">Specify Debug option- default is OFF</td>
+                </tr>
+                <tr class="Body-Body1">
+                    <td class="BodyB-Column1-Body1">[NO] VERBOSE</td>
+                    <td class="BodyA-Column2-Body1">Specify output level for the setup script. Default is NO Verbose.</td>
+                </tr>
+            </tbody>
+        </table>
+        <p style="font-weight: bold;">Target</p>
+        <table style="width: 100%;margin-left: 0;margin-right: auto;mc-table-style: url('../Resources/TableStyles/ArgsTwoCol.css');" class="TableStyle-ArgsTwoCol" cellspacing="0">
+            <col class="Column-Column1" />
+            <col class="Column-Column2" />
+            <tbody>
+                <tr class="Body-Body1">
+                    <td class="BodyE-Column1-Body1">32bit</td>
+                    <td class="BodyD-Column2-Body1">Specify the target platform architecture as 32bit x86.</td>
+                </tr>
+                <tr class="Body-Body1">
+                    <td class="BodyE-Column1-Body1">64bit</td>
+                    <td class="BodyD-Column2-Body1">Specify the target platform architecture as 64bit x86.</td>
+                </tr>
+                <tr class="Body-Body1">
+                    <td class="BodyE-Column1-Body1">vx6x86</td>
+                    <td class="BodyD-Column2-Body1">Specify <a href="RelNotes-vxworks.htm#How4">cross compile for WindRiver VxWorks on the Intel x86 Processor</a></td>
+                </tr>
+                <tr class="Body-Body1">
+                    <td class="BodyE-Column1-Body1">intx86</td>
+                    <td class="BodyD-Column2-Body1">Specify <a href="RelNotes-ghs.htm#How4">cross compile for Green Hills Integrity on the Intel x86 Processor</a></td>
+                </tr>
+                <tr class="Body-Body1">
+                    <td class="BodyE-Column1-Body1">neux86</td>
+                    <td class="BodyD-Column2-Body1">Specify <a href="RelNotes-neutrino.htm#Installi">cross compile for QNX Neutrino on the Intel x86 Processor</a></td>
+                </tr>
+                <tr class="Body-Body1">
+                    <td class="BodyB-Column1-Body1">neuarm</td>
+                    <td class="BodyA-Column2-Body1">Specify <a href="RelNotes-neutrino.htm#Installi">cross compile for QNX Neutrino using ARMv7 instruction set (Cortex Series)</a></td>
+                </tr>
+            </tbody>
+        </table>
+        <p class="Notes">The default is based on the environment variable:&#160;<br />%PROCESSOR_ARCHITECTURE%</p>
+        <p style="font-weight: bold;">TFS</p>
+        <table style="width: 100%;margin-left: 0;margin-right: auto;mc-table-style: url('../Resources/TableStyles/ArgsTwoCol.css');" class="TableStyle-ArgsTwoCol" cellspacing="0">
+            <col class="Column-Column1" />
+            <col class="Column-Column2" />
+            <tbody>
+                <tr class="Body-Body1">
+                    <td class="BodyE-Column1-Body1">tfsr</td>
+                    <td class="BodyD-Column2-Body1">Use the <a href="../TFS/Chapter2.htm#2.2" title="Client/Server TFS" alt="Client/Server TFS">Client/Server</a> TFS version</td>
+                </tr>
+                <tr class="Body-Body1">
+                    <td class="BodyE-Column1-Body1">tfss</td>
+                    <td class="BodyD-Column2-Body1">Use the <a href="../TFS/Chapter2.htm#2.4" title="Standalone TFS" alt="Standalone TFS">Standalone</a> TFS version</td>
+                </tr>
+                <tr class="Body-Body1">
+                    <td class="BodyB-Column1-Body1">tfst</td>
+                    <td class="BodyA-Column2-Body1">Use the <a href="../TFS/Chapter2.htm#2.3" title="Direct-Linked TFS" alt="Direct-Linked TFS">Direct Linked</a> TFS version (Default)</td>
+                </tr>
+            </tbody>
+        </table>
+        <p class="Notes">If using multiple shell windows, changing the current TFS will affect <b>all</b> shells using that install directory.</p>
+        <h4>Building <span class="MyVariablesProductShortName">RDM</span> (source package) or Examples</h4>
+        <ol>
+            <li value="1">Install the software following the <a href="../IG/UNIX.htm">Windows Install Guide</a>. If building source, ensure you are installing the <b>source package</b>.</li>
+            <li value="2">From a terminal window session:</li>
+        </ol><pre xml:space="preserve">&gt;cd [installDir]
+&gt;rdm.bat [options]
+&gt;k</pre>
+        <p class="Notes">As part of the build step (for source or examples), a tfserver is automatically started before and stopped after. Shutdown any running tfservers before starting the build.</p>
+        <p>If a source package is installed, this will build the entire source if source files are modified. If source is not present, only the examples will be built.</p>
+        <p>All <span class="MyVariablesProductShortName">RDM</span> makefiles are designed to be invoked by the KMake utility, which is included in the RDM Installation. The correct command is aliased to 'k' for convenience.</p>
+        <p class="Notes">NOTE: When compiling with Kmake on Windows, the "rc.exe" tool is required. This can be obtained through the Windows Platform SDK.</p>
+        <hr MadCap:conditions="Default.ScreenOnly" width="100%" size="0" align="center" />
+        <p MadCap:conditions="Default.ScreenOnly" style="font-size: 8pt;"><span class="MyVariablesCopyright">Copyright © 2012, Raima Inc. All rights reserved.</span>
+        </p>
+        <script type="text/javascript" src="../SkinSupport/MadCapBodyEnd.js">
+        </script>
+        <p class="MCWebHelpFramesetLink MCWebHelpFramesetLinkBottom" style="display: none;"><a href="../../Default_CSH.htm#GS/RelNotes-Windows.htm" style="">Open topic with navigation</a>
+        </p>
+    </body>
+</html>

@@ -1,0 +1,17 @@
+create database vtabs;
+create table stdtab(
+    pkey integer primary key,
+    name char(24) key,
+    addr char(32),
+    city char(24),
+    state char(2),
+    zip char(10)
+);
+create virtual table virtab(
+    pkey integer primary key,
+    name char(24),
+    addr char(32),
+    city char(24),
+    state char(2),
+    zip char(10)
+);

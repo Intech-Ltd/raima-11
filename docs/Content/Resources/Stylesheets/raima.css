@@ -1,0 +1,861 @@
+/*<meta />*/
+
+/* General */
+
+/* Special Slidebar Stuff */
+
+/* 1) Article ******************************************************************* */
+
+/* List Styles ****************************************************************** */
+
+/* Definition List Styles ******************************************************* */
+
+/* contentsub */
+
+/* TOC Styles ******************************************************************* */
+
+/*border:1px solid #2f6fab;*/
+
+/* clear: both; */
+
+/* float: left; */
+
+/* Images and Thumbnails ******************************************************** */
+
+/*
+    border: 0.5em solid White;
+    border-width: 0.5em 0 0.8em 1.4em;
+*/
+
+/*
+    margin: 0.3em 0.5em 0.5em 0;
+    border: 0.5em solid White;
+    border-width: 0.5em 1.4em 0.8em 0;
+*/
+
+/* External Link Styles ********************************************************* */
+
+/*
+** keep the whitespace in front of the ^=, hides rule from konqueror
+** this is css3, the validator doesn't like it when validating as css2
+*/
+
+.article
+{
+	margin: 0;
+	padding: 2em 0 2em;
+	font-size: 0.95em;
+}
+
+.article p
+{
+	margin: 10px 0 10px 0;
+	padding: 0;
+}
+
+.article div.editsection
+{
+	margin: 20px 0 0 0;
+}
+
+.selected
+{
+	font-weight: bold;
+}
+
+.new
+{
+	
+}
+
+#sidebarslidebox
+{
+	position: absolute;
+	width: 210px;
+}
+
+/* [WLW] changed from 'auto' */
+
+.sidebarslidecontrol
+{
+	text-align: right;
+	color: #BBB;
+	font-size: 0.8em;
+	width: 202px;
+	cursor: hand;
+	cursor: pointer;
+}
+
+#sidebar
+{
+	top: 8.63em;
+}
+
+.article
+{
+	margin: 0;
+	padding: 2em 0 2em;
+	font-size: 0.95em;
+}
+
+.article div.editsection
+{
+	margin: 20px 0 0 0;
+}
+
+.article h1,
+h2,
+h3,
+h4,
+h5,
+h6
+{
+	font-family: Arial, Helvetica, sans-serif;
+	font-weight: normal;
+	color: #036;
+	margin: 30px 0 10px 0;
+	padding: 3px;
+}
+
+.article h1
+{
+	font-size: 1.7em;
+	border-bottom: solid #CCC 1px;
+}
+
+.article h1.firstHeading
+{
+	border-bottom: none;
+	margin-top: 0;
+	font-size: 1.7em;
+}
+
+.article h2
+{
+	font-size: 1.6em;
+	border-bottom: solid #CCC 1px;
+}
+
+.article h3
+{
+	font-size: 1.5em;
+}
+
+.article h4
+{
+	font-size: 1.4em;
+}
+
+.article h5
+{
+	font-size: 1.3em;
+}
+
+.article h6
+{
+	font-size: 1.1em;
+	font-weight: bold;
+}
+
+.article h1 a
+{
+	text-decoration: none;
+}
+
+.article h2
+{
+	font-family: Arial, Helvetica, sans-serif;
+	font-weight: normal;
+	color: #036;
+}
+
+.article h2 a
+{
+	text-decoration: none;
+}
+
+.article h3 a
+{
+	text-decoration: none;
+}
+
+.article h4 a
+{
+	text-decoration: none;
+}
+
+.article h5 a
+{
+	text-decoration: none;
+}
+
+.article h6 a
+{
+	text-decoration: none;
+}
+
+.article .introduction
+{
+	float: right;
+	width: 210px;
+	margin: 16px 0 16px 16px;
+	color: #fff;
+}
+
+.article .introduction h3
+{
+	padding: 8px 12px 0 12px;
+	margin: 0;
+	font-size: 0.8em;
+}
+
+.article .selected
+{
+	font-weight: normal;
+}
+
+.article img
+{
+	border: none;
+}
+
+.article ul li
+{
+	list-style: square;
+}
+
+.article ol li
+{
+	list-style: decimal;
+}
+
+.article dl
+{
+	
+}
+
+.article dl dt
+{
+	font-weight: bold;
+}
+
+.article dl dd
+{
+	margin-left: 1em;
+}
+
+#contentSub
+{
+	font-size: 0.8em;
+	font-style: italic;
+	color: #999;
+	margin: 10px 10px 10px 25px;
+	padding: 0;
+}
+
+#toc
+{
+	border: 1px solid #aaaaaa;
+	padding: 5px;
+	margin: 0 20px 10px 0;
+	font-size: 0.90em;
+}
+
+#toc h2
+{
+	margin: 0;
+	padding: 0 0 2px 0;
+	font-size: 1.4em;
+}
+
+#toc .tocindent
+{
+	margin-left: 1em;
+}
+
+#toc .tocline
+{
+	margin-bottom: 0px;
+}
+
+#toc .toctoggle
+{
+	font-size: 90%;
+}
+
+#toc .editsection
+{
+	margin-top: 0.7em;
+	font-size: 94%;
+	display: none;
+}
+
+#toc ul
+{
+	margin: 0;
+	padding: 0;
+}
+
+#toc li
+{
+	list-style: none;
+	margin-left: 1.2em;
+}
+
+div.floatright,
+table.floatright
+{
+	clear: right;
+	float: right;
+	position: relative;
+	margin: 0 0 0.5em 0.5em;
+	border: 0;
+}
+
+div.floatleft,
+table.floatleft
+{
+	float: left;
+	position: relative;
+	margin: 0 0.5em 0.5em 0;
+	border: 0;
+}
+
+div.thumb
+{
+	margin-bottom: 0.5em;
+	border-style: solid;
+	border-color: White;
+	width: auto;
+}
+
+div.thumb div
+{
+	border: 1px solid #cccccc;
+	padding: 3px !important;
+	background-color: #f9f9f9;
+	font-size: 94%;
+	text-align: center;
+	overflow: hidden;
+}
+
+div.thumb div a img
+{
+	border: 1px solid #cccccc;
+}
+
+div.thumb div div.thumbcaption
+{
+	border: none;
+	text-align: left;
+	line-height: 1.4em;
+	padding: 0.3em 0 0.1em 0;
+}
+
+div.magnify
+{
+	float: right;
+	border: none !important;
+	background: none !important;
+}
+
+div.magnify a,
+div.magnify img
+{
+	display: block;
+	border: none !important;
+	background: none !important;
+}
+
+div.tright
+{
+	clear: right;
+	float: right;
+	border-width: 0.5em 0 0.8em 1.4em;
+}
+
+div.tleft
+{
+	float: left;
+	margin-right: 0.5em;
+	border-width: 0.5em 1.4em 0.8em 0;
+}
+
+.article .exlink
+{
+	padding-right: 13px;
+}
+
+p
+{
+	voice-family: "\"}\"";
+	voice-family: inherit;
+	margin-right: 0px;
+	margin-left: 0px;
+	font-size: 11pt;
+	border-collapse: collapse;
+	font-family: sans-serif;
+}
+
+pre
+{
+	background: #EEE;
+	line-height: 1.1em;
+	overflow: 0;
+	border-left-style: none;
+	border-left-width: 1px;
+	border-left-color: #666;
+	border-right-style: none;
+	border-right-width: 1px;
+	border-right-color: #666;
+	border-top-style: none;
+	border-top-width: 1px;
+	border-top-color: #666;
+	border-bottom-style: none;
+	border-bottom-width: 1px;
+	border-bottom-color: #666;
+	padding-left: 20px;
+	padding-right: 20px;
+	padding-top: 15px;
+	padding-bottom: 15px;
+	font-size: 10pt;
+}
+
+.prewrong
+{
+	padding: 0;
+	margin: 0;
+}
+
+.prewrong pre
+{
+	background: #FDD;
+	border: dashed #644 1px;
+}
+
+.wrong
+{
+	background: #FDD;
+	border: solid #644 1px;
+	padding: 5px;
+	margin: 5px 0 5px 0;
+}
+
+.wrong-inline
+{
+	background: #FDD;
+	border: solid #644 1px;
+	padding: 0 3px 0 3px;
+}
+
+body
+{
+	
+}
+
+td
+{
+	font-size: 11pt;
+	border-spacing: 0px;
+	display: table-cell;
+	empty-cells: show;
+	border-spacing-x: 0px;
+	border-spacing-y: 0px;
+	font-family: sans-serif;
+}
+
+a
+{
+	text-decoration: overline;
+	font-size: 11pt;
+	color: #036;
+}
+
+blockquote
+{
+	font-family: Arial, Helvetica, sans-serif;
+	font-size: 11pt;
+}
+
+MadCap|xref
+{
+	mc-format: '{filename} {para}';
+}
+
+th
+{
+	text-align: left;
+	font-weight: bold;
+	font-style: normal;
+	background-color: #c0c0c0;
+	font-size: 11pt;
+	font-family: sans-serif;
+}
+
+caption
+{
+	text-align: left;
+	font-weight: bold;
+	font-style: normal;
+	font-size: 9pt;
+	font-family: sans-serif;
+}
+
+h6
+{
+	display: block;
+	font-weight: bold;
+	font-size: 12pt;
+	font-family: Arial, Helvetica, sans-serif;
+}
+
+a.Hyperlink
+{
+	text-decoration: none;
+	color: #0000ff;
+}
+
+h1
+{
+	font-weight: bold;
+	font-style: normal;
+	font-family: Arial, Helvetica, sans-serif;
+	color: #036;
+	font-size: 24pt;
+	border-left-style: none;
+	border-left-width: ;
+	border-left-color: ;
+	border-right-style: none;
+	border-right-width: ;
+	border-right-color: ;
+	border-top-style: none;
+	border-top-width: ;
+	border-top-color: ;
+	border-bottom-style: none;
+	border-bottom-width: ;
+	border-bottom-color: ;
+	mc-auto-number-format: ;
+}
+
+h2
+{
+	font-weight: bold;
+	font-size: 18pt;
+}
+
+h3
+{
+	font-weight: bold;
+	font-size: 14pt;
+}
+
+h4
+{
+	font-weight: bold;
+	font-size: 12pt;
+}
+
+h5
+{
+	font-weight: bold;
+	font-size: 12pt;
+}
+
+p.ParamDesc
+{
+	voice-family: "\"}\"";
+	voice-family: inherit;
+	font-family: Arial, Helvetica, sans-serif;
+	margin-right: 0px;
+	font-size: 11pt;
+	margin-left: 1in;
+}
+
+p.ParamIndent
+{
+	voice-family: "\"}\"";
+	voice-family: inherit;
+	font-family: Arial, Helvetica, sans-serif;
+	margin-right: 0px;
+	font-size: 11pt;
+	margin-left: .5in;
+	font-weight: normal;
+	font-style: Italic;
+}
+
+p.Param
+{
+	voice-family: "\"}\"";
+	voice-family: inherit;
+	font-family: Arial, Helvetica, sans-serif;
+	margin-right: 0px;
+	font-size: 11pt;
+	margin-left: .5in;
+	font-weight: normal;
+	font-style: normal;
+}
+
+blockquote.note
+{
+	font-family: Arial, Helvetica, sans-serif;
+	font-size: 11pt;
+}
+
+p.Notes
+{
+	voice-family: "\"}\"";
+	voice-family: inherit;
+	font-family: Arial, Helvetica, sans-serif;
+	font-size: 11pt;
+	margin-right: 0.25in;
+	margin-left: 0.25in;
+	padding-left: 4px;
+	padding-right: 4px;
+	padding-top: 4px;
+	padding-bottom: 4px;
+	border-left-style: solid;
+	border-left-width: 1px;
+	border-right-style: solid;
+	border-right-width: 1px;
+	border-top-style: solid;
+	border-top-width: 1px;
+	border-bottom-style: solid;
+	border-bottom-width: 1px;
+	background-color: #b0c4de;
+}
+
+li
+{
+	font-family: Arial, Helvetica, sans-serif;
+	font-size: 11pt;
+	margin-bottom: .5em;
+	margin-top: .5em;
+}
+
+ol
+{
+	font-family: Arial, Helvetica, sans-serif;
+	font-size: 11pt;
+}
+
+ul
+{
+	font-family: Arial, Helvetica, sans-serif;
+	font-size: 11pt;
+}
+
+table
+{
+	border-spacing: 0px;
+	width: 100%;
+	border-collapse: collapse;
+}
+
+tr
+{
+	text-decoration: none;
+}
+
+h2.newpage
+{
+	page-break-before: always;
+}
+
+h3.newpage
+{
+	page-break-before: always;
+	margin-top: 0;
+}
+
+h4.newpage
+{
+	page-break-before: always;
+}
+
+h5.newpage
+{
+	page-break-before: always;
+}
+
+p.Caption
+{
+	font-weight: bold;
+	font-style: normal;
+	font-size: 9pt;
+}
+
+p.Heading
+{
+	font-size: 12pt;
+	font-weight: bold;
+	font-family: Arial, Helvetica, sans-serif;
+	color: #036;
+	margin: 30px 0 10px 0;
+	page-break-before: auto;
+	page-break-after: avoid;
+}
+
+p.HeadingNewPage
+{
+	font-size: 12pt;
+	font-weight: bold;
+	font-family: Arial, Helvetica, sans-serif;
+	color: #036;
+	margin: 30px 0 10px 0;
+	page-break-after: avoid;
+	page-break-before: always;
+}
+
+span.code
+{
+	font-family: monospace;
+}
+
+p.Quotation
+{
+	font-weight: normal;
+	font-style: italic;
+	text-align: right;
+	margin-top: 0.12px;
+	margin-bottom: 0.12px;
+	font-family: serif;
+	font-size: 11pt;
+}
+
+p.QuoteAuthor
+{
+	margin-top: 0.12px;
+	margin-bottom: 0.12px;
+	text-align: right;
+	font-size: 9pt;
+	font-family: serif;
+}
+
+pre.Grammar
+{
+	font-family: serif;
+	font-size: 11pt;
+	color: #0000ff;
+	margin-bottom: 0;
+	margin-top: 0;
+}
+
+@media print
+{
+	tr
+	{
+		text-decoration: none;
+		font-family: ;
+	}
+
+	th
+	{
+		font-family: ;
+	}
+
+	table
+	{
+		
+	}
+}
+
+p.MiniTOC1
+{
+	
+}
+
+MadCap|glossaryTerm
+{
+	font-family: sans-serif;
+	font-weight: normal;
+	font-style: italic;
+	font-size: 11pt;
+	color: #696969;
+}
+
+MadCap|glossaryProxy
+{
+	font-family: sans-serif;
+}
+
+a.GlossaryPageTerm
+{
+	font-family: sans-serif;
+}
+
+div.GlossaryPageDefinition
+{
+	font-family: sans-serif;
+}
+
+div.GlossaryPageEntry
+{
+	font-family: sans-serif;
+}
+
+div.GlossaryPageHeading
+{
+	font-family: sans-serif;
+}
+
+div.GlossaryPageTerm
+{
+	font-family: sans-serif;
+}
+
+div
+{
+	font-family: sans-serif;
+}
+
+MadCap|footnotesBlock
+{
+	font-size: ;
+	font-family: ;
+}
+
+MadCap|footnoteBlock
+{
+	font-family: sans-serif;
+	font-size: 10pt;
+}
+
+@media non-print
+{
+	p.Title
+	{
+		
+	}
+
+	p.Subtitle
+	{
+		font-size: 30pt;
+	}
+}
+
+p.Subtitle
+{
+	font-size: 30pt;
+}
+
+p.Title
+{
+	font-size: 36pt;
+}
+
+a:link
+{
+	text-decoration: none;
+	color: blue;
+}
+
+a:visited
+{
+	text-decoration: none;
+}
+
+a:focus
+{
+	text-decoration: none;
+}
+

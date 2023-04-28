@@ -1,0 +1,74 @@
+<?xml version="1.0" encoding="utf-8"?>
+<!DOCTYPE html PUBLIC "-//W3C//DTD XHTML 1.0 Strict//EN" "http://www.w3.org/TR/xhtml1/DTD/xhtml1-strict.dtd">
+<html xmlns:MadCap="http://www.madcapsoftware.com/Schemas/MadCap.xsd" MadCap:tocPath="TFS Configuration &amp; Extension API" MadCap:InPreviewMode="false" MadCap:PreloadImages="false" MadCap:RuntimeFileType="Topic" MadCap:TargetType="WebHelp" lang="en-us" xml:lang="en-us" MadCap:PathToHelpSystem="../../" MadCap:HelpSystemFileName="Default.xml" MadCap:SearchType="Stem">
+    <head>
+        <meta http-equiv="Content-Type" content="text/html; charset=utf-8" /><title>Enhanced HTTP Monitor</title>
+        <link rel="icon" type="image/png" href="http://docs.raima.com/favicon.png" />
+        <link href="../SkinSupport/MadCap.css" rel="stylesheet" />
+        <link href="../Resources/Stylesheets/raima.css" rel="stylesheet" />
+        <script src="../SkinSupport/MadCapAll.js" type="text/javascript">
+        </script>
+    </head>
+    <body>
+        <p class="MCWebHelpFramesetLink MCWebHelpFramesetLinkTop" style="display: none;"><a href="../../Default_CSH.htm#TFS/Chapter4.htm" style="">Open topic with navigation</a>
+        </p>
+        <div class="MCBreadcrumbsBox_0"><span class="MCBreadcrumbsPrefix">You are here: </span><a class="MCBreadcrumbsLink" href="dbTFSUG.htm">TFS Configuration &amp; Extension API</a><span class="MCBreadcrumbsDivider"> &gt; </span><span class="MCBreadcrumbs">Enhanced HTTP Monitor</span>
+        </div>
+        <h1><a MadCap:generatedBookmark="TOC" name="Enhanced_HTTP_Monitor"></a>Enhanced HTTP Monitor</h1>
+        <p>The Enhanced HTTP Monitor is a browser-based monitor/administrator that displays status of servers, databases, users, and Replication.  It allows the starting and stopping of mirroring or replication if the appropriate servers are running.</p>
+        <p>The user interface communicates to a TFS through HTTP requests.  To protect security of the servers and data, we require that a user logs in before being able to perform any function in the Enhanced HTTP Monitor.  Once logged in, all HTTP requests and responses are encrypted.  See separate document on <span class="MyVariablesProductShortName">RDM</span> TFS Admin Security.  Due to the session-less nature of HTTP, encrypting every request ensures that the server only responds to valid (authorized) requests.</p>
+        <p>The development build will create a default user account for user 'admin' with a password of 'secret'.  The password is encrypted and stored as a URL encoded string in the <code>tfs.ini</code> file in the <code>[Accounts]</code> section.  Customers should create their own user accounts.  This can be accomplished by running the <b>tfsuser</b> utility.  The <b>tfsuser</b> utility will prompt for a password.  The default user name is 'admin'.  A different name can be specified on the command line.  Run '<code>tfsuser –h</code>' to see a complete list of command line options.</p>
+        <p>It is important to know that all TFS servers that are to be access through a browser must have the same username and password.  You must either run <b>tfsuser</b> with a <code>-th</code> option for each TFS running, or you must copy the <code>[Accounts]</code> entry from one <code>tfs.ini</code> file to all other server <code>tfs.ini</code> files.</p>
+        <p>The same password is required on all servers because the main TFS, the one the user logs into, is used as a proxy server to all other servers.  It is impractical to force the user to login separately to every server to which they might connect.  Using the main TFS as a proxy server is required due to browser security restrictions.  We cannot connect from a browser via AJAX to any other server.  We can only connect to the server and port that sent the page currently active in the browser.</p>
+        <p class="Caption">HTTP request flow<br /><img src="../Resources/Images/http_request_flow.png" /></p>
+        <p>
+            <img src="../Resources/Images/http_login.png" />
+        </p>
+        <p>Once logged in, every page contains one or more HTTP requests to a server.  Internally, the username is used on every HTTP request and the password is used to encrypt the request sent to the server.  The password is also used to decrypt the content of responses from the server.  The password is never sent to the server.  The content of a message is encrypted using the password.  The server, which has a copy of the password, decrypts the message using the password.  If the server is unable to decrypt the message, that means the user is not logged in, and an error is returned.  If the server is able to perform the requested action, the response is encrypted using the password already stored on the server.  The response is decrypted in the browser and the results are displayed.</p>
+        <p>Users can logout from any page.</p>
+        <p>The user's session can timeout.  The default timeout value is 10 minutes.  This value can be configured manually by adding a <code>Timeout=xxx</code> (in seconds) property to the <code>[Accounts]</code> section of the <code>tfs.ini</code> file.  On a timeout or login error, the main login page is displayed.</p>
+        <p>
+            <img src="../Resources/Images/http_databases.png" />
+        </p>
+        <p>After login, the main TFS page is displayed.  This page shows all databases on this server, all users logged in to this server, any databases that are mirrored or replicated from or to this server, and the Replication settings for this server.  Each box is expandable by clicking on the arrow to the left of each box's heading.</p>
+        <p>The <b>Databases</b> box shows all databases that exist on this TFS.  Clicking a database name will open a new tab with information about that database.  The tab shows the name of the database and the server and port where the database exists (i.e.: <code>test@EDH-Win7:<span style="mc-tag-and-class: code;" class="MyVariablesDefaultPort">21553</span></code>).  If the tab is already opened, it will be activated.</p>
+        <p>
+            <img src="../Resources/Images/http_locks.png" />
+        </p>
+        <p>The database info page shows information about file locks, users with this database open, files used by this database and their allocation sizes.</p>
+        <p>Also from the database page, the user can configure the Replication settings specific to this database.  This allows the user to override the default settings from the TFS.  For example, the user can enable mirroring log file generation for a specific database without the overhead of creating log files for all other databases controlled by this TFS.  The user will make their changes and click the <b>Apply</b> button.  To change this database to use the global TFS settings for Replication, click the <b>Default</b> button.</p>
+        <p>If you want to open a connection to another TFS, click the '+' tab.</p>
+        <p>
+            <img src="../Resources/Images/http_login2.png" />
+        </p>
+        <p>This creates a <b>New</b> tab that will ask for the host name and port of the requested TFS. When the <b>Connect</b> button is clicked, a connection will be made to this server.  This tab will be renamed to the server's name and, if the server is available, the main TFS information page will be displayed for this server.  If the connection already exists, that tab will be activated.</p>
+        <p>
+            <img src="../Resources/Images/http_users.png" />
+        </p>
+        <p>In the <b>Users</b> box on a TFS tab, all users that are connected to this server will display.  You can disconnect a user by clicking on the <b>X</b> next to a user's login name.  You cannot disconnect a user from a database tab, as a user may have more than one database opened.</p>
+        <p>Care should be taken when disconnecting a user this way.  You have no way to know if the user is in the middle of a transaction.</p>
+        <p>If there are too many tabs to be displayed on the screen at one time, a drop down box is available from the <b>down</b> arrow on the right side of the tab row.  From here you can go directly to any tab.  Tabs can be closed by clicking on the red <b>x</b> next to their name.  You cannot close the first tab to the main TFS.  Tab names that are too long will be truncated and end with '...'.</p>
+        <p>
+            <img src="../Resources/Images/http_dataflow.png" />
+        </p>
+        <p>There are three refresh settings, <b>Off</b>, <b>2</b> and <b>5</b>.  The default is to refresh the page every 2 seconds.  The selected refresh rate will be underlined.  Only the visible tab refreshes.  Since each TFS controls its own session, each tab could timeout if they are in the background for too long.  Therefore, tabs that are in the background are kept alive during each refresh interval internally without any action by the user.  If the refresh setting is <b>Off</b>, the session will timeout if the session becomes idle.  With refresh enabled, sessions with tabs will not timeout.</p>
+        <p>If you want to start mirroring or replication, open a new tab connection to a slave TFS.  In the <b>Replication</b> box, there are three sections; databases that this server is sending as a master, databases that this server is receiving as a slave, and a way to start a new database mirror or replication.</p>
+        <p>
+            <img src="../Resources/Images/http_dataflow2.png" />
+        </p>
+        <p>The title of the <b>Replication</b> box will change depending on the type of server associated with the TFS.  The Replication server type will be 'Mirroring Server', 'Replication Server' or 'SQL Replication Server'.  The options (checkboxes) below the drop downs will change depending on the type of server.  A mirroring server will have an option for 'synchronous' mirroring.  A SQL replication server will have options for the type of destination SQL server (<span class="MyVariablesRDMServer">RDM Server</span>, MySQL, MSSQL, or Oracle).  It will also have a field to enter the DSN if necessary.  The DSN will not be needed if the user set the RDSLOGIN environment variable before starting <b>dbrepsql</b>.  All server types will have 'override in-memory' to allow a master in-memory database to be an on-disk database on a slave.</p>
+        <p>The ability to start mirroring or replication will only appear if there are two or more TFS tabs open.  From the slave TFS tab, the user will select a master TFS server from the 'Connected Masters' drop down.  The 'Databases' drop down will automatically update with the list of databases available from that master.  When the 'Start' button is clicked, this TFS tab becomes a slave of the selected database from the selected master.</p>
+        <p>If the user starts mirroring or replication, but the master is not configured to create log files for the appropriate type, an error message will be displayed.</p>
+        <p>
+            <img src="../Resources/Images/http_mirroring.png" />
+        </p>
+        <p>To stop mirroring or replication, simply click the <b>Stop</b> button from either the master's TFS tab or the slave's TFS tab.</p>
+        <hr MadCap:conditions="Default.ScreenOnly" width="100%" size="0" align="center" />
+        <p MadCap:conditions="Default.ScreenOnly" style="font-size: 8pt;"><span class="MyVariablesCopyright">Copyright © 2012, Raima Inc. All rights reserved.</span>
+        </p>
+        <script type="text/javascript" src="../SkinSupport/MadCapBodyEnd.js">
+        </script>
+        <p class="MCWebHelpFramesetLink MCWebHelpFramesetLinkBottom" style="display: none;"><a href="../../Default_CSH.htm#TFS/Chapter4.htm" style="">Open topic with navigation</a>
+        </p>
+    </body>
+</html>

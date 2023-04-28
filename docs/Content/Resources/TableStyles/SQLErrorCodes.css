@@ -1,0 +1,2309 @@
+/* MadCap Table Style: */
+
+/*<meta Version="7" />*/
+
+mcTableStyle
+{
+	name: SQLErrorCodes;
+	border-collapse: collapse;
+	border-left-style: solid;
+	border-left-width: 1px;
+	border-left-color: #c0c0c0;
+	border-right-style: solid;
+	border-right-width: 1px;
+	border-right-color: #c0c0c0;
+	border-top-style: none;
+	border-top-width: 1px;
+	border-top-color: #c0c0c0;
+	border-bottom-style: solid;
+	border-bottom-width: 1px;
+	border-bottom-color: #c0c0c0;
+	max-id: 6;
+	cell-padding-left: 0px;
+	cell-padding-right: 0px;
+	cell-padding-top: 0px;
+	cell-padding-bottom: 0px;
+	background-image: none;
+	margin-left: 0px;
+	margin-right: 0px;
+	margin-top: 0px;
+	margin-bottom: 0px;
+}
+
+mcTableColumnStyle
+{
+	span: 1;
+	separator-style: solid;
+	separator-width: 1px;
+	separator-color: #c0c0c0;
+	name: Column1;
+	id: 0;
+	text-align: left;
+	vertical-align: top;
+	cell-padding-left: 0px;
+	cell-padding-right: 0px;
+	cell-padding-top: 0px;
+	cell-padding-bottom: 0px;
+	size: 100px;
+}
+
+mcTableColumnStyle
+{
+	span: 1;
+	id: 4;
+	name: Column2;
+	separator-style: solid;
+	separator-width: 1px;
+	separator-color: #c0c0c0;
+	text-align: left;
+	vertical-align: top;
+	size: 190px;
+}
+
+mcTableColumnStyle
+{
+	span: 1;
+	id: 5;
+	name: Column3;
+	text-align: left;
+	vertical-align: top;
+	separator-style: solid;
+	separator-width: 1px;
+	separator-color: #c0c0c0;
+	size: 90px;
+}
+
+mcTableColumnStyle
+{
+	span: 1;
+	id: 6;
+	name: Column4;
+}
+
+mcTableHeadStyle
+{
+	span: 1;
+	separator-style: solid;
+	separator-width: 1px;
+	separator-color: #c0c0c0;
+	name: Header1;
+	id: 2;
+	font-family: sans-serif;
+	font-weight: bold;
+	background-image: none;
+	cell-padding-left: 0px;
+	cell-padding-right: 0px;
+	cell-padding-top: 0px;
+	cell-padding-bottom: 0px;
+	background-color: #c0c0c0;
+}
+
+mcTableBodyStyle
+{
+	span: 1;
+	font-weight: normal;
+	separator-style: solid;
+	separator-width: 1px;
+	separator-color: #c0c0c0;
+	name: Body1;
+	id: 1;
+	font-family: sans-serif;
+	cell-padding-left: 0px;
+	cell-padding-right: 0px;
+	cell-padding-top: 0px;
+	cell-padding-bottom: 0px;
+	background-image: none;
+}
+
+mcTableFootStyle
+{
+	span: 1;
+	separator-style: solid;
+	separator-width: 1px;
+	separator-color: #c0c0c0;
+	name: Footer1;
+	id: 3;
+	cell-padding-left: 0px;
+	cell-padding-right: 0px;
+	cell-padding-top: 0px;
+	cell-padding-bottom: 0px;
+	background-image: none;
+}
+
+
+/* Cell Styles: */
+ 
+.TableStyle-SQLErrorCodes
+{
+	border-collapse: collapse;
+	background-image: none;
+	border-left-style: solid;
+	border-left-color: #c0c0c0;
+	border-left-width: 1px;
+	border-right-style: solid;
+	border-right-color: #c0c0c0;
+	border-right-width: 1px;
+	border-top-style: none;
+	border-top-color: #c0c0c0;
+	border-top-width: 1px;
+	border-bottom-style: solid;
+	border-bottom-color: #c0c0c0;
+	border-bottom-width: 1px;
+	margin-left: 0px;
+	margin-right: 0px;
+	margin-top: 0px;
+	margin-bottom: 0px;
+	border-spacing: 0px 0px;
+}
+
+.TableStyle-SQLErrorCodes .Column-Column1
+{
+	width: 100px;
+}
+
+.TableStyle-SQLErrorCodes .Column-Column2
+{
+	width: 190px;
+}
+
+.TableStyle-SQLErrorCodes .Column-Column3
+{
+	width: 90px;
+}
+
+.TableStyle-SQLErrorCodes .Column-Column4
+{
+	
+}
+
+.TableStyle-SQLErrorCodes .Head-Header1
+{
+	
+}
+
+.TableStyle-SQLErrorCodes .HeadI-Column1-Header1
+{
+	text-align: left;
+	vertical-align: top;
+	font-family: sans-serif;
+	font-weight: bold;
+	background-color: #c0c0c0;
+	background-image: none;
+	padding-left: 0px;
+	padding-right: 0px;
+	padding-top: 0px;
+	padding-bottom: 0px;
+}
+
+.TableStyle-SQLErrorCodes .HeadI-Column1-Header1 p
+{
+	font-family: sans-serif;
+	font-weight: bold;
+}
+
+.TableStyle-SQLErrorCodes .HeadE-Column1-Header1
+{
+	text-align: left;
+	vertical-align: top;
+	border-right-width: 1px;
+	border-right-color: #c0c0c0;
+	border-right-style: solid;
+	font-family: sans-serif;
+	font-weight: bold;
+	background-color: #c0c0c0;
+	background-image: none;
+	padding-left: 0px;
+	padding-right: 0px;
+	padding-top: 0px;
+	padding-bottom: 0px;
+	border-bottom-width: 1px;
+	border-bottom-color: #c0c0c0;
+	border-bottom-style: solid;
+}
+
+.TableStyle-SQLErrorCodes .HeadE-Column1-Header1 p
+{
+	font-family: sans-serif;
+	font-weight: bold;
+}
+
+.TableStyle-SQLErrorCodes .HeadF-Column1-Header1
+{
+	text-align: left;
+	vertical-align: top;
+	font-family: sans-serif;
+	font-weight: bold;
+	background-color: #c0c0c0;
+	background-image: none;
+	padding-left: 0px;
+	padding-right: 0px;
+	padding-top: 0px;
+	padding-bottom: 0px;
+	border-bottom-width: 1px;
+	border-bottom-color: #c0c0c0;
+	border-bottom-style: solid;
+}
+
+.TableStyle-SQLErrorCodes .HeadF-Column1-Header1 p
+{
+	font-family: sans-serif;
+	font-weight: bold;
+}
+
+.TableStyle-SQLErrorCodes .HeadH-Column1-Header1
+{
+	text-align: left;
+	vertical-align: top;
+	border-right-width: 1px;
+	border-right-color: #c0c0c0;
+	border-right-style: solid;
+	font-family: sans-serif;
+	font-weight: bold;
+	background-color: #c0c0c0;
+	background-image: none;
+	padding-left: 0px;
+	padding-right: 0px;
+	padding-top: 0px;
+	padding-bottom: 0px;
+}
+
+.TableStyle-SQLErrorCodes .HeadH-Column1-Header1 p
+{
+	font-family: sans-serif;
+	font-weight: bold;
+}
+
+.TableStyle-SQLErrorCodes .HeadD-Column1-Header1
+{
+	text-align: left;
+	vertical-align: top;
+	font-family: sans-serif;
+	font-weight: bold;
+	background-color: #c0c0c0;
+	background-image: none;
+	padding-left: 0px;
+	padding-right: 0px;
+	padding-top: 0px;
+	padding-bottom: 0px;
+	border-bottom-width: 1px;
+	border-bottom-color: #c0c0c0;
+	border-bottom-style: solid;
+}
+
+.TableStyle-SQLErrorCodes .HeadD-Column1-Header1 p
+{
+	font-family: sans-serif;
+	font-weight: bold;
+}
+
+.TableStyle-SQLErrorCodes .HeadC-Column1-Header1
+{
+	text-align: left;
+	vertical-align: top;
+	font-family: sans-serif;
+	font-weight: bold;
+	background-color: #c0c0c0;
+	background-image: none;
+	padding-left: 0px;
+	padding-right: 0px;
+	padding-top: 0px;
+	padding-bottom: 0px;
+}
+
+.TableStyle-SQLErrorCodes .HeadC-Column1-Header1 p
+{
+	font-family: sans-serif;
+	font-weight: bold;
+}
+
+.TableStyle-SQLErrorCodes .HeadB-Column1-Header1
+{
+	text-align: left;
+	vertical-align: top;
+	border-right-width: 1px;
+	border-right-color: #c0c0c0;
+	border-right-style: solid;
+	font-family: sans-serif;
+	font-weight: bold;
+	background-color: #c0c0c0;
+	background-image: none;
+	padding-left: 0px;
+	padding-right: 0px;
+	padding-top: 0px;
+	padding-bottom: 0px;
+}
+
+.TableStyle-SQLErrorCodes .HeadB-Column1-Header1 p
+{
+	font-family: sans-serif;
+	font-weight: bold;
+}
+
+.TableStyle-SQLErrorCodes .HeadA-Column1-Header1
+{
+	text-align: left;
+	vertical-align: top;
+	font-family: sans-serif;
+	font-weight: bold;
+	background-color: #c0c0c0;
+	background-image: none;
+	padding-left: 0px;
+	padding-right: 0px;
+	padding-top: 0px;
+	padding-bottom: 0px;
+}
+
+.TableStyle-SQLErrorCodes .HeadA-Column1-Header1 p
+{
+	font-family: sans-serif;
+	font-weight: bold;
+}
+
+.TableStyle-SQLErrorCodes .HeadG-Column1-Header1
+{
+	text-align: left;
+	vertical-align: top;
+	font-family: sans-serif;
+	font-weight: bold;
+	background-color: #c0c0c0;
+	background-image: none;
+	padding-left: 0px;
+	padding-right: 0px;
+	padding-top: 0px;
+	padding-bottom: 0px;
+}
+
+.TableStyle-SQLErrorCodes .HeadG-Column1-Header1 p
+{
+	font-family: sans-serif;
+	font-weight: bold;
+}
+
+.TableStyle-SQLErrorCodes .HeadI-Column2-Header1
+{
+	text-align: left;
+	vertical-align: top;
+	font-family: sans-serif;
+	font-weight: bold;
+	background-color: #c0c0c0;
+	background-image: none;
+	padding-left: 0px;
+	padding-right: 0px;
+	padding-top: 0px;
+	padding-bottom: 0px;
+}
+
+.TableStyle-SQLErrorCodes .HeadI-Column2-Header1 p
+{
+	font-family: sans-serif;
+	font-weight: bold;
+}
+
+.TableStyle-SQLErrorCodes .HeadE-Column2-Header1
+{
+	text-align: left;
+	vertical-align: top;
+	border-right-width: 1px;
+	border-right-color: #c0c0c0;
+	border-right-style: solid;
+	font-family: sans-serif;
+	font-weight: bold;
+	background-color: #c0c0c0;
+	background-image: none;
+	padding-left: 0px;
+	padding-right: 0px;
+	padding-top: 0px;
+	padding-bottom: 0px;
+	border-bottom-width: 1px;
+	border-bottom-color: #c0c0c0;
+	border-bottom-style: solid;
+}
+
+.TableStyle-SQLErrorCodes .HeadE-Column2-Header1 p
+{
+	font-family: sans-serif;
+	font-weight: bold;
+}
+
+.TableStyle-SQLErrorCodes .HeadF-Column2-Header1
+{
+	text-align: left;
+	vertical-align: top;
+	font-family: sans-serif;
+	font-weight: bold;
+	background-color: #c0c0c0;
+	background-image: none;
+	padding-left: 0px;
+	padding-right: 0px;
+	padding-top: 0px;
+	padding-bottom: 0px;
+	border-bottom-width: 1px;
+	border-bottom-color: #c0c0c0;
+	border-bottom-style: solid;
+}
+
+.TableStyle-SQLErrorCodes .HeadF-Column2-Header1 p
+{
+	font-family: sans-serif;
+	font-weight: bold;
+}
+
+.TableStyle-SQLErrorCodes .HeadH-Column2-Header1
+{
+	text-align: left;
+	vertical-align: top;
+	border-right-width: 1px;
+	border-right-color: #c0c0c0;
+	border-right-style: solid;
+	font-family: sans-serif;
+	font-weight: bold;
+	background-color: #c0c0c0;
+	background-image: none;
+	padding-left: 0px;
+	padding-right: 0px;
+	padding-top: 0px;
+	padding-bottom: 0px;
+}
+
+.TableStyle-SQLErrorCodes .HeadH-Column2-Header1 p
+{
+	font-family: sans-serif;
+	font-weight: bold;
+}
+
+.TableStyle-SQLErrorCodes .HeadD-Column2-Header1
+{
+	text-align: left;
+	vertical-align: top;
+	font-family: sans-serif;
+	font-weight: bold;
+	background-color: #c0c0c0;
+	background-image: none;
+	padding-left: 0px;
+	padding-right: 0px;
+	padding-top: 0px;
+	padding-bottom: 0px;
+	border-bottom-width: 1px;
+	border-bottom-color: #c0c0c0;
+	border-bottom-style: solid;
+}
+
+.TableStyle-SQLErrorCodes .HeadD-Column2-Header1 p
+{
+	font-family: sans-serif;
+	font-weight: bold;
+}
+
+.TableStyle-SQLErrorCodes .HeadC-Column2-Header1
+{
+	text-align: left;
+	vertical-align: top;
+	font-family: sans-serif;
+	font-weight: bold;
+	background-color: #c0c0c0;
+	background-image: none;
+	padding-left: 0px;
+	padding-right: 0px;
+	padding-top: 0px;
+	padding-bottom: 0px;
+}
+
+.TableStyle-SQLErrorCodes .HeadC-Column2-Header1 p
+{
+	font-family: sans-serif;
+	font-weight: bold;
+}
+
+.TableStyle-SQLErrorCodes .HeadB-Column2-Header1
+{
+	text-align: left;
+	vertical-align: top;
+	border-right-width: 1px;
+	border-right-color: #c0c0c0;
+	border-right-style: solid;
+	font-family: sans-serif;
+	font-weight: bold;
+	background-color: #c0c0c0;
+	background-image: none;
+	padding-left: 0px;
+	padding-right: 0px;
+	padding-top: 0px;
+	padding-bottom: 0px;
+}
+
+.TableStyle-SQLErrorCodes .HeadB-Column2-Header1 p
+{
+	font-family: sans-serif;
+	font-weight: bold;
+}
+
+.TableStyle-SQLErrorCodes .HeadA-Column2-Header1
+{
+	text-align: left;
+	vertical-align: top;
+	font-family: sans-serif;
+	font-weight: bold;
+	background-color: #c0c0c0;
+	background-image: none;
+	padding-left: 0px;
+	padding-right: 0px;
+	padding-top: 0px;
+	padding-bottom: 0px;
+}
+
+.TableStyle-SQLErrorCodes .HeadA-Column2-Header1 p
+{
+	font-family: sans-serif;
+	font-weight: bold;
+}
+
+.TableStyle-SQLErrorCodes .HeadG-Column2-Header1
+{
+	text-align: left;
+	vertical-align: top;
+	font-family: sans-serif;
+	font-weight: bold;
+	background-color: #c0c0c0;
+	background-image: none;
+	padding-left: 0px;
+	padding-right: 0px;
+	padding-top: 0px;
+	padding-bottom: 0px;
+}
+
+.TableStyle-SQLErrorCodes .HeadG-Column2-Header1 p
+{
+	font-family: sans-serif;
+	font-weight: bold;
+}
+
+.TableStyle-SQLErrorCodes .HeadI-Column3-Header1
+{
+	text-align: left;
+	vertical-align: top;
+	font-family: sans-serif;
+	font-weight: bold;
+	background-color: #c0c0c0;
+	background-image: none;
+	padding-left: 0px;
+	padding-right: 0px;
+	padding-top: 0px;
+	padding-bottom: 0px;
+}
+
+.TableStyle-SQLErrorCodes .HeadI-Column3-Header1 p
+{
+	font-family: sans-serif;
+	font-weight: bold;
+}
+
+.TableStyle-SQLErrorCodes .HeadE-Column3-Header1
+{
+	text-align: left;
+	vertical-align: top;
+	border-right-width: 1px;
+	border-right-color: #c0c0c0;
+	border-right-style: solid;
+	font-family: sans-serif;
+	font-weight: bold;
+	background-color: #c0c0c0;
+	background-image: none;
+	padding-left: 0px;
+	padding-right: 0px;
+	padding-top: 0px;
+	padding-bottom: 0px;
+	border-bottom-width: 1px;
+	border-bottom-color: #c0c0c0;
+	border-bottom-style: solid;
+}
+
+.TableStyle-SQLErrorCodes .HeadE-Column3-Header1 p
+{
+	font-family: sans-serif;
+	font-weight: bold;
+}
+
+.TableStyle-SQLErrorCodes .HeadF-Column3-Header1
+{
+	text-align: left;
+	vertical-align: top;
+	font-family: sans-serif;
+	font-weight: bold;
+	background-color: #c0c0c0;
+	background-image: none;
+	padding-left: 0px;
+	padding-right: 0px;
+	padding-top: 0px;
+	padding-bottom: 0px;
+	border-bottom-width: 1px;
+	border-bottom-color: #c0c0c0;
+	border-bottom-style: solid;
+}
+
+.TableStyle-SQLErrorCodes .HeadF-Column3-Header1 p
+{
+	font-family: sans-serif;
+	font-weight: bold;
+}
+
+.TableStyle-SQLErrorCodes .HeadH-Column3-Header1
+{
+	text-align: left;
+	vertical-align: top;
+	border-right-width: 1px;
+	border-right-color: #c0c0c0;
+	border-right-style: solid;
+	font-family: sans-serif;
+	font-weight: bold;
+	background-color: #c0c0c0;
+	background-image: none;
+	padding-left: 0px;
+	padding-right: 0px;
+	padding-top: 0px;
+	padding-bottom: 0px;
+}
+
+.TableStyle-SQLErrorCodes .HeadH-Column3-Header1 p
+{
+	font-family: sans-serif;
+	font-weight: bold;
+}
+
+.TableStyle-SQLErrorCodes .HeadD-Column3-Header1
+{
+	text-align: left;
+	vertical-align: top;
+	font-family: sans-serif;
+	font-weight: bold;
+	background-color: #c0c0c0;
+	background-image: none;
+	padding-left: 0px;
+	padding-right: 0px;
+	padding-top: 0px;
+	padding-bottom: 0px;
+	border-bottom-width: 1px;
+	border-bottom-color: #c0c0c0;
+	border-bottom-style: solid;
+}
+
+.TableStyle-SQLErrorCodes .HeadD-Column3-Header1 p
+{
+	font-family: sans-serif;
+	font-weight: bold;
+}
+
+.TableStyle-SQLErrorCodes .HeadC-Column3-Header1
+{
+	text-align: left;
+	vertical-align: top;
+	font-family: sans-serif;
+	font-weight: bold;
+	background-color: #c0c0c0;
+	background-image: none;
+	padding-left: 0px;
+	padding-right: 0px;
+	padding-top: 0px;
+	padding-bottom: 0px;
+}
+
+.TableStyle-SQLErrorCodes .HeadC-Column3-Header1 p
+{
+	font-family: sans-serif;
+	font-weight: bold;
+}
+
+.TableStyle-SQLErrorCodes .HeadB-Column3-Header1
+{
+	text-align: left;
+	vertical-align: top;
+	border-right-width: 1px;
+	border-right-color: #c0c0c0;
+	border-right-style: solid;
+	font-family: sans-serif;
+	font-weight: bold;
+	background-color: #c0c0c0;
+	background-image: none;
+	padding-left: 0px;
+	padding-right: 0px;
+	padding-top: 0px;
+	padding-bottom: 0px;
+}
+
+.TableStyle-SQLErrorCodes .HeadB-Column3-Header1 p
+{
+	font-family: sans-serif;
+	font-weight: bold;
+}
+
+.TableStyle-SQLErrorCodes .HeadA-Column3-Header1
+{
+	text-align: left;
+	vertical-align: top;
+	font-family: sans-serif;
+	font-weight: bold;
+	background-color: #c0c0c0;
+	background-image: none;
+	padding-left: 0px;
+	padding-right: 0px;
+	padding-top: 0px;
+	padding-bottom: 0px;
+}
+
+.TableStyle-SQLErrorCodes .HeadA-Column3-Header1 p
+{
+	font-family: sans-serif;
+	font-weight: bold;
+}
+
+.TableStyle-SQLErrorCodes .HeadG-Column3-Header1
+{
+	text-align: left;
+	vertical-align: top;
+	font-family: sans-serif;
+	font-weight: bold;
+	background-color: #c0c0c0;
+	background-image: none;
+	padding-left: 0px;
+	padding-right: 0px;
+	padding-top: 0px;
+	padding-bottom: 0px;
+}
+
+.TableStyle-SQLErrorCodes .HeadG-Column3-Header1 p
+{
+	font-family: sans-serif;
+	font-weight: bold;
+}
+
+.TableStyle-SQLErrorCodes .HeadI-Column4-Header1
+{
+	font-family: sans-serif;
+	font-weight: bold;
+	background-color: #c0c0c0;
+	background-image: none;
+	padding-left: 0px;
+	padding-right: 0px;
+	padding-top: 0px;
+	padding-bottom: 0px;
+}
+
+.TableStyle-SQLErrorCodes .HeadI-Column4-Header1 p
+{
+	font-family: sans-serif;
+	font-weight: bold;
+}
+
+.TableStyle-SQLErrorCodes .HeadE-Column4-Header1
+{
+	font-family: sans-serif;
+	font-weight: bold;
+	background-color: #c0c0c0;
+	background-image: none;
+	padding-left: 0px;
+	padding-right: 0px;
+	padding-top: 0px;
+	padding-bottom: 0px;
+	border-bottom-width: 1px;
+	border-bottom-color: #c0c0c0;
+	border-bottom-style: solid;
+}
+
+.TableStyle-SQLErrorCodes .HeadE-Column4-Header1 p
+{
+	font-family: sans-serif;
+	font-weight: bold;
+}
+
+.TableStyle-SQLErrorCodes .HeadF-Column4-Header1
+{
+	font-family: sans-serif;
+	font-weight: bold;
+	background-color: #c0c0c0;
+	background-image: none;
+	padding-left: 0px;
+	padding-right: 0px;
+	padding-top: 0px;
+	padding-bottom: 0px;
+	border-bottom-width: 1px;
+	border-bottom-color: #c0c0c0;
+	border-bottom-style: solid;
+}
+
+.TableStyle-SQLErrorCodes .HeadF-Column4-Header1 p
+{
+	font-family: sans-serif;
+	font-weight: bold;
+}
+
+.TableStyle-SQLErrorCodes .HeadH-Column4-Header1
+{
+	font-family: sans-serif;
+	font-weight: bold;
+	background-color: #c0c0c0;
+	background-image: none;
+	padding-left: 0px;
+	padding-right: 0px;
+	padding-top: 0px;
+	padding-bottom: 0px;
+}
+
+.TableStyle-SQLErrorCodes .HeadH-Column4-Header1 p
+{
+	font-family: sans-serif;
+	font-weight: bold;
+}
+
+.TableStyle-SQLErrorCodes .HeadD-Column4-Header1
+{
+	font-family: sans-serif;
+	font-weight: bold;
+	background-color: #c0c0c0;
+	background-image: none;
+	padding-left: 0px;
+	padding-right: 0px;
+	padding-top: 0px;
+	padding-bottom: 0px;
+	border-bottom-width: 1px;
+	border-bottom-color: #c0c0c0;
+	border-bottom-style: solid;
+}
+
+.TableStyle-SQLErrorCodes .HeadD-Column4-Header1 p
+{
+	font-family: sans-serif;
+	font-weight: bold;
+}
+
+.TableStyle-SQLErrorCodes .HeadC-Column4-Header1
+{
+	font-family: sans-serif;
+	font-weight: bold;
+	background-color: #c0c0c0;
+	background-image: none;
+	padding-left: 0px;
+	padding-right: 0px;
+	padding-top: 0px;
+	padding-bottom: 0px;
+}
+
+.TableStyle-SQLErrorCodes .HeadC-Column4-Header1 p
+{
+	font-family: sans-serif;
+	font-weight: bold;
+}
+
+.TableStyle-SQLErrorCodes .HeadB-Column4-Header1
+{
+	font-family: sans-serif;
+	font-weight: bold;
+	background-color: #c0c0c0;
+	background-image: none;
+	padding-left: 0px;
+	padding-right: 0px;
+	padding-top: 0px;
+	padding-bottom: 0px;
+}
+
+.TableStyle-SQLErrorCodes .HeadB-Column4-Header1 p
+{
+	font-family: sans-serif;
+	font-weight: bold;
+}
+
+.TableStyle-SQLErrorCodes .HeadA-Column4-Header1
+{
+	font-family: sans-serif;
+	font-weight: bold;
+	background-color: #c0c0c0;
+	background-image: none;
+	padding-left: 0px;
+	padding-right: 0px;
+	padding-top: 0px;
+	padding-bottom: 0px;
+}
+
+.TableStyle-SQLErrorCodes .HeadA-Column4-Header1 p
+{
+	font-family: sans-serif;
+	font-weight: bold;
+}
+
+.TableStyle-SQLErrorCodes .HeadG-Column4-Header1
+{
+	font-family: sans-serif;
+	font-weight: bold;
+	background-color: #c0c0c0;
+	background-image: none;
+	padding-left: 0px;
+	padding-right: 0px;
+	padding-top: 0px;
+	padding-bottom: 0px;
+}
+
+.TableStyle-SQLErrorCodes .HeadG-Column4-Header1 p
+{
+	font-family: sans-serif;
+	font-weight: bold;
+}
+
+.TableStyle-SQLErrorCodes .Foot-Footer1
+{
+	
+}
+
+.TableStyle-SQLErrorCodes .FootI-Column1-Footer1
+{
+	text-align: left;
+	vertical-align: top;
+	background-image: none;
+	padding-left: 0px;
+	padding-right: 0px;
+	padding-top: 0px;
+	padding-bottom: 0px;
+}
+
+.TableStyle-SQLErrorCodes .FootI-Column1-Footer1 p
+{
+	
+}
+
+.TableStyle-SQLErrorCodes .FootE-Column1-Footer1
+{
+	text-align: left;
+	vertical-align: top;
+	border-right-width: 1px;
+	border-right-color: #c0c0c0;
+	border-right-style: solid;
+	background-image: none;
+	padding-left: 0px;
+	padding-right: 0px;
+	padding-top: 0px;
+	padding-bottom: 0px;
+	border-top-width: 1px;
+	border-top-color: #c0c0c0;
+	border-top-style: solid;
+}
+
+.TableStyle-SQLErrorCodes .FootE-Column1-Footer1 p
+{
+	
+}
+
+.TableStyle-SQLErrorCodes .FootF-Column1-Footer1
+{
+	text-align: left;
+	vertical-align: top;
+	background-image: none;
+	padding-left: 0px;
+	padding-right: 0px;
+	padding-top: 0px;
+	padding-bottom: 0px;
+	border-top-width: 1px;
+	border-top-color: #c0c0c0;
+	border-top-style: solid;
+}
+
+.TableStyle-SQLErrorCodes .FootF-Column1-Footer1 p
+{
+	
+}
+
+.TableStyle-SQLErrorCodes .FootH-Column1-Footer1
+{
+	text-align: left;
+	vertical-align: top;
+	border-right-width: 1px;
+	border-right-color: #c0c0c0;
+	border-right-style: solid;
+	background-image: none;
+	padding-left: 0px;
+	padding-right: 0px;
+	padding-top: 0px;
+	padding-bottom: 0px;
+}
+
+.TableStyle-SQLErrorCodes .FootH-Column1-Footer1 p
+{
+	
+}
+
+.TableStyle-SQLErrorCodes .FootD-Column1-Footer1
+{
+	text-align: left;
+	vertical-align: top;
+	background-image: none;
+	padding-left: 0px;
+	padding-right: 0px;
+	padding-top: 0px;
+	padding-bottom: 0px;
+	border-top-width: 1px;
+	border-top-color: #c0c0c0;
+	border-top-style: solid;
+}
+
+.TableStyle-SQLErrorCodes .FootD-Column1-Footer1 p
+{
+	
+}
+
+.TableStyle-SQLErrorCodes .FootC-Column1-Footer1
+{
+	text-align: left;
+	vertical-align: top;
+	background-image: none;
+	padding-left: 0px;
+	padding-right: 0px;
+	padding-top: 0px;
+	padding-bottom: 0px;
+}
+
+.TableStyle-SQLErrorCodes .FootC-Column1-Footer1 p
+{
+	
+}
+
+.TableStyle-SQLErrorCodes .FootB-Column1-Footer1
+{
+	text-align: left;
+	vertical-align: top;
+	border-right-width: 1px;
+	border-right-color: #c0c0c0;
+	border-right-style: solid;
+	background-image: none;
+	padding-left: 0px;
+	padding-right: 0px;
+	padding-top: 0px;
+	padding-bottom: 0px;
+}
+
+.TableStyle-SQLErrorCodes .FootB-Column1-Footer1 p
+{
+	
+}
+
+.TableStyle-SQLErrorCodes .FootA-Column1-Footer1
+{
+	text-align: left;
+	vertical-align: top;
+	background-image: none;
+	padding-left: 0px;
+	padding-right: 0px;
+	padding-top: 0px;
+	padding-bottom: 0px;
+}
+
+.TableStyle-SQLErrorCodes .FootA-Column1-Footer1 p
+{
+	
+}
+
+.TableStyle-SQLErrorCodes .FootG-Column1-Footer1
+{
+	text-align: left;
+	vertical-align: top;
+	background-image: none;
+	padding-left: 0px;
+	padding-right: 0px;
+	padding-top: 0px;
+	padding-bottom: 0px;
+}
+
+.TableStyle-SQLErrorCodes .FootG-Column1-Footer1 p
+{
+	
+}
+
+.TableStyle-SQLErrorCodes .FootI-Column2-Footer1
+{
+	text-align: left;
+	vertical-align: top;
+	background-image: none;
+	padding-left: 0px;
+	padding-right: 0px;
+	padding-top: 0px;
+	padding-bottom: 0px;
+}
+
+.TableStyle-SQLErrorCodes .FootI-Column2-Footer1 p
+{
+	
+}
+
+.TableStyle-SQLErrorCodes .FootE-Column2-Footer1
+{
+	text-align: left;
+	vertical-align: top;
+	border-right-width: 1px;
+	border-right-color: #c0c0c0;
+	border-right-style: solid;
+	background-image: none;
+	padding-left: 0px;
+	padding-right: 0px;
+	padding-top: 0px;
+	padding-bottom: 0px;
+	border-top-width: 1px;
+	border-top-color: #c0c0c0;
+	border-top-style: solid;
+}
+
+.TableStyle-SQLErrorCodes .FootE-Column2-Footer1 p
+{
+	
+}
+
+.TableStyle-SQLErrorCodes .FootF-Column2-Footer1
+{
+	text-align: left;
+	vertical-align: top;
+	background-image: none;
+	padding-left: 0px;
+	padding-right: 0px;
+	padding-top: 0px;
+	padding-bottom: 0px;
+	border-top-width: 1px;
+	border-top-color: #c0c0c0;
+	border-top-style: solid;
+}
+
+.TableStyle-SQLErrorCodes .FootF-Column2-Footer1 p
+{
+	
+}
+
+.TableStyle-SQLErrorCodes .FootH-Column2-Footer1
+{
+	text-align: left;
+	vertical-align: top;
+	border-right-width: 1px;
+	border-right-color: #c0c0c0;
+	border-right-style: solid;
+	background-image: none;
+	padding-left: 0px;
+	padding-right: 0px;
+	padding-top: 0px;
+	padding-bottom: 0px;
+}
+
+.TableStyle-SQLErrorCodes .FootH-Column2-Footer1 p
+{
+	
+}
+
+.TableStyle-SQLErrorCodes .FootD-Column2-Footer1
+{
+	text-align: left;
+	vertical-align: top;
+	background-image: none;
+	padding-left: 0px;
+	padding-right: 0px;
+	padding-top: 0px;
+	padding-bottom: 0px;
+	border-top-width: 1px;
+	border-top-color: #c0c0c0;
+	border-top-style: solid;
+}
+
+.TableStyle-SQLErrorCodes .FootD-Column2-Footer1 p
+{
+	
+}
+
+.TableStyle-SQLErrorCodes .FootC-Column2-Footer1
+{
+	text-align: left;
+	vertical-align: top;
+	background-image: none;
+	padding-left: 0px;
+	padding-right: 0px;
+	padding-top: 0px;
+	padding-bottom: 0px;
+}
+
+.TableStyle-SQLErrorCodes .FootC-Column2-Footer1 p
+{
+	
+}
+
+.TableStyle-SQLErrorCodes .FootB-Column2-Footer1
+{
+	text-align: left;
+	vertical-align: top;
+	border-right-width: 1px;
+	border-right-color: #c0c0c0;
+	border-right-style: solid;
+	background-image: none;
+	padding-left: 0px;
+	padding-right: 0px;
+	padding-top: 0px;
+	padding-bottom: 0px;
+}
+
+.TableStyle-SQLErrorCodes .FootB-Column2-Footer1 p
+{
+	
+}
+
+.TableStyle-SQLErrorCodes .FootA-Column2-Footer1
+{
+	text-align: left;
+	vertical-align: top;
+	background-image: none;
+	padding-left: 0px;
+	padding-right: 0px;
+	padding-top: 0px;
+	padding-bottom: 0px;
+}
+
+.TableStyle-SQLErrorCodes .FootA-Column2-Footer1 p
+{
+	
+}
+
+.TableStyle-SQLErrorCodes .FootG-Column2-Footer1
+{
+	text-align: left;
+	vertical-align: top;
+	background-image: none;
+	padding-left: 0px;
+	padding-right: 0px;
+	padding-top: 0px;
+	padding-bottom: 0px;
+}
+
+.TableStyle-SQLErrorCodes .FootG-Column2-Footer1 p
+{
+	
+}
+
+.TableStyle-SQLErrorCodes .FootI-Column3-Footer1
+{
+	text-align: left;
+	vertical-align: top;
+	background-image: none;
+	padding-left: 0px;
+	padding-right: 0px;
+	padding-top: 0px;
+	padding-bottom: 0px;
+}
+
+.TableStyle-SQLErrorCodes .FootI-Column3-Footer1 p
+{
+	
+}
+
+.TableStyle-SQLErrorCodes .FootE-Column3-Footer1
+{
+	text-align: left;
+	vertical-align: top;
+	border-right-width: 1px;
+	border-right-color: #c0c0c0;
+	border-right-style: solid;
+	background-image: none;
+	padding-left: 0px;
+	padding-right: 0px;
+	padding-top: 0px;
+	padding-bottom: 0px;
+	border-top-width: 1px;
+	border-top-color: #c0c0c0;
+	border-top-style: solid;
+}
+
+.TableStyle-SQLErrorCodes .FootE-Column3-Footer1 p
+{
+	
+}
+
+.TableStyle-SQLErrorCodes .FootF-Column3-Footer1
+{
+	text-align: left;
+	vertical-align: top;
+	background-image: none;
+	padding-left: 0px;
+	padding-right: 0px;
+	padding-top: 0px;
+	padding-bottom: 0px;
+	border-top-width: 1px;
+	border-top-color: #c0c0c0;
+	border-top-style: solid;
+}
+
+.TableStyle-SQLErrorCodes .FootF-Column3-Footer1 p
+{
+	
+}
+
+.TableStyle-SQLErrorCodes .FootH-Column3-Footer1
+{
+	text-align: left;
+	vertical-align: top;
+	border-right-width: 1px;
+	border-right-color: #c0c0c0;
+	border-right-style: solid;
+	background-image: none;
+	padding-left: 0px;
+	padding-right: 0px;
+	padding-top: 0px;
+	padding-bottom: 0px;
+}
+
+.TableStyle-SQLErrorCodes .FootH-Column3-Footer1 p
+{
+	
+}
+
+.TableStyle-SQLErrorCodes .FootD-Column3-Footer1
+{
+	text-align: left;
+	vertical-align: top;
+	background-image: none;
+	padding-left: 0px;
+	padding-right: 0px;
+	padding-top: 0px;
+	padding-bottom: 0px;
+	border-top-width: 1px;
+	border-top-color: #c0c0c0;
+	border-top-style: solid;
+}
+
+.TableStyle-SQLErrorCodes .FootD-Column3-Footer1 p
+{
+	
+}
+
+.TableStyle-SQLErrorCodes .FootC-Column3-Footer1
+{
+	text-align: left;
+	vertical-align: top;
+	background-image: none;
+	padding-left: 0px;
+	padding-right: 0px;
+	padding-top: 0px;
+	padding-bottom: 0px;
+}
+
+.TableStyle-SQLErrorCodes .FootC-Column3-Footer1 p
+{
+	
+}
+
+.TableStyle-SQLErrorCodes .FootB-Column3-Footer1
+{
+	text-align: left;
+	vertical-align: top;
+	border-right-width: 1px;
+	border-right-color: #c0c0c0;
+	border-right-style: solid;
+	background-image: none;
+	padding-left: 0px;
+	padding-right: 0px;
+	padding-top: 0px;
+	padding-bottom: 0px;
+}
+
+.TableStyle-SQLErrorCodes .FootB-Column3-Footer1 p
+{
+	
+}
+
+.TableStyle-SQLErrorCodes .FootA-Column3-Footer1
+{
+	text-align: left;
+	vertical-align: top;
+	background-image: none;
+	padding-left: 0px;
+	padding-right: 0px;
+	padding-top: 0px;
+	padding-bottom: 0px;
+}
+
+.TableStyle-SQLErrorCodes .FootA-Column3-Footer1 p
+{
+	
+}
+
+.TableStyle-SQLErrorCodes .FootG-Column3-Footer1
+{
+	text-align: left;
+	vertical-align: top;
+	background-image: none;
+	padding-left: 0px;
+	padding-right: 0px;
+	padding-top: 0px;
+	padding-bottom: 0px;
+}
+
+.TableStyle-SQLErrorCodes .FootG-Column3-Footer1 p
+{
+	
+}
+
+.TableStyle-SQLErrorCodes .FootI-Column4-Footer1
+{
+	background-image: none;
+	padding-left: 0px;
+	padding-right: 0px;
+	padding-top: 0px;
+	padding-bottom: 0px;
+}
+
+.TableStyle-SQLErrorCodes .FootI-Column4-Footer1 p
+{
+	
+}
+
+.TableStyle-SQLErrorCodes .FootE-Column4-Footer1
+{
+	background-image: none;
+	padding-left: 0px;
+	padding-right: 0px;
+	padding-top: 0px;
+	padding-bottom: 0px;
+	border-top-width: 1px;
+	border-top-color: #c0c0c0;
+	border-top-style: solid;
+}
+
+.TableStyle-SQLErrorCodes .FootE-Column4-Footer1 p
+{
+	
+}
+
+.TableStyle-SQLErrorCodes .FootF-Column4-Footer1
+{
+	background-image: none;
+	padding-left: 0px;
+	padding-right: 0px;
+	padding-top: 0px;
+	padding-bottom: 0px;
+	border-top-width: 1px;
+	border-top-color: #c0c0c0;
+	border-top-style: solid;
+}
+
+.TableStyle-SQLErrorCodes .FootF-Column4-Footer1 p
+{
+	
+}
+
+.TableStyle-SQLErrorCodes .FootH-Column4-Footer1
+{
+	background-image: none;
+	padding-left: 0px;
+	padding-right: 0px;
+	padding-top: 0px;
+	padding-bottom: 0px;
+}
+
+.TableStyle-SQLErrorCodes .FootH-Column4-Footer1 p
+{
+	
+}
+
+.TableStyle-SQLErrorCodes .FootD-Column4-Footer1
+{
+	background-image: none;
+	padding-left: 0px;
+	padding-right: 0px;
+	padding-top: 0px;
+	padding-bottom: 0px;
+	border-top-width: 1px;
+	border-top-color: #c0c0c0;
+	border-top-style: solid;
+}
+
+.TableStyle-SQLErrorCodes .FootD-Column4-Footer1 p
+{
+	
+}
+
+.TableStyle-SQLErrorCodes .FootC-Column4-Footer1
+{
+	background-image: none;
+	padding-left: 0px;
+	padding-right: 0px;
+	padding-top: 0px;
+	padding-bottom: 0px;
+}
+
+.TableStyle-SQLErrorCodes .FootC-Column4-Footer1 p
+{
+	
+}
+
+.TableStyle-SQLErrorCodes .FootB-Column4-Footer1
+{
+	background-image: none;
+	padding-left: 0px;
+	padding-right: 0px;
+	padding-top: 0px;
+	padding-bottom: 0px;
+}
+
+.TableStyle-SQLErrorCodes .FootB-Column4-Footer1 p
+{
+	
+}
+
+.TableStyle-SQLErrorCodes .FootA-Column4-Footer1
+{
+	background-image: none;
+	padding-left: 0px;
+	padding-right: 0px;
+	padding-top: 0px;
+	padding-bottom: 0px;
+}
+
+.TableStyle-SQLErrorCodes .FootA-Column4-Footer1 p
+{
+	
+}
+
+.TableStyle-SQLErrorCodes .FootG-Column4-Footer1
+{
+	background-image: none;
+	padding-left: 0px;
+	padding-right: 0px;
+	padding-top: 0px;
+	padding-bottom: 0px;
+}
+
+.TableStyle-SQLErrorCodes .FootG-Column4-Footer1 p
+{
+	
+}
+
+.TableStyle-SQLErrorCodes .Body-Body1
+{
+	
+}
+
+.TableStyle-SQLErrorCodes .BodyI-Column1-Body1
+{
+	font-family: sans-serif;
+	font-weight: normal;
+	background-image: none;
+	text-align: left;
+	vertical-align: top;
+	padding-left: 0px;
+	padding-right: 0px;
+	padding-top: 0px;
+	padding-bottom: 0px;
+}
+
+.TableStyle-SQLErrorCodes .BodyI-Column1-Body1 p
+{
+	font-family: sans-serif;
+	font-weight: normal;
+}
+
+.TableStyle-SQLErrorCodes .BodyE-Column1-Body1
+{
+	font-family: sans-serif;
+	font-weight: normal;
+	background-image: none;
+	border-bottom-width: 1px;
+	border-bottom-color: #c0c0c0;
+	border-bottom-style: solid;
+	text-align: left;
+	vertical-align: top;
+	padding-left: 0px;
+	padding-right: 0px;
+	padding-top: 0px;
+	padding-bottom: 0px;
+	border-right-width: 1px;
+	border-right-color: #c0c0c0;
+	border-right-style: solid;
+}
+
+.TableStyle-SQLErrorCodes .BodyE-Column1-Body1 p
+{
+	font-family: sans-serif;
+	font-weight: normal;
+}
+
+.TableStyle-SQLErrorCodes .BodyF-Column1-Body1
+{
+	font-family: sans-serif;
+	font-weight: normal;
+	background-image: none;
+	border-bottom-width: 1px;
+	border-bottom-color: #c0c0c0;
+	border-bottom-style: solid;
+	text-align: left;
+	vertical-align: top;
+	padding-left: 0px;
+	padding-right: 0px;
+	padding-top: 0px;
+	padding-bottom: 0px;
+}
+
+.TableStyle-SQLErrorCodes .BodyF-Column1-Body1 p
+{
+	font-family: sans-serif;
+	font-weight: normal;
+}
+
+.TableStyle-SQLErrorCodes .BodyH-Column1-Body1
+{
+	font-family: sans-serif;
+	font-weight: normal;
+	background-image: none;
+	text-align: left;
+	vertical-align: top;
+	padding-left: 0px;
+	padding-right: 0px;
+	padding-top: 0px;
+	padding-bottom: 0px;
+	border-right-width: 1px;
+	border-right-color: #c0c0c0;
+	border-right-style: solid;
+}
+
+.TableStyle-SQLErrorCodes .BodyH-Column1-Body1 p
+{
+	font-family: sans-serif;
+	font-weight: normal;
+}
+
+.TableStyle-SQLErrorCodes .BodyD-Column1-Body1
+{
+	font-family: sans-serif;
+	font-weight: normal;
+	background-image: none;
+	border-bottom-width: 1px;
+	border-bottom-color: #c0c0c0;
+	border-bottom-style: solid;
+	text-align: left;
+	vertical-align: top;
+	padding-left: 0px;
+	padding-right: 0px;
+	padding-top: 0px;
+	padding-bottom: 0px;
+}
+
+.TableStyle-SQLErrorCodes .BodyD-Column1-Body1 p
+{
+	font-family: sans-serif;
+	font-weight: normal;
+}
+
+.TableStyle-SQLErrorCodes .BodyC-Column1-Body1
+{
+	font-family: sans-serif;
+	font-weight: normal;
+	background-image: none;
+	text-align: left;
+	vertical-align: top;
+	padding-left: 0px;
+	padding-right: 0px;
+	padding-top: 0px;
+	padding-bottom: 0px;
+}
+
+.TableStyle-SQLErrorCodes .BodyC-Column1-Body1 p
+{
+	font-family: sans-serif;
+	font-weight: normal;
+}
+
+.TableStyle-SQLErrorCodes .BodyB-Column1-Body1
+{
+	font-family: sans-serif;
+	font-weight: normal;
+	background-image: none;
+	text-align: left;
+	vertical-align: top;
+	padding-left: 0px;
+	padding-right: 0px;
+	padding-top: 0px;
+	padding-bottom: 0px;
+	border-right-width: 1px;
+	border-right-color: #c0c0c0;
+	border-right-style: solid;
+}
+
+.TableStyle-SQLErrorCodes .BodyB-Column1-Body1 p
+{
+	font-family: sans-serif;
+	font-weight: normal;
+}
+
+.TableStyle-SQLErrorCodes .BodyA-Column1-Body1
+{
+	font-family: sans-serif;
+	font-weight: normal;
+	background-image: none;
+	text-align: left;
+	vertical-align: top;
+	padding-left: 0px;
+	padding-right: 0px;
+	padding-top: 0px;
+	padding-bottom: 0px;
+}
+
+.TableStyle-SQLErrorCodes .BodyA-Column1-Body1 p
+{
+	font-family: sans-serif;
+	font-weight: normal;
+}
+
+.TableStyle-SQLErrorCodes .BodyG-Column1-Body1
+{
+	font-family: sans-serif;
+	font-weight: normal;
+	background-image: none;
+	text-align: left;
+	vertical-align: top;
+	padding-left: 0px;
+	padding-right: 0px;
+	padding-top: 0px;
+	padding-bottom: 0px;
+}
+
+.TableStyle-SQLErrorCodes .BodyG-Column1-Body1 p
+{
+	font-family: sans-serif;
+	font-weight: normal;
+}
+
+.TableStyle-SQLErrorCodes .BodyI-Column2-Body1
+{
+	font-family: sans-serif;
+	font-weight: normal;
+	background-image: none;
+	padding-left: 0px;
+	padding-right: 0px;
+	padding-top: 0px;
+	padding-bottom: 0px;
+	text-align: left;
+	vertical-align: top;
+}
+
+.TableStyle-SQLErrorCodes .BodyI-Column2-Body1 p
+{
+	font-family: sans-serif;
+	font-weight: normal;
+}
+
+.TableStyle-SQLErrorCodes .BodyE-Column2-Body1
+{
+	font-family: sans-serif;
+	font-weight: normal;
+	background-image: none;
+	padding-left: 0px;
+	padding-right: 0px;
+	padding-top: 0px;
+	padding-bottom: 0px;
+	border-bottom-width: 1px;
+	border-bottom-color: #c0c0c0;
+	border-bottom-style: solid;
+	text-align: left;
+	vertical-align: top;
+	border-right-width: 1px;
+	border-right-color: #c0c0c0;
+	border-right-style: solid;
+}
+
+.TableStyle-SQLErrorCodes .BodyE-Column2-Body1 p
+{
+	font-family: sans-serif;
+	font-weight: normal;
+}
+
+.TableStyle-SQLErrorCodes .BodyF-Column2-Body1
+{
+	font-family: sans-serif;
+	font-weight: normal;
+	background-image: none;
+	padding-left: 0px;
+	padding-right: 0px;
+	padding-top: 0px;
+	padding-bottom: 0px;
+	border-bottom-width: 1px;
+	border-bottom-color: #c0c0c0;
+	border-bottom-style: solid;
+	text-align: left;
+	vertical-align: top;
+}
+
+.TableStyle-SQLErrorCodes .BodyF-Column2-Body1 p
+{
+	font-family: sans-serif;
+	font-weight: normal;
+}
+
+.TableStyle-SQLErrorCodes .BodyH-Column2-Body1
+{
+	font-family: sans-serif;
+	font-weight: normal;
+	background-image: none;
+	padding-left: 0px;
+	padding-right: 0px;
+	padding-top: 0px;
+	padding-bottom: 0px;
+	text-align: left;
+	vertical-align: top;
+	border-right-width: 1px;
+	border-right-color: #c0c0c0;
+	border-right-style: solid;
+}
+
+.TableStyle-SQLErrorCodes .BodyH-Column2-Body1 p
+{
+	font-family: sans-serif;
+	font-weight: normal;
+}
+
+.TableStyle-SQLErrorCodes .BodyD-Column2-Body1
+{
+	font-family: sans-serif;
+	font-weight: normal;
+	background-image: none;
+	padding-left: 0px;
+	padding-right: 0px;
+	padding-top: 0px;
+	padding-bottom: 0px;
+	border-bottom-width: 1px;
+	border-bottom-color: #c0c0c0;
+	border-bottom-style: solid;
+	text-align: left;
+	vertical-align: top;
+}
+
+.TableStyle-SQLErrorCodes .BodyD-Column2-Body1 p
+{
+	font-family: sans-serif;
+	font-weight: normal;
+}
+
+.TableStyle-SQLErrorCodes .BodyC-Column2-Body1
+{
+	font-family: sans-serif;
+	font-weight: normal;
+	background-image: none;
+	padding-left: 0px;
+	padding-right: 0px;
+	padding-top: 0px;
+	padding-bottom: 0px;
+	text-align: left;
+	vertical-align: top;
+}
+
+.TableStyle-SQLErrorCodes .BodyC-Column2-Body1 p
+{
+	font-family: sans-serif;
+	font-weight: normal;
+}
+
+.TableStyle-SQLErrorCodes .BodyB-Column2-Body1
+{
+	font-family: sans-serif;
+	font-weight: normal;
+	background-image: none;
+	padding-left: 0px;
+	padding-right: 0px;
+	padding-top: 0px;
+	padding-bottom: 0px;
+	text-align: left;
+	vertical-align: top;
+	border-right-width: 1px;
+	border-right-color: #c0c0c0;
+	border-right-style: solid;
+}
+
+.TableStyle-SQLErrorCodes .BodyB-Column2-Body1 p
+{
+	font-family: sans-serif;
+	font-weight: normal;
+}
+
+.TableStyle-SQLErrorCodes .BodyA-Column2-Body1
+{
+	font-family: sans-serif;
+	font-weight: normal;
+	background-image: none;
+	padding-left: 0px;
+	padding-right: 0px;
+	padding-top: 0px;
+	padding-bottom: 0px;
+	text-align: left;
+	vertical-align: top;
+}
+
+.TableStyle-SQLErrorCodes .BodyA-Column2-Body1 p
+{
+	font-family: sans-serif;
+	font-weight: normal;
+}
+
+.TableStyle-SQLErrorCodes .BodyG-Column2-Body1
+{
+	font-family: sans-serif;
+	font-weight: normal;
+	background-image: none;
+	padding-left: 0px;
+	padding-right: 0px;
+	padding-top: 0px;
+	padding-bottom: 0px;
+	text-align: left;
+	vertical-align: top;
+}
+
+.TableStyle-SQLErrorCodes .BodyG-Column2-Body1 p
+{
+	font-family: sans-serif;
+	font-weight: normal;
+}
+
+.TableStyle-SQLErrorCodes .BodyI-Column3-Body1
+{
+	font-family: sans-serif;
+	font-weight: normal;
+	background-image: none;
+	padding-left: 0px;
+	padding-right: 0px;
+	padding-top: 0px;
+	padding-bottom: 0px;
+	text-align: left;
+	vertical-align: top;
+}
+
+.TableStyle-SQLErrorCodes .BodyI-Column3-Body1 p
+{
+	font-family: sans-serif;
+	font-weight: normal;
+}
+
+.TableStyle-SQLErrorCodes .BodyE-Column3-Body1
+{
+	font-family: sans-serif;
+	font-weight: normal;
+	background-image: none;
+	padding-left: 0px;
+	padding-right: 0px;
+	padding-top: 0px;
+	padding-bottom: 0px;
+	border-bottom-width: 1px;
+	border-bottom-color: #c0c0c0;
+	border-bottom-style: solid;
+	text-align: left;
+	vertical-align: top;
+	border-right-width: 1px;
+	border-right-color: #c0c0c0;
+	border-right-style: solid;
+}
+
+.TableStyle-SQLErrorCodes .BodyE-Column3-Body1 p
+{
+	font-family: sans-serif;
+	font-weight: normal;
+}
+
+.TableStyle-SQLErrorCodes .BodyF-Column3-Body1
+{
+	font-family: sans-serif;
+	font-weight: normal;
+	background-image: none;
+	padding-left: 0px;
+	padding-right: 0px;
+	padding-top: 0px;
+	padding-bottom: 0px;
+	border-bottom-width: 1px;
+	border-bottom-color: #c0c0c0;
+	border-bottom-style: solid;
+	text-align: left;
+	vertical-align: top;
+}
+
+.TableStyle-SQLErrorCodes .BodyF-Column3-Body1 p
+{
+	font-family: sans-serif;
+	font-weight: normal;
+}
+
+.TableStyle-SQLErrorCodes .BodyH-Column3-Body1
+{
+	font-family: sans-serif;
+	font-weight: normal;
+	background-image: none;
+	padding-left: 0px;
+	padding-right: 0px;
+	padding-top: 0px;
+	padding-bottom: 0px;
+	text-align: left;
+	vertical-align: top;
+	border-right-width: 1px;
+	border-right-color: #c0c0c0;
+	border-right-style: solid;
+}
+
+.TableStyle-SQLErrorCodes .BodyH-Column3-Body1 p
+{
+	font-family: sans-serif;
+	font-weight: normal;
+}
+
+.TableStyle-SQLErrorCodes .BodyD-Column3-Body1
+{
+	font-family: sans-serif;
+	font-weight: normal;
+	background-image: none;
+	padding-left: 0px;
+	padding-right: 0px;
+	padding-top: 0px;
+	padding-bottom: 0px;
+	border-bottom-width: 1px;
+	border-bottom-color: #c0c0c0;
+	border-bottom-style: solid;
+	text-align: left;
+	vertical-align: top;
+}
+
+.TableStyle-SQLErrorCodes .BodyD-Column3-Body1 p
+{
+	font-family: sans-serif;
+	font-weight: normal;
+}
+
+.TableStyle-SQLErrorCodes .BodyC-Column3-Body1
+{
+	font-family: sans-serif;
+	font-weight: normal;
+	background-image: none;
+	padding-left: 0px;
+	padding-right: 0px;
+	padding-top: 0px;
+	padding-bottom: 0px;
+	text-align: left;
+	vertical-align: top;
+}
+
+.TableStyle-SQLErrorCodes .BodyC-Column3-Body1 p
+{
+	font-family: sans-serif;
+	font-weight: normal;
+}
+
+.TableStyle-SQLErrorCodes .BodyB-Column3-Body1
+{
+	font-family: sans-serif;
+	font-weight: normal;
+	background-image: none;
+	padding-left: 0px;
+	padding-right: 0px;
+	padding-top: 0px;
+	padding-bottom: 0px;
+	text-align: left;
+	vertical-align: top;
+	border-right-width: 1px;
+	border-right-color: #c0c0c0;
+	border-right-style: solid;
+}
+
+.TableStyle-SQLErrorCodes .BodyB-Column3-Body1 p
+{
+	font-family: sans-serif;
+	font-weight: normal;
+}
+
+.TableStyle-SQLErrorCodes .BodyA-Column3-Body1
+{
+	font-family: sans-serif;
+	font-weight: normal;
+	background-image: none;
+	padding-left: 0px;
+	padding-right: 0px;
+	padding-top: 0px;
+	padding-bottom: 0px;
+	text-align: left;
+	vertical-align: top;
+}
+
+.TableStyle-SQLErrorCodes .BodyA-Column3-Body1 p
+{
+	font-family: sans-serif;
+	font-weight: normal;
+}
+
+.TableStyle-SQLErrorCodes .BodyG-Column3-Body1
+{
+	font-family: sans-serif;
+	font-weight: normal;
+	background-image: none;
+	padding-left: 0px;
+	padding-right: 0px;
+	padding-top: 0px;
+	padding-bottom: 0px;
+	text-align: left;
+	vertical-align: top;
+}
+
+.TableStyle-SQLErrorCodes .BodyG-Column3-Body1 p
+{
+	font-family: sans-serif;
+	font-weight: normal;
+}
+
+.TableStyle-SQLErrorCodes .BodyI-Column4-Body1
+{
+	font-family: sans-serif;
+	font-weight: normal;
+	background-image: none;
+	padding-left: 0px;
+	padding-right: 0px;
+	padding-top: 0px;
+	padding-bottom: 0px;
+}
+
+.TableStyle-SQLErrorCodes .BodyI-Column4-Body1 p
+{
+	font-family: sans-serif;
+	font-weight: normal;
+}
+
+.TableStyle-SQLErrorCodes .BodyE-Column4-Body1
+{
+	font-family: sans-serif;
+	font-weight: normal;
+	background-image: none;
+	padding-left: 0px;
+	padding-right: 0px;
+	padding-top: 0px;
+	padding-bottom: 0px;
+	border-bottom-width: 1px;
+	border-bottom-color: #c0c0c0;
+	border-bottom-style: solid;
+}
+
+.TableStyle-SQLErrorCodes .BodyE-Column4-Body1 p
+{
+	font-family: sans-serif;
+	font-weight: normal;
+}
+
+.TableStyle-SQLErrorCodes .BodyF-Column4-Body1
+{
+	font-family: sans-serif;
+	font-weight: normal;
+	background-image: none;
+	padding-left: 0px;
+	padding-right: 0px;
+	padding-top: 0px;
+	padding-bottom: 0px;
+	border-bottom-width: 1px;
+	border-bottom-color: #c0c0c0;
+	border-bottom-style: solid;
+}
+
+.TableStyle-SQLErrorCodes .BodyF-Column4-Body1 p
+{
+	font-family: sans-serif;
+	font-weight: normal;
+}
+
+.TableStyle-SQLErrorCodes .BodyH-Column4-Body1
+{
+	font-family: sans-serif;
+	font-weight: normal;
+	background-image: none;
+	padding-left: 0px;
+	padding-right: 0px;
+	padding-top: 0px;
+	padding-bottom: 0px;
+}
+
+.TableStyle-SQLErrorCodes .BodyH-Column4-Body1 p
+{
+	font-family: sans-serif;
+	font-weight: normal;
+}
+
+.TableStyle-SQLErrorCodes .BodyD-Column4-Body1
+{
+	font-family: sans-serif;
+	font-weight: normal;
+	background-image: none;
+	padding-left: 0px;
+	padding-right: 0px;
+	padding-top: 0px;
+	padding-bottom: 0px;
+	border-bottom-width: 1px;
+	border-bottom-color: #c0c0c0;
+	border-bottom-style: solid;
+}
+
+.TableStyle-SQLErrorCodes .BodyD-Column4-Body1 p
+{
+	font-family: sans-serif;
+	font-weight: normal;
+}
+
+.TableStyle-SQLErrorCodes .BodyC-Column4-Body1
+{
+	font-family: sans-serif;
+	font-weight: normal;
+	background-image: none;
+	padding-left: 0px;
+	padding-right: 0px;
+	padding-top: 0px;
+	padding-bottom: 0px;
+}
+
+.TableStyle-SQLErrorCodes .BodyC-Column4-Body1 p
+{
+	font-family: sans-serif;
+	font-weight: normal;
+}
+
+.TableStyle-SQLErrorCodes .BodyB-Column4-Body1
+{
+	font-family: sans-serif;
+	font-weight: normal;
+	background-image: none;
+	padding-left: 0px;
+	padding-right: 0px;
+	padding-top: 0px;
+	padding-bottom: 0px;
+}
+
+.TableStyle-SQLErrorCodes .BodyB-Column4-Body1 p
+{
+	font-family: sans-serif;
+	font-weight: normal;
+}
+
+.TableStyle-SQLErrorCodes .BodyA-Column4-Body1
+{
+	font-family: sans-serif;
+	font-weight: normal;
+	background-image: none;
+	padding-left: 0px;
+	padding-right: 0px;
+	padding-top: 0px;
+	padding-bottom: 0px;
+}
+
+.TableStyle-SQLErrorCodes .BodyA-Column4-Body1 p
+{
+	font-family: sans-serif;
+	font-weight: normal;
+}
+
+.TableStyle-SQLErrorCodes .BodyG-Column4-Body1
+{
+	font-family: sans-serif;
+	font-weight: normal;
+	background-image: none;
+	padding-left: 0px;
+	padding-right: 0px;
+	padding-top: 0px;
+	padding-bottom: 0px;
+}
+
+.TableStyle-SQLErrorCodes .BodyG-Column4-Body1 p
+{
+	font-family: sans-serif;
+	font-weight: normal;
+}
+
+

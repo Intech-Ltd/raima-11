@@ -1,0 +1,345 @@
+<?xml version="1.0" encoding="utf-8"?>
+<!DOCTYPE html PUBLIC "-//W3C//DTD XHTML 1.0 Strict//EN" "http://www.w3.org/TR/xhtml1/DTD/xhtml1-strict.dtd">
+<html xmlns:MadCap="http://www.madcapsoftware.com/Schemas/MadCap.xsd" MadCap:tocPath="Native API|Reference Manual|Core API Function Descriptions" MadCap:InPreviewMode="false" MadCap:PreloadImages="false" MadCap:RuntimeFileType="Topic" MadCap:TargetType="WebHelp" lang="en-us" xml:lang="en-us" MadCap:PathToHelpSystem="../../../" MadCap:HelpSystemFileName="Default.xml" MadCap:SearchType="Stem">
+    <head>
+        <meta http-equiv="Content-Type" content="text/html; charset=utf-8" /><title>d_open</title>
+        <link rel="icon" type="image/png" href="http://docs.raima.com/favicon.png" />
+        <link href="../../SkinSupport/MadCap.css" rel="stylesheet" />
+        <link href="../../Resources/TableStyles/FunctionArgs.css" rel="stylesheet" />
+        <link href="../../Resources/TableStyles/CoreErrCodes.css" rel="stylesheet" />
+        <link href="../../Resources/Stylesheets/raima.css" rel="stylesheet" />
+        <script src="../../SkinSupport/MadCapAll.js" type="text/javascript">
+        </script>
+    </head>
+    <body>
+        <p class="MCWebHelpFramesetLink MCWebHelpFramesetLinkTop" style="display: none;"><a href="../../../Default_CSH.htm#RM/api/d_open.htm" style="">Open topic with navigation</a>
+        </p>
+        <div class="MCBreadcrumbsBox_0"><span class="MCBreadcrumbsPrefix">You are here: </span><a class="MCBreadcrumbsLink" href="../../dbCore.htm">Native API</a><span class="MCBreadcrumbsDivider"> &gt; </span><a class="MCBreadcrumbsLink" href="../dbRM.htm">Reference Manual</a><span class="MCBreadcrumbsDivider"> &gt; </span><a class="MCBreadcrumbsLink" href="../Chapter33.htm">Core API Function Descriptions</a><span class="MCBreadcrumbsDivider"> &gt; </span><span class="MCBreadcrumbs">d_open</span>
+        </div>
+        <h3 class="newpage"><a name="kanchor85"></a>d_open</h3>
+        <p>Open database(s)</p>
+        <p class="Heading">Prototype</p><pre xml:space="preserve">int32_t <b>d_open</b>(
+    const char *<i>dbspecs</i>, 
+    const char *<i>type</i>, 
+    DB_TASK    *<i>task</i>);</pre><pre xml:space="preserve">int32_t <b>d_openW</b>(
+    const wchar_t *<i>dbspecs</i>, /* UNICODE string */
+    const wchar_t *<i>type</i>,    /* UNICODE string */
+    DB_TASK       *<i>task</i>);</pre>
+        <p class="Heading">Parameters</p>
+        <table style="width: 100%;mc-table-style: url('../../Resources/TableStyles/FunctionArgs.css');margin-left: 0;margin-right: auto;" class="TableStyle-FunctionArgs" cellspacing="0">
+            <col style="width: 140px;" class="Column-Column1" />
+            <col style="width: 80px;" class="Column-Column3" />
+            <col class="Column-Column2" />
+            <tbody>
+                <tr class="Body-Body1">
+                    <td class="BodyE-Column1-Body1">dbspecs</td>
+                    <td class="BodyE-Column3-Body1">(input)</td>
+                    <td class="BodyD-Column2-Body1">A semicolon-separated list of database specifications.</td>
+                </tr>
+                <tr class="Body-Body1">
+                    <td class="BodyB-Column1-Body1">type</td>
+                    <td class="BodyB-Column3-Body1">(input)</td>
+                    <td class="BodyA-Column2-Body1">A string containing the type of access to the database.</td>
+                </tr>
+            </tbody>
+        </table>
+        <table style="width: 100%;mc-table-style: url('../../Resources/TableStyles/FunctionArgs.css');margin-left: 0;margin-right: auto;caption-side: top;" class="TableStyle-FunctionArgs" cellspacing="0">
+            <col style="width: 140px;" class="Column-Column1" />
+            <col style="width: 80px;" class="Column-Column3" />
+            <col class="Column-Column2" />
+            <tbody>
+                <tr class="Body-Body1">
+                    <td class="BodyB-Column1-Body1">task</td>
+                    <td class="BodyB-Column3-Body1">(input)</td>
+                    <td class="BodyA-Column2-Body1">A pointer to a <code>DB_TASK</code> structure.</td>
+                </tr>
+            </tbody>
+        </table>
+        <p class="Heading">Description</p>
+        <p>This function opens database(s) for access in a <i>shared</i>, <i>read-only</i>, or <i>exclusive</i> mode. One or more databases are identified in the first argument, which is a string, and will all be opened for use if <code>d_open</code> returns S_OKAY.</p>
+        <p>You must use <code>d_open</code> (and not <code>d_iopen</code>) for your first database open, as only <code>d_open</code> can establish the database mode (type of access). For subsequent database opens, use <code>d_iopen</code> if you wish current databases to remain open. (Refer to the listing for <code>d_iopen</code>.) When <code>d_open</code> is called, any databases currently open will be closed before the newly specified database is opened. The type of access to all of the databases is specified by the string <code>type</code> as follows: </p>
+        <table style="border-left-style: solid;border-left-width: 1px;border-left-color: #c0c0c0;border-right-style: solid;border-right-width: 1px;border-right-color: #c0c0c0;border-top-style: solid;border-top-width: 1px;border-top-color: #c0c0c0;border-bottom-style: solid;border-bottom-width: 1px;border-bottom-color: #c0c0c0;border-collapse: collapse;margin-left: 0;margin-right: auto;" class="errcode_table">
+            <col style="width: 79px;" />
+            <col />
+            <thead>
+                <tr>
+                    <th>Type</th>
+                    <th>Description</th>
+                </tr>
+            </thead>
+            <tr>
+                <td>"s"</td>
+                <td>Shared access mode. Multiple users can be accessing database at the same time.</td>
+            </tr>
+            <tr>
+                <td>"r"</td>
+                <td>Read only mode. Necessary if a union is opened.</td>
+            </tr>
+            <tr>
+                <td>"x"</td>
+                <td>Exclusive access mode. Only one user can access the database. All others will be locked out.</td>
+            </tr>
+            <tr>
+                <td>"o"</td>
+                <td>One-user-only mode. This is the same as "x" above. It had a slightly different meaning with earlier versions of <span class="MyVariablesProductShortName">RDM</span>, and has been left in for compatibility.</td>
+            </tr>
+        </table>
+        <p>The open mode can be in either uppercase or lowercase.</p>
+        <p class="Notes">If database mirroring or replication is to be used, the database access mode must be the <i>shared</i> mode.</p>
+        <p class="Notes">If <code>replication</code> is enabled, the database cannot be opened in exclusive mode.</p>
+        <p>A full database name includes the database name, with an optional qualifier to identify the TFS where the database is maintained:</p><pre xml:space="preserve">dbname[@TFScomputername[:port]]</pre>
+        <p>Defaults apply when not specified. The default <code>TFScomputername</code> is <code>localhost</code>, and the default port is <span style="mc-tag-and-class: code;" class="MyVariablesDefaultPort">21553</span>.</p>
+        <p>Examples of database specifications:</p>
+        <table style="margin-left: 0;margin-right: auto;caption-side: top;">
+            <col style="width: 233px;" />
+            <col />
+            <thead>
+                <tr>
+                    <th>Database Name</th>
+                    <th>Fully Qualified Database Name</th>
+                </tr>
+            </thead>
+            <tbody>
+                <tr>
+                    <td>"tims"</td>
+                    <td>"tims@localhost:<span class="MyVariablesDefaultPort">21553</span>"</td>
+                </tr>
+                <tr>
+                    <td>"tims@Joe_wkstation"</td>
+                    <td>"tims@Joe_wkstation:<span class="MyVariablesDefaultPort">21553</span>"</td>
+                </tr>
+                <tr>
+                    <td>"sales@RDM_svr:1730"</td>
+                    <td>"sales@RDM_svr:1730"</td>
+                </tr>
+                <tr>
+                    <td>"tims@localhost:1760"</td>
+                    <td>"tims@localhost:1760" (requires computer name to use non-default port)</td>
+                </tr>
+            </tbody>
+        </table>
+        <p>A complete database specification can be a union of 2 or more databases, which is represented by database names separated by "|" symbols:</p><pre xml:space="preserve">dbname1|dbname2[|dbnameN...]</pre>
+        <p>Each database included in a union must have an identical definition (DDL). When opened as a union, the data will appear to come from one database, whether it is read through record-type scanning or key scanning. A union is read only, and an error will be returned if a union is specified but the open mode is not "r".</p>
+        <p>If multiple databases are being opened, the databases are assigned sequential numbers left to right in the order specified in the list, with the first being zero. The <i>current database</i>, the first one in the list, is database 0 upon return from the call. The database number is passed to each database access function designate database upon which the function will operate. If only a single database is opened, or function <code>d_setdb</code> is used to set the current database, then the database number parameter to the database access functions can be CURR_DB defined in <code>rdm.h</code> as -1.</p>
+        <p>In a multiple database open, a database union is considered to be one database, thus in the following database open:</p><pre xml:space="preserve">d_open("phlist|corporate.com-<span class="MyVariablesDefaultPort">21553</span>/phlist|phlist-temps@corporate.com:1740;templist", "r", task)</pre>
+        <p>specifies two databases:</p>
+        <blockquote>
+            <p>Database 0: phlist|corporate.com-<span class="MyVariablesDefaultPort">21553</span>/phlist|phlist-temps@corporate.com:1740</p>
+        </blockquote>
+        <blockquote>
+            <p>Database 1: templist</p>
+        </blockquote>
+        <p>where database 0 is a union of three identically structured databases:</p>
+        <blockquote>
+            <p>phlist - local database</p>
+            <p>corporate.com-<span class="MyVariablesDefaultPort">21553</span>/phlist - local copy (mirror) of database from corporate.com's default port.</p>
+            <p>phlist-temps@corporate.com:1740 - remote database, on corporate.com:1740.</p>
+        </blockquote>
+        <p class="Notes">Note that the first and second databases in the union reside on the same computer. The second database, however, is a mirrored copy of the master located on corporate.com:<span class="MyVariablesDefaultPort">21553</span>, where the mirror is local. The third database is located on corporate.com:1740 and is controlled by a different TFS than the TFS for the master server on corporate.com:<span class="MyVariablesDefaultPort">21553</span>.</p>
+        <p>The <code>d_open</code> call will be successful if it is able to contact each TFS referenced in the database specifications, and find the named database(s) there.</p>
+        <p class="Heading">User's Guide</p>
+        <p><a href="../../UG/Chapter5.htm#5.2.1">Opening and Closing Databases</a>
+        </p>
+        <p><a href="../../UG/Chapter5.htm#5.9">Multiple Database Access</a>
+        </p>
+        <p class="Heading">Currency Changes</p>
+        <p>curr_rec = system record (NULL_DBA, if no system record);</p>
+        <p>curr_own[system owned sets] = system record;</p>
+        <p>curr_own[all other sets] = NULL_DBA;</p>
+        <p>curr_mem[of all sets] = NULL_DBA;</p>
+        <p>curr_db = 0;</p>
+        <p class="Heading">Required Headers</p><pre xml:space="preserve">#include "rdm.h"</pre>
+        <p class="Heading">Libraries</p>
+        <table style="width: 100%; margin-left: 0; margin-right: auto;">
+            <col style="width: 200px;">
+            </col>
+            <col>
+            </col>
+            <thead>
+                <tr>
+                    <th>Library Name</th>
+                    <th>Description</th>
+                </tr>
+            </thead>
+            <tbody>
+                <tr>
+                    <td><code>rdmrdm<span class="MyVariablesLibraryVersion">11</span></code>
+                    </td>
+                    <td><span class="MyVariablesProductShortName">RDM</span> Runtime Library</td>
+                </tr>
+            </tbody>
+        </table>
+        <p>See <a href="../../GS/distrib.htm#Library">Library Naming Conventions</a> section for full library name and a list of library dependencies.</p>
+        <p class="Heading">Return Codes</p>
+        <table class="TableStyle-CoreErrCodes" cellspacing="0" style="mc-table-style: url('../../Resources/TableStyles/CoreErrCodes.css');">
+            <col class="Column-Column1" />
+            <col class="Column-Column2" />
+            <col class="Column-Column3" />
+            <thead>
+                <tr class="Head-Header1">
+                    <th class="HeadE-Column1-Header1">Value</th>
+                    <th class="HeadE-Column2-Header1">Name</th>
+                    <th class="HeadD-Column3-Header1">Description</th>
+                </tr>
+            </thead>
+            <tbody>
+                <tr class="Body-Body1">
+                    <td class="BodyB-Column1-Body1">0</td>
+                    <td class="BodyB-Column2-Body1">S_OKAY</td>
+                    <td class="BodyA-Column3-Body1">normal return, okay</td>
+                </tr>
+            </tbody>
+        </table>
+        <table class="TableStyle-CoreErrCodes" cellspacing="0" style="mc-table-style: url('../../Resources/TableStyles/CoreErrCodes.css');">
+            <col class="Column-Column1" />
+            <col class="Column-Column2" />
+            <col class="Column-Column3" />
+            <tbody>
+                <tr class="Body-Body1">
+                    <td class="BodyB-Column1-Body1">5</td>
+                    <td class="BodyB-Column2-Body1">S_UNAVAIL</td>
+                    <td class="BodyA-Column3-Body1">database file currently unavailable</td>
+                </tr>
+            </tbody>
+        </table>
+        <table class="TableStyle-CoreErrCodes" cellspacing="0" style="mc-table-style: url('../../Resources/TableStyles/CoreErrCodes.css');">
+            <col class="Column-Column1" />
+            <col class="Column-Column2" />
+            <col class="Column-Column3" />
+            <tbody>
+                <tr class="Body-Body1">
+                    <td class="BodyB-Column1-Body1">-1</td>
+                    <td class="BodyB-Column2-Body1">S_DBOPEN</td>
+                    <td class="BodyA-Column3-Body1">database not opened</td>
+                </tr>
+            </tbody>
+        </table>
+        <table class="TableStyle-CoreErrCodes" cellspacing="0" style="mc-table-style: url('../../Resources/TableStyles/CoreErrCodes.css');">
+            <col class="Column-Column1" />
+            <col class="Column-Column2" />
+            <col class="Column-Column3" />
+            <tbody>
+                <tr class="Body-Body1">
+                    <td class="BodyB-Column1-Body1">-4</td>
+                    <td class="BodyB-Column2-Body1">S_INVDB</td>
+                    <td class="BodyA-Column3-Body1">cannot open dictionary</td>
+                </tr>
+            </tbody>
+        </table>
+        <table class="TableStyle-CoreErrCodes" cellspacing="0" style="mc-table-style: url('../../Resources/TableStyles/CoreErrCodes.css');">
+            <col class="Column-Column1" />
+            <col class="Column-Column2" />
+            <col class="Column-Column3" />
+            <tbody>
+                <tr class="Body-Body1">
+                    <td class="BodyB-Column1-Body1">-11</td>
+                    <td class="BodyB-Column2-Body1">S_BADTYPE</td>
+                    <td class="BodyA-Column3-Body1">invalid lock value</td>
+                </tr>
+            </tbody>
+        </table>
+        <table class="TableStyle-CoreErrCodes" cellspacing="0" style="mc-table-style: url('../../Resources/TableStyles/CoreErrCodes.css');">
+            <col class="Column-Column1" />
+            <col class="Column-Column2" />
+            <col class="Column-Column3" />
+            <tbody>
+                <tr class="Body-Body1">
+                    <td class="BodyB-Column1-Body1">-21</td>
+                    <td class="BodyB-Column2-Body1">S_INCOMPAT</td>
+                    <td class="BodyA-Column3-Body1">incompatible dictionary file</td>
+                </tr>
+            </tbody>
+        </table>
+        <table class="TableStyle-CoreErrCodes" cellspacing="0" style="mc-table-style: url('../../Resources/TableStyles/CoreErrCodes.css');">
+            <col class="Column-Column1" />
+            <col class="Column-Column2" />
+            <col class="Column-Column3" />
+            <tbody>
+                <tr class="Body-Body1">
+                    <td class="BodyB-Column1-Body1">-26</td>
+                    <td class="BodyB-Column2-Body1">S_TRACTIVE</td>
+                    <td class="BodyA-Column3-Body1">transaction already active</td>
+                </tr>
+            </tbody>
+        </table>
+        <table class="TableStyle-CoreErrCodes" cellspacing="0" style="mc-table-style: url('../../Resources/TableStyles/CoreErrCodes.css');">
+            <col class="Column-Column1" />
+            <col class="Column-Column2" />
+            <col class="Column-Column3" />
+            <tbody>
+                <tr class="Body-Body1">
+                    <td class="BodyB-Column1-Body1">-28</td>
+                    <td class="BodyB-Column2-Body1">S_DBD_NONAMES</td>
+                    <td class="BodyA-Column3-Body1">incompatible legacy DBD file - does not contain record/field/set names</td>
+                </tr>
+            </tbody>
+        </table>
+        <table class="TableStyle-CoreErrCodes" cellspacing="0" style="mc-table-style: url('../../Resources/TableStyles/CoreErrCodes.css');">
+            <col class="Column-Column1" />
+            <col class="Column-Column2" />
+            <col class="Column-Column3" />
+            <tbody>
+                <tr class="Body-Body1">
+                    <td class="BodyB-Column1-Body1">-226</td>
+                    <td class="BodyB-Column2-Body1">S_TX_NO_REMOTE</td>
+                    <td class="BodyA-Column3-Body1">Remote connections not allowed</td>
+                </tr>
+            </tbody>
+        </table>
+        <table class="TableStyle-CoreErrCodes" cellspacing="0" style="mc-table-style: url('../../Resources/TableStyles/CoreErrCodes.css');">
+            <col class="Column-Column1" />
+            <col class="Column-Column2" />
+            <col class="Column-Column3" />
+            <tbody>
+                <tr class="Body-Body1">
+                    <td class="BodyB-Column1-Body1">-904</td>
+                    <td class="BodyB-Column2-Body1">S_NOMEMORY</td>
+                    <td class="BodyA-Column3-Body1">out of memory</td>
+                </tr>
+            </tbody>
+        </table>
+        <p class="Heading">See Also</p>
+        <p><a href="d_opentask.htm">d_opentask</a>
+        </p>
+        <p><a href="d_close.htm">d_close</a>
+        </p>
+        <p><a href="d_iopen.htm">d_iopen</a>
+        </p>
+        <p><a href="d_iclose.htm">d_iclose</a>
+        </p>
+        <p><a href="d_setdb.htm">d_setdb</a>
+        </p>
+        <p class="Heading">Example</p><pre xml:space="preserve">switch ( operation )
+{
+   case ACCTS_PAY:
+      	/* open for shared accounts payable usage */
+      	status = d_open("genledg;acctspay", "s", task);
+      	break;
+   case ACCTS_RCV:
+      	/* open for shared accounts receivable usage */
+       /* genledg=0, acctsrcv=1 */
+      	status = d_open("genledg;acctsrcv", "s", task);
+      	break;
+   case MONTH_END:
+      	/* open for exclusive month-end processing */
+      	status = d_open("genledg", "x", task);
+      	break;
+}
+if ( status == S_UNAVAIL )
+   user_message("database unavailable");
+else
+{
+   if ( status != S_OKAY )
+      	terminate();
+   ...
+}
+</pre>
+        <hr MadCap:conditions="Default.ScreenOnly" width="100%" size="0" align="center" />
+        <p MadCap:conditions="Default.ScreenOnly" style="font-size: 8pt;"><span class="MyVariablesCopyright">Copyright © 2012, Raima Inc. All rights reserved.</span>
+        </p>
+        <script type="text/javascript" src="../../SkinSupport/MadCapBodyEnd.js">
+        </script>
+        <p class="MCWebHelpFramesetLink MCWebHelpFramesetLinkBottom" style="display: none;"><a href="../../../Default_CSH.htm#RM/api/d_open.htm" style="">Open topic with navigation</a>
+        </p>
+    </body>
+</html>

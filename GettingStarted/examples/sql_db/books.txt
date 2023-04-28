@@ -1,0 +1,327 @@
+"alcott01","AlcottL","Moods","297 p. : ill. ; 18 cm.","Boston : Loring, 1864.",1864,"PS1017 .M6 1864","2009-12-05","2010-05-04",1200,960
+"alcott02","AlcottL","On picket duty, and other tales.","96 p. 17 cm.","Boston, J. Redpath; New York, H. Dexter, Hamilton & co., 1864.",1864,"PZ3.A355 On PS1017","2008-09-06",,1075,860
+"alcott03","AlcottL","Little women, or, Meg, Jo, Beth, and Amy","iv, [3], 8-341, [7] p., [4] leaves of plates : ill. ; 17 cm.","Boston : Roberts Brothers, 1868.",1868,"PZ7.A335 Li 1868","2009-04-02",,1550,1240
+"alcott04","AlcottL","Little men : life at Plumfield with Jo's boys","[8], 376 p., [4] leaves of plates : ill. ; 18 cm.","Boston : Roberts Brothers (Cambridge : Press of John Wilson and Son), 1871.",1871,"PS1017 .L4 1871","2010-03-28","2010-01-11",1250,1000
+"alcott05","AlcottL","Eight cousins;","3 p. l. 290 p. front., illus. 18 cm.","Boston, Roberts brothers, 1875.",1875,"PZ7.A335 E ","2008-11-22","2010-08-14",850,708
+"alcott06","AlcottL","Rose in bloom. A sequel to 'Eight cousins.'","viii, 375 p. incl. front. (port.) 18 cm.","Boston, Roberts brothers, 1876.",1876,"PZ7.A335R","2009-07-10","2010-01-06",875,729
+"austen01","AustenJ","Pride and prejudice: a novel ...","3 v. 17 cm.","London, Printed for T. Egerton, 1813.",1813,"PZ3.A93 Pr PR4034.P7","2007-04-03",,12500,9615
+"austen02","AustenJ","Sense and sensibility: a novel.","3 v. 17 cm.","London, published by T. Egerton, 1813.",1813,"PZ3.A93 Se4 PR4034.S4","2007-09-22",,13500,10384
+"austen03","AustenJ","Mansfield Park: a novel. In three volumes.","3 v. 18 cm.","London, Printed for T. Egerton, 1814.",1814,"PZ3.A93M PR4034.M3","2007-05-18","2009-10-28",13500,10384
+"austen04","AustenJ","Emma: a novel. In three volumes.","3 v. 19 cm.","London, Printed for J. Murray, 1816.",1816,"PZ3.A93 E4 PR4034.E5","2007-10-20",,13500,10384
+"austen05","AustenJ","Persuasion.","p. [213]-440. 17 cm.","London, R. Bentley; [etc., etc.] 1848.",1848,"PZ3.A93 N3 PR4034.P4","2009-12-21",,1200,960
+"austen06","AustenJ","Northanger abbey. A novel.","2 p.l., 212 p. front. 17 cm.","London, R. Bentley; [etc., etc.] 1848.",1848,"PZ3.A93 N3 PR4034.N7","2007-11-11",,1150,920
+"bacon01","BaconF","Essays","[12], 241, [3] p. (the 1st and last leaves blank) ; 13 cm.","Imprinted at London : By Iohn Beale, 1612.",1612,"PR2206 .A3 1612","2006-05-27",,8250,6600
+"bacon02","BaconF","Apophthegmes new and old.","p. cm.","London, H. Barret and R. Whittaker, 1625.",1625,"PN6270 .B3 1625","2010-10-11",,6500,5200
+"bacon03","BaconF","Sylva sylvarum. French","[16], 26, [6], 567, [1] p. ; 17 cm. (8vo)","A Paris : Chez Antoine de Sommaville & André Soubron ..., 1631.",1631,"Q155.B14 S9514 1631","2009-10-04","2010-04-01",5000,4000
+"bacon04","BaconF","History natural and experimental, of life and death.","4 p.l., 64 p. 29 cm.","London, Printed for William Lee, and Humphrey Moseley, 1658.",1658,"Q155.B14 S95 1658","2009-09-17","2010-02-13",2500,2000
+"barrie01","BarrieJ","A window in Thrums.","7, 217 p. 20 cm.","London, Hodder and Stoughton, 1889.",1889,"PZ3 .B277 Wi2 PR4074","2009-08-18",,3450,2760
+"barrie02","BarrieJ","Peter Pan in Kensington Gardens","x, 126 p., [50] leaves of plates : ill. (some col.), map ;","New York : Charles Scribner's Sons, 1906.",1906,"PR4074 .P318","2007-07-10",,7500,6000
+"barrie03","BarrieJ","Peter and Wendy, by J.M. Barrie; illustrated by F.D. Bedford.","vii p., 1 l., 267 p. front., plates. 21 cm.","New York, C. Scribner's Son, 1911.",1911,"PZ8.B276 Pet2","2007-12-20",,875,729
+"baum01","BaumL","Mother Goose in prose","265, [5] p., [13] leaves of plates : ill. ; 29 cm.","Chicago : Way and Williams, 1897.",1897,"PZ8.3.M85 B7 1897","2006-07-28",,750,625
+"baum02","BaumL","Father Goose, his book, by L. Frank Baum. Pictures by Wm. W. Denslow.","[106] p. incl. front., col. illus. 29 cm.","Chicago, G. M. Hill Co. 1899.",1899,"PZ8.3.B327 Fat 1899","2007-07-12",,1275,1020
+"baum03","BaumL","Wizard of Oz","259, [3] p., [24] leaves of plates : col. ill. ; 23 cm.","Chicago ; New York : G.M. Hill Co., 1900.",1900,"PZ8.B327 Wo","2006-05-01",,4950,3960
+"burns01","BurnsR","Poems, chiefly in the Scottish dialect...","1 v. cm.","Edinburgh, 1787.",1787,"PR4300 1787 .E","2008-10-28","2009-07-12",1250,1000
+"burns02","BurnsR","Aloway Kirk; or, Tam O'Shanter. A tale. By Robert Burns ...","8 p. 15 cm.","Glasgow Brash & Reid, 1800.",1800,"PR4314 .Al 18--","2010-12-16",,950,791
+"burroughs01","BurroughsE","Tarzan of the apes, by Edgar Rice Burroughs ...","4 p. l., 400, [1] p. front. 19 1/2 cm.","New York, A.L.Burt company, 1914.",1914,"PZ3.B944 T2 PS3503.U687","2009-05-21",,595,495
+"burroughs02","BurroughsE","The return of Tarzan, by Edgar Rice Burroughs . . . decorations by J. Allen St. John.","4 p. l., 365 p. illus. 19 1/2 cm.","New York, Grosset & Dunlap, 1915.",1915,"PZ3.B944 R3 PS3503.U687","2009-05-17",,375,312
+"burroughs03","BurroughsE","The beasts of Tarzan,","4 p. l., 336, [1] p. front., illus. 20 cm.","Chicago, A. C. McClurg & co., 1916.",1916,"PZ3.B944 Be PS3503.U687","2008-12-08",,225,187
+"burroughs04","BurroughsE","The son of Tarzan","[6], 394 p. : ill. ; 20 cm.","Chicago : A.C. McClurg & Co., 1917.",1917,"PZ3.B944 So PS3503.U687","2008-12-04",,225,187
+"carlyle01","CarlyleT","The life of Friedrich Schiller : comprehending an examination of his works.","vi , 352 p., [1] leaf of plates : port. ; 24 cm.","London : Taylor and Hessey, 1825.",1825,"PT2482 .C3 1825","2010-06-20",,125,104
+"carlyle02","CarlyleT","Burns","p. [267]-312. 21 cm.","Edinburgh, 1828.",1828,"PR4331 .C3 1828","2009-01-03",,1385,1108
+"carlyle03","CarlyleT","Chartism.","2 p.l., 113 p. 19 cm.","Boston, C. C. Little and J. Brown, 1840.",1840,"DA559.7 .C3 1840a","2009-11-04","2009-12-13",995,829
+"carlyle04","CarlyleT","Past and present.","iv, [13]-161 p. 20 cm.","New York, W. H. Colyer, 1843.",1843,"HN388 .C33 1843b","2010-12-25",,3750,3000
+"carlyle05","CarlyleT","Thomas Carlyle's collected works.","30 v. 21 cm.","London, Chapman and Hall, 1869.",1869,"PR4420 .E96","2007-04-26",,5750,4600
+"carroll01","CarrollL","Alice's adventures in Wonderland","192 p. : ill. ; 19 cm.","Boston : Lee and Shepard, 1870.",1870,"PZ6.C23 Al 1870","2008-03-02","2010-02-01",4500,3600
+"carroll02","CarrollL","Through the looking-glass, and what Alice found there. With fifty illustrations by John Tenniel.","6p. l., 224p., 1 l. illus. 19cm.","London, Macmillan and co., 1872.",1872,"PZ8.D666 Th2","2007-04-19","2008-07-24",2000,1600
+"carroll03","CarrollL","The game of logic, by Lewis Carroll [pseud.]","5 p. l., 96 p. front., diagrs. 19 cm.","London, New York, Macmillan and Co., 1887.",1887,"BC135 .D6","2007-03-01","2010-03-01",75,62
+"cather01","CatherW","'The fear that walks by noonday.'","p. 224-231. 27 cm.","Lincoln, Neb., 1894.",1894,"LD3687 .S6 vol. 3","2007-08-18",,7500,6000
+"cather02","CatherW","April twilights","p. cm.","Boston, R.G. Badger, 1903.",1903,"PS3505.A87 A8 1903","2010-06-14",,5450,4360
+"cather03","CatherW","O pioneers! By Willa Sibert Cather ...","6 p.l., 3-308, [2] p. col. front. 19 cm.","Boston, New York, Houghton Mifflin company, 1913.",1913,"PS3505.A87 O2 1913","2006-09-06",,5895,4716
+"cather04","CatherW","One of ours [by] Willa Cather.","5 p. l., 459 p. 20 cm.","New York, A. A. Knopf, 1922.",1922,"PZ3.C2858 On","2010-06-20","2010-04-05",1550,1240
+"cather05","CatherW","The professor's house","283 p. ; 20 cm.","New York : Knopf, 1925.",1925,"PZ3.C2858 Pr5 PS3505.A87","2006-06-20",,850,708
+"cather06","CatherW","My mortal enemy.","122 p. illus. 22 cm.","London, W. Heinemann, 1928.",1928,"PS3505.A87 M9 1928","2010-02-14",,475,395
+"cather07","CatherW","Shadows on the rock.","4 p., l., 3-280 p., 1 l. 20 cm.","New York, A. A. Knopf, 1931.",1931,"PZ3.C2858 Sh","2007-04-05",,335,279
+"cather08","CatherW","Lucy Gayheart.","3 p.l., 3-231 p., 1 l. 20 cm.","New York, A.A. Knopf, 1935.",1935,"PZ3.C2858 Lu PS3505.A87","2007-01-19",,250,208
+"cbronte01","BronteC","Jane Eyre. An autobiography. Ed. by Currer Bell [pseud.]","174p. 24cm.","New York, Harper & brothers, 1848.",1848,"PR4167 .J3 1848","2010-09-09",,12500,9615
+"cbronte02","BronteC","Villette.","2 v. 17 cm.","Leipzig, B. Tauchnitz, 1853.",1853,"PZ3.B79O V2 PR4167.V5","2006-03-20",,9500,7600
+"cbronte03","BronteC","Jane Eyre.","vii, [1], 467 p. 18 cm.","London, Smith, Elder & co., 1869.",1869,"PZ3.B790 J4 PR4167.J3","2008-07-29","2010-02-08",4375,3500
+"chaucer01","ChaucerG","The workes, newlye printed, wyth dyuers workes whych were neuer in print before.","ccclxxxxii l. illus. 33 cm.","[London] Printed by W. Bonham, 1542.",1542,"PR1850  1542","2007-12-16","2007-04-03",42500,32692
+"chaucer02","ChaucerG","Canterbury tales","3 v. 21 cm.","London, Printed for J. and R. Tonson, 1741.",1741,"PR1872 .O3","2008-04-19",,17500,13461
+"chesterton01","ChestertonG","The defendant","[8], 131 p. ; 20 cm.","London : R. Brimley Johnson, 1901.",1901,"PR4453.C4 D4 1901","2008-03-06",,2500,2000
+"chesterton02","ChestertonG","Heretics,","viii p., 1 l., 11-305 p. 20 cm.","New York, John Lane company; [etc., etc.], 1905.",1905,"PR4453.C4 H4","2006-07-25","2007-07-03",950,791
+"chesterton03","ChestertonG","All things considered, by G. K. Chesterton.","vi, 295, [1] p. 18 cm.","New York, J. Lane company, 1908.",1908,"PR4453.C4 A65","2009-12-18","2009-06-06",1200,960
+"chesterton04","ChestertonG","Wit and wisdom of G. K. Chesterton ...","3 p.l., 233 p. 15 cm.","New York, Dodd, Mead and company, 1911.",1911,"PR4453.C4 A16","2010-03-04",,1500,1200
+"chesterton05","ChestertonG","The innocence of Father Brown,","4 p.l., 335, [1] p. front., plates. 20 cm.","London, New York [etc.] Cassell and company, ltd., 1911.",1911,"PZ3.C4265 Inn PR4453.C4","2009-01-22",,1250,1000
+"chesterton06","ChestertonG","Orthodoxy","299 p. ; 20 cm.","New York : John Lane, 1911.",1911,"BR121 .C5 1911","2010-08-23",,975,812
+"chesterton07","ChestertonG","The man who knew too much, by Gilbert K. Chesterton, with illustrations by W. Hatherell.","4 p. l., 365 p. front. 20 cm.","New York, London, Harper & brothers, 1922.",1922,"PZ3.C4265 Ma PR4453.C4","2008-02-13",,750,625
+"chesterton08","ChestertonG","The incredulity of Father Brown,","4 p.l., 295, [1] p. 20 cm.","London, New York [etc.] Cassell and company, ltd., 1926.",1926,"PZ3 .C4265 Inc2 PR4453.C4","2008-10-23","2010-05-08",500,416
+"coleridge01","ColeridgeS","Poems","xx, 278 p. ; 17 cm.","Bristol : Printed by N. Biggs, for J. Cottle ; London : Messrs. Robinsons, 1797.",1797,"PR4478 .A1 1797","2009-10-29","2010-06-13",2500,2000
+"coleridge02","ColeridgeS","The works of Samuel Taylor Coleridge, prose and verse.","xvi, 546 p. front. (port.) 24 cm.","Philadelphia, T. Cowperthwait, 1845.",1845,"PR4470 .E45","2009-09-26","2009-10-30",1000,833
+"conrad01","ConradJ","An outcast of the islands","391 p. ; 21 cm.","London : T.F. Unwin, 1896.",1896,"PR6005.O4 O82 1896b","2006-05-08",,1750,1400
+"conrad02","ConradJ","The lagoon.","22 p. 19 cm.","New York, Macmillan, 1896.",1896,"PR6005.O4 L23 1896 ","2006-02-15",,1250,1000
+"conrad03","ConradJ","Lord Jim : a tale","[6], 451 p. ; 20 cm.","Edinburgh : Blackwood, 1900.",1900,"PR6005.O4 L6 1900","2007-12-28","2009-02-17",6750,5400
+"conrad04","ConradJ","The mirror of the sea, by Joseph Conrad ...","3 p. l., 328, [1] p. 20 cm.","New York, London, Harper & Brothers, 1906.",1906,"G540 .C667 1906","2010-07-25",,4500,3600
+"conrad05","ConradJ","The works of Joseph Conrad."," v. 23 cm.","Garden City, New York, Doubleday, Page & company, 1920.",1920,"PR6005 .O4 1920","2009-08-27",,6750,5400
+"cooper01","CooperJ","Precaution; a novel...","2 v. 19.5 cm.","New York, A. T. Goodrich & Co., 1820.",1820,"PZ3.C786 Pre PS1417.P6","2007-08-16",,5000,4000
+"cooper02","CooperJ","The spy; a tale of the neutral ground.","3 v. 19 cm.","London, Printed for the book-sellers; J. T. Devison, printer, Aberdeen, 1823.",1823,"PS1417 .S7 1821z ","2008-09-03",,3500,2800
+"cooper03","CooperJ","The last of the Mohicans; a narrative of 1757.","2 v. 19 cm.","Philadelphia, H.C. Carey & I. Lea, 1826.",1826,"PZ3.C786L PS1408","2007-01-02",,7500,6000
+"cooper04","CooperJ","The prairie : a tale","3 v. ; 17 cm.","Paris : Hector Bossange, 1827.",1827,"PS1416 .A1 1827b","2009-11-02","2009-03-20",6550,5240
+"cooper05","CooperJ","The Red Rover, a tale.","1 v. 18 cm.","Philadelphia, Carey, Lea, & Blanchard, 1836.",1836,"PZ3.C786 R4 PS1417.R","2010-03-14",,3025,2420
+"cooper06","CooperJ","Homeward bound;","2 v. 18 cm.","Philadelphia, Carey, Lea & Blanchard, 1838.",1838,"PZ3.C786 Hom PS1407.H8","2006-12-13",,2750,2200
+"crane01","CraneS","The red badge of courage; an episode of the American civil war.","233 p. 19 cm.","New York, D. Appleton and company, 1895.",1895,"PS1449.C85 R3 1895","2007-09-25",,22500,17307
+"crane02","CraneS","Selected works. 1898","301 p. ; 19 cm.","London : W. Heinemann, 1898.",1898,"PS1449.C85 A6 1898","2010-10-17",,375,312
+"decartes01","DescartesR","Principia philosophiae","12 p.l., 310 p. illus., diagrs. 21 cm.","Amstelodami, apud Ludovicum Elzevirium, 1644.",1644,"B1860  1644","2006-03-09",,75000,57692
+"defoe01","DefoeD","The history of Moll Flanders, &c. ...","24 p. illus. 15 cm.","Durham, Eng., Printed by I. Lane, 1727.",1727,"AC901 .M5 v. 525, no. 4 PR3404.M6","2008-06-19",,1200,960
+"defoe02","DefoeD","Memoirs of a cavalier:","4 p. l, 338 p. 20 cm.","London, Printed for A. Bell etc., 1720.",1720,"PR3404 .M3 1720 ","2008-02-18",,975,812
+"defoe03","DefoeD","The life and adventures of Robinson Crusoe.","1 p.l., [5]-291 p. plates. 22 cm.","London, Harrison and co., 1781.",1781,"PZ1 .N857 PR3403","2006-01-25",,2500,2000
+"dickens01","DickensC","The life and adventures of Nicholas Nickleby","1 v. cm.","Phila., 1839.",1839,"PR4565 .A1 1839a ","2008-12-14",,4500,3600
+"dickens02","DickensC","Oliver Twist; or, The parish boy's progress.","2 p.l., [iii]-v, [5]-186 p. 19 cm.","Philadelphia, Carey, Lea and Blanchard, 1837.",1837,"PZ3.D55 O1c","2008-02-15",,3750,3000
+"dickens03","DickensC","Oliver Twist.","1 v. cm.","Philadelphia, 1839.",1839,"PZ3.D55 Ol5 PR4567","2007-03-24","2007-06-13",3000,2400
+"dickens04","DickensC","Master Humphrey's clock.","v. cm.","Philadelphia, 1841.",1841,"PZ3.D55 Ma2 PR4572","2007-08-03",,850,708
+"dickens05","DickensC","A Christmas carol.","254 p. front., plates. 14 cm.","London, New York [etc.] G. Routledge and sons, limited pref., 1843.",1843,"PZ3.D55 Chr5 PR4572","2008-10-14","2009-09-12",12500,9615
+"dickens06","DickensC","A Christmas carol.","254 p. front., plates. 14 cm.","London, New York [etc.] G. Routledge and sons, limited pref., 1843.",1843,"PZ3.D55 Chr5 PR4572","2007-01-16",,4500,3600
+"dickens07","DickensC","The adventures of Oliver Twist;","p. cm.","London, Pub. for the author, by Bradbury & Evans, 1846.",1846,"PZ3 .D55019 PR4567","2010-12-03",,2795,2236
+"dickens08","DickensC","Little Dorrit.","2 v. illus. 25 cm.","Philadelphia, T. B. Peterson, 1855.",1855,"PR4562 .A1 1850","2008-03-15","2010-03-04",3000,2400
+"dickens09","DickensC","David Copperfield","xiv, 624 p., 39 plates (incl. front.) ; 22 cm.","London : Bradbury & Evans, 1850.",1850,"PR4558 .A1 1850","2010-11-26",,1500,1200
+"dickens10","DickensC","Bleak House...","v. cm.","New York, Harper & bros., 1852.",1852,"PR4556 .A1 1852","2009-09-27",,2750,2200
+"dickens11","DickensC","Hard times.","1 p.l., 108 p. 24 cm.","New York, T. L. McElrath & co., 1854.",1854,"PZ3.D55 H3 PR4561","2010-11-21",,3000,2400
+"dickens12","DickensC","A tale of two cities,","8 nos. in 7. plates. 23 cm.","London, Chapman and Hall, 1859.",1859,"PR4571 .A1 1859a ","2010-01-30",,15000,11538
+"dickens13","DickensC","Great expectations.","1 v. cm.","Philadelphia, 1861.",1861,"PZ3.D55 Gr7 PR4560","2009-11-09",,2500,2000
+"dickens14","DickensC","Our mutual friend.","4 v. fronts., plates. 19 cm.","New York, J. Bradburn, 1864.",1864,"PZ3.D55 Ou2 PR4568","2009-03-29",,2250,1800
+"dost01","DostoyevskyF","The idiot. By Fedor Dostoieffsky. Tr. from the Russian by  Frederick Whishaw.","480 p. 20 cm.","London, Vizetelly & Co.; New York [etc.] Brentano's, 1887.",1887,"PZ3.D742I","2009-09-29","2010-05-17",875,729
+"dost02","DostoyevskyF","Prestuplenie i nakazanie. English","2 p.l., 493 p. 20 cm.","New York, The Macmillan co., [1914]",1914,"PZ3.D742 C4","2010-07-11",,1350,1080
+"doyle01","DoyleA","Adventures of Sherlock Holmes.","307 p.","New York, A.L. Burt company [c1892]",1892,"PZ3.D772 Adv2 PR4622.A7","2010-12-07",,12500,9615
+"doyle02","DoyleA","Adventures of Sherlock Holmes, by A. Conan Doyle ... Illustrated.","4 p. 1., [3]-307 p. front., plates, 20 cm.","New York and London, Harper & brothers, [c1892]",1892,"PZ3.D772 Adv PR4622.A7","2007-07-25",,4950,3960
+"doyle03","DoyleA","Memoirs of Sherlock Holmes.","1 v. cm.","New York, 1894.",1894,"PZ3.D772 Me3 PR4622.M4","2008-11-16",,5250,4200
+"doyle04","DoyleA","Memoirs of Sherlock Holmes, by A. Conan Doyle ... Illustrated.","3 p. l., 259 p. front., plates. 20 cm.","New York, London, Harper & Brothers [c1894]",1894,"PZ3.D772 M2 PR4622.M4","2008-03-16",,850,708
+"doyle05","DoyleA","The hound of the Baskervilles : another adventure of Sherlock Holmes","358 p., [16] leaves of plates : ill. ; 19 cm.","London : George Newnes, 1902.",1902,"PR4622 .H6 1902","2006-09-14","2008-11-04",3250,2600
+"dumas01","DumasA","Comte de Monte-Cristo. English","2 v. 16 cm.","Belfast, Simms and M'Intyre; London, W.S. Orr and Co., 1846.",1846,"PZ3.D89 Cou","2008-02-04",,525,437
+"dumas02","DumasA","Les trois mousquetaires, par Alexandre Dumas.","268 p. 26 cm.","New York, P. Gaillardet, 1846.",1846,"PQ2228 .A1 1846","2006-05-23","2006-11-02",250,208
+"dumas03","DumasA","Trois mousquetaires. English","257 p. 23 cm.","Baltimore, Taylor, Wilde and Company, 1846.",1846,"PQ2228 .A42 1846","2009-12-04","2009-09-09",325,270
+"dumas04","DumasA","The iron hand;","1 p.l., 19-231 p. illus. 23 cm.","Philadelphia, T. B. Peterson & brothers [1858?]",1858,"PZ3.D89 Ih","2010-08-03",,775,645
+"ebronte01","BronteE","Wuthering Heights. A novel.","288 p. 19 cm.","New York, Harper & brothers, 1848.",1848,"PZ3.B7902W PR4172.W7","2010-02-03",,6775,5420
+"eliot01","EliotG","Adam Bede. A novel.","p. cm.","New York, Harper & brothers [1855]",1855,"PZ3.E43 A11 PR4656","2010-12-18","2010-08-18",2500,2000
+"eliot02","EliotG","The mill on the Floss.","189 p. 24 cm.","New York, Harper & bros., 1860.",1860,"PZ3.E43 Mil3 PR4664","2008-09-28","2010-02-06",2250,1800
+"eliot03","EliotG","Silas Marner : the weaver of Raveloe","364 p. ; 21 cm.","Edinburgh : W. Blackwood and Sons, 1861.",1861,"PZ3.E43 Si2 PR4670","2010-01-04","2010-01-04",2100,1680
+"eliot04","EliotG","Romola.","3 v. 19 cm.","London, Smith, Elder and co., 1863.",1863,"PZ3.E43 R2 PR4668","2010-05-13",,975,812
+"eliot05","EliotG","The Spanish gypsy,","3 p.l., 382 p. 18 cm.","Edinburgh and London, 1868.",1868,"PR4666 .S6 1868","2007-02-05","2009-10-07",1350,1080
+"eliot06","EliotG","Daniel Deronda.","v. 52-53. 25 cm.","New York, 1876.",1876,"AP2 .H3 vol. 52-53","2008-04-20",,1575,1260
+"eliot07","EliotG","Middlemarch: a study of provincial life. By George Eliot...","2 v. 19 1/2 cm.","New York, Harper & Brothers, 1876.",1876,"PZ3.E43 Mi5 PR4662","2009-03-08","2010-01-02",1850,1480
+"ferber01","FerberE","Dawn O'Hara, the girl who laughed,","5 p. l., 302 p. col. front. 20 cm.","New York, Frederick A. Stokes company [1911]",1911,"PZ3.F380 D2 PS3511.E46","2007-10-20",,250,208
+"ferber02","FerberE","Show boat; a novel by Edna Ferber.","4 p.l., 398 p. 23 cm.","Garden City, N.Y., Doubleday, Page & company, 1926.",1926,"PS3511.E46 S5 1926","2006-05-07",,375,312
+"ferber03","FerberE","American beauty,","p. cm.","Garden City, N.Y., Doubleday, Doran & company, inc., 1931.",1931,"PS3511.E46 A8 1931 ","2007-07-15",,250,208
+"franklin01","FranklinB","Advice to a young tradesman","[4] p. ; 19 cm. (4to)","[Boston] : Sold [by Benjamin Mecom] at the New Printing-Office, in Boston, 1762.",1762,"HF5386 .F56","2006-05-08",,6350,5080
+"gaskell01","GaskellE","Mary Barton: a tale of Manchester life ...","2 v. cm.","London, Chapman and Hall, 1849.",1849,"PZ3.G212 M2 PR4710.M3","2008-12-28",,725,604
+"gaskell02","GaskellE","North and South.","1 p.l., [5]-154 p. 24 cm.","New York, Harper & brothers, 1855.",1855,"PR4710 .N6 1855","2009-08-18","2010-03-10",1875,1500
+"gaskell03","GaskellE","The life of Charlotte Bronte, by E.C. Gaskell.","2 v. illus., facsims. 20 cm.","London, Smith, Elder, 1857.",1857,"PR4168 .G3 1857","2006-08-02",,850,708
+"gaskell04","GaskellE","Wives and daughters. A novel.","1 p.l., [9]-258 p. front., illus. 24 cm.","New York, Harper & brothers, 1866.",1866,"PZ3.G212W PR4710.W5","2006-06-12",,2250,1800
+"gaskell05","GaskellE","Cranford.","32 p. 33 cm.","New York, G. Munro, 1881.",1881,"PZ1 .S44","2009-03-26",,1250,1000
+"hardy01","HardyT","A pair of blue eyes; a novel by Thomas Hardy ...","1 p. l., 390 p. 17 cm.","New York, H. Holt and company, 1873.",1873,"PZ3.H222 P2 PR4750.P3","2010-11-20",,2750,2200
+"hardy02","HardyT","Under the greenwood tree","30 p. ill. ; 32 cm.","New York : George Munro, [1877?].",1877,"PZ3.H222 Un3 PR4750.U5","2007-03-18",,3125,2500
+"hardy03","HardyT","Far from the madding crowd,","1 p. l., 272 p. 19 cm.","New York. J. W. Lovell company [1887]",1887,"PZ3.H222 F6 PR4745","2009-02-13",,3750,3000
+"hardy04","HardyT","A Laodicean. A novel.","1 p.l., 71 p. 30 cm.","New York, Harper & brothers [1881]",1881,"PZ3.H222 L3 PR4750.L26","2008-01-12","2009-10-26",1825,1460
+"hawthorne01","HawthorneN","Fanshawe, a tale ...","141 p. 20 x 12 cm.","Boston, Marsh & Capen, 1828.",1828,"PS1872 .F3 1828","2008-03-12",,3250,2600
+"hawthorne02","HawthorneN","Twice-told tales.","2 v. 18 cm.","Boston, J. Munroe, 1842.",1842,"PS1870 .A1 1842 ","2006-03-13",,3500,2800
+"hawthorne03","HawthorneN","The scarlet letter, a romance.","iv, 322 p. 19 cm.","Boston, Ticknor, Reed, and Fields, 1850.",1850,"PS1868 .A1 1850","2009-02-17",,3750,3000
+"hawthorne04","HawthorneN","The house of the seven gables, a romance.","1 v. cm.","Breton, 1851.",1851,"PS1861 .A1 1851 ","2010-09-09",,3250,2600
+"hobbes01","HobbesT","Leviathan","394 p. 29 cm.","London, Printed for Andrew Ckooke [i.e. Crooke], at the Green Dragon in St. Pauls Church-yard, 1651.",1651,"JC153 .H65 1651","2008-05-03",,14500,11153
+"hugo01","HugoV","The hunchback of Notre-Dame. With sketch of the life and writings of the author by Frederic Shoberl.","3 p. l., [v]-xiv, 466 p. front. 17 cm.","London: R. Bentley [etc., etc.] 1833.",1833,"PZ3.H875 Hu","2006-12-01","2006-11-28",750,625
+"hugo02","HugoV","The hunchback of Notre-Dame.","2 v. 19 x 11 cm.","Philadelphia, Carey, Lea and Blanchard, 1834.",1834,"PZ3.H875 Hu2","2010-02-06",,500,416
+"hugo03","HugoV","Napoleon the Little.","1 p.l., [9]-246 p. 17 cm.","London, Vizetelly and co. [etc.] 1852.",1852,"DC279 .H882","2009-05-25",,550,458
+"hugo04","HugoV","Les miserables,","1 v. 16 cm.","Paris, Londres [etc.] Nelson [1862]",1862,"PQ2286 .A1 1862a","2010-12-03",,150,125
+"hugo05","HugoV","Les Miserables","5 v. 25 cm.","New York, Carleton, 1862.",1862,"PZ3.H875 Mi","2006-02-28",,375,312
+"irving01","IrvingW","The Alhambra. By Washington Irving ...","3 p. l., [9]-224 p. 19 cm.","New York, A. L. Burt, 1855.",1855,"PS2056 .A1 1800z","2010-05-13",,2175,1740
+"irving02","IrvingW","Salmagundi, or, The Whim-whams and opinions of Lancelot Langstaff, Esq. and others.","2 v. fronts. 15 cm.","New York: Printed & published by D. Longworth, at the Shakespeare-Gallery, 1807-08.",1807,"PS2064 .A1 1807","2006-01-02",,3250,2600
+"irving03","IrvingW","Biographical memoir of Capt-David Porter.","1 v. 21 cm.","[1814]",1814,"E353.1.P7 I7","2008-10-30","2008-03-22",2950,2360
+"irving04","IrvingW","Bracebridge hall;","2 v. 23 cm.","New York, Printed by C. S. Van Winkle, 1822.",1822,"PS2057 .A1 1822 ","2010-08-24","2010-02-17",1835,1468
+"irving05","IrvingW","Letters of Jonathan Oldstyle, gent. ...","1 v. cm.","N.Y., 1824",1824,"PS2072 .L4 1824","2010-05-08","2010-02-03",1150,920
+"irving06","IrvingW","A history of the life and voyages of Christopher Columbus. By Washington Irving ...","4 v. fold. maps. 17 cm.","Paris, A. and W. Galignani, 1828.",1828,"E111 .I726","2008-04-25",,775,645
+"irving07","IrvingW","Abbotsford and Newstead abbey.","p. cm.","London, J. Murray, 1835.",1835,"DA890.A1 I67","2009-08-07",,1050,840
+"irving08","IrvingW","Adventures of Captain Bonneville","2 v. : 2 maps ; 21 cm.","Philadelphia : Carey, Lea, & Blanchard, 1837.",1837,"F592 .I708","2010-08-10","2010-07-10",750,625
+"irving09","IrvingW","The works of Washington Irving.","v. fronts. (v. 1-2, 7, 11, 15-20; v. 17-20: ports.) pl.,","New-York, G. P. Putnam & company, 1853-",1853,"PS2050 .E53","2009-09-19","2009-06-26",3500,2800
+"james01","JamesH","A passionate pilgrim, and other tales.","496 p. 19 cm.","Boston, J. R. Osgood and company, 1875.",1875,"PZ3.J234P PS2116.P3","2007-11-09",,275,229
+"james02","JamesH","Transatlantic sketches. By Henry James, jr.","1 p.l., v-vi, [7]-401 p. 20 cm.","Boston, J.R. Osgood and company, 1875.",1875,"D919 .J28","2006-05-02","2009-12-06",350,291
+"james03","JamesH","The American.","435 p. 19 cm.","London, Ward, Lock & co. [1877]",1877,"PS2116 .A6 1877a","2009-07-30",,375,312
+"james04","JamesH","The Europeans; a sketch. By Henry James, jr.","1 p. l., 281 p. 20 cm.","Boston, Houghton, Osgood and Company, 1879.",1879,"PZ3.J234 Eu PS2116.E8","2006-06-30","2006-01-26",225,187
+"james05","JamesH","Hawthorne, by Henry James, jr.","vi, 183 p. 19 cm.","London, Macmillan and co., 1879.",1879,"PS1881 .J3 1879","2007-07-02",,150,125
+"james06","JamesH","The portrait of a lady.","1 p.l., 520 p. 19 cm.","Boston, New York, Houghton, Mifflin and company, 1882 [1881]",1882,"PZ3.J234 Po2 PS2116.P6","2008-05-03",,125,104
+"james07","JamesH","Washington square, by Henry James, jr. ... illustrated by George Du Maurier.","266 p. incl. front., illus., plates. 17 cm.","New York, Harper & brothers, 1881.",1881,"PZ3.J234W PS2116.W3","2010-04-22",,180,150
+"james08","JamesH","Portraits of places.","4 p.l., 376 p. 20 cm.","Boston, J. R. Osgood and company, 1884.",1884,"D919 .J27 1884","2007-12-21",,225,187
+"james09","JamesH","The reverberator,","2 v. 19 cm.","London and New York, Macmillan and co., 1888.",1888,"PS2116 .R5 1888a","2010-10-29",,195,162
+"james10","JamesH","Theatricals. Two comedies: Tenants. -- Disengaged,","vi p., 1 l., 325 p. 20 cm.","New York, Harper & brothers, 1894.",1894,"PS2111 .E94a","2008-01-04",,75,62
+"james11","JamesH","The other house [a novel]","3 p.l., 3-388 p. 20 cm.","New York, London, The Macmillan company, 1896.",1896,"PZ3.J234 Ot PS2116.O","2006-04-10",,110,91
+"james12","JamesH","In the cage","187 p. ; 20 cm.","London : Duckworth, 1898.",1898,"PS2116 .I5 1898a","2007-03-09","2008-07-15",175,145
+"james13","JamesH","The awkward age, a novel. By Henry James...","3p. l., 3-456 [1]p., 1l. 19 cm.","New York and London, Harper & Brothers Publishers, 1899.",1899,"PZ3.J234 Aw PS2116.A8","2009-07-30",,175,145
+"james14","FlaubertG","Madame Bovary; tr. from the French of Gustave Flaubert, with a critical introduction by Henry James.","xlix, 434, [1] p. front., 3 col. pl., ports. 22 cm.","London, W. Heinemann, 1902.",1902,"PQ2246.M2 E5","2010-01-29",,110,91
+"james15","JamesH","The American scene","vi, 465 p. ; 23 cm.","London : Chapman and Hall, 1907.",1907,"F106 .J26","2009-12-06",,75,62
+"johnson01","JohnsonS","A dictionary of the English language","2 v. 43 cm.","London, Printed by W. Strahan, for J. and P. Knapton [etc.], 1755.",1755,"PE1620 .J6 1755","2010-07-14",,5000,4000
+"johnson02","JohnsonS","A dictionary of the English language","2 v. 21 cm.","London, Printed for W. Strahan [etc.] 1770.",1770,"PE1620 .J6 1770","2006-05-04",,4000,3200
+"kipling01","KiplingR","Departmental ditties and other verses.","[29] leaves ; 27 x 11 cm.","[Lahore : Civil and Military Gazette Press, 1886].",1886,"PR4854 .D6 1886","2008-11-25",,1500,1200
+"kipling02","KiplingR","Plain tales from the hills","xii, 283 p. ; 19 cm.","Calcutta : Thacker, Spink and Co. London : W. Thacker & Co., 1888.",1888,"PR4854 .P6 1888","2007-03-02",,1500,1200
+"kipling03","KiplingR","Fuzzy Wuzzy : (Soudan Expeditionary Force)","[8] p., [1] leaf of plates : port. ; 18 cm.","New York : Alex Grosset & Company, 1895.",1895,"PR4854 .F8 1890z","2010-06-20","2010-06-05",1500,1200
+"kipling04","KiplingR","Wee Willie Winkie, and other child stories","96 p. ; 22 cm.","Allahabad : A.H. Wheeler ; London : Sampson Low, Marston, Searle & Livingston, [1890?]",1890,"PR4854 .W4 1890c","2010-10-03","2010-03-03",1500,1200
+"kipling05","KiplingR","The jungle book","xi, 303 p. : ill. ; 20 cm.","New York : The Century Co., 1894.",1894,"PR4854 .J6 1894b","2007-10-05",,2000,1600
+"kipling06","KiplingR","Captains courageous : a story of the Grand banks","viii, 323 p. : ill. ; 20 cm.","New York : Century Co., 1897.",1897,"PZ3.K629 C2","2009-05-26",,450,375
+"kipling07","KiplingR","Gunga Din","[8] p., [1] leaf of plates : ill. ; 19 cm.","[S.l. : s.n., 1900?]",1900,"PR4854 .G75 1900","2010-05-07",,1500,1200
+"kipling08","KiplingR","Kim","366 p. ; 17 cm.","Leizpig : B. Tauchnitz, 1901.",1901,"PR4854 .K4 1901d","2006-07-07","2007-11-23",1250,1000
+"lewis01","LewisS","Our Mr. Wrenn; the romantic adventures of a gentle man","4 p.l., 253, [1] p. 19 cm.","New York, London, ... 1914.",1914,"PZ3.L5884O PS3523.E9","2010-04-21",,2250,1800
+"lewis02","LewisS","Free air","3 p. l., 3-370 p. 20 cm.","New York, Grosset & Dunlap [1919]",1919,"PZ3.L5884 Fr2 PS3523.E94","2010-08-28",,200,166
+"lewis03","LewisS","Main street","451 p. ; 21 cm.","New York : Harcourt, Brace, c1920.",1920,"PZ3.L5884 Mai2 PS3523.E94","2010-07-23",,3000,2400
+"lewis04","LewisS","Elmer Gantry : a novel","479 p. ; 20 cm.","London : J. Cape, 1927.",1927,"PS3523.E94 E6 1927a","2007-10-27","2007-03-04",3250,2600
+"london01","LondonJ","The son of the wolf : tales of the far North","251 p. : 1 ill. ; 20 cm.","Boston : Houghton, Mifflin, 1900.",1900,"PZ3.L846 So","2007-03-24","2007-01-18",2500,2000
+"london02","LondonJ","Children of the frost, by Jack London...with illustrations by Raphael M. Reay.","261 p. 20 cm.","New York, The Macmillan company, 1902.",1902,"PZ3.L846 Ch PS3523.O46","2006-05-11","2009-11-21",1000,833
+"london03","LondonJ","The call of the wild","2 p.l., 9-231 p. incl. col. illus., col. plates. col.","New York, London, The Macmillan company, 1903.",1903,"PZ3.L846 C2","2009-01-24","2010-01-23",3000,2400
+"london04","LondonJ","The sea-wolf.","1 v. cm.","New York, London, 1904.",1904,"PZ3.L846 Se PS3523.O46","2006-01-23",,300,250
+"longfellow01","LongfellowH","Poems","117 p. ; 23 cm.","New York : Harper and Bros., 1846.",1846,"PS2250 .E46","2006-01-03",,125,104
+"longfellow02","LongfellowH","Voices of the night","xv, 144 p. 19 cm.","Cambridge, J. Owen, 1839.",1839,"PS2270 .A1 1839 ","2009-02-15",,750,625
+"longfellow03","LongfellowH","The waif: a collection of poems ...","xi p., 1 l., 144 p. 18 cm.","Cambridge, Published by John Owen, 1845 [i.e. 1844]",1845,"PR1175 .W255","2007-12-02",,725,604
+"longfellow04","LongfellowH","Evangeline, a tale of Acadie.","163 p. 19 cm.","Boston, William D. Ticknor & company, 1847.",1847,"PS2263 .A1 1847","2010-02-17","2010-02-01",1000,833
+"longfellow05","LongfellowH","The seaside and the fireside.","iv p., 1 l., 141 p. 19 cm.","Boston, Ticknor, Reed, and Fields, 1850.",1850,"PS2266 .A1 1850 ","2008-11-18",,825,687
+"longfellow06","LongfellowH","The golden legend","1 p. l., 301 p. 19 cm.","Boston, Ticknor, Reed, and Fields, 1851.",1851,"PS2260 .A1 1851","2009-07-29",,750,625
+"longfellow07","LongfellowH","The song of Hiawatha.","iv, 316 p. 18 cm.","London, D. Bogue, 1855.",1855,"PS2267 .A1 1855b","2006-02-04",,500,416
+"longfellow08","LongfellowH","Poems.","iv, p., 1 l., [7]-215 p. 19 cm.","Boston, Ticknor and Fields, 1858.",1858,"PS2262 .A1 1858","2008-10-29","2008-09-28",1250,1000
+"longfellow09","LongfellowH","Tales of a wayside inn,","1 p.l., v, 140 p. 17 cm.","London, Routledge, Warne, and Routledge, 1864.",1864,"PS2269 .A1 1864a","2010-04-01",,650,541
+"longfellow10","LongfellowH","The poetical works of Henry Wadsworth Longfellow.","viii. 363 p. 15 cm.","Boston, Ticknor and Fields, 1867.",1867,"PS2250 .E67","2008-09-03",,950,791
+"longfellow11","LongfellowH","Excelsior","[18] leaves : ill. ; 20 cm.","Boston : J. R. Osgood, 1878.",1878,"PS2271 .E8 1878b","2010-11-05",,500,416
+"milton01","MiltonJ","The doctrine and disipline of divorce:","2 p.l., 48 p. 19 cm.","London, Printed by T.P. and M.S., 1643.",1643,"HQ813 .M5 1643","2010-08-02",,275,229
+"milton02","MiltonJ","Paradise lost.","[356] p. 19 cm.","London, / Printed by S. Simmons, and are to be sold by T. Helder at the Angel in Little Brittain., 1669.",1669,"PR3560 1669","2010-12-11",,7500,6000
+"milton03","MiltonJ","Paradise regain'd. A poem. In IV books. To which is added Samson Agonistes.","111, 101 p. 18 cm.","London, Printed by J. M[acock] for J. Starkey, 1671.",1671,"PR3563 1671","2007-09-08","2007-10-14",7250,5800
+"milton04","MiltonJ","The poetical works of Mr John Milton.","5 pt. in 1 v. front  (port.) 12 pl. 33 cm.","London, Printed for J. Tonson, 1695.",1695,"PR3550 .C95","2009-11-14",,9250,7400
+"muir01","MuirJ","Picturesque California and the region west of the Rocky mountains, from Alaska to Mexico.","10 v. illus. (part mounted) plates. 50 x 37 cm.","San Francisco and New York, The J. Dewing company, 1888.",1888,"F851 .M954 ","2007-09-29","2010-05-22",1750,1400
+"muir02","MuirJ","The mountains of California","2 p.l., ix-xiii p., 1 l., 381 p. front., illus. (incl.","New York, The Century co. 1894.",1894,"F866 .M95","2007-08-24",,7500,6000
+"muir03","MuirJ","Our national parks","5 p.l., 370 p. front., plates, map. 21 cm.","Boston, New York, Houghton Mifflin and company, 1901.",1901,"E160 .M95","2007-06-17",,1000,833
+"muir04","MuirJ","In American fields and forests;","xii p., 2 l., [3]-378 p., 1 l. front., 6 pl. 20 cm.","Boston and New York, Houghton Mifflin company, 1909.",1909,"QH81 .I3","2010-07-10",,500,416
+"muir05","MuirJ","Travels in Alaska, by John Muir ....","ix, [1] p., 2 l., 3-326, [4] p. front., plates. 21 cm.","Boston, New York, Houghton Mifflin co., 1915.",1915,"F908 .M95","2009-09-07",,1250,1000
+"paine01","PaineT","Common sense","[6], 54 p. ; 21 cm. (8vo)","[London] : Philadelphia, printed, London, re-printed for J. Almon ..., 1776.",1776,"E211 .P13","2008-05-10","2008-06-07",32500,25000
+"paine02","PaineT","Rights of man.","2 v. cm.","[n.p.] 1791.",1791,"JC177 .B3 1791","2009-07-17",,7500,6000
+"paine03","PaineT","The age of reason.","p. cm.","Philadelphia: Printed, and sold by the booksellers. 1794.",1794,"BL2740 .A2 pt.1 1794p ","2009-09-21",,2250,1800
+"poe01","PoeE","Poems.","124 p. 16 cm.","New York, E. Bliss, 1831.",1831,"PS2605 .A1 1831","2009-11-22","2010-11-17",22500,17307
+"poe02","PoeE","Tales of the grotesque and arabesque","2 v. ; 20 cm.","Philadelphia : Lea and Blanchard, 1840.",1840,"PS2612 .A1 1840","2006-02-14",,25000,19230
+"poe03","PoeE","The raven.","p. 264-267. 20 cm.","New  York, 1845.",1845,"PN4145 .V35 1845 ","2007-04-07","2009-11-18",12500,9615
+"poe04","PoeE","Poems.","xiv p., 1 l., [17]-380 p. front. (port.) plates, facsim. 19","New York, W. J. Widdleton, 1857.",1857,"PS2605 .A1 187","2009-05-17",,7500,6000
+"potter01","PotterB","The tailor of Gloucester","85, [1] p. : col. ill. ; 15 cm.","New York : Frederick Warne & Co., 36 East 22d Street, 1903.",1903,"PZ7.P85 Tai 1903","2006-02-25","2006-06-27",15000,11538
+"potter02","PotterB","The tale of Squirrel Nutkin","[5], 8-84, [2] p. : ill. (some col.) ; 15 cm.","New York : Frederick Warne & Co., 36 East 22d Street, [1903]",1903,"PZ7.P85 Tas 1903","2006-02-09","2007-09-02",3750,3000
+"potter03","PotterB","The tale of Benjamin Bunny","85 p. : col. ill. ; 15 cm.","New York : F. Warne & Co., c1904.",1904,"PZ10.3 .P47","2006-03-03","2006-09-10",5000,4000
+"potter04","PotterB","The tale of Peter Rabbit","First Edition. One of only 250 copies.","Privately printed, December, 1901.",1901,"PZ7.P85 Tap","2007-12-19",,80000,61538
+"potter05","PotterB","The pie and the patty-pan.","51, [1] p. : ill. (some col.) ; 19 cm.","New York : Frederick Warne and Co., 36 East 22d Street, [1905]",1905,"PZ7.P85 Pi 1905","2006-03-17","2008-06-09",5000,4000
+"potter06","PotterB","The tale of Mrs. Tiggy-Winkle","84, [2] p. : ill. (some col.) ; 15 cm.","New York : Frederick Warne & Co., 36 East 22d Street, [1905]",1905,"PZ7.P85 Taki 1905","2009-09-18",,5000,4000
+"potter07","PotterB","The tale of Mr. Jeremy Fisher","85, [1] p. : ill. (some col.) ; 15 cm.","New York : Frederick Warne & Co., 36 East 22d Street, [1906]",1906,"PZ7.P85 Takf 1906","2008-11-03",,2500,2000
+"potter08","PotterB","The tale of Jemima Puddle-Duck","[5], 8-85, [1] p. : ill. (some col.) ; 15 cm.","New York : Frederick Warne & Co., 36 East 22d Street, [1908]",1908,"PZ7.P85 Take 1908","2007-03-13","2009-04-23",4500,3600
+"potter09","PotterB","The tale of Tom Kitten","84, [2] p. : ill. (some col.) ; 15 cm.","New York : Frederick Warne & Co., 36 East 22d Street, [1907]",1907,"PZ7.P85 Tat 1907","2008-01-26",,850,708
+"potter10","PotterB","The tale of Timmy Tiptoes","84 p. : col. ill. ; 14 cm.","New York : Frederick Warne & Co., 12 East 33d Street, c1911.",1911,"PZ7.P85 Taso 1911","2008-04-17",,850,708
+"potter11","PotterB","The tale of Mr. Tod","93 , [1] p. : ill. (some col.) ; 15 cm.","London ; New York : Frederick Warne and Co., 1912.",1912,"PZ10.3.P47 Tam","2007-02-13",,750,625
+"potter12","PotterB","The tale of Pigling Bland, by Beatrix Potter ...","93, [1]  p. incl. col. front., illus., col. plates. 15 cm.","New York, F. Warne & Co. [c1913]",1913,"PZ10.3.P47 Tar2","2009-03-10",,400,333
+"potter13","PotterB","The tale of Johnny Town-mouse","85, [1] p. : col. ill. ; 14 cm.","London and New York : Frederick Warne and Co., [1918]",1918,"PZ7.P85 Takej 1918","2007-02-21","2007-04-23",750,625
+"raleigh01","RaleighW","The history of the world.","2 v. : maps ; 33 cm. (fol.)","At London : Printed for Walter Bvrre, 1614.",1614,"D57 .R183 1614","2010-01-12",,32500,25000
+"scott01","ScottW","Rob Roy.","129 p. 23 cm.","[n.p., 1802]",1802,"PZ3.S43 Ro4 PR5322.R6","2007-11-15",,1650,1320
+"scott02","ScottW","The lay of the last minstrel : a poem.","[8], 319, [3] p. ; 29 cm. (4to)","London: : Printed for Longman, Hurst, Rees, and Orme ... and A. Constable and Co. Edinburgh, by James Ballantyne, Edinburgh., 1805.",1805,"PR5309 .A1","2007-10-29",,625,520
+"scott03","ScottW","Marmion; a tale of Flodden field.","6 p.l., [3]-377, cxxvi p. 21 cm.","Edinburgh, Printed by J. Baillantyne and co. for A. Constable and company; [etc., etc.] 1808.",1808,"PR5311 .A1 1808a ","2010-12-02",,450,375
+"scott04","ScottW","The lady of the lake. A poem.","6 p.l., [3]-433 p. 21 cm.","Edinburgh, J. Ballantyne and co.; [etc., etc.] 1810.",1810,"PR5308 .A1 1810a","2010-09-05",,375,312
+"scott05","ScottW","The vision of Don Roderick: a poem.","136 p. 15 cm.","Philadelphia, A. Finley, 1811.",1811,"PR5313 .V5 1811b ","2010-09-28",,950,791
+"scott06","ScottW","The field of Waterloo; a poem.","48 p. 14 cm.","Philadelphia: Published by M. Thomas, No. 52 Chesnut-Street, Van Winkle & Wiley, Printers, 1815.",1815,"PR5313 .F5 1815","2009-09-10",,375,312
+"scott07","ScottW","Ivanhoe; a romance,","3 v. 19 cm.","Edinburgh, A. Constable and co.; [etc., etc.] 1821.",1821,"PZ3.S43 I3 PR5318","2010-04-01",,125,104
+"scott08","ScottW","The history of Scotland. By Sir Walter Scott, bart.","2 v. 17 cm.","London, Printed for Longman, Brown, Green & Longmans [pref. 1829]",1829,"AC1 .L3 vol. 100-101","2010-03-28","2010-01-18",425,354
+"shakespeare01","ShakespeareW","The Tragicall Historie of Hamlet, Prince of Denmarke.","1 l., [99] p. 21 cm.","At London, Printed by T. R. for N. L. and are to be sold at his shoppe vnder Saint Dunstons Church in Fleetstreet. 1604.",1604,"PR2750 .B07 1859","2006-01-02",,175000,129629
+"shakespeare02","ShakespeareW","Midsummer night's dream","[64] p. ; 18 cm. (4to)","[London] : Printed by Iames Roberts [i.e. William Jaggard for T. Pavier], 1619.",1619,"PR2750 .A27 1619","2010-10-18","2010-04-09",135000,100000
+"shakespeare03","ShakespeareW","Macbeth, a tragedy.","2 p.l., 66 p. 21 cm.","London, Printed for P. Chetwin, 1674.",1674,"PR2823 .A1 1674","2007-05-22",,75000,57692
+"shakespeare04","ShakespeareW","Plays","[18], 303, [1], 100 [i.e. 98], [2], 69-232, [2], 79-80,","London : Printed by Isaac Iaggard and Ed. Blount, 1623.",1623,"PR2751 .A1 1623","2008-02-09",,250000,185185
+"shakespeare05","ShakespeareW","Romeo and Juliet","[92] p. ; 20 cm. (4to)","London : Printed by Thomas Creede for Cuthbert Burby ..., 1599.",1599,"PR2831 .A1 1599","2009-07-17","2010-04-03",225000,166666
+"shakespeare06","ShakespeareW","King Richard II","6 p. l., 51 (i. e. 55), [1] p. 23 cm.","London, Printed for R. Tonson, and J. Tonson, 1681.",1681,"PR2878.K8 T3","2007-08-22",,34500,26538
+"shakespeare07","ShakespeareW","Works. 1709","6 v. fronts., plates. 20 cm.","London, Printed for Jacob Tonson, within Grays-Inn Gate, next Grays-Inn Lane, 1709.",1709,"PR2752 .R8 1709","2006-10-26",,25000,19230
+"shelley01","ShelleyM","Frankenstein; or, The modern Prometheus.","3 v. 19 cm.","London, Printed for Lackington, Hughes, Harding, Mavor, & Jones, 1818.",1818,"PR5397 .F7 1818","2009-11-26",,25000,19230
+"shelley02","ShelleyM","Lodore.","228 p. 20 cm.","New York, Wallis & Newell, 1835.",1835,"PZ3.S545 Lo PR5397","2006-11-04",,3750,3000
+"shelley03","ShelleyM","Falkner. A novel.","1 p.l., [5]-321 p. 20 cm.","New-York, Harper & brothers, 1837.",1837,"PR5397 .F3 1837","2006-01-16",,1500,1200
+"sinclair01","SinclairU","King Midas","388 p. front., plates. 19 cm.","New York and London, Funk & Wagnalls company, 1901.",1901,"PS3537.I85 S75 1901b","2006-10-03","2009-04-19",750,625
+"sinclair02","SinclairU","A captain of industry;","142 p. 20 cm.","Girard, Kan., The Appeal to reason, 1906.",1906,"PS3537.I85 C3 ","2010-07-25",,750,625
+"sinclair03","SinclairU","The jungle","4 p.l., 413 p. 20 cm.","New York, Doubleday, Page & company, 1906.",1906,"PZ3.S616 Ju PS3537.I85","2010-09-13",,8250,6600
+"sinclair04","SinclairU","The metropolis, by Upton Sinclair.","342 p. 19 cm.","London, T.W. Laurie [c1908]",1908,"PS3537.I85 M4 1908b","2010-05-05","2010-01-01",75,62
+"stevenson01","StevensonR","An inland voyage.","x, 237 p. 20 cm.","London, C. K. Paul, 1878.",1878,"PR5488 .I6 1878","2008-02-27",,15000,11538
+"stevenson02","StevensonR","Travels with a donkey in the Cevennes,","2 p.l., [ix]-xii, 227 p. front. 19 cm.","London, C. K. Paul & co., 1879.",1879,"DC611.C424 S74","2008-10-16",,500,416
+"stevenson03","StevensonR","New Arabian nights,","viii, 329 p. 17 cm.","New York, H. Holt and company, 1882.",1882,"PZ3.S848 N2 PR5484.N5","2006-07-24",,8500,6800
+"stevenson04","StevensonR","Treasure Island.","viii, 292, 4 p. map. 20 cm.","London, New York, Cassell, 1883.",1883,"PR5486 .A1 1883 ","2009-05-03",,10000,8000
+"stevenson05","StevensonR","A child's garden of verses.","x, 101 p. 17 cm.","London, Longmans, Green, 1885.",1885,"PR5489 .C51885a ","2007-09-13",,3000,2400
+"stevenson06","StevensonR","Kidnapped : being memoirs of the adventures of David Balfour in the year 1751","viii, 311 p., [1] folded leaf of plates : 1 map ; 20 cm.","[London] : Cassell & Company, Limited, 1886.",1886,"PR5484 .K5 1886","2007-12-19",,2500,2000
+"stevenson07","StevensonR","Strange case of Dr. Jekyll and Mr. Hyde.","141 p. 18 cm.","London, Longmans, Green, 1886.",1886,"PR5485 .A1 1886","2006-11-15",,2850,2280
+"stowe01","StoweH","Uncle Tom's cabin.","xxiii, [1], 391 p. front. (port.) 27 pl. 20 cm.","London, J. Cassell, 1852.",1852,"PS2954 .U5 1852","2006-11-06",,10000,8000
+"stowe02","StoweH","The minister's wooing. By H. Beecher Stowe ... with illustrations by Phiz [pseud.]","2 p. l., 362 p. front., plates. 21 cm.","London, S. Low, son, & co., 1859.",1859,"PS2954 .M5 1859","2009-05-28","2010-03-09",750,625
+"stowe03","StoweH","Little foxes.","2 p.l., [7]-287 p. 19 cm.","Boston, Fields, Osgood, & co., 1869.",1869,"PS2954 .L6 1869","2008-06-14",,750,625
+"swift01","SwiftJ","A tale of a tub.","322 p. 19 cm.","London, J. Nutt, 1704.",1704,"PR3724 .T3 1704 ","2009-01-24","2010-01-11",250,208
+"swift02","SwiftJ","Gulliver's travels","2 v. : 7 plates ; 20 cm.","London : B. Motte, 1726.",1726,"PR3724 .G7 1726b","2010-08-23","2010-06-01",3250,2600
+"tennyson01","TennysonA","Poems.","163 p. 18 cm.","London, E. Moxon, 1833.",1833,"PR5550 .E33 ","2008-10-04",,1000,833
+"tennyson02","TennysonA","Poems.","v. 18 cm.","Boston, W. D. Ticknor, 1842.",1842,"PR5550 .E42","2008-01-19",,750,625
+"tennyson03","TennysonA","The princess; a medley, by Alfred Tennyson.","168 p. 19 cm.","Boston, W. D. Ticknor, 1848.",1848,"PR5571 .A1 1848","2009-08-29",,1200,960
+"tennyson04","TennysonA","Ode on the death of the Duke of Wellington.","16 p. 24 cm.","London, E. Moxon, 1852.",1852,"PR5568 .O3 1852 ","2009-08-18","2010-04-15",1450,1160
+"tennyson05","TennysonA","Idyls of the King. By Alfred Tennyson.","227 p. 19 cm.","Boston, Ticknor and Fields, 1859.",1859,"PR5558.A2 T5 1859","2007-10-29",,500,416
+"tennyson06","TennysonA","Enoch Arden","42 p. plates. 17 cm.","Boston, Ticknor and Fields, 1865.",1865,"PR5556 .A1 1865b","2007-02-18",,350,291
+"tennyson07","TennysonA","Poems of imagination and fancy. By Alfred Tennyson ...","xii, 13-124 p. incl. front. (port.) plates. 20 cm.","Philadelphia, E. H. Butler & Co., 1865.",1865,"PR5550 .E65","2007-12-11",,625,520
+"tennyson08","TennysonA","Guinevere,","3 p.l., 41 p. 9 pl. 42 cm.","New York, G. Routledge ans sons; [London, Swift and co., Regent press] 1868.",1868,"PR5559 .M3 1868","2008-03-30",,500,416
+"tennyson09","TennysonA","The Holy Grail, and other poems. By Alfred Tennyson ...","202 p. 18 cm.","Boston, Fields, Osgood, 1870.",1870,"PR5559 .H5 1870b","2010-12-14",,350,291
+"tennyson10","TennysonA","Poems. 1871","vi, 428 p., [1] leaf of plates : ill., port. ; 19 cm.","Boston : James R. Osgood & Co., 1871.",1871,"PR5550 .E71 1871","2006-09-03",,1500,1200
+"tennyson11","TennysonA","Queen Mary, a drama,","viii, 278 p. 18 cm.","London, Henry S. King & co., 1875.",1875,"PR5572 .Q6 1875 ","2009-03-18",,300,250
+"tennyson12","TennysonA","The lover's tale.","25 p. 32 x 23 cm.","New York, G. Munro, c1879.",1879,"PR5566 .L5 1879a","2010-07-25",,225,187
+"thoreau01","ThoreauH","Walden; or, Life in the woods. By Henry D. Thoreau.","357 p., plan. 18 cm.","Boston, Ticknor and Fields, 1854.",1854,"PS3048 .A1 1854","2010-04-18",,17500,13461
+"thoreau02","ThoreauH","Cape Cod.","3 p.l., 252 p. 18 cm.","Boston, Ticknor and Fields, 1865.",1865,"F72.C3 T37","2006-12-10",,1200,960
+"tolstoy01","TolstoyL","War and peace; a historical novel.","6 v. 17 cm.","New York, W.S. Gottsberger, 1886.",1886,"PZ3.T588W","2008-03-13",,4250,3400
+"tolstoy02","TolstoyL","Ivan Ilyitch, and other stories,","1 p.l., v-xi, 311 p. 20 cm.","New York, T. Y. Crowell & co. [c1887]",1887,"PZ3.T588 Iv","2009-08-21","2010-03-11",3200,2560
+"tolstoy03","TolstoyL","The death of Ivan Iliitch,","1 p. l., [5]-90 p. 20 cm.","New York, G. Munro [1888]",1888,"PZ3.T558D","2007-11-13",,3000,2400
+"trollope01","TrollopeA","Doctor Thorne. A novel. By Anthony Trollope ...","iv, [5]-520 p. 20 cm.","New York, Harper & Brothers, 1858.",1858,"PZ3.T75 D2 PR5684.D58","2008-01-15",,3500,2800
+"trollope02","TrollopeA","Castle Richmond. A novel. By Anthony Trollope.","2 v. 17 cm.","Leipzig, B. Tauchnitz, 1860.",1860,"PZ3.T75 Ca PR5684.C3","2007-12-18",,2750,2200
+"trollope03","TrollopeA","The West Indies and the Spanish Main.","iv, 395 p. front. (map) 22 cm.","London, Chapman & Hall, 1860.",1860,"F1611 .T84","2007-10-18",,125,104
+"trollope04","TrollopeA","Phineas Finn, the Irish member. A novel.","235 p. incl. front. plates. 24 cm.","New York, Harper & brothers, 1868.",1868,"PZ3.T75 P2 PR5684.P39","2006-11-19",,1250,1000
+"trollope05","TrollopeA","The Eustace diamonds.","1 p. l., [9]-351 p. 23 cm.","New York, Harper & brothers, 1873.",1873,"PZ3.T75 E3 PR5684.E7","2007-09-18",,350,291
+"twain01","TwainM","The celebrated jumping frog of Calaveras county, and other sketches","198 p. : ill. ; 18 cm.","New York : C.H. Webb : American News Co., agents, 1867 (New York : John A. Gray & Green)",1867,"PS1322 .C4 1867","2006-08-06",,32500,25000
+"twain02","TwainM","Innocents abroad. Chapters 1-31","246 p. ; 17 cm.","London : George Routledge & Sons, [1872] (London : Bradbury, Agnew & Co.)",1872,"PS1312 .A3 1872","2009-07-04","2009-09-19",12500,9615
+"twain03","TwainM","The adventures of Tom Sawyer,","p. cm.","London, Chatto and Windus, 1876.",1876,"PS1306 .A1 1876a","2007-09-17",,67500,51923
+"twain04","TwainM","Old times on the Mississippi","142, 10 p. ; 17 cm.","London : Ward, Lock, and Tyler, [1877]",1877,"PS1322 .O43 1877","2010-08-18","2010-01-13",2250,1800
+"twain05","TwainM","The prince and the pauper : a tale for young people of all ages","x, 309 p., [26] leaves of plates : ill. ; 20 cm.","New York : Harper & Brothers, c1881.",1881,"PS1316 .A1 1881","2006-03-09","2008-09-26",650,541
+"twain06","TwainM","Life on the Mississippi","547 p. : ill. ; 19 cm.","Montreal : Dawson Bros., 1883.",1883,"F353 .C6458 1883d","2006-06-24",,350,291
+"twain07","TwainM","Adventures of Huckleberry Finn","366 p., [1] leaf of plates : ill., 1 port. ; 22 cm.","New York : Charles L. Webster and Co., 1885, c1884.",1885,"PS1305 .A1 1885","2010-10-10","2010-09-04",3500,2800
+"twain08","TwainM","Mark Twain's library of humor","xxiv, 707 p. : ill. ; 24 cm.","New York : Charles L. Webster & Co., 1888.",1888,"PN6157 .C5 1888","2006-02-16","2010-01-02",1200,960
+"twain09","TwainM","Connecticut Yankee in King Arthur's court","xvi, 525, 32 p. : ill. ; 20 cm.","London : Chatto & Windus, 1889.",1889,"PS1308 .A1 1889a","2010-07-02","2010-06-02",500,416
+"twain10","TwainM","The £1,000,000 bank-note, and other new stories","260, 9 p., [1] leaf of plates : 1 ill. ; 20 cm.","New York : Charles L. Webster & Co., 1893.",1893,"PZ3.C59 On PS1315","2007-07-23",,850,708
+"twain11","TwainM","English as she is taught","28, [1] p. ; 19 cm.","Boston, Mass. : Mutual Book Co., c1900.",1900,"LB3060 .T86 1900","2008-04-01",,250,208
+"verne01","VerneJ","Capitaine de quinze ans. English","ix, 486 p. illus., fold. map. 21 cm.","New York, Scribner, 1836.",1836,"PQ2469.C2 E5 1886 ","2010-10-26",,3750,3000
+"verne02","VerneJ","From the earth to the moon:","84 p. front. cm.","Newark, N.J., Newark printing and publishing co., 1869.",1869,"PZ3.V594 Fro","2010-02-08","2010-02-03",4250,3400
+"verne03","VerneJ","The tour of the world in eighty days, by Jules Verne.","1 p. l., [iii]-vii, [9]-291 p. front. 15 cm.","Boston, J. R. Osgood and company, 1873.",1873,"PZ3.V594 Tou","2009-02-18",,1750,1400
+"verne04","VerneJ","Around the world in eighty days.","p. cm.","Boston, J. R. Osgood, 1874.",1874,"PQ2469.T7 E58 ","2010-06-27","2010-01-25",1000,833
+"verne05","VerneJ","Voyage au centre de la terre. English","305 p. illus. 19 cm.","New York, Scribner, Armstrong & co. [1874]",1874,"PZ3.V594 Sto","2007-06-10",,1650,1320
+"verne06","VerneJ","Twenty thousand leagues under the seas","xii, 303 p. 21 cm.","New York, Douglas & Myers; [etc., etc;] 1874.",1874,"PZ3.V594 Tw","2006-01-01","2008-09-28",1785,1428
+"verne07","VerneJ","The mysterious island.","1 p. l., 110 p. front., illus., map. 25 x 16 cm.","New York, Scribner, Armstrong & co., 1875.",1875,"PZ3.V594 My2","2010-04-07",,825,687
+"wells01","WellsH","The time machine, an invention,","vii, 216 p. 18 cm.","New York, H. Holt and company [c1895]",1895,"PZ3.W465 Ti2 PR5774","2008-12-30",,1500,1200
+"wells02","WellsH","The island of Doctor Moreau,","x, 219, [2] p. front. 20 cm.","London, W. Heinemann, 1896.",1896,"PR5774 .I8 1896 ","2009-03-24",,30000,23076
+"wells03","WellsH","The invisible man, a grotesque romance,","3 p.l., 278, [1] p. 20 cm.","New York and London, Harper & brothers [c1897]",1897,"PZ3.W465 Inv2 PR5774","2009-01-13",,12500,9615
+"wells04","WellsH","The war of the worlds,","6 p.l., 290, [1] p. front. (port.) plates. 20 cm.","New York and London, Harper & brothers [c1898]",1898,"PZ3.W465 Wa2 PR5774","2006-10-13","2006-12-15",3000,2400
+"wells05","WellsH","The first men in the moon, by H.G. Wells ...","vii, 342 p. 12 pl. (incl. front.) 20 cm.","London, G. Newnes, limited, 1901.",1901,"PR5774 .F5 1901","2009-01-19","2010-01-02",25000,19230
+"wharton01","WhartonE","The greater inclination","4 p.l., 254 p. ; 20 cm.","New York : C. Scribner's Sons, 1899.",1899,"PZ3.W555 Gr PS3545.H16","2009-07-02",,3250,2600
+"wharton02","WhartonE","The custom of the country","594 p. ; 21 cm.","New York : C. Scribner's Sons, [19--], c1941.",1941,"PS3545.H16 C8 1900z","2006-08-19",,500,416
+"wharton03","WhartonE","Crucial instances,","4 p. l., 241, [1] p. 19 cm.","New York, C. Scribner's sons, 1901.",1901,"PZ3.W555 Cr PS3545.H16","2009-08-07","2009-03-20",3250,2600
+"wharton04","WhartonE","The valley of decision : a novel","2 v. ; 20 cm.","New York : Charles Scribner's Sons, 1902.",1902,"PS3545.H16 V3 1902","2008-07-28",,3500,2800
+"wharton05","WhartonE","The descent of man, and other stories","4 p.l., 312 p. 20 cm.","New York, C. Scribner's sons, 1904.",1904,"PS3545.H16 D4 1904b","2009-08-09","2010-04-04",4000,3200
+"wharton06","WhartonE","The house of mirth, by Edith Wharton.","3 p.l., 3-516 p. 20 cm.","London : Macmillan and co., limited; New York, The Macmillan company, 1905.",1905,"PZ3.W555 Ho 2 PS3545.H16","2007-01-23",,3750,3000
+"wharton07","WhartonE","The fruit of the tree,","4 p. l., 3-633 p. front., 2 pl. 20 cm.","New York, C. Scribner's sons, 1907.",1907,"PZ3.W555 Fr PS3545.H16","2006-03-29",,3250,2600
+"wharton08","WhartonE","Ethan Frome","195 p. ; 19 cm.","London : Macmillan, 1911.",1911,"PS3545.H16 E7 1911b","2009-10-13","2010-07-13",2500,2000
+"wharton09","WhartonE","The age of innocence","[6], 364, [2] p. (last p. blank) ; 20 cm.","New York ; London : D. Appleton and Company, 1920.",1920,"PZ3.W555 Ag PS3545.H16","2008-10-20","2008-12-20",2500,2000
+"wharton10","WhartonE","Poems. Selections","[8], 51, [4] p. ; 24 cm.","London : Medici Society, 1926 ([London] : Chiswick Press)",1926,"PS3545.H16 A6 1926","2009-10-02",,2250,1800
+"wharton11","WhartonE","The buccaneers","vi, 371, [1] p. ; 20 cm.","New York : D. Appleton-Century Company, 1938.",1938,"PZ3.W555 Bu","2006-02-05","2007-08-08",1500,1200
+"whitman01","WhitmanW","Leaves of grass.","384, [1] p., [1] leaf of plates : 1 port. ; 17 cm.","Brooklyn, New York : [s.n.], 1856.",1856,"PS3201 1856","2008-12-24",,7500,6000
+"whitman02","WhitmanW","Drum-taps","72 p. ; 19 cm.","New-York : [W. Whitman], 1865 ([New York : Peter Eckler])",1865,"PS3211 .A1 1865a","2010-06-06",,3500,2800
+"whitman03","WhitmanW","Poems. Selections","xii, 403 p., [1] leaf of plates : 1 port. ; 18 cm.","London : John Camden Hotten, 1868.",1868,"PS3204 .R67 1868","2007-10-09",,1750,1400
+"wilde01","WildeO","Poems. By Oscar Wilde.","ix, 236 p., 1 l. 19 cm.","London, D. Bogue, 1881.",1881,"PR5814 1881a","2007-05-22",,12500,9615
+"wilde02","WildeO","The picture of Dorian Gray.","vii, 344 p. 20 cm.","London, New York, Ward, Lock [1891]",1891,"PR5819 .A1 1891 ","2010-03-06",,21000,16153
+"wilde03","WildeO","Salome, a tragedy in one act:","5 p.l., 66, [2] p. front., illus., plates. 22 cm.","London, E. Mathews & John Lane; Boston, Copeland & Day, 1894.",1894,"PR5820 .S2 1894 ","2010-06-04",,2000,1600
+"wilde04","WildeO","The ballad of Reading gaol.","4 p. l., 31 numb. l. 23 cm.","London, L. Smithers, 1898.",1898,"PR5818 .B2 1898 ","2006-03-08","2007-12-23",22500,17307
+"wilde05","WildeO","The importance of being Earnest; a trivial comedy for serious people.","151 p. 22 cm.","London, L. Smithers, 1899.",1899,"PR5818 .I4 1899","2010-02-08",,2000,1600
+"woolf01","WoolfV","The voyage out, by Virginia Woolf.","3 p. l., 458 p. 19 cm.","London, Duckworth & Co., 1915.",1915,"PZ3.W884V PR6045.O72","2010-12-22",,3250,2600
+"woolf02","WoolfV","Night and day, by Virginia Woolf ...","2 p. l., 538 p. 20 cm.","London, Duckworth and Company [1919]",1919,"PZ3.W884 Ni PR6045.O72","2009-08-29",,1750,1400
+"woolf03","WoolfV","Jacob's room [by] Virginia Woolf.","290 p. 20 cm.","[London] Published by L. & V. Woolf at the Hogarth Press, 1922.",1922,"PR6045.O72 J3 1922","2009-08-10",,32500,25000
+"faulkner01","FaulknerW","The marble faun","51 p. ; 20 cm.","Boston : The Four Seas Co., 1924.",1924,"PS3511.A86 M3 1924","2008-10-20",,750,585
+"faulkner02","FaulknerW","Mosquitoes","5 p. l., 9-349 p. 19 cm.","New York, Boni and Liveright, 1927.",1927,"PZ3.F272 Mo PS3511.A86","2007-05-07",,425,275
+"faulkner03","FaulknerW","Sanctuary","1 v. 12⁰","New York, 1931.",1931,"PZ3.F272 San3 PS3511.A86","2008-07-15",,235,137
+"faulkner04","FaulknerW","Light in August","2 p. l., 480 p. 21 cm.","[New York] H. Smith & R. Haas, 1932.",1932,"PZ3.F272 Li PS3511.A86","2007-05-08",,330,245
+"faulkner05","FaulknerW","Pylon","vii, 318 p. ; 20 cm.","London : Chatto & Windus, 1935.",1935,"PS3511.A86 P9 1935b","2009-12-28",,175,85
+"steinbeck01","SteinbeckJ","Tortilla flat","vi p., 1 l., 9-316 [1] p. illus. 20 cm.","New York, Covici, Friede [c1935]",1935,"PZ3.S8195 Tor PS3537.T3234","2008-12-19",,375,255
+"steinbeck02","SteinbeckJ","Of mice and men","186 p. 19 cm.","New York, Covici-Friede [c1937]",1937,"PZ3.S8195 Of 3 PS3537.T3234","2007-11-15",,220,169
+"steinbeck03","SteinbeckJ","The red pony","81, [1] p. 26 cm.","New York, Covici-Friede, 1937.",1937,"PS3537.T3234 R4 1937","2007-11-06",,105,75
+"steinbeck04","SteinbeckJ","The grapes of wrath","3 p.l., 3-619 p. 21 cm.","New York, The Viking press [c1939]",1939,"PZ3.S8195 Gr 5 PS3537.T3234","2010-05-28","2011-03-09",142,99
+"steinbeck05","SteinbeckJ","East of Eden.","602 p. 24 cm.","New York, Viking Press, 1952.",1952,"PS3537.T3234 E3 1952","2009-06-14",,85,45
+"steinbeck06","SteinbeckJ","The winter of our discontent.","311 p. 22 cm.","New York, Viking Press, 1961.",1961,"PZ3.S8195 Wi","2010-01-24","2011-01-11",75,45

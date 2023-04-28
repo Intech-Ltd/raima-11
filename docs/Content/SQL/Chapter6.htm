@@ -1,0 +1,157 @@
+<?xml version="1.0" encoding="utf-8"?>
+<!DOCTYPE html PUBLIC "-//W3C//DTD XHTML 1.0 Strict//EN" "http://www.w3.org/TR/xhtml1/DTD/xhtml1-strict.dtd">
+<html xmlns:MadCap="http://www.madcapsoftware.com/Schemas/MadCap.xsd" MadCap:tocPath="SQL API|SQL Language Guide|User's Guide" MadCap:InPreviewMode="false" MadCap:PreloadImages="false" MadCap:RuntimeFileType="Topic" MadCap:TargetType="WebHelp" lang="en-us" xml:lang="en-us" MadCap:PathToHelpSystem="../../" MadCap:HelpSystemFileName="Default.xml" MadCap:SearchType="Stem">
+    <head>
+        <meta http-equiv="Content-Type" content="text/html; charset=utf-8" /><title>Inserting Data into a Database</title>
+        <link rel="icon" type="image/png" href="http://docs.raima.com/favicon.png" />
+        <link href="../SkinSupport/MadCap.css" rel="stylesheet" />
+        <link href="../Resources/Stylesheets/raima.css" rel="stylesheet" />
+        <script src="../SkinSupport/MadCapAll.js" type="text/javascript">
+        </script>
+    </head>
+    <body>
+        <p class="MCWebHelpFramesetLink MCWebHelpFramesetLinkTop" style="display: none;"><a href="../../Default_CSH.htm#SQL/Chapter6.htm" style="">Open topic with navigation</a>
+        </p>
+        <div class="MCBreadcrumbsBox_0"><span class="MCBreadcrumbsPrefix">You are here: </span><a class="MCBreadcrumbsLink" href="../dbRSQL.htm">SQL API</a><span class="MCBreadcrumbsDivider"> &gt; </span><a class="MCBreadcrumbsLink" href="dbSQL.htm">SQL Language Guide</a><span class="MCBreadcrumbsDivider"> &gt; </span><a class="MCBreadcrumbsLink" href="Chapter1.htm">User's Guide</a><span class="MCBreadcrumbsDivider"> &gt; </span><span class="MCBreadcrumbs">Inserting Data into a Database</span>
+        </div>
+        <h1 class="firstHeading"><a MadCap:generatedBookmark="TOC" name="Inserting_Data_into_a_Database"></a>Inserting Data into a Database</h1>
+        <p class="Quotation">"I never guess.  It is a capital mistake to theorize</p>
+        <p class="Quotation">before one has data.  Insensibly one begins to twist</p>
+        <p class="Quotation">facts to suit theories, instead of theories to suit facts".</p>
+        <p class="QuoteAuthor">- Sherlock Holmes</p>
+        <p>In this section you will learn how to put data into an <span class="MyVariablesRSQLName">RDM SQL</span> database. Three methods are available to you for doing this.  The most common is through the <b>insert values</b> statement that stores a single row into a table.  Another is to use the <b>insert select</b> statement that lets you store all of the rows returned from a <b>select</b> statement into a table.  The <b>select</b> retrieves rows from other tables in the same database or in another database but can also retrieve data from a non-SQL data source that you can make available to <span class="MyVariablesRSQLName">RDM SQL</span> through the <b>create virtual table</b> feature.   The third method is through the use of the non-standard <b>import</b> statement.  This statement can insert new rows into a table from data stored in a comma-delimited or XML text file.</p>
+        <p>When making modifications to database content it is vitally important to maintain the logical integrity of the data.  Logical integrity means that all the related rows from multiple tables, as defined by the foreign and primary key relationships in the DDL, always exist.   That means, for example, that for every book stored in the bookshop database the referenced author row exists as do all of its related names, notes, sales and auctions.  Logical integrity is achieved through the use of transactions.  This section will also show you how to use SQL transactions to ensure that the logical integrity of your database remains intact and it is with that subject that we begin.</p>
+        <h2><a MadCap:generatedBookmark="TOC" name="Transactions"></a>Transactions</h2>
+        <p>It is very important that any database management system (DBMS) ensures that the data that is stored in a database satisfies the ACID criteria: Atomicity, Consistency, Isolation, and Durability.  Atomicity means that a set of interrelated database modifications all be made together at the same time.  If one modification from the set fails then all fail.   Consistency means that a database never contains errant data or relationships and that a transaction always transforms the database from one consistent state into another.  Consistency is something that is primarily the responsibility of the application because the database cannot be certain that all of the necessary modifications have been properly included in any given transaction.  In <span class="MyVariablesRSQLName">RDM SQL</span>,  consistency rules are specified through the foreign and primary key declarations and <span class="MyVariablesRSQLName">RDM SQL</span> does ensure that those relationships are consistent.  Isolation means that the changes that are being made during a transaction are only visible to the user (program task) making them.  Not until the transaction's changes have been committed to the database are other users (tasks) able to see them.   Durability refers to the DBMS's ability to ensure that the changes made by all transactions that have committed survive any kind of system failure.</p>
+        <p>The work necessary to ensure that a DBMS supports "ACIDicity" makes it among the most complex of all system software components.  The challenge being to maintain ACIDicity and yet allow the database data to be easily accessed by as many users as possible, as fast as possible.  However, there is an unavoidable and severe negative performance impact caused by the need to maintain an ACID compliant database.   When enforcement of these properties is relaxed, data can be updated and accessed much more quickly but the consistency and integrity of the data will certainly be impaired should a system failure occur.</p>
+        <p>Three statements are used for transaction processing.  The <b>start transaction</b> statement does just that.  The <b>commit</b> statement will write to the database all of the changes made since the last <b>start transaction</b>.  The <b>rollback</b> statement will undo all of the changes made since the last <b>start transaction</b>.  The syntax for each of these statements is shown below.</p><pre class="Grammar" xml:space="preserve">start_stmt:
+		{<b>start trans</b>[<b>action</b>] |&#160;<b>begin</b> [<b>work</b>] [<b>trans</b>[<b>action</b>]]} [<b>read only</b>]</pre><pre class="Grammar" xml:space="preserve">commit_stmt:
+		{<b>commit</b> [<b>work</b>] |&#160;<b>end</b> [<b>trans</b>[<b>action</b>]]}</pre><pre class="Grammar" xml:space="preserve">release_stmt:
+		<b>release savepoint</b>   <![CDATA[ ]]><i>savepoint_id</i>]</pre><pre class="Grammar" xml:space="preserve">rollback_stmt:
+		<b>rollback</b> [<b>work</b>] [[<b>to savepoint</b>] <i>savepoint_id</i>]</pre>
+        <p>If no <b>start transaction</b> statement has been executed prior to the execution of an <b>insert</b>, <b>update</b>, or <b>delete</b> statement, the system will automatically start a transaction for you.</p>
+        <p>The <b>read only transaction</b> was described in detail in the <a href="Chapter5.htm">Retrieving Data from a Database</a> section.   Examples showing how to use transactions with the <b>insert</b> statement are provided in the following sections.</p>
+        <h2><a MadCap:generatedBookmark="TOC" name="Insert_Values"></a>Insert Values</h2>
+        <p>The insert values statement is used to insert a new row into a table.  Its syntax is as shown in the box below.</p><pre class="Grammar" xml:space="preserve">insert_values_stmt:
+ 		<b>insert into</b> [<i>db_name</i>.]<i>table_name</i> [( <i>column_name</i>[, <i>column_name</i>]... )]
+		<b>values</b> simple_expr[, simple_expr]...
+
+simple_expr:
+ 		simple_operand [+ | - | * | / | % | simple_operand]…
+	|	( simple_expr )
+
+simple_operand:
+ 		<i>constant</i> | <i>column_name</i> | arg_name | ? | scalar_fcn
+
+scalar_fcn:
+		numeric_function | datetime_function | string_function | system_function
+ 	|	<i>udf_name</i> ([simple_expr][, simple_expr]...)</pre>
+        <p>The <b>insert values</b> statement is used to insert a single row into the table <code>table_name</code>.  If a <code>column_name</code> list is specified it must include every column which requires that a value be specified (a primary key column or one which does not have a default value but does have a not null declared).  For each column, there must be a value specified in the same corresponding position in the values list.   If no <code>column_name</code> list is specified then there must be a value listed for each column declared in the table in the order in which the columns were declared in the <b>create table</b> statement for <code>table_name</code>.</p>
+        <p>The values specified in the values list will usually simply be a constant of a data type that is compatible with the data type of its corresponding column.  However, simple expressions can be used and besides constant values can include a reference to another column value in the list (<code>column_name</code>) , parameter marker references (designated by a "?") or, if the <b>insert</b> statement is contained within a <b>create procedure</b> statement, procedure argument names (<code>arg_name</code>).    Expressions can also include calls to the built-in SQL functions or to a user-defined function.  Use of functions will be described in detail in the <a href="Chapter5.htm">Changing and Deleting Data in a Database</a> section and in the <a href="Chapter12.htm">User-Defined Functions (UDFs) in SQL</a> section.   The arithmetic operations that are supported include the usual addition (+), subtraction (-), multiplication (*), and division (/) as well as modulo (%).  If a values list entry includes a <code>column_name</code> it must reference another column in the table and the values list entry for that column cannot itself include a <code>column_name</code> reference.</p>
+        <p>Here are some example <b>insert</b> statements:</p><pre xml:space="preserve">start transaction;
+insert into author values "DescartesR", "Descartes, Rene", "M", 1596, 1650,
+    "French philosopher, mathematician, physicist, and writer";
+insert into book values "descartes01", "DescartesR", "Principia philosophiae", 
+ 	"12 p.l., 310 p. illus., diagrs. 21 cm.", 
+ 	"Amstelodami, apud Ludovicum Elzevirium", 
+ 	1644, "B1860  1644", date "2010-09-22", null, 1.20*cost, 12750.0;
+insert into related_name values "descartes01", "Lessing J. Rosenwald Collection";
+insert into related_name values "descartes01", "John Davis Batchelder Collection";
+insert into note(noteid, bookid) values nextnote(), "descartes01";
+insert into note_line values thisnote(), "Title vignette: device of Louis Elzevir.";
+insert into note_line values thisnote(), "Last preliminary leaf (sig. b[4]) blank.";
+commit;</pre>
+        <p>There are several things to notice from this example.  The first is the presence of the start transaction and commit statements that enclose the seven insert statements.   As was discussed in the last section, since all of the data being inserted into the database is interrelated, by placing it inside a single transaction unit, the system guarantees that either all of the data will be reliability stored in the database or, in the event of a system failure during the transaction, none of it will.   If each insert statement was individually committed then, should a failure occur, some of the data would be missing.  Therefore, it is always best to enclose all related database modification statements (i.e., <b>insert</b>, <b>update</b>, and <b>delete</b>) in a transaction.</p>
+        <p>The value associated with the price column in the second <b>insert</b> statement (i.e., the next to last entry in the values list) is an expression that references the cost column (the last entry in the list).   In this example, the asking price for the book is calculated as a 20% markup over the cost of the book.</p>
+        <p>The final three <b>insert</b> statements illustrate how <span class="MyVariablesProductShortName">RDM</span> user-defined functions (UDF) can be used to implement an "auto-increment" integer primary key.   UDFs will be explained in detail in the <a href="Chapter12.htm">User-Defined Functions (UDFs) in SQL</a> section but here all you need to know is that the call to <code>nextnote()</code> returns the next higher <code>noteid</code> value and the call to <code>thisnote()</code> returns the current value (i.e., that just returned by <code>nextnote()</code> when the previous insert statement was executed).   This allows the foreign key value for column <code>noteid</code> in table <code>note_line</code> to reference the note row that was just entered.</p>
+        <h2><a MadCap:generatedBookmark="TOC" name="Insert_From_Select"></a>Insert From Select</h2>
+        <p>You can also insert new rows into a table from another table using insert from <b>select</b> statement.  The syntax for the insert from <b>select</b> statement is given below.  The <b>select</b> statement was described in detail in the <a href="Chapter5.htm">Retrieving Data from a Database</a> section and its use with the <b>insert</b> statement will show the basics of how the two can be used together.</p><pre class="Grammar">insert_select_stmt:
+ 		<b>insert into</b> <![CDATA[ ]]><i>table_name</i> [( <i>column_name</i>[, <i>column_name</i>]... )]
+		<b>from</b> select_stmt</pre>
+        <p>The number of result columns returned from the <code>select_stmt</code> must equal the number of columns specified in the <code>colum_name</code> list or, if not specified, the number of columns declared in the table.  The data type of each result column must also be compatible with its corresponding table column.</p>
+        <p>The following example uses the weather sensor database example discussed in the <a href="Chapter4.htm">Defining a Database</a> section.  The <b>select</b> statement retrieves data from the various weather sensors and stores the results in the <code>weather_summary</code> table.  It uses the limit clause to specify that the data is to be accumulated and summarized every 60 minutes.   Even though only the SQL statements are shown, the execution of the statement would be performed inside a loop in the application program.  One row per longitude and latitude, date, and hour of the day is stored in the <code>weather_summary</code> table.  Note that the execution time for this statement is one hour.</p><pre xml:space="preserve">insert into weather_summary from 
+ 	select loc_long, loc_lat, curdate(), hour(rdg_time)
+ 		avg(temperature), avg(pressure), avg(humidity), avg(light) from weather_data
+ 		group by 1, 2, 3, 4 limit(60 mins);</pre>
+        <h2><a MadCap:generatedBookmark="TOC" name="Import"></a>Import</h2>
+        <p>Data from non-database sources that are contained in text files can be loaded into a database table by using the <b>import</b> statement as shown in the syntax specification below.</p><pre class="Grammar" xml:space="preserve">import_stmt:
+ 		<b>import into</b>     <![CDATA[ ]]><i>table_name</i>     <![CDATA[ ]]><b>from</b> [<b>char</b> | <b>wchar</b> | <b>xml</b>] <b>file</b> "<i>filename</i>"</pre>
+        <p>The data must either be stored in a comma-delimited or XML format.  A comma-delimited format requires that each column value be specified in the order in which the columns are declared in the table.  Absence of a column value is indicated by a blank or empty entry (e.g., ",,").   Specify <b>wchar</b> if the text is stored with wide-characters.</p>
+        <p>The following statements are used to load the sample data contained in comma-delimited text files into bookshop example database.</p><pre xml:space="preserve">import into author from file "authors.txt";
+import into book from file "books.txt";
+import into genres from file "genres.txt";
+import into subjects from file "subjects.txt";
+import into related_name from file "names.txt";
+import into genres_books from file "bookgens.txt";
+import into subjects_books from file "booksubs.txt";
+import into acctmgr from file "acctmgrs.txt";
+import into patron from file "patrons.txt";
+import into note from file "bnotes.txt";
+import into note_line from file "bnotelines.txt";
+import into note from file "pnotes.txt";
+import into note_line from file "pnotelines.txt";
+import into sale from file "sales.txt";
+import into auction from file "auctions.txt";</pre>
+        <p>In XML format the column values are identified using XML attributes or tags to identify the column name with which the tagged value is associated.  The columns can be in any order but all necessary columns must be included (i.e., columns declared as not null without a default value or which are declared as a  primary or unique key).   Each row is bracketed between pairs of <code>&lt;ROW&gt;</code> and <code>&lt;/ROW&gt;</code> tags.  For each row column values are specified between pairs of <code>&lt;column_name&gt;</code> and <code>&lt;/column_name&gt;</code> tags.  The file begins with a <code>&lt;RAIMA-SQL&gt;</code> tag and ends with a <code>&lt;/RAIMA-SQL&gt;</code> tag.   A portion of file sponsors.xml which can be used to load the sponsor table in the <i>nsfawards</i> database is shown below.</p><pre xml:space="preserve">&lt;RAIMA-SQL&gt;
+ 	...
+    &lt;ROW&gt;
+        &lt;name&gt;UNAVCO, Inc.&lt;/name&gt;
+        &lt;addr&gt;3360 Mitchell Lane&lt;/addr&gt;
+        &lt;city&gt;Boulder&lt;/city&gt;
+        &lt;state&gt;CO&lt;/state&gt;
+        &lt;zip&gt;80301&lt;/zip&gt;
+    &lt;/ROW&gt;
+    &lt;ROW&gt;
+        &lt;name&gt;UNIAX Corporation&lt;/name&gt;
+        &lt;addr&gt;6780 Cortona Drive&lt;/addr&gt;
+        &lt;city&gt;Santa Barbara&lt;/city&gt;
+        &lt;state&gt;CA&lt;/state&gt;
+        &lt;zip&gt;93117&lt;/zip&gt;
+    &lt;/ROW&gt;
+    &lt;ROW&gt;
+        &lt;name&gt;UNIVERSITY OF MICHIGAN&lt;/name&gt;
+        &lt;addr&gt;2455 Hayward Street&lt;/addr&gt;
+        &lt;city&gt;Ann Arbor&lt;/city&gt;
+        &lt;state&gt;MI&lt;/state&gt;
+        &lt;zip&gt;48109&lt;/zip&gt;
+    &lt;/ROW&gt;
+    &lt;ROW&gt;
+        &lt;name&gt;UNIVERSITY OF WISCONSIN MA&lt;/name&gt;
+        &lt;addr&gt;&lt;/addr&gt;
+        &lt;city&gt;&lt;/city&gt;
+        &lt;state&gt;  &lt;/state&gt;
+        &lt;zip&gt;  /  &lt;/zip&gt;
+    &lt;/ROW&gt;
+    &lt;ROW&gt;
+        &lt;name&gt;UNT Hlth Sci Ctr at Fort W&lt;/name&gt;
+        &lt;addr&gt;Camp Bowie at Montgomery&lt;/addr&gt;
+        &lt;city&gt;Fort Worth&lt;/city&gt;
+        &lt;state&gt;TX&lt;/state&gt;
+        &lt;zip&gt;76107&lt;/zip&gt;
+    &lt;/ROW&gt;
+    &lt;ROW&gt;
+        &lt;name&gt;URS Group, Inc.&lt;/name&gt;
+        &lt;addr&gt;566 El Dorado Street - 2nd Floor&lt;/addr&gt;
+        &lt;city&gt;Pasadena&lt;/city&gt;
+        &lt;state&gt;CA&lt;/state&gt;
+        &lt;zip&gt;91101&lt;/zip&gt;
+    &lt;/ROW&gt;
+    &lt;ROW&gt;
+        &lt;name&gt;US Army Corps of Engineers&lt;/name&gt;
+        &lt;addr&gt;Transatlantic Programs Center&lt;/addr&gt;
+        &lt;city&gt;Winchester&lt;/city&gt;
+        &lt;state&gt;VA&lt;/state&gt;
+        &lt;zip&gt;22601&lt;/zip&gt;
+    &lt;/ROW&gt;
+ 	...
+&lt;/RAIMA-SQL&gt;</pre>
+        <p>The following statement loads the sponsor table in the <i>nsfawards</i> database from the above file.</p><pre xml:space="preserve">import into sponsor from xml file "sponsors.xml";</pre>
+        <hr MadCap:conditions="Default.ScreenOnly" width="100%" size="0" align="center" />
+        <p MadCap:conditions="Default.ScreenOnly" style="font-size: 8pt;"><span class="MyVariablesCopyright">Copyright © 2012, Raima Inc. All rights reserved.</span>
+        </p>
+        <script type="text/javascript" src="../SkinSupport/MadCapBodyEnd.js">
+        </script>
+        <p class="MCWebHelpFramesetLink MCWebHelpFramesetLinkBottom" style="display: none;"><a href="../../Default_CSH.htm#SQL/Chapter6.htm" style="">Open topic with navigation</a>
+        </p>
+    </body>
+</html>

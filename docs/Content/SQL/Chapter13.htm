@@ -1,0 +1,846 @@
+<?xml version="1.0" encoding="utf-8"?>
+<!DOCTYPE html PUBLIC "-//W3C//DTD XHTML 1.0 Strict//EN" "http://www.w3.org/TR/xhtml1/DTD/xhtml1-strict.dtd">
+<html xmlns:MadCap="http://www.madcapsoftware.com/Schemas/MadCap.xsd" MadCap:tocPath="SQL API|SQL Language Guide|User's Guide" MadCap:InPreviewMode="false" MadCap:PreloadImages="false" MadCap:RuntimeFileType="Topic" MadCap:TargetType="WebHelp" lang="en-us" xml:lang="en-us" MadCap:PathToHelpSystem="../../" MadCap:HelpSystemFileName="Default.xml" MadCap:SearchType="Stem">
+    <head>
+        <meta http-equiv="Content-Type" content="text/html; charset=utf-8" /><title>Using Virtual Tables to Access Any Data</title>
+        <link rel="icon" type="image/png" href="http://docs.raima.com/favicon.png" />
+        <link href="../SkinSupport/MadCap.css" rel="stylesheet" />
+        <link href="../Resources/TableStyles/fncSummary.css" rel="stylesheet" />
+        <link href="../Resources/TableStyles/BasicTwoCol.css" rel="stylesheet" />
+        <link href="../Resources/TableStyles/ParamStruct.css" rel="stylesheet" />
+        <link href="../Resources/Stylesheets/raima.css" rel="stylesheet" />
+        <script src="../SkinSupport/MadCapAll.js" type="text/javascript">
+        </script>
+    </head>
+    <body>
+        <p class="MCWebHelpFramesetLink MCWebHelpFramesetLinkTop" style="display: none;"><a href="../../Default_CSH.htm#SQL/Chapter13.htm" style="">Open topic with navigation</a>
+        </p>
+        <div class="MCBreadcrumbsBox_0"><span class="MCBreadcrumbsPrefix">You are here: </span><a class="MCBreadcrumbsLink" href="../dbRSQL.htm">SQL API</a><span class="MCBreadcrumbsDivider"> &gt; </span><a class="MCBreadcrumbsLink" href="dbSQL.htm">SQL Language Guide</a><span class="MCBreadcrumbsDivider"> &gt; </span><a class="MCBreadcrumbsLink" href="Chapter1.htm">User's Guide</a><span class="MCBreadcrumbsDivider"> &gt; </span><span class="MCBreadcrumbs">Using Virtual Tables to Access Any Data</span>
+        </div>
+        <h1><a MadCap:generatedBookmark="TOC" name="Using_Virtual_Tables_to_Access_Any_Data"></a>Using Virtual Tables to Access Any Data</h1>
+        <p class="Quotation">'Virtual Reality' is a name being slapped on</p>
+        <p class="Quotation">almost anything these days, especially if it's lame.</p>
+        <p class="QuoteAuthor">- Mark Hamilton</p>
+        <p>A <i>virtual table</i> provides the ability to present any kind of data to SQL as a table.  .  It is important to recognize that virtual tables do not behave like standard database tables.  <span class="MyVariablesRSQLName">RDM SQL</span> does not lock a virtual table.  Virtual tables are not transactional—you cannot commit or rollback an insert statement.  The data in a virtual table is not necessarily persistent.  A virtual table's implementation of an insert statement may not actually store a new "row" into the table but might actually be used to simply provide data that is used to control an embedded device.  Some virtual tables may have an unlimited number of rows as in, for example, a virtual table that returns the status data from sensors in an embedded system that varies over time.  The virtual table implementation described in this section is quite basic supporting only  <b>insert</b> and <b>select</b> statements yet that is sufficient to allow you to interface SQL with just about any kind of non-SQL data from your embedded systems application. </p>
+        <p>A virtual table is defined through a combination of the <b>create virtual table</b> DDL statement and a set of user-written C functions that conform to a pre-defined function call interface specification.  A pointer to a pre-defined structure array that contains an entry for each virtual table with the addresses of each of the virtual table interface functions is passed into SQL before the database is opened by calling the <code>rsqlRegisterVirtualTables</code> function.  The virtual table interface functions are then called by SQL at the appropriate times during the execution of any SQL statement that references the virtual table.  This interaction is depicted in the figure below which shows SQL calling the function in the application's virtual table function module to fetch a row of weather data from a wireless sensor network (WSN).</p>
+        <p class="Caption">
+            <img src="../Resources/Images/vtoperation.png" />
+            <br />Figure 1. Virtual Table Operation</p>
+        <p>This section will show you how to develop a virtual table implementation through the use of a simple example.   Virtual tables are defined using the <b>create virtual table</b> SQL DDL statement described in the <a href="Chapter4.htm">Defining a Database</a> section and implemented in a C program module that conforms to a pre-defined API that will be called by the SQL runtime system in order to process any <b>insert</b> (or <b>import</b>) and <b>select</b> statements that access the virtual table (note that at the present time <b>update</b> and <b>delete</b> statements are not allowed on a virtual table).  The example virtual table is defined as follows in the vtabs example database DDL specification (file <code>vtabs.sql</code>).</p><pre xml:space="preserve">create database vtabs;
+create table stdtab(
+    pkey integer primary key,
+    name char(24) key,
+    addr char(32),
+    city char(24),
+    state char(2),
+    zip char(10)
+);
+create virtual table virtab(
+    pkey integer primary key,
+    name char(24),
+    addr char(32),
+    city char(24),
+    state char(2),
+    zip char(10)
+);
+</pre>
+        <p>Note that two identical tables are defined except for the defined keys.  One is a standard table and one is a virtual table.  A database must contain at least one standard table.  Of course, it is not required that you have an identical standard table for each virtual table. The purpose of the example is to demonstrate how easy it is to load a standard table from a virtual table using the <b>insert into table from select</b> statement.</p>
+        <h2><a MadCap:generatedBookmark="TOC" name="Virtual_Table_Load_Table_Definition_and_Registration"></a><a name="Virtual"></a>Virtual Table Load Table Definition and Registration</h2>
+        <p>A virtual table implementation consists of the six C functions described in the table below.</p>
+        <table style="mc-table-style: url('../Resources/TableStyles/BasicTwoCol.css');margin-left: 0;margin-right: auto;" class="TableStyle-BasicTwoCol" cellspacing="0">
+            <caption>Table 1. Virtual Table Implementation Functions</caption>
+            <col class="Column-Column1" style="width: 14%;" />
+            <col class="Column-Column2" style="width: 43%;" />
+            <col class="Column-Column1" style="width: 43%;" />
+            <thead>
+                <tr class="Head-Header1">
+                    <th class="HeadE-Column1-Header1">Function Entry</th>
+                    <th class="HeadE-Column2-Header1">Description</th>
+                    <th class="HeadD-Column1-Header1">When Called by SQL</th>
+                </tr>
+            </thead>
+            <tbody>
+                <tr class="Body-Body1">
+                    <td class="BodyE-Column1-Body1" style="font-family: monospace;">vtInsert</td>
+                    <td class="BodyE-Column2-Body1">Executes an <b>insert</b> statement which "inserts" the specified data values.</td>
+                    <td class="BodyD-Column1-Body1">When SQL <b>insert</b> statement is executed (<code>rsqlExecute</code>). Can be <code>NULL</code>.</td>
+                </tr>
+                <tr class="Body-Body1">
+                    <td class="BodyE-Column1-Body1" style="font-family: monospace;">vtRowCount</td>
+                    <td class="BodyE-Column2-Body1">Returns an estimate of the current number of rows contained in the virtual table.</td>
+                    <td class="BodyD-Column1-Body1">When SQL statement is compiled (<code>rsqlPrepare</code>).</td>
+                </tr>
+                <tr class="Body-Body1">
+                    <td class="BodyE-Column1-Body1" style="font-family: monospace;">vtSelectCount</td>
+                    <td class="BodyE-Column2-Body1">Returns the actual current number of rows contained in the virtual table.</td>
+                    <td class="BodyD-Column1-Body1">When "select count(*)" is executed on the virtual table.</td>
+                </tr>
+                <tr class="Body-Body1">
+                    <td class="BodyE-Column1-Body1" style="font-family: monospace;">vtSelectOpen</td>
+                    <td class="BodyE-Column2-Body1">Executes a <b>select</b> statement which performs any needed initialization for subsequent calls to <code>vtFetch</code>.</td>
+                    <td class="BodyD-Column1-Body1">When SQL <b>select</b> statement is executed (<code>rsqlExecute</code>).</td>
+                </tr>
+                <tr class="Body-Body1">
+                    <td class="BodyE-Column1-Body1" style="font-family: monospace;">vtFetch</td>
+                    <td class="BodyE-Column2-Body1">Fetches the next row in the virtual table.</td>
+                    <td class="BodyD-Column1-Body1">When <code>rsqlFetch</code> is called.</td>
+                </tr>
+                <tr class="Body-Body1">
+                    <td class="BodyB-Column1-Body1" style="font-family: monospace;">vtSelectClose</td>
+                    <td class="BodyB-Column2-Body1">Performs any needed cleanup—e.g., to free any memory allocated by the <code>vtSelectOpen</code> or <code>vtFetch</code> functions.</td>
+                    <td class="BodyA-Column1-Body1">When <b>select</b> execution completes (e.g., when the cursor is closed). Can be <code>NULL</code>.</td>
+                </tr>
+            </tbody>
+        </table>
+        <p>The entry points for these functions are provided through a virtual table load table that is passed from your application to the <span class="MyVariablesRSQLName">RDM SQL</span> system by calling function <code>rsqlRegisterVirtualTables</code> before processing any SQL&#160;statements that reference a virtual table.  This table is an array of type <code>VTLOADTABLE</code> defined in header file <code>rsqltypes.h</code> (automatically included with header file <code>rsql.h</code>) and shown below.</p><pre xml:space="preserve">typedef struct vtfloadtable {
+    char           vtName[NAMELEN];  /* name of the virtual table */
+    PVTINSERT      vtInsert;         /* ptr to INSERT execution function */
+    PVTROWCOUNT    vtRowCount;       /* ptr to row count est. function*/
+    PVTSELECTCOUNT vtSelectCount;    /* ptr to actual row count function */
+    PVTSELECTOPEN  vtSelectOpen;     /* ptr to SELECT init function */
+    PVTFETCH       vtFetch;          /* ptr to fetch next row function */
+    PVTSELECTCLOSE vtSelectClose;    /* ptr to SELECT term function */
+} VTFLOADTABLE;
+</pre>
+        <p>The first field in the table, <code>vtName</code>, is a char string containing the name of the virtual table and must be the same as that specified in its corresponding <b>create virtual table</b> statement (case insensitive).  The remaining fields in <code>VTLOADTABLE</code> contain pointers to the functions that implement the virtual table.  Each of the six implementation functions must conform to its prototype definition given in header file <code>rsqltypes.h</code> as follows.</p><pre xml:space="preserve">typedef RSQL_ERRCODE (EXTERNAL_FCN VTINSERT)(  /* <i>vtInsert</i>() */
+    HSTMT        hstmt,        /* in:  statement handle */
+    uint16_t     nocols,       /* in:  no. of ref'd columns */
+    VCOL_INFO   *colsvals,     /* in:  array of ref'd column value containers */
+    void        *pRegCtx)      /* in:  ptr to user's registration context */</pre><pre xml:space="preserve">
+typedef RSQL_ERRCODE (EXTERNAL_FCN VTROWCOUNT)(  /* <i>vtRowCount</i>() */
+    HSTMT        hstmt,        /* in:  statement handle */
+    void        *pRegCtx,      /* in:  ptr to user's registration context */
+    uint64_t    *pNoRows)      /* out: ptr to row count value */</pre><pre xml:space="preserve">
+typedef RSQL_ERRCODE (EXTERNAL_FCN VTSELECTCOUNT)(  /* <i>vtSelectCount</i>() */
+    HSTMT        hstmt,        /* in:  statement handle */
+    void        *pRegCtx,      /* in:  ptr to user's registration context */
+    void        *pFetchCtx,    /* in:  ptr to fetch context */
+    uint64_t    *pNoRows)      /* out: ptr to row count value */</pre><pre xml:space="preserve">
+typedef RSQL_ERRCODE (EXTERNAL_FCN VTSELECTOPEN)(  /* <i>vtSelectOpen</i>() */
+    HSTMT        hstmt,        /* in:  statement handle */
+    uint16_t     nocols,       /* in:  no. of ref'd columns */
+    VCOL_INFO   *colsvals,     /* in:  array of ref'd column value containers */
+    void        *pRegCtx,      /* in:  ptr to registration context */
+    void        *pFetchCtx,    /* in:  ptr to fetch context */
+    RSQL_VALUE  *pkeyval)      /* in:  ptr to primary key value */</pre><pre xml:space="preserve">typedef RSQL_ERRCODE (EXTERNAL_FCN VTFETCH)(  /* <i>vtFetch</i>() */
+    HSTMT        hstmt,        /* in:  statement handle */
+    uint16_t     nocols,       /* in:  no. of ref'd columns */
+    VCOL_INFO   *colsvals,     /* in:  array of ref'd column value containers */
+    void        *pRegCtx,      /* in:  ptr to registration context */
+    void        *pFetchCtx)    /* in:  ptr to fetch context */</pre><pre xml:space="preserve">
+typedef void (EXTERNAL_FCN VTSELECTCLOSE)(  /* <i>vtSelectClose</i>() */  
+    HSTMT        hstmt,        /* in:  statement handle */
+    void        *pRegCtx,      /* in:  ptr to registration context */
+    void        *pFetchCtx)    /* in:  ptr to fetch context */
+</pre>
+        <p>The function names are italicized to indicate that they can be named whatever you like.   Note that the first argument to each function is a statement handle.  This is the statement handle of the SQL statement that contains the reference to the virtual table.  In general you do not need to use this argument.  If the implementation of your virtual table needs to make calls to the <span class="MyVariablesRSQLName">RDM SQL</span> functions you can use the statement handle to retrieve its associated connection handle by calling <code>rsqlGetConnHandle</code> which can then be used to call <code>rsqlAllocStmt</code> to allocate a new statement handle that could be used by the virtual table implementation functions.</p>
+        <p>The code snippet below is from the example virtual table C module <code>vtabfcns.c</code> (contained in the <code>GettingStarted\examples\sqlVT</code> directory) and shows the definition of the <code>VTLOADTABLE</code> for the <code>virtab</code> table.</p><pre xml:space="preserve">static VTINSERT      vtInsert;
+static VTROWCOUNT    vtRowCount;
+static VTSELECTCOUNT vtSelectCount;
+static VTSELECTOPEN  vtSelectOpen;
+static VTFETCH       vtFetch;
+ 
+const VTFLOADTABLE vtFcnTable[] = {
+    {"virtab",vtInsert,vtRowCount,vtSelectCount,vtSelectOpen,vtFetch,NULL}
+};
+const size_t vtFetchSz = sizeof(VTAB_CTX);
+</pre>
+        <p><span class="MyVariablesRSQLName">RDM SQL</span> is informed about the existence of these functions by the application through a call to function <code>rsqlRegisterVirtualTables</code> which must occur before opening the database in which they are declared.   The code snippet below shows how this is done.</p><pre xml:space="preserve">
+            <b>extern const UDFLOADTABLE vtFcnTable[];
+extern const size_t vtFetchSz;</b>
+
+MyApplication() 
+{
+	HCONN hdbc;
+
+	if ( rsqlAllocConn(&amp;hdbc) == errSUCCESS ) {
+		<b>rsqlRegisterVirtualTables(hdbc, "vtabs", 1, vtFcnTable, NULL, vtFetchSz);</b>
+		if ( rsqlOpenDB(hdbc, "vtabs", "s") != errSUCCESS ) 
+ 	...
+}
+</pre>
+        <p>Six arguments are passed to <code>rsqlRegisterVirtualTables</code>: the connection handle, the name of the database containing the declarations of the virtual tables, the number of virtual tables in the load table, the address of the virtual table load table, a pointer to a user registration context data area (which can be <code>NULL</code> if unnecessary)), and the maximum size that is needed for the fetch context data area.  The prototype for <code>rsqlRegisterVirtualTables</code> is given below.</p><pre xml:space="preserve">RSQL_ERRCODE EXTERNAL_FCN rsqlRegisterVirtualTables(
+    HCONN               hConn,     /* in:  connection handle */
+    const char         *dbname,    /* in:  name of db */
+    uint16_t            novts,     /* in:  number of virtual tables */
+    const VTFLOADTABLE *vtftab,    /* in:  ptr to VTF load table */
+    void               *pRegCtx,    /* in:  ptr to user's registration context */
+    const size_t        szFetchCtx) /* in:  size of fetch context to be alloc'd */</pre>
+        <p>The <code>pRegCtx</code> can be used by the application program to allocate the space for the data to be manipulated by the virtual table interface in order for the interface functions to operate reentrantly without having to use the synchronization functions described in the next section.  Of course, this only works when the data to be accessed does not need to be shared by multiple connections in which case the technique described in the next section must still be used.  The <code>pRegCtx</code> pointer is passed all of the virtual table functions by the <span class="MyVariablesRSQLName">RDM SQL</span> engine. If no registration context is needed the <code>pRegCtx</code> should be NULL.</p>
+        <p>The <code>szFetchCtx</code> needs to be set to the largest fetch context data area used for all the virtual tables  in database <code>dbname</code>.  This space will be automatically allocated by the <span class="MyVariablesRSQLName">RDM SQL</span> engine and passed to the execution-time functions (all but <code>vtRowCount</code>) through the <code>pFetchCtx</code> argument.  If no context is needed then <code>szFetchCtx</code> should be 0.</p>
+        <h2><a MadCap:generatedBookmark="TOC" name="Thread-safe_Access_to_Global_Data_Used_by_a_Virtual_Table_Interface"></a>Thread-safe Access to Global Data Used by a Virtual Table Interface</h2>
+        <p>The virtual table example provided in this section stores its data in a global table.  As such, access to that data needs to be done in a safe manner when used in multi-threaded applications.  <span class="MyVariablesProductShortName">RDM</span>'s platform support package (PSP) includes a set of synchronization functions that can be used to serialize access to the shared data.  These functions are described in the table below.</p>
+        <table style="margin-left: 0;margin-right: auto;mc-table-style: url('../Resources/TableStyles/fncSummary.css');" class="TableStyle-fncSummary" cellspacing="0">
+            <caption>Table 2. <span class="MyVariablesProductShortName">RDM</span> PSP Synchronization Functions</caption>
+            <col class="Column-Column1" style="width: 20%;">
+            </col>
+            <col class="Column-Column2" style="width: 80%;">
+            </col>
+            <thead>
+                <tr class="Head-Header1">
+                    <th class="HeadE-Column1-Header1">Function</th>
+                    <th class="HeadD-Column2-Header1">Description</th>
+                </tr>
+            </thead>
+            <tbody>
+                <tr class="Body-Body1">
+                    <td class="BodyE-Column1-Body1" style="font-family: monospace;">psp_enterCritSec</td>
+                    <td class="BodyD-Column2-Body1">Enter a process-wide critical section.  This function blocks execution of all other threads running in the application's process except the calling one until <code>psp_exitCritSec</code> is called.</td>
+                </tr>
+                <tr class="Body-Body1">
+                    <td class="BodyE-Column1-Body1" style="font-family: monospace;">psp_exitCritSec</td>
+                    <td class="BodyD-Column2-Body1">Exits the critical section started by the last call to <code>psp_enterCritSec</code> allowing other threads to execute.</td>
+                </tr>
+                <tr class="Body-Body1">
+                    <td class="BodyE-Column1-Body1" style="font-family: monospace;">psp_syncCreate</td>
+                    <td class="BodyD-Column2-Body1">Creates a semaphore that can be used with <code>psp_syncEnterExcl</code> to serialize access to the shared data that is to be protected by that semaphore.</td>
+                </tr>
+                <tr class="Body-Body1">
+                    <td class="BodyE-Column1-Body1" style="font-family: monospace;">psp_syncEnterExcl</td>
+                    <td class="BodyD-Column2-Body1">Enter exclusive, one-thread-at-a-time access controlled by the specified semaphore.  The calling thread will block until all other threads that have already called <code>psp_syncEnterExcl</code> on that semaphore have exited.</td>
+                </tr>
+                <tr class="Body-Body1">
+                    <td class="BodyB-Column1-Body1" style="font-family: monospace;">psp_syncExitExcl</td>
+                    <td class="BodyA-Column2-Body1">Exits the exclusive access section controlled by the specified semaphore.</td>
+                </tr>
+            </tbody>
+        </table>
+        <p>The shared data used by the <code>virtab</code> table interface is declared in module <code>vtabfcns.c</code> and is shown below.</p><pre xml:space="preserve">struct virtab {
+    int32_t    pkey;
+    char       name[25];
+    char       addr[33];
+    char       city[24];
+    char       state[3];
+    char       zip[10];
+    int8_t     is_null[6];
+};
+
+static PSP_SEM         vtsem = NO_PSP_SEM;
+static const uint32_t  maxrows = 1000;
+static struct virtab  *vtrows = NULL;
+static uint32_t        norows = 0;
+</pre>
+        <p>The <code>PSP_SEM</code> variable <code>vtsem</code> is the semaphore that will be used to serialize access to the <code>vtrows</code> array and the <code>norows</code> variable.  The two functions that are included in the <code>vtabfcns.c</code> module that encapsulate the calls to the PSP synchronization functions are shown below.</p><pre xml:space="preserve"> 1  /* ========================================================================
+ 2     Enter serialized access to vtrows data 
+ 3  */
+ 4  static void vtEnter()
+ 5  {
+ 6      if ( vtsem == NO_PSP_SEM ) {
+ 7          psp_enterCritSec();
+ 8          if ( vtsem == NO_PSP_SEM )
+ 9              vtsem = psp_syncCreate(PSP_MUTEX_SEM);
+10          psp_exitCritSec();
+11      }
+12      psp_syncEnterExcl(vtsem);
+13  }
+14 
+15  /* ========================================================================
+16      Exit serialized access to vtrows data 
+17  */
+18  static void vtExit()
+19  {
+20      psp_syncExitExcl(vtsem);
+21  }
+</pre>
+        <p>Note that the call to <code>psp_enterCritSec</code> at line 7 will only be called once and that the recheck of the vtsem value at line 8 is a common method to guard against one thread having created the <code>vtsem</code> semaphore between another thread's execution at line 6 and its successful return from the call at line 7.  The call to <code>psp_syncEnterExcl</code> at line 12 will serialize access to the shared data.  Hence, the virtual functions will call <code>vtEnter()</code> before accessing <code>vtrows</code> and/or <code>norows</code> and then call <code>vtExit()</code> when the needed access is finished.</p>
+        <h2><a MadCap:generatedBookmark="TOC" name="Virtual_Table_Execution_Function:_vtInsert"></a>Virtual Table Execution Function: <i>vtInsert</i><a name="kanchor216"></a></h2>
+        <p>This function is called by SQL to execute the SQL <b>insert</b> statement that references the virtual table.  Four arguments are passed into the <code>vtInsert</code> function as described in the following table.</p>
+        <table style="mc-table-style: url('../Resources/TableStyles/ParamStruct.css');margin-left: 0;margin-right: auto;" class="TableStyle-ParamStruct" cellspacing="0">
+            <caption>Table 3. Function vtInsert Argument Descriptions</caption>
+            <col class="Column-Column1" />
+            <col class="Column-Column2" />
+            <col class="Column-Column3" />
+            <thead>
+                <tr class="Head-Header1">
+                    <th class="HeadE-Column1-Header1">Argument</th>
+                    <th class="HeadE-Column2-Header1">Type</th>
+                    <th class="HeadD-Column3-Header1">Description</th>
+                </tr>
+            </thead>
+            <tbody>
+                <tr class="Body-Body1">
+                    <td class="BodyE-Column1-Body1">hStmt</td>
+                    <td class="BodyE-Column2-Body1">HSTMT</td>
+                    <td class="BodyD-Column3-Body1">Statement handle of SQL statement containing the virtual table reference.</td>
+                </tr>
+                <tr class="Body-Body1">
+                    <td class="BodyE-Column1-Body1">nocols</td>
+                    <td class="BodyE-Column2-Body1">uint16_t</td>
+                    <td class="BodyD-Column3-Body1">Number of referenced columns (size of <code>colsvals</code> array).</td>
+                </tr>
+                <tr class="Body-Body1">
+                    <td class="BodyE-Column1-Body1">colsvals</td>
+                    <td class="BodyE-Column2-Body1">VCOL_INFO *</td>
+                    <td class="BodyD-Column3-Body1">Array of referenced column value containers.</td>
+                </tr>
+                <tr class="Body-Body1">
+                    <td class="BodyB-Column1-Body1">pRegCtx</td>
+                    <td class="BodyB-Column2-Body1">void *</td>
+                    <td class="BodyA-Column3-Body1">Pointer to the user program allocated context data area that was originally passed in through the call to <code>rsqlRegisterVirtualTables</code>.</td>
+                </tr>
+            </tbody>
+        </table>
+        <p>Each entry of the <code>colsvals</code> array contains information about a virtual table column that is referenced in the SQL statement.  This information is contained in the <code>VCOL_INFO struct</code> type whose fields are described in the following table.</p>
+        <table style="mc-table-style: url('../Resources/TableStyles/ParamStruct.css');margin-left: 0;margin-right: auto;" class="TableStyle-ParamStruct" cellspacing="0">
+            <caption>Table 4. VCOL_INFO Description</caption>
+            <col class="Column-Column1" />
+            <col class="Column-Column2" />
+            <col class="Column-Column3" />
+            <thead>
+                <tr class="Head-Header1">
+                    <th class="HeadE-Column1-Header1">Field Name</th>
+                    <th class="HeadE-Column2-Header1">Data Type</th>
+                    <th class="HeadD-Column3-Header1">Description</th>
+                </tr>
+            </thead>
+            <tbody>
+                <tr class="Body-Body1">
+                    <td class="BodyE-Column1-Body1">colno</td>
+                    <td class="BodyE-Column2-Body1">int16_t</td>
+                    <td class="BodyD-Column3-Body1">Ordinal position of column in table declaration: 0 (first column) to # of columns in table – 1 (last column).</td>
+                </tr>
+                <tr class="Body-Body1">
+                    <td class="BodyE-Column1-Body1">len</td>
+                    <td class="BodyE-Column2-Body1">uint32_t</td>
+                    <td class="BodyD-Column3-Body1">Column length in bytes.</td>
+                </tr>
+                <tr class="Body-Body1">
+                    <td class="BodyE-Column1-Body1">is_null</td>
+                    <td class="BodyE-Column2-Body1">int16_t *</td>
+                    <td class="BodyD-Column3-Body1">Pointer to variable containing the null indicator flag: *is_null = 0 =&gt; not null, *is_null = 1 =&gt; is null.</td>
+                </tr>
+                <tr class="Body-Body1">
+                    <td class="BodyB-Column1-Body1">data</td>
+                    <td class="BodyB-Column2-Body1">void *</td>
+                    <td class="BodyA-Column3-Body1">Pointer to the buffer containing the column value.</td>
+                </tr>
+            </tbody>
+        </table>
+        <p>Note that the <code>is_null</code> field is a pointer to the <code>int16_t</code> variable that is used by SQL system to indicate that a column value is null.  By assigning this through the pointer it eliminates the need for the SQL system to perform an extra loop through the <code>colsvals</code> array.</p>
+        <p>The values contained in the <code>colsvals</code> array are those specified in the <b>values</b> clause of the associated <b>insert</b> statement.  The <code>vtInsert</code> implementation for the <code>virtab</code> table is given below.</p><pre xml:space="preserve"> 1	/* ========================================================================
+ 2	    Virtual table INSERT execution function 
+ 3	*/
+ 4	static RSQL_ERRCODE EXTERNAL_FCN vtInsert(  /* vtInsert() */
+ 5	    HSTMT        hstmt,        /* in:  statement handle */
+ 6	    uint16_t     nocols,       /* in:  no. of ref'd columns */
+ 7	    VCOL_INFO   *colsvals,     /* in:  array of ref'd column value containers */
+ 8	    void        *pRegCtx)      /* in:  unused */
+ 9	{
+10	  int32_t      lv;
+11	  uint32_t     rowno;
+12	  int16_t      pkno = -1;
+13	  RSQL_ERRCODE stat = errSUCCESS;
+14
+15	  UNREF_PARM(hstmt)
+16	  UNREF_PARM(pRegCtx)
+17	  
+18	  vtEnter();
+19	  
+20	  if ( !vtrows ) {
+21	      /* allocate virtab data area */
+22	      vtrows = calloc(maxrows, sizeof(struct virtab));
+23	  }
+24	  /* locate specified primary key value, if any */
+25	  for (pkno = 0; pkno &lt; nocols; ++pkno) {
+26	      if ( colsvals[pkno].colno == 0 ) {
+27	          /* locate row with matching primary key */
+28	          memcpy(&amp;lv, colsvals[pkno].data, sizeof(int32_t));
+29	          for ( rowno = 0; rowno &lt; norows; ++rowno ) {
+30	              if ( vtrows[rowno].pkey == lv ) {
+31	                  vtExit();
+32	                  return errDUPLICATE;
+33	              }
+34	          }
+35	      }
+36	  }
+37	  stat = vtStoreRow(norows, nocols, colsvals); 
+38	  if ( stat == errSUCCESS )
+39	      ++norows;
+40	    
+41	    vtExit();
+42	    
+43	    return stat;
+44	}
+</pre>
+        <p>The <code>colsvals</code> array contains the values of the table columns to be inserted.   The <code>nocols</code> argument specifies the number of entries in the <code>colsvals</code> array which could be less than the number of columns declared in the table.</p>
+        <p>Since the <code>virtab</code> table has a primary key, the function needs to locate the primary key value in the <code>colsvals</code> array so that its uniqueness can be checked.   This is work is done at lines 24 to 36.   Since the primary key is declared on the first column of the table, its value is located in the <code>colsvals</code> entry that has <code>colno</code> equal to 0 (line 26).   Once found, the value is copied into the local <code>int32_t</code> variable <code>lv</code>.  If a matching row is found the function returns status <code>errDUPLICATE</code> indicate that an attempt was made to insert a row with a duplicate primary key value (lines  30-33).</p>
+        <p>If no duplicate is found, function <code>vtStoreRow</code> (shown below) is called to add the new row to the <code>vtrows</code> array.</p><pre xml:space="preserve"> 1	/* ========================================================================
+ 2	    Store column values in specified row (0 = first row)
+ 3	*/
+ 4	static RSQL_ERRCODE vtStoreRow(
+ 5	    uint32_t         rowno,    /* in: row number into which store col vals */
+ 6	    uint16_t         nocols,   /* in: no. of ref'd columns */
+ 7	    const VCOL_INFO *colsvals) /* in: array of ref'd column value containers 	*/
+ 8	{
+ 9	    uint16_t         cno;
+10	    const VCOL_INFO *pCol;
+11	    struct virtab   *pRow;
+12	    
+13	    if ( rowno &gt;= maxrows )
+14	        return errVTSPACE;
+15	        
+16	    pRow = &amp;vtrows[rowno];
+17	    
+18	    for (pCol = colsvals, cno = 0; cno &lt; nocols; ++cno, ++pCol ) {
+19	        if ( *pCol-&gt;is_null )
+20	            pRow-&gt;is_null[pCol-&gt;colno] = 1;
+21	        else {
+22	            pRow-&gt;is_null[pCol-&gt;colno] = 0;
+23	            switch (pCol-&gt;colno) {
+24	                case 0: memcpy(&amp;pRow-&gt;pkey, pCol-&gt;data, sizeof(int32_t)); break;
+25	                case 1: strncpy(pRow-&gt;name,  (char *)pCol-&gt;data, 24);     break;
+26	                case 2: strncpy(pRow-&gt;addr,  (char *)pCol-&gt;data, 32);     break;
+27	                case 3: strncpy(pRow-&gt;city,  (char *)pCol-&gt;data, 24);     break;
+28	                case 4: strncpy(pRow-&gt;state, (char *)pCol-&gt;data, 2);      break;
+29	                case 5: strncpy(pRow-&gt;zip,   (char *)pCol-&gt;data, 9);      break;
+30	            } /*lint !e744 */
+31	        }
+32	    }
+33	    return errSUCCESS;
+34	}
+</pre>
+        <p>The <code>rowno</code> argument is index into <code>vtrows</code> into which the row will be stored. The <code>pRow</code> pointer (assigned at line 16) is simply used to derefence that row in the code which follows.  Lines 18-32 loop through the <code>colsvals</code> array in order to assign the values for each individual column into its field in the <code>vtrows struct</code> array entry.  It is important to note that the table column number is not <code>cno</code> but <code>pCol-&gt;colno</code> (lines 20, 22, and 23).   Also note that in this example the <code>len</code> field of <code>VCOL_INFO</code> is not used but it could (should!) have been used to, for example, check for a possible truncation (i.e., where <code>pCol-&gt;len</code> is greater than the declared size of the column).</p>
+        <h2 class="newpage"><a MadCap:generatedBookmark="TOC" name="Virtual_Table_Row_Count_Function:_vtRowCount"></a>Virtual Table Row Count Function: <i>vtRowCount</i><a name="kanchor217"></a></h2>
+        <p>This function is called by SQL during compilation of a SQL <b>select</b> statement that contains a reference to the virtual table in order to fetch an estimate of the number of rows in the table. Three arguments are passed into the <code>vtRowCount</code> function as described in the following table.</p>
+        <table style="mc-table-style: url('../Resources/TableStyles/ParamStruct.css');margin-left: 0;margin-right: auto;" class="TableStyle-ParamStruct" cellspacing="0">
+            <caption>Table 5. Function vtRowCount Argument Descriptions</caption>
+            <col class="Column-Column1" />
+            <col class="Column-Column2" />
+            <col class="Column-Column3" />
+            <thead>
+                <tr class="Head-Header1">
+                    <th class="HeadE-Column1-Header1">Argument</th>
+                    <th class="HeadE-Column2-Header1">Type</th>
+                    <th class="HeadD-Column3-Header1">Description</th>
+                </tr>
+            </thead>
+            <tbody>
+                <tr class="Body-Body1">
+                    <td class="BodyE-Column1-Body1">hStmt</td>
+                    <td class="BodyE-Column2-Body1">HSTMT</td>
+                    <td class="BodyD-Column3-Body1">Statement handle of SQL statement containing the virtual table reference.</td>
+                </tr>
+                <tr class="Body-Body1">
+                    <td class="BodyE-Column1-Body1">pRegCtx</td>
+                    <td class="BodyE-Column2-Body1">void *</td>
+                    <td class="BodyD-Column3-Body1">Pointer to the user program allocated registration context data area that was originally passed in through the call to <code>rsqlRegisterVirtualTables</code>.</td>
+                </tr>
+                <tr class="Body-Body1">
+                    <td class="BodyB-Column1-Body1">pNoRows</td>
+                    <td class="BodyB-Column2-Body1">uint64_t *</td>
+                    <td class="BodyA-Column3-Body1">Pointer to the output variable into which the estimate of the number of rows in the table is to be returned.</td>
+                </tr>
+            </tbody>
+        </table>
+        <p>The <code>vtRowCount</code> implementation for the <code>virtab</code> table is provided below.</p><pre xml:space="preserve">/* ========================================================================
+    Virtual table row count function 
+*/
+static void EXTERNAL_FCN vtRowCount(  /* vtRowCount() */
+    HSTMT            hstmt,   /* in:  statement handle */
+    void            *pRegCtx, /* in:&#160;&#160;unused */
+    uint64_t        *pNoRows) /* out:  ptr to row count value */
+{
+    UNREF_PARM(hstmt)
+    UNREF_PARM(pRegCtx)
+
+    vtEnter();
+    *pNoRows = (uint64_t)norows;
+    vtExit();
+}
+</pre>
+        <p>The <code>UNREF_PARM</code> macro is provided in <span class="MyVariablesProductShortName">RDM</span> to indicate that a particular argument is unused and to avoid the associated compiler warning.  Note the necessary absence of the terminating semi-colon (";").</p>
+        <p>Here you can clearly see how access to the <code>norows</code> variable is protected by the bracketing calls to functions <code>vtEnter</code> and <code>vtExit</code>.</p>
+        <p>If an exact row count value cannot be determined at compilation time then the <code>vtRowCount</code> function should return an estimate of the number of rows.  It does not have to be an exact value.</p>
+        <h2><a MadCap:generatedBookmark="TOC" name="Virtual_Table_Row_Count_Function:_vtSelectCount"></a>Virtual Table Row Count Function: <i>vtSelectCount</i><a name="kanchor218"></a></h2>
+        <p>This function is only called by SQL during execution of a SQL "<b>select count(*) from</b> <![CDATA[ ]]><i>virtab</i>" statement in order to fetch the actual number of rows in the table. Four arguments are passed into the <code>vtRowCount</code> function as described in the following table.</p>
+        <table style="mc-table-style: url('../Resources/TableStyles/ParamStruct.css');margin-left: 0;margin-right: auto;" class="TableStyle-ParamStruct" cellspacing="0">
+            <caption>Table 6. Function vtSelectCount Argument Descriptions</caption>
+            <col class="Column-Column1" />
+            <col class="Column-Column2" />
+            <col class="Column-Column3" />
+            <thead>
+                <tr class="Head-Header1">
+                    <th class="HeadE-Column1-Header1">Argument</th>
+                    <th class="HeadE-Column2-Header1">Type</th>
+                    <th class="HeadD-Column3-Header1">Description</th>
+                </tr>
+            </thead>
+            <tbody>
+                <tr class="Body-Body1">
+                    <td class="BodyE-Column1-Body1">hStmt</td>
+                    <td class="BodyE-Column2-Body1">HSTMT</td>
+                    <td class="BodyD-Column3-Body1">Statement handle of SQL statement containing the virtual table reference.</td>
+                </tr>
+                <tr class="Body-Body1">
+                    <td class="BodyE-Column1-Body1">pRegCtx</td>
+                    <td class="BodyE-Column2-Body1">void *</td>
+                    <td class="BodyD-Column3-Body1">Pointer to the user program allocated registration context data area that was originally passed in through the call to rsqlRegisterVirtualTables.</td>
+                </tr>
+                <tr class="Body-Body1">
+                    <td class="BodyE-Column1-Body1">pFCtx</td>
+                    <td class="BodyE-Column2-Body1">void *</td>
+                    <td class="BodyD-Column3-Body1">Pointer to the fetch context data area.</td>
+                </tr>
+                <tr class="Body-Body1">
+                    <td class="BodyB-Column1-Body1">pNoRows</td>
+                    <td class="BodyB-Column2-Body1">uint64_t *</td>
+                    <td class="BodyA-Column3-Body1">Pointer to the output variable into which the number of rows in the table is to be returned.</td>
+                </tr>
+            </tbody>
+        </table>
+        <p>The <code>vtSelectCount</code> implementation for the <code>virtab</code> table is almost identical to the <code>vtRowCount</code> and is provided below.</p><pre xml:space="preserve">/* ========================================================================
+    Virtual table select count function 
+*/
+static void EXTERNAL_FCN vtSelectCount(  /* vtSelectCount() */
+    HSTMT            hstmt,   /* in:  statement handle */
+    void            *pRegCtx, /* in:  unused */
+    void            *pFCtx,   /* in:  fetch context pointer */
+    uint64_t        *pNoRows) /* out: ptr to row count value */
+{
+    UNREF_PARM(hstmt)
+    UNREF_PARM(pRegCtx)
+    UNREF_PARM(pFCtx)
+
+    vtEnter();
+    *pNoRows = (uint64_t)norows;
+    vtExit();
+}
+</pre>
+        <p>If an exact row count value cannot be determined at compilation time then the <code>vtRowCount</code> function should return an estimate of the number of rows.  It does not have to be an exact value.</p>
+        <h2 class="newpage"><a MadCap:generatedBookmark="TOC" name="Virtual_Table_Select_Open_Function:_vtSelectOpen"></a>Virtual Table Select Open Function: <i>vtSelectOpen</i><a name="kanchor219"></a></h2>
+        <p>This function is called by SQL to initialize execution of the SQL <b>select</b> statement that references the virtual table.  Six arguments are passed into the <code>vtSelectOpen</code> function as described in the following table.</p>
+        <table style="mc-table-style: url('../Resources/TableStyles/ParamStruct.css');margin-left: 0;margin-right: auto;" class="TableStyle-ParamStruct" cellspacing="0">
+            <caption>Table 7. Function vtSelectOpen Argument Descriptions</caption>
+            <col class="Column-Column1" />
+            <col class="Column-Column2" />
+            <col class="Column-Column3" />
+            <thead>
+                <tr class="Head-Header1">
+                    <th class="HeadE-Column1-Header1">Argument</th>
+                    <th class="HeadE-Column2-Header1">Type</th>
+                    <th class="HeadD-Column3-Header1">Description</th>
+                </tr>
+            </thead>
+            <tbody>
+                <tr class="Body-Body1">
+                    <td class="BodyE-Column1-Body1">hStmt</td>
+                    <td class="BodyE-Column2-Body1">HSTMT</td>
+                    <td class="BodyD-Column3-Body1">Statement handle of SQL statement containing the virtual table reference.</td>
+                </tr>
+                <tr class="Body-Body1">
+                    <td class="BodyE-Column1-Body1">nocols</td>
+                    <td class="BodyE-Column2-Body1">uint16_t</td>
+                    <td class="BodyD-Column3-Body1">Number of referenced columns (size of <code>colsvals</code> array).</td>
+                </tr>
+                <tr class="Body-Body1">
+                    <td class="BodyE-Column1-Body1">colsvals</td>
+                    <td class="BodyE-Column2-Body1">VCOL_INFO *</td>
+                    <td class="BodyD-Column3-Body1">Array of referenced column value containers.</td>
+                </tr>
+                <tr class="Body-Body1">
+                    <td class="BodyE-Column1-Body1">pRegCtx</td>
+                    <td class="BodyE-Column2-Body1">void *</td>
+                    <td class="BodyD-Column3-Body1">Pointer to the user program allocated context data area that was originally passed in through the call to <code>rsqlRegisterVirtualTables</code>.</td>
+                </tr>
+                <tr class="Body-Body1">
+                    <td class="BodyE-Column1-Body1">pFCtx</td>
+                    <td class="BodyE-Column2-Body1">void *</td>
+                    <td class="BodyD-Column3-Body1">Pointer to the fetch context data area.</td>
+                </tr>
+                <tr class="Body-Body1">
+                    <td class="BodyB-Column1-Body1">pkeyval</td>
+                    <td class="BodyB-Column2-Body1">RSQL_VALUE *</td>
+                    <td class="BodyA-Column3-Body1">Pointer to specified primary key value (<code>NULL</code> if not specified).</td>
+                </tr>
+            </tbody>
+        </table>
+        <p>Each entry of the <code>colsvals</code> array contains information about a virtual table column that is referenced in the SQL statement.  This information is contained in the <code>VCOL_INFO struct</code> type whose fields are described in the following table.</p>
+        <table style="margin-left: 0;margin-right: auto;mc-table-style: url('../Resources/TableStyles/ParamStruct.css');" class="TableStyle-ParamStruct" cellspacing="0">
+            <caption>Table 8. VCOL_INFO Description</caption>
+            <col class="Column-Column1" />
+            <col class="Column-Column2" />
+            <col class="Column-Column3" />
+            <thead>
+                <tr class="Head-Header1">
+                    <th class="HeadE-Column1-Header1">Field Name</th>
+                    <th class="HeadE-Column2-Header1">Data Type</th>
+                    <th class="HeadD-Column3-Header1">Description</th>
+                </tr>
+            </thead>
+            <tbody>
+                <tr class="Body-Body1">
+                    <td class="BodyE-Column1-Body1">colno</td>
+                    <td class="BodyE-Column2-Body1">int16_t</td>
+                    <td class="BodyD-Column3-Body1">Ordinal position of column in table declaration: 0 (first column) to # of columns in table – 1 (last column).</td>
+                </tr>
+                <tr class="Body-Body1">
+                    <td class="BodyE-Column1-Body1">len</td>
+                    <td class="BodyE-Column2-Body1">uint32_t</td>
+                    <td class="BodyD-Column3-Body1">Column length in bytes.</td>
+                </tr>
+                <tr class="Body-Body1">
+                    <td class="BodyE-Column1-Body1">is_null</td>
+                    <td class="BodyE-Column2-Body1">int16_t *</td>
+                    <td class="BodyD-Column3-Body1">Pointer to variable containing the null indicator flag: *is_null = 0 =&gt; not null, *is_null = 1 =&gt; is null.</td>
+                </tr>
+                <tr class="Body-Body1">
+                    <td class="BodyB-Column1-Body1">data</td>
+                    <td class="BodyB-Column2-Body1">void *</td>
+                    <td class="BodyA-Column3-Body1">Pointer to the buffer containing the column value.</td>
+                </tr>
+            </tbody>
+        </table>
+        <p>Note that the <code>is_null</code> field is a pointer to the <code>int16_t</code> variable that is used by SQL system to indicate that a column value is null.  By assigning this through the pointer it eliminates the need for the SQL system to perform an extra loop through the <code>colsvals</code> array.</p>
+        <p>The implementation of <code>vtSelectOpen</code> for the <code>virtab</code> virtual table example is given below.  Note the calls to <code>vtEnter</code> and the reciprocal call to <code>vtExit</code>.  As stated above, this serializes thread access to the shared <code>vtrows</code> and <code>norows</code> variables.</p><pre xml:space="preserve"> 1  /* ========================================================================
+ 2	    Virtual table SELECT execution function 
+ 3	*/
+ 4	static RSQL_ERRCODE EXTERNAL_FCN vtSelectOpen(  /* vtSelectOpen() */
+ 5	    HSTMT        hstmt,        /* in:  statement handle */
+ 6	    uint16_t     nocols,       /* in:  no. of ref'd columns */
+ 7	    VCOL_INFO   *colsvals,     /* in:  array of ref'd column value containers */
+ 8	    void        *pRegCtx,      /* in:  ptr to registration context */
+ 9	    void        *pFCtx,        /* in:  ptr to fetch context */
+10	    RSQL_VALUE  *pkeyval)      /* in:  ptr to primary key value */
+11	{
+12	    RSQL_ERRCODE stat = errSUCCESS;
+13	    uint32_t     rowno;
+14	    VTAB_CTX    *pCtx = (VTAB_CTX *)pFCtx;
+15	    
+16	    UNREF_PARM(hstmt)
+17	    UNREF_PARM(pRegCtx)
+18	    
+19	    pCtx-&gt;rowcnt   = 0;
+20	    pCtx-&gt;rowno    = rowno = 0;
+21	    pCtx-&gt;pkeyval  = pkeyval;
+22	
+23	    vtEnter();
+24	    
+25	    if ( !vtrows ) {
+26	        vtrows = calloc(maxrows, sizeof(struct virtab));
+27	    }
+28	    else if ( pkeyval ) {
+29	        /* locate row with matching primary key */
+30	        for ( rowno = 0; rowno &lt; norows; ++rowno ) {
+31	            if ( pkeyval-&gt;vt.lv == vtrows[rowno].pkey )
+32	                break;
+33	        }
+34	        pCtx-&gt;rowno = rowno;
+35	    }
+36	    vtExit();
+37	    
+38	    return stat;
+39	}</pre>
+        <p>It is important to note that any dynamic allocations that need to be made for any of the shared data will necessarily live for the life of the invoking process (unless, for some reason, it is explicitly freed in the <code>vtSelectOpen</code> function).</p>
+        <p>The <b>select</b> statement operational requirements for the <code>vtSelectOpen</code> function to set the <code>rowno</code> variable to the first row to be fetched.</p>
+        <p>The <code>fetch</code> context that is passed to <code>vtSelectOpen</code> must be used to save  any information that will be used by <code>vtFetch</code> to control the fetching of rows from the virtual table.  The context used in the <code>virtab</code> example is defined by the <code>VTAB_CTX struct typedef</code> declaration given below.</p><pre xml:space="preserve">typedef struct vtab_ctx {
+    uint64_t      rowcnt;       /* count of rows fetched */
+    uint64_t      rowno;        /* number of next row to be fetched */
+    RSQL_VALUE   *pkeyval;      /* ptr to primary key's value */
+} VTAB_CTX;
+</pre>
+        <p>The <code>rowno</code> contains the <code>vtrows</code> index of the next row to be returned by <code>vtFetch</code>. The <code>rowcnt</code> and a non-NULL <code>pkeyval</code> is used to ensure that only one row is returned when the <b>select</b> statement included the "where pkey = <i>value</i>" clause.</p>
+        <p>If a primary key value is specified then <code>vtSelectOpen</code> needs to locate the row with that value (lines 30-34) and set <code>pCtx-&gt;rowno</code> to it.  If it is not found then <code>pCtx-&gt;rowno</code> is set to <code>norows</code> which will cause <code>vtFetch</code> to return <code>errNOMOREDATA</code>.</p>
+        <h2 class="newpage"><a MadCap:generatedBookmark="TOC" name="Virtual_Table_Fetch_Function:_vtFetch"></a>Virtual Table Fetch Function: <i>vtFetch</i><a name="kanchor220"></a></h2>
+        <p>This function is called by SQL to fetch the next row from the virtual table.  Five arguments are passed into the <code>vtFetch</code> function as described in the following table.</p>
+        <table style="mc-table-style: url('../Resources/TableStyles/ParamStruct.css');margin-left: 0;margin-right: auto;" class="TableStyle-ParamStruct" cellspacing="0">
+            <caption>Table 9. Function vtFetch Argument Description</caption>
+            <col class="Column-Column1" />
+            <col class="Column-Column2" />
+            <col class="Column-Column3" />
+            <thead>
+                <tr class="Head-Header1">
+                    <th class="HeadE-Column1-Header1">Argument</th>
+                    <th class="HeadE-Column2-Header1">Type</th>
+                    <th class="HeadD-Column3-Header1">Description</th>
+                </tr>
+            </thead>
+            <tbody>
+                <tr class="Body-Body1">
+                    <td class="BodyE-Column1-Body1">hStmt</td>
+                    <td class="BodyE-Column2-Body1">HSTMT</td>
+                    <td class="BodyD-Column3-Body1">Statement handle of SQL statement containing the virtual table reference.</td>
+                </tr>
+                <tr class="Body-Body1">
+                    <td class="BodyE-Column1-Body1">nocols</td>
+                    <td class="BodyE-Column2-Body1">uint16_t</td>
+                    <td class="BodyD-Column3-Body1">Number of referenced columns (size of <code>colsvals</code> array).</td>
+                </tr>
+                <tr class="Body-Body1">
+                    <td class="BodyE-Column1-Body1">colsvals</td>
+                    <td class="BodyE-Column2-Body1">VCOL_INFO&#160;*</td>
+                    <td class="BodyD-Column3-Body1">Array of referenced column value containers.</td>
+                </tr>
+                <tr class="Body-Body1">
+                    <td class="BodyE-Column1-Body1">pRegCtx</td>
+                    <td class="BodyE-Column2-Body1">void *</td>
+                    <td class="BodyD-Column3-Body1">Pointer to the user program allocated context data area that was originally passed in through the call to <code>rsqlRegisterVirtualTables</code>.</td>
+                </tr>
+                <tr class="Body-Body1">
+                    <td class="BodyB-Column1-Body1">pFCtx</td>
+                    <td class="BodyB-Column2-Body1">void *</td>
+                    <td class="BodyA-Column3-Body1">Pointer to the fetch context data area.</td>
+                </tr>
+            </tbody>
+        </table>
+        <p>The fetch context pointer, <code>pFCtx</code>, references the fetch context data area containing any virtual table specific data needed for processing the fetch (e.g., current row number).  If a primary key lookup value was specified, then only one row should be retrieved.  If not, then all rows in the table should be retrieved with status <code>errNOMOREDATA</code> being returned on the first call after the last row has been fetched.   The necessary programming logic is best explained through the <code>virtab</code> example as shown below.</p><pre xml:space="preserve"> 1  /* ========================================================================
+ 2	    Virtual table fetch function 
+ 3	*/
+ 4	static RSQL_ERRCODE EXTERNAL_FCN vtFetch(  /* vtFetch() */
+ 5	    HSTMT        hstmt,        /* in:  statement handle */
+ 6	    uint16_t     nocols,       /* in:  no. of ref'd columns */
+ 7	    VCOL_INFO   *colsvals,     /* in:  array of ref'd col value containers */
+ 8	    void        *pRegCtx,      /* in:  ptr to registration context */
+ 9	    void        *pFCtx)        /* in:  ptr to fetch context */
+10	{
+11	    int16_t      cno;
+12	    VTAB_CTX    *pCtx = (VTAB_CTX *)pFCtx;
+13	    uint32_t     rno = (uint32_t)pCtx-&gt;rowno;
+14    
+15	    vtEnter();
+16	    
+17	    if ( rno == norows || (pCtx-&gt;pkeyval &amp;&amp; pCtx-&gt;rowcnt) ) {
+18	        pCtx-&gt;rowno = 0;
+19	        vtExit();
+20	        return errNOMOREDATA;
+21	    }
+22	    for (cno = 0; cno &lt; nocols; ++cno) {
+23	        const VCOL_INFO *pCVal = &amp;colsvals[cno];
+24	        if ( vtrows[rno].is_null[pCVal-&gt;colno] )
+25	            *pCVal-&gt;is_null = 1;
+26	        else {
+27	            *pCVal-&gt;is_null = 0;
+28	            switch ( pCVal-&gt;colno ) {
+29	                case 0: 
+30	                    memcpy(pCVal-&gt;data, &amp;vtrows[rno].pkey, sizeof(int32_t));
+31	                    break;
+32	                case 1:
+33	                    strcpy(pCVal-&gt;data, vtrows[rno].name);
+34	                    break;
+35	                case 2:
+36	                    strcpy(pCVal-&gt;data, vtrows[rno].addr);
+37	                    break;
+38	                case 3:
+39	                    strcpy(pCVal-&gt;data, vtrows[rno].city);
+40	                    break;
+41	                case 4:
+42	                    strcpy(pCVal-&gt;data, vtrows[rno].state);
+43	                    break;
+44	                case 5:
+45	                    strcpy(pCVal-&gt;data, vtrows[rno].zip);
+46	                    break;
+47	            } /*lint !e744 */
+48	        }
+49	    }
+50	    ++pCtx-&gt;rowcnt;
+51	    ++pCtx-&gt;rowno;
+52	
+53	    vtExit();
+54	    
+55	    return errSUCCESS;
+56	}
+</pre>
+        <p>As with <code>vtSelectOpen</code>, note here as well the call to <code>vtEnter</code> at line 15 and its reciprocal calls to <code>vtExit</code> at lines 19 and 53 serializing access to the <code>norows</code> and <code>vtrows</code> variables.  The <code>if</code> statement at line 17 tests the two conditions under which an <code>errNOMOREDATA</code> status code is to be returned.</p>
+        <p>The loop at lines 22 to 49 is used to copy the fetched row's information for each column in the <code>colsvals</code> array.  This involves setting the correct null value indicator (lines 24-25) and, for the non-null columns, copying its value into the column's data buffer pointed to by the <code>VCOL_INFO</code> data field (lines 30, 33, 36, 39, 42, and 45).</p>
+        <p>Finally, the row count and row number values are incremented (lines 50-51).</p>
+        <h2 class="newpage"><a MadCap:generatedBookmark="TOC" name="Virtual_Table_Select_CloseFunction:_vtSelectClose"></a>Virtual Table Select CloseFunction: <i>vtSelectClose</i><a name="kanchor221"></a></h2>
+        <p>This function is called by SQL when the application has completed its processing of the statement containing the virtual table reference in order to terminate the select statement access to the virtual table. Any memory that was allocated by <code>vtSelectOpen</code> for the <code>vtFetch</code> calls would need to be freed by this function.  Three arguments are passed into the <code>vtSelectClose</code> function as described in the following table.</p>
+        <table style="mc-table-style: url('../Resources/TableStyles/ParamStruct.css');margin-left: 0;margin-right: auto;" class="TableStyle-ParamStruct" cellspacing="0">
+            <caption>Table 10. Function vtSelectCClose Argument Descriptions</caption>
+            <col class="Column-Column1" />
+            <col class="Column-Column2" />
+            <col class="Column-Column3" />
+            <thead>
+                <tr class="Head-Header1">
+                    <th class="HeadE-Column1-Header1">Argument</th>
+                    <th class="HeadE-Column2-Header1">Type</th>
+                    <th class="HeadD-Column3-Header1">Description</th>
+                </tr>
+            </thead>
+            <tbody>
+                <tr class="Body-Body1">
+                    <td class="BodyE-Column1-Body1">hStmt</td>
+                    <td class="BodyE-Column2-Body1">HSTMT</td>
+                    <td class="BodyD-Column3-Body1">Statement handle of SQL statement containing the virtual table reference.</td>
+                </tr>
+                <tr class="Body-Body1">
+                    <td class="BodyE-Column1-Body1">pRegCtx</td>
+                    <td class="BodyE-Column2-Body1">void *</td>
+                    <td class="BodyD-Column3-Body1">Pointer to the user program allocated context data area that was originally passed in through the call to <code>rsqlRegisterVirtualTables</code>.</td>
+                </tr>
+                <tr class="Body-Body1">
+                    <td class="BodyB-Column1-Body1">pFCtx</td>
+                    <td class="BodyB-Column2-Body1">void *</td>
+                    <td class="BodyA-Column3-Body1">Pointer to the fetch context data area.</td>
+                </tr>
+            </tbody>
+        </table>
+        <p>No <code>vtSelectClose</code> function is needed for the <code>virtab</code> virtual table implementation. But an example stub is shown below.</p><pre xml:space="preserve">/* ========================================================================
+    Virtual table close function 
+*/
+typedef void EXTERNAL_FCN vtSelectClose(
+    HSTMT        hstmt,        /* in:  statement handle */
+    void        *pRegCtx,      /* in:  ptr to registration context */
+    void        *pFetchCtx)    /* in:  ptr to fetch context */
+/*
+    Called by SQL when SELECT statement containing virtual table reference 
+    completes execution (i.e., when cursor is closed).  
+    
+    Use this function to do any needed cleanup and device termination actions.
+*/
+{
+	/* code to free any allocated memory or, perhaps 
+      to power down virtual table device.  */
+
+}</pre>
+        <h2><a MadCap:generatedBookmark="TOC" name="Virtual_Table_Usage"></a>Virtual Table Usage</h2>
+        <p class="Heading">Virtual Tables Are Not Transaction Sensitive</p>
+        <p>An <b>insert</b> on a virtual table cannot be committed nor can it be rolled-back.  In fact, an <b>insert</b> doesn't even have to do an "insert".  It simply sends a set of data values to the <code>vtInsert</code> function for the specified virtual table.  What that function actually does with the data is up to it.  For example, in a wireless sensor network (WSN) application an <b>insert</b> could be used to send control settings to a sensor.</p>
+        <p class="Heading">Some Virtual Tables May Have an Unlimited Number of Rows</p>
+        <p>Only a little imagination is needed to see that data from sources such as a WSN have no natural end.  As long as the sensors continue to operate, data will always be available.  This presents a particularly difficult problem when the data needs to be summarized over some aggregate collection.  Consider the following two tables shown below from the weather data WSN application database from the <a href="Chapter4.htm">Defining a Database</a> section.</p><pre xml:space="preserve">
+create table weather_summary(
+ 	longitude integer,
+ 	latitude integer,
+ 	rdg_date date,
+ 	hour_of_day smallint,
+ 	avg_temp smallint,
+ 	avg_ press smallint,
+ 	avg_hum smallint,
+ 	avg_lumens smallint,
+ 	foreign key (longitude, latitude) references location
+);
+create virtual readonly table weather_data(
+ 	sensor_id bigint primary key,
+ 	loc_long integer,
+ 	loc_lat integer,
+ 	rdg_time timestamp,
+ 	temperature smallint,
+ 	pressure smallint,
+ 	humidity smallint,
+ 	light smallint,
+ 	power integer
+); 	
+</pre>
+        <p>The <code>weather_summary</code> table contains the averages of the readings from each sensor as collected over each hour of the day.  In order to compute these aggregated values, SQL needs to sort the fetched rows by <code>sensor_id</code> and <code>rdg_time</code> (timestamp when the sensor data was read).  But any sort needs to have a fixed number of rows.  How is this done when there is an unlimited number of rows?</p>
+        <p>To address this problem, the <b>select</b> statement includes a non-standard clause that can limit the number of rows that are returned as specified in the following syntax.</p><pre class="Grammar" xml:space="preserve">select_stmt:
+ 	<b>select</b> … <b>from</b>              <![CDATA[ ]]><i>table</i>              <![CDATA[ ]]><b>where</b> … <b>limit</b>( <i>num</i> limit_unit)</pre><pre class="Grammar" xml:space="preserve">limit_unit: 
+ 	<b>rows</b> | <b>hours</b> | <b>mins</b> | <b>secs</b> | <b>msecs</b>                  <![CDATA[
+]]></pre>
+        <p>The <b>limit</b> clause limits either the number of rows that are returned or the amount of time the <b>select</b> statement is allowed to run.   The following example shows a <b>select</b> statement that stores the averages per hour from each weather sensor in the <code>weather_summary</code> table.</p><pre xml:space="preserve">insert into weather_summary
+ 	select loc_long, loc_lat, convert(rdg_time,date), hour(rdg_time), 
+ 		avg(temperature), avg(pressure), avg(humidity), avg(light) from weather_data
+ 		group by 1,2,4 limit(4 hours);
+</pre>
+        <p>Each row is fetched and sorted over each four hour span of time.  At the end of that time, the sorted data is scanned and the aggregate calculations performed and the resulting rows are then stored in the <code>weather_summary</code> table. The time limit can be shorter but, in this case, not any less than an hour as that is the smallest unit over which the aggregation is made (of course, this assumes that the <b>select</b> is synchronized to execute at the start of an hour).</p>
+        <p>It is important to note that even though the virtual table has no fixed number of rows, the <code>vtRowCount</code> function still needs to return a value.  Based on how you choose to limit the <b>select</b> statements that retrieve data from your virtual table just have <code>vtRowCount</code> return an estimate of the average number of rows that will be returned from any given execution of the <b>select</b>.  It does not have to be an exact value.</p>
+        <p class="Heading">Virtual Table Data Is Not Necessarily Persistent</p>
+        <p>The data contained in the example <code>virtab</code> virtual table is clearly not persistent.   The <code>stdtab</code> table can be used to save a persistent copy of the data as shown in the following SQL statements.</p><pre xml:space="preserve">insert into stdtab from select * from virtab;<br />commit;</pre>
+        <p>Then, when the application is restarted, <code>virtab</code> can be reloaded by simply doing the reverse (only without the <b>commit</b>).</p><pre xml:space="preserve">insert into virtab from select * from stdtab;</pre>
+        <hr MadCap:conditions="Default.ScreenOnly" width="100%" size="0" align="center" />
+        <p MadCap:conditions="Default.ScreenOnly" style="font-size: 8pt;"><span class="MyVariablesCopyright">Copyright © 2012, Raima Inc. All rights reserved.</span>
+        </p>
+        <script type="text/javascript" src="../SkinSupport/MadCapBodyEnd.js">
+        </script>
+        <p class="MCWebHelpFramesetLink MCWebHelpFramesetLinkBottom" style="display: none;"><a href="../../Default_CSH.htm#SQL/Chapter13.htm" style="">Open topic with navigation</a>
+        </p>
+    </body>
+</html>

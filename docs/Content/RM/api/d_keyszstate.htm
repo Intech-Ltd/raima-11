@@ -1,0 +1,201 @@
+<?xml version="1.0" encoding="utf-8"?>
+<!DOCTYPE html PUBLIC "-//W3C//DTD XHTML 1.0 Strict//EN" "http://www.w3.org/TR/xhtml1/DTD/xhtml1-strict.dtd">
+<html xmlns:MadCap="http://www.madcapsoftware.com/Schemas/MadCap.xsd" MadCap:tocPath="Native API|Reference Manual|Core API Function Descriptions" MadCap:InPreviewMode="false" MadCap:PreloadImages="false" MadCap:RuntimeFileType="Topic" MadCap:TargetType="WebHelp" lang="en-us" xml:lang="en-us" MadCap:PathToHelpSystem="../../../" MadCap:HelpSystemFileName="Default.xml" MadCap:SearchType="Stem">
+    <head>
+        <meta http-equiv="Content-Type" content="text/html; charset=utf-8" /><title>d_keyszstate</title>
+        <link rel="icon" type="image/png" href="http://docs.raima.com/favicon.png" />
+        <link href="../../SkinSupport/MadCap.css" rel="stylesheet" />
+        <link href="../../Resources/TableStyles/FunctionArgs.css" rel="stylesheet" />
+        <link href="../../Resources/TableStyles/CoreErrCodes.css" rel="stylesheet" />
+        <link href="../../Resources/Stylesheets/raima.css" rel="stylesheet" />
+        <script src="../../SkinSupport/MadCapAll.js" type="text/javascript">
+        </script>
+    </head>
+    <body>
+        <p class="MCWebHelpFramesetLink MCWebHelpFramesetLinkTop" style="display: none;"><a href="../../../Default_CSH.htm#RM/api/d_keyszstate.htm" style="">Open topic with navigation</a>
+        </p>
+        <div class="MCBreadcrumbsBox_0"><span class="MCBreadcrumbsPrefix">You are here: </span><a class="MCBreadcrumbsLink" href="../../dbCore.htm">Native API</a><span class="MCBreadcrumbsDivider"> &gt; </span><a class="MCBreadcrumbsLink" href="../dbRM.htm">Reference Manual</a><span class="MCBreadcrumbsDivider"> &gt; </span><a class="MCBreadcrumbsLink" href="../Chapter33.htm">Core API Function Descriptions</a><span class="MCBreadcrumbsDivider"> &gt; </span><span class="MCBreadcrumbs">d_keyszstate</span>
+        </div>
+        <h3 class="newpage"><a name="kanchor77"></a>d_keyszstate</h3>
+        <p>Retrieve the size of the key state buffer</p>
+        <p class="Heading">Prototype</p><pre xml:space="preserve">int32_t&#160;<b>d_keyszstate</b>(
+&#160;&#160;&#160;&#160;int32_t&#160;&#160;&#160;<i>keyfield</i>,
+&#160;&#160;&#160;&#160;uint32_t&#160;*<i>pSize</i>,
+&#160;&#160;&#160;&#160;DB_TASK&#160;&#160;*<i>hDb</i>,
+&#160;&#160;&#160;&#160;int32_t &#160; <i>dbn</i>);</pre>
+        <p class="Heading">Parameters</p>
+        <table style="width: 100%;mc-table-style: url('../../Resources/TableStyles/FunctionArgs.css');" class="TableStyle-FunctionArgs" cellspacing="0">
+            <col style="width: 140px;" class="Column-Column1" />
+            <col style="width: 80px;" class="Column-Column3" />
+            <col class="Column-Column2" />
+            <tbody>
+                <tr class="Body-Body1">
+                    <td class="BodyE-Column1-Body1">keyfield</td>
+                    <td class="BodyE-Column3-Body1">(input)</td>
+                    <td class="BodyD-Column2-Body1">The key field type for which to get the state size.</td>
+                </tr>
+                <tr class="Body-Body1">
+                    <td class="BodyB-Column1-Body1">pSize</td>
+                    <td class="BodyB-Column3-Body1">(output)</td>
+                    <td class="BodyA-Column2-Body1">A pointer to the size, in bytes, of the buffer to store key state information.</td>
+                </tr>
+            </tbody>
+        </table>
+        <table style="width: 100%;mc-table-style: url('../../Resources/TableStyles/FunctionArgs.css');margin-left: 0;margin-right: auto;caption-side: top;" class="TableStyle-FunctionArgs" cellspacing="0">
+            <col style="width: 140px;" class="Column-Column1" />
+            <col style="width: 80px;" class="Column-Column3" />
+            <col class="Column-Column2" />
+            <tbody>
+                <tr class="Body-Body1">
+                    <td class="BodyE-Column1-Body1">task</td>
+                    <td class="BodyE-Column3-Body1">(input)</td>
+                    <td class="BodyD-Column2-Body1">A pointer to a <code>DB_TASK</code> structure.</td>
+                </tr>
+                <tr class="Body-Body1">
+                    <td class="BodyB-Column1-Body1">dbn</td>
+                    <td class="BodyB-Column3-Body1">(input)</td>
+                    <td class="BodyA-Column2-Body1">The database number.</td>
+                </tr>
+            </tbody>
+        </table>
+        <p class="Heading">Description</p>
+        <p>This function retrieves the size of a buffer to store state information for the specified key field, regardless of the key state.&#160; The
+retrieved size does not change during execution of the application.&#160; Your application uses the <b>d_keyszstate</b> function
+with <b>d_keyrdstate</b> and <b>d_keywrstate</b> to save and restore the state of a key file.</p>
+        <p class="Heading">Required Headers</p><pre xml:space="preserve">#include "rdm.h"</pre>
+        <p class="Heading">Libraries</p>
+        <table style="width: 100%; margin-left: 0; margin-right: auto;">
+            <col style="width: 200px;">
+            </col>
+            <col>
+            </col>
+            <thead>
+                <tr>
+                    <th>Library Name</th>
+                    <th>Description</th>
+                </tr>
+            </thead>
+            <tbody>
+                <tr>
+                    <td><code>rdmrdm<span class="MyVariablesLibraryVersion">11</span></code>
+                    </td>
+                    <td><span class="MyVariablesProductShortName">RDM</span> Runtime Library</td>
+                </tr>
+            </tbody>
+        </table>
+        <p>See <a href="../../GS/distrib.htm#Library">Library Naming Conventions</a> section for full library name and a list of library dependencies.</p>
+        <p class="Heading">Return Codes</p>
+        <table class="TableStyle-CoreErrCodes" cellspacing="0" style="mc-table-style: url('../../Resources/TableStyles/CoreErrCodes.css');">
+            <col class="Column-Column1" />
+            <col class="Column-Column2" />
+            <col class="Column-Column3" />
+            <thead>
+                <tr class="Head-Header1">
+                    <th class="HeadE-Column1-Header1">Value</th>
+                    <th class="HeadE-Column2-Header1">Name</th>
+                    <th class="HeadD-Column3-Header1">Description</th>
+                </tr>
+            </thead>
+            <tbody>
+                <tr class="Body-Body1">
+                    <td class="BodyB-Column1-Body1">0</td>
+                    <td class="BodyB-Column2-Body1">S_OKAY</td>
+                    <td class="BodyA-Column3-Body1">normal return, okay</td>
+                </tr>
+            </tbody>
+        </table>
+        <table class="TableStyle-CoreErrCodes" cellspacing="0" style="mc-table-style: url('../../Resources/TableStyles/CoreErrCodes.css');">
+            <col class="Column-Column1" />
+            <col class="Column-Column2" />
+            <col class="Column-Column3" />
+            <tbody>
+                <tr class="Body-Body1">
+                    <td class="BodyB-Column1-Body1">-4</td>
+                    <td class="BodyB-Column2-Body1">S_INVDB</td>
+                    <td class="BodyA-Column3-Body1">cannot open dictionary</td>
+                </tr>
+            </tbody>
+        </table>
+        <table class="TableStyle-CoreErrCodes" cellspacing="0" style="mc-table-style: url('../../Resources/TableStyles/CoreErrCodes.css');">
+            <col class="Column-Column1" />
+            <col class="Column-Column2" />
+            <col class="Column-Column3" />
+            <tbody>
+                <tr class="Body-Body1">
+                    <td class="BodyB-Column1-Body1">-17</td>
+                    <td class="BodyB-Column2-Body1">S_NOTKEY</td>
+                    <td class="BodyA-Column3-Body1">field is not a valid key</td>
+                </tr>
+            </tbody>
+        </table>
+        <table class="TableStyle-CoreErrCodes" cellspacing="0" style="mc-table-style: url('../../Resources/TableStyles/CoreErrCodes.css');">
+            <col class="Column-Column1" />
+            <col class="Column-Column2" />
+            <col class="Column-Column3" />
+            <tbody>
+                <tr class="Body-Body1">
+                    <td class="BodyB-Column1-Body1">-52</td>
+                    <td class="BodyB-Column2-Body1">S_INVTASK</td>
+                    <td class="BodyA-Column3-Body1">invalid task</td>
+                </tr>
+            </tbody>
+        </table>
+        <p class="Heading">Currency Changes</p>
+        <p>None</p>
+        <p class="Heading">Locking Requirements</p>
+        <p>None</p>
+        <p class="Heading">See Also</p>
+        <p><a href="d_opentask.htm">d_opentask</a>
+        </p>
+        <p><a href="d_open.htm">d_open</a>, <a href="d_open_ptr.htm">d_open_ptr</a>, <a href="d_iopen.htm">d_iopen</a>, <a href="d_iopen_ptr.htm">d_iopen_ptr</a></p>
+        <p><a href="d_keyrdstate.htm">d_keyrdstate</a>
+        </p>
+        <p><a href="d_keywrstate.htm">d_keywrstate</a>
+        </p>
+        <p class="Heading">Example</p><pre>#include "rdm.h"
+#include "tims.h"
+
+int32_t testKeyStateFcns(const char *id_code, DB_TASK *task)
+{
+  int32_t   stat;
+  uint32_t  usSize;
+  char      szIdCode[SIZEOF_ID_CODE];
+  void     *pvBuf;
+
+  if ((stat = d_reclock(INFO, "r", task, CURR_DB)) != S_OKAY)
+    return stat;
+    
+  if ((stat = d_keyfind(ID_CODE, id_code, task, CURR_DB)) != S_OKAY) {
+    d_recfree(INFO, task, CURR_DB);
+    return stat;
+  }
+
+  d_keyszstate(ID_CODE, &amp;usSize, task, CURR_DB);
+  pvBuf = psp_getMemory(usSize, 0);
+  
+  d_keyrdstate(ID_CODE, pvBuf, task, CURR_DB);  /* read the key state */
+
+  d_keyfrst(ID_CODE, task, CURR_DB);  /* change the key state on purpose */
+
+  d_keywrstate(ID_CODE, pvBuf, task, CURR_DB);  /* restore the key state */
+
+  while (d_keynext(ID_CODE, task, CURR_DB) == S_OKAY) {
+    if ((stat = d_keyread(szIdCode, task)) == S_OKAY)
+      fprintf(stdout, "%s\n", szIdCode);
+  }
+
+  psp_freeMemory(pvBuf, 0);
+  d_recfree(INFO, task, CURR_DB);
+  
+  return stat;
+}
+</pre>
+        <hr MadCap:conditions="Default.ScreenOnly" width="100%" size="0" align="center" />
+        <p MadCap:conditions="Default.ScreenOnly" style="font-size: 8pt;"><span class="MyVariablesCopyright">Copyright © 2012, Raima Inc. All rights reserved.</span>
+        </p>
+        <script type="text/javascript" src="../../SkinSupport/MadCapBodyEnd.js">
+        </script>
+        <p class="MCWebHelpFramesetLink MCWebHelpFramesetLinkBottom" style="display: none;"><a href="../../../Default_CSH.htm#RM/api/d_keyszstate.htm" style="">Open topic with navigation</a>
+        </p>
+    </body>
+</html>

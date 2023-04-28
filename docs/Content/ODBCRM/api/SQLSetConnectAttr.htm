@@ -1,0 +1,346 @@
+<?xml version="1.0" encoding="utf-8"?>
+<!DOCTYPE html PUBLIC "-//W3C//DTD XHTML 1.0 Strict//EN" "http://www.w3.org/TR/xhtml1/DTD/xhtml1-strict.dtd">
+<html xmlns:MadCap="http://www.madcapsoftware.com/Schemas/MadCap.xsd" MadCap:tocPath="SQL API|ODBC User's Guide|ODBC API&#160;Reference" MadCap:InPreviewMode="false" MadCap:PreloadImages="false" MadCap:RuntimeFileType="Topic" MadCap:TargetType="WebHelp" lang="en-us" xml:lang="en-us" MadCap:PathToHelpSystem="../../../" MadCap:HelpSystemFileName="Default.xml" MadCap:SearchType="Stem">
+    <head>
+        <meta http-equiv="Content-Type" content="text/html; charset=utf-8" /><title>SQLSetConnectAttr</title>
+        <link rel="icon" type="image/png" href="http://docs.raima.com/favicon.png" />
+        <link href="../../SkinSupport/MadCap.css" rel="stylesheet" />
+        <link href="../../Resources/TableStyles/FunctionArgs.css" rel="stylesheet" />
+        <link href="../../Resources/TableStyles/ODBCErrorCodes.css" rel="stylesheet" />
+        <link href="../../Resources/TableStyles/ODBCTable.css" rel="stylesheet" />
+        <link href="../../Resources/Stylesheets/raima.css" rel="stylesheet" />
+        <script src="../../SkinSupport/MadCapAll.js" type="text/javascript">
+        </script>
+    </head>
+    <body>
+        <p class="MCWebHelpFramesetLink MCWebHelpFramesetLinkTop" style="display: none;"><a href="../../../Default_CSH.htm#ODBCRM/api/SQLSetConnectAttr.htm" style="">Open topic with navigation</a>
+        </p>
+        <div class="MCBreadcrumbsBox_0"><span class="MCBreadcrumbsPrefix">You are here: </span><a class="MCBreadcrumbsLink" href="../../dbRSQL.htm">SQL API</a><span class="MCBreadcrumbsDivider"> &gt; </span><a class="MCBreadcrumbsLink" href="../dbODBCUG.htm">ODBC User's Guide</a><span class="MCBreadcrumbsDivider"> &gt; </span><a class="MCBreadcrumbsLink" href="../ODBCCore.htm">ODBC API&#160;Reference</a><span class="MCBreadcrumbsDivider"> &gt; </span><span class="MCBreadcrumbs">SQLSetConnectAttr</span>
+        </div>
+        <h3 class="newpage">SQLSetConnectAttr<a name="kanchor389"></a></h3>
+        <p>Sets attributes that govern aspects of connections.</p>
+        <p class="Heading">Conformance</p>
+        <p>Version Introduced: ODBC 3.0 Standards Compliance: ISO 92</p>
+        <p class="Heading">Syntax </p><pre>SQLRETURN SQLSetConnectAttr(
+     SQLHDBC       ConnectionHandle,
+     SQLINTEGER    Attribute,
+     SQLPOINTER    ValuePtr,
+     SQLINTEGER    StringLength);</pre>
+        <p class="Heading">Arguments</p>
+        <table style="width: 100%;mc-table-style: url('../../Resources/TableStyles/FunctionArgs.css');margin-left: 0;margin-right: auto;" class="TableStyle-FunctionArgs" cellspacing="0">
+            <col style="width: 140px;" class="Column-Column1" />
+            <col style="width: 80px;" class="Column-Column3" />
+            <col class="Column-Column2" />
+            <tbody>
+                <tr class="Body-Body1">
+                    <td style="" class="BodyE-Column1-Body1">ConnectionHandle     </td>
+                    <td style="" class="BodyE-Column3-Body1">(input)</td>
+                    <td style="" class="BodyD-Column2-Body1">Connection handle.
+
+</td>
+                </tr>
+                <tr class="Body-Body1">
+                    <td class="BodyE-Column1-Body1">Attribute</td>
+                    <td class="BodyE-Column3-Body1">(input)</td>
+                    <td class="BodyD-Column2-Body1">Attribute to set, listed in "Comments."
+
+</td>
+                </tr>
+                <tr class="Body-Body1">
+                    <td style="" class="BodyE-Column1-Body1">ValuePtr</td>
+                    <td style="" class="BodyE-Column3-Body1">(input)</td>
+                    <td style="" class="BodyD-Column2-Body1">Pointer to the value to be associated with Attribute. Depending on the value of <code>Attribute</code>, <code>ValuePtr</code> will be a 32-bit unsigned integer value or will point to a null-terminated character string. Note that if the <code>Attribute</code> argument is a driver-specific value, the value in <code>ValuePtr</code> may be a signed integer.
+
+</td>
+                </tr>
+                <tr class="Body-Body1">
+                    <td class="BodyB-Column1-Body1">StringLength</td>
+                    <td class="BodyB-Column3-Body1">(input)</td>
+                    <td class="BodyA-Column2-Body1"> If Attribute is an ODBC-defined attribute and <code>ValuePtr</code> points to a character string or a binary buffer, this argument should be the length of <code>*ValuePtr</code>. For character string data, this argument should contain the number of bytes in the string.
+
+If <code>Attribute</code> is an ODBC-defined attribute and <code>ValuePtr</code> is an integer, <code>StringLength</code> is ignored.
+
+</td>
+                </tr>
+            </tbody>
+        </table>
+        <p class="Heading">Required Headers</p><pre xml:space="preserve">#include "sql.h"</pre>
+        <p class="Heading">Libraries</p>
+        <table style="width: 100%; margin-left: 0; margin-right: auto;">
+            <col style="width: 200px;">
+            </col>
+            <col>
+            </col>
+            <thead>
+                <tr>
+                    <th>Library Name</th>
+                    <th>Description</th>
+                </tr>
+            </thead>
+            <tbody>
+                <tr>
+                    <td><code>rdmrdbc<span class="MyVariablesLibraryVersion">11</span></code>
+                    </td>
+                    <td><span class="MyVariablesProductShortName">RDM</span>&#160;ODBC&#160;API Library</td>
+                </tr>
+            </tbody>
+        </table>
+        <p>See <a href="../../GS/distrib.htm#Library">Library Naming Conventions</a> section for full library name and a list of library dependencies.</p>
+        <p class="Heading">Returns</p>
+        <table class="TableStyle-ODBCErrorCodes" cellspacing="0" style="margin-left: 0;margin-right: auto;mc-table-style: url('../../Resources/TableStyles/ODBCErrorCodes.css');">
+            <col class="Column-Column1" />
+            <col class="Column-Column2" />
+            <tbody>
+                <tr class="Body-Body1">
+                    <th class="BodyB-Column1-Body1" style="font-weight: bold;">Return Code</th>
+                    <th class="BodyA-Column2-Body1" style="font-weight: bold;">Description</th>
+                </tr>
+            </tbody>
+        </table>
+        <table class="TableStyle-ODBCErrorCodes" cellspacing="0" style="mc-table-style: url('../../Resources/TableStyles/ODBCErrorCodes.css');">
+            <col class="Column-Column1" />
+            <col class="Column-Column2" />
+            <tbody>
+                <tr class="Body-Body1">
+                    <td class="BodyB-Column1-Body1">SQL_SUCCESS</td>
+                    <td class="BodyA-Column2-Body1">Function completed successfully. The application calls <code>SQLGetDiagField</code> to retrieve additional information from the header record.
+</td>
+                </tr>
+            </tbody>
+        </table>
+        <table class="TableStyle-ODBCErrorCodes" cellspacing="0" style="mc-table-style: url('../../Resources/TableStyles/ODBCErrorCodes.css');">
+            <col class="Column-Column1" />
+            <col class="Column-Column2" />
+            <tbody>
+                <tr class="Body-Body1">
+                    <td class="BodyB-Column1-Body1">SQL_SUCCESS_WITH_INFO</td>
+                    <td class="BodyA-Column2-Body1">Function completed successfully, possibly with a nonfatal error (warning). The application calls <code>SQLGetDiagRec</code> or <code>SQLGetDiagField</code> to retrieve additional information.
+</td>
+                </tr>
+            </tbody>
+        </table>
+        <table class="TableStyle-ODBCErrorCodes" cellspacing="0" style="mc-table-style: url('../../Resources/TableStyles/ODBCErrorCodes.css');">
+            <col class="Column-Column1" />
+            <col class="Column-Column2" />
+            <tbody>
+                <tr class="Body-Body1">
+                    <td class="BodyB-Column1-Body1">SQL_ERROR</td>
+                    <td class="BodyA-Column2-Body1">Function failed. The application calls <code>SQLGetDiagRec</code> or <code>SQLGetDiagField</code> to retrieve additional information. The contents of any output arguments to the function are undefined.
+</td>
+                </tr>
+            </tbody>
+        </table>
+        <table class="TableStyle-ODBCErrorCodes" cellspacing="0" style="mc-table-style: url('../../Resources/TableStyles/ODBCErrorCodes.css');">
+            <col class="Column-Column1" />
+            <col class="Column-Column2" />
+            <tbody>
+                <tr class="Body-Body1">
+                    <td class="BodyB-Column1-Body1">SQL_INVALID_HANDLE</td>
+                    <td class="BodyA-Column2-Body1">Function failed due to an invalid environment, connection, statement, or descriptor handle. This indicates a programming error. No additional information is available from <code>SQLGetDiagRec</code> or <code>SQLGetDiagField</code>. This code is returned only when the handle is a null pointer or is the wrong type, such as when a statement handle is passed for an argument that requires a connection handle.
+</td>
+                </tr>
+            </tbody>
+        </table>
+        <table class="TableStyle-ODBCErrorCodes" cellspacing="0" style="mc-table-style: url('../../Resources/TableStyles/ODBCErrorCodes.css');">
+            <col class="Column-Column1" />
+            <col class="Column-Column2" />
+            <tbody>
+                <tr class="Body-Body1">
+                    <td class="BodyB-Column1-Body1">SQL_NO_DATA</td>
+                    <td class="BodyA-Column2-Body1">No more data was available. The application calls <code>SQLGetDiagRec</code> or <code>SQLGetDiagField</code> to retrieve additional information.</td>
+                </tr>
+            </tbody>
+        </table>
+        <p class="Heading">Comments</p>
+        <table style="mc-table-style: url('../../Resources/TableStyles/ODBCTable.css');margin-left: 0;margin-right: auto;caption-side: top;" class="TableStyle-ODBCTable" cellspacing="0">
+            <col class="Column-Column1" />
+            <col class="Column-Column2" />
+            <col class="Column-Column3" />
+            <thead>
+                <tr class="Head-Header1">
+                    <th class="HeadE-Column1-Header1">Attribute</th>
+                    <th class="HeadE-Column2-Header1">ODBC</th>
+                    <th class="HeadD-Column3-Header1">ValuePtr Contents</th>
+                </tr>
+            </thead>
+            <tbody>
+                <tr class="Body-Body1">
+                    <td class="BodyE-Column1-Body1">SQL_ATTR_ACCESS_MODE<sup>[1][5]</sup></td>
+                    <td class="BodyE-Column2-Body1">1.0</td>
+                    <td class="BodyD-Column3-Body1">An <code>SQLUINTEGER</code> value that specifies the access mode of the database. <span class="MyVariablesProductShortName">RDM</span> accepts the following values:<br /><br /><code>SQL_MODE_READ_ONLY</code> = the database will be opened with the read-only mode. It is equivalent of specifying "r" as the core-level open mode.<br /><br /><code>SQL_MODE_READ_WRITE</code> = the database will be opened for read/write access. It is equivalent of specifying "s" as the core-level open mode. This is the default.<br /><br /><code>SQL_MODE_EXCLUSIVE</code> = the database will be opened with the exclusive-access mode. Only one user can access the database.</td>
+                </tr>
+                <tr class="Body-Body1">
+                    <td class="BodyE-Column1-Body1">SQL_ATTR_ASYNC_ENABLE</td>
+                    <td class="BodyE-Column2-Body1">3.0</td>
+                    <td class="BodyD-Column3-Body1">An <code>SQLUINTEGER</code> value that enables the connection-level asynchronous execution support. <span class="MyVariablesProductShortName">RDM</span> supports the following values:<br /><br /><code>SQL_ASYNC_ENABLE_OFF</code> = Connection-level asynchronous execution is not supported.</td>
+                </tr>
+                <tr class="Body-Body1">
+                    <td class="BodyE-Column1-Body1">SQL_ATTR_AUTO_IPD</td>
+                    <td class="BodyE-Column2-Body1">3.0</td>
+                    <td class="BodyD-Column3-Body1">A read-only <code>SQLUINTEGER</code> value that specifies whether or not the automatic population of the implementation parameter descriptor (IPD) is supported.  <span class="MyVariablesProductShortName">RDM</span> supports the following values:<br /><br /><code>SQL_TRUE</code> = Automatic population of the IPD is supported. An application can set the <code>SQL_ATTR_ENABLE_AUTO_IPD</code> statement attribute to enable the automatic population of the IPD.<br /><br />This is a read-only attribute and cannot be set by <b>SQLSetConnectAttr</b>.</td>
+                </tr>
+                <tr class="Body-Body1">
+                    <td class="BodyE-Column1-Body1">SQL_ATTR_AUTOCOMMIT<sup>[2]</sup></td>
+                    <td class="BodyE-Column2-Body1">1.0</td>
+                    <td class="BodyD-Column3-Body1">An <code>SQLUINTEGER</code> value that specifies whether transactions are committed automatically or manually. <span class="MyVariablesProductShortName">RDM</span> supports the following values:<br /><br /><code>SQL_AUTOCOMMIT_ON</code> = Transactions are committed automatically. This is the default value when <span class="MyVariablesProductShortName">RDM</span> is accessed through Microsoft ODBC Driver Manager.<br /><br /><code>SQL_AUTOCOMMIT_OFF</code> = Transactions need to be manually committed by calling <b>SQLEndTran</b>. This is the default when <span class="MyVariablesProductShortName">RDM</span> is accessed directly from an ODBC application.</td>
+                </tr>
+                <tr class="Body-Body1">
+                    <td class="BodyE-Column1-Body1">SQL_ATTR_CONNECTION_DEAD</td>
+                    <td class="BodyE-Column2-Body1">3.5</td>
+                    <td class="BodyD-Column3-Body1">A read-only <code>SQLUINTEGER</code> value that indicates whether or not the connection to the data source is active. <span class="MyVariablesProductShortName">RDM</span> supports the following values:<br /><br /><code>SQL_CD_TRUE</code> = The connection to the <span class="MyVariablesProductShortName">RDM</span> runtime engine has been established.<br /><br /><code>SQL_CD_FALSE</code> = The connection to the <span class="MyVariablesProductShortName">RDM</span> runtime engine has been terminated.<br /><br />Note that the returned value of this attribute may not accurately indicate a "lost" connection.<br /><br />This is a read-only attribute and cannot be set by <b>SQLSetConnectAttr</b>.</td>
+                </tr>
+                <tr class="Body-Body1">
+                    <td class="BodyE-Column1-Body1">SQL_ATTR_CONNECTION_TIMEOUT</td>
+                    <td class="BodyE-Column2-Body1">1.0</td>
+                    <td class="BodyD-Column3-Body1">An SQLUINTEGER value that specifies the number of seconds a request made by the driver waits until it returns to the application. <span class="MyVariablesProductShortName">RDM</span> supports the following values:<br /><br />0 = there is no timeout.</td>
+                </tr>
+                <tr class="Body-Body1">
+                    <td class="BodyE-Column1-Body1">SQL_ATTR_CURRENT_CATALOG<sup>[1]</sup></td>
+                    <td class="BodyE-Column2-Body1">2.0</td>
+                    <td class="BodyD-Column3-Body1">A character string that specifies the name(s) of the databases to open at the time of connection. <span class="MyVariablesProductShortName">RDM</span> supports multiple databases to be open simultaneously. The database names are to be delimited by semicolons.</td>
+                </tr>
+                <tr class="Body-Body1">
+                    <td class="BodyE-Column1-Body1">SQL_ATTR_LOGIN_TIMEOUT</td>
+                    <td class="BodyE-Column2-Body1">1.0</td>
+                    <td class="BodyD-Column3-Body1">An <code>SQLUINTEGER</code> value that specifies the number of seconds the driver waits for the login request until returning to the application. <span class="MyVariablesProductShortName">RDM</span> supports the following values:<br /><br />0 = there is no timeout.</td>
+                </tr>
+                <tr class="Body-Body1">
+                    <td class="BodyE-Column1-Body1">SQL_ATTR_METADATA_ID</td>
+                    <td class="BodyE-Column2-Body1">3.0</td>
+                    <td class="BodyD-Column3-Body1">An <code>SQLUINTEGER</code> value that specifies how the string arguments of catalog functions are to be treated. <span class="MyVariablesProductShortName">RDM</span> supports the following values:<br /><br /><code>SQL_FALSE</code> = the string arguments are not treated as identifiers. Case is significant. They can contain search patterns.</td>
+                </tr>
+                <tr class="Body-Body1">
+                    <td class="BodyE-Column1-Body1">SQL_ATTR_ODBC_CURSORS</td>
+                    <td class="BodyE-Column2-Body1">2.0</td>
+                    <td class="BodyD-Column3-Body1">An <code>SQLULEN</code> value that tells the Driver Manager whether to use the ODBC cursor library. <span class="MyVariablesProductShortName">RDM</span> supports the following values:<br /><br /><code>SQL_CUR_USE_DRIVER</code> = use the <span class="MyVariablesProductShortName">RDM</span> ODBC driver's cursor.</td>
+                </tr>
+                <tr class="Body-Body1">
+                    <td class="BodyE-Column1-Body1">SQL_ATTR_TXN_ISOLATION</td>
+                    <td class="BodyE-Column2-Body1">1.0</td>
+                    <td class="BodyD-Column3-Body1">An <code>SQLUINTEGER</code> value that indicates the transaction isolation level of the current connection. <span class="MyVariablesProductShortName">RDM</span> supports the following values:<br /><br /><code>SQL_TXN_SERIALIZABLE</code> = transactions are serializable. Dirty reads, non-repeatable reads and phantoms are not allowed.</td>
+                </tr>
+                <tr class="Body-Body1">
+                    <td class="BodyE-Column1-Body1">SQL_ATTR_RDM_DBCAT<sup>[1]</sup></td>
+                    <td class="BodyE-Column2-Body1"><span class="MyVariablesProductShortName">RDM</span>
+                    </td>
+                    <td class="BodyD-Column3-Body1">A <code>SQLPOINTER</code> value that specifies the pointer to the <span class="MyVariablesProductShortName">RDM</span> database catalog buffer. More than catalog buffers can be specified.<br /><br />Calling <b>SQLSetConnectAttr</b> with this attribute multiple times will append the specified value to the existing catalog buffer list.<br /><br /><b>SQLGetConnectAttr</b> with this attribute will return the catalog buffer list. The number of pointers in the list can be retrieved by using the <code>SQL_ATTR_RDM_DBCAT_COUNT</code> attribute.</td>
+                </tr>
+                <tr class="Body-Body1">
+                    <td class="BodyE-Column1-Body1">SQL_ATTR_RDM_DBCAT_COUNT</td>
+                    <td class="BodyE-Column2-Body1"><span class="MyVariablesProductShortName">RDM</span>
+                    </td>
+                    <td class="BodyD-Column3-Body1">A read-only <code>SQLUINTEGR</code> value that indicates the number of catalog buffer pointers stored in the catalog buffer list.<br /><br />This is a read-only attribute and cannot be set by <b>SQLSetConnectAttr</b>.</td>
+                </tr>
+                <tr class="Body-Body1">
+                    <td class="BodyE-Column1-Body1">SQL_ATTR_RDM_DEFER_BLOB</td>
+                    <td class="BodyE-Column2-Body1"><span class="MyVariablesProductShortName">RDM</span>
+                    </td>
+                    <td class="BodyD-Column3-Body1">An <code>SQLUINTEGER</code> value that indicates whether the reading of BLOB data is deferred. The following values are supported.<br /><br /><code>SQL_FALSE</code> = the reading of BLOB data is not deferred. It means the entire BLOB value is retrieved when a BLOB column is fetched whether or not the column is bound. A call to <b>SQLGetData</b> will simply copy the already-retrieved data into the application buffer. This is the default.<br /><br /><code>SQL_TRUE</code> = the reading of BLOB data is deferred. It means the value of a BLOB column is not retrieved when the column is fetched but not bound. A call to <b>SQLGetData</b> will retrieve the actual column value.</td>
+                </tr>
+                <tr class="Body-Body1">
+                    <td class="BodyE-Column1-Body1">SQL_ATTR_RDM_REMOTE_CONN<sup>[1][3]</sup></td>
+                    <td class="BodyE-Column2-Body1"><span class="MyVariablesProductShortName">RDM</span>
+                    </td>
+                    <td class="BodyD-Column3-Body1">An <code>SQLUINTEGER</code> value that indicates the type of connection an application makes with the <span class="MyVariablesProductShortName">RDM</span> core engine. The following values are supported.<br /><br /><code>SQL_CT_UNKNOWN</code> = Whether <span class="MyVariablesProductShortName">RDM</span> ODBC uses the embedded core engine or a remote server is unknown. This is the default.
+
+<br /><br /><code>SQL_CT_LOCAL</code> = the <span class="MyVariablesProductShortName">RDM</span> ODBC Driver will use the embedded core engine. This is the default.
+
+<br /><br /><code>SQL_CT_REMOTE</code> = the <span class="MyVariablesProductShortName">RDM</span> ODBC Driver will use the RPC mechanism to connect to the specified remote server that accesses the core engine through TCP/IP.
+
+<br /><br />The name of the remote server can be specified with the <code>SQL_ATTR_RDM_REMOTE_NAME</code> attribute
+</td>
+                </tr>
+                <tr class="Body-Body1">
+                    <td class="BodyE-Column1-Body1">SQL_ATTR_RDM_REMOTE_NAME<sup>[1]</sup></td>
+                    <td class="BodyE-Column2-Body1"><span class="MyVariablesProductShortName">RDM</span>
+                    </td>
+                    <td class="BodyD-Column3-Body1">A character string that indicates the name of the remote <span class="MyVariablesProductShortName">RDM</span> host that the driver will connect to for database access. The default is "localhost."</td>
+                </tr>
+                <tr class="Body-Body1">
+                    <td class="BodyE-Column1-Body1">SQL_ATTR_RDM_RESERVE_BYTES<sup>[1]</sup></td>
+                    <td class="BodyE-Column2-Body1"><span class="MyVariablesProductShortName">RDM</span>
+                    </td>
+                    <td class="BodyD-Column3-Body1">An <code>SQLUINTEGER</code> value that indicates the number of bytes <span class="MyVariablesRSQLName">RDM SQL</span> will reserve at connection time. The default value is 0.</td>
+                </tr>
+                <tr class="Body-Body1">
+                    <td class="BodyE-Column1-Body1">SQL_ATTR_RDM_TFS_PORT<sup>[1]</sup></td>
+                    <td class="BodyE-Column2-Body1"><span class="MyVariablesProductShortName">RDM</span>
+                    </td>
+                    <td class="BodyD-Column3-Body1">An <code>SQLUSMALLINT</code> value that indicates the port number the target TFS is listening on. The default is <span class="MyVariablesDefaultPort">21553</span>.</td>
+                </tr>
+                <tr class="Body-Body1">
+                    <td class="BodyE-Column1-Body1">SQL_ATTR_RDM_TFSINIT_DISKLESS<sup>[4]</sup></td>
+                    <td class="BodyE-Column2-Body1"><span class="MyVariablesProductShortName">RDM</span>
+                    </td>
+                    <td class="BodyD-Column3-Body1">A 32-bit integer that indicates whether the embedded TFServer uses the "diskless" mode. If <code>SQL_TRUE</code>, the driver uses the "diskless" mode. If <code>SQL_FALSE</code>, the driver does not use the "diskless" mode. The default is <code>SQL_FALSE</code>.</td>
+                </tr>
+                <tr class="Body-Body1">
+                    <td class="BodyE-Column1-Body1">SQL_ATTR_RDM_TFSINIT_DOCROOT<sup>[4]</sup></td>
+                    <td class="BodyE-Column2-Body1"><span class="MyVariablesProductShortName">RDM</span>
+                    </td>
+                    <td class="BodyD-Column3-Body1">A character string that contains the documentation root (docroot) of the embedded TFServer.<p>If the value of this attribute is not set and the <code>RDM_DOCROOT</code> environment variable is set, the value in <code>RDM_DOCROOT</code> will be used. If neither is set, the application's working directory will be used.
+</p></td>
+                </tr>
+                <tr class="Body-Body1">
+                    <td class="BodyE-Column1-Body1">SQL_ATTR_RDM_TFSINIT_LOGFILE<sup>[4]</sup></td>
+                    <td class="BodyE-Column2-Body1"><span class="MyVariablesProductShortName">RDM</span>
+                    </td>
+                    <td class="BodyD-Column3-Body1">A character string that contains the name of the log file where the activities of the embedded TFServer will be logged.  The default is <code>NULL</code>, in which case activities will not be logged.</td>
+                </tr>
+                <tr class="Body-Body1">
+                    <td class="BodyE-Column1-Body1">SQL_ATTR_RDM_TFSINIT_PORT<sup>[4]</sup></td>
+                    <td class="BodyE-Column2-Body1"><span class="MyVariablesProductShortName">RDM</span>
+                    </td>
+                    <td class="BodyD-Column3-Body1">A 32-bit integer that contains the port number of the embedded TFServer. The default value is port <span class="MyVariablesDefaultPort">21553</span>.</td>
+                </tr>
+                <tr class="Body-Body1">
+                    <td class="BodyE-Column1-Body1">SQL_ATTR_RDM_TFS_READONLY<sup>[4]</sup></td>
+                    <td class="BodyE-Column2-Body1"><span class="MyVariablesProductShortName">RDM</span>
+                    </td>
+                    <td class="BodyD-Column3-Body1">A 32-bit integer that indicates whether the embedded TFServer is in read-only mode. If <code>SQL_TRUE</code>, the embedded TFServer will only allow read operations on its databases. If <code>SQL_FALSE</code>, both read and write operations will be allowed. The default is <code>SQL_FALSE</code>.</td>
+                </tr>
+                <tr class="Body-Body1">
+                    <td class="BodyE-Column1-Body1">SQL_ATTR_RDM_TFSINIT_STDOUT<sup>[4]</sup></td>
+                    <td class="BodyE-Column2-Body1"><span class="MyVariablesProductShortName">RDM</span>
+                    </td>
+                    <td class="BodyD-Column3-Body1">A charater string that contains the name of the file the <code>stdout</code> of the embedded TFServer will be redirected to.  The default is NULL, in which case the console output will be directed to <code>stdout</code>.</td>
+                </tr>
+                <tr class="Body-Body1">
+                    <td class="BodyE-Column1-Body1">SQL_ATTR_RDM_TFSINIT_TYPE</td>
+                    <td class="BodyE-Column2-Body1"><span class="MyVariablesProductShortName">RDM</span>
+                    </td>
+                    <td class="BodyD-Column3-Body1">A 32-bit integer that indicates the type of the TFServer used with an application. <span class="MyVariablesProductShortName">RDM</span> supports the following values:
+<br /><br /><code>SQL_TFSTYPE_TFS</code> = An embedded TFServer (TFST) will be used.
+
+<br /><br /><code>SQL_TFSTYPE_RPC</code> = A remote TFServer (TFSR) will be used. This option requires that an application have access to a running TFServer process.
+
+<br /><br /><code>SQL_TFSTYPE_STANDALONE</code> = A standalone TFServer (TFSS) will be used.
+
+<br /><br /><code>SQL_TFSTYPE_DEFAULT</code> = The default TFServer will be used. This is identical to <code>SQL_TFSTYPE_TFS</code> unless the <span class="MyVariablesProductShortName">RDM</span> source code is modified and recompiled.
+
+<br /><br />The default value is <code>SQL_TFSTYPE_DEFAULT</code>.
+</td>
+                </tr>
+                <tr class="Body-Body1">
+                    <td class="BodyB-Column1-Body1">SQL_ATTR_RDM_TFSINIT_VERBOSE<sup>[4]</sup></td>
+                    <td class="BodyB-Column2-Body1"><span class="MyVariablesProductShortName">RDM</span>
+                    </td>
+                    <td class="BodyA-Column3-Body1">A 32-bit integer that indicates whether the verbose mode is enabled. If <code>SQL_TRUE</code>, more detailed message will be printed out to the TFSever console (or a file if the application uses the <code>SQL_ATTR_RDM_TFS_STDOUT</code> attribute). If <code>SQL_FALSE</code>, such detailed messages will not be displayed. The default is <code>SQL_FALSE</code>.</td>
+                </tr>
+            </tbody>
+        </table>
+        <p><sup>[1]</sup>Those attributes can be set before or after connecting to <span class="MyVariablesRSQLName">RDM SQL</span>. However, the values set after a connection has been established will not take effect until the existing connection has been closed and a new one has been established.</p>
+        <p><sup>[2]</sup>Those attributes can be set before and after connecting to <span class="MyVariablesRSQLName">RDM SQL</span>. However, the values set or retrieved before a connection has been established may not reflect the value stored in the <span class="MyVariablesRSQLName">RDM SQL</span> SQL engine. The application should always set/get those attribute values while the connection to the data source is on.</p>
+        <p><sup>[3]</sup> If the <code>SQL_ATTR_RDM_CONN_TYPE</code> attribute is set to <code>SQL_CT_UNKNOWN</code> at the time of connection, <b>SQLConnect</b> or <b>SQLDriverConnect</b> will determine the connection type by checking the values of <code>SQL_ATTR_RDM_REMOTE_NAME</code>, <code>SQL_ATTR_RDM_TFS_NAME</code>, and in the case of <b>SQLConnect</b>, the value of first argument. Once the connection type has been determined, that type will be stored in the <code>SQL_ATTR_RDM_CONN_TYPE</code> attribute. For details, see <b>SQLConnect</b> and <b>SQLDriverConnect</b>.</p>
+        <p><sup>[4]</sup> Values set with those attributes will have no effect if the application does not use an embedded TFServer ("tfss" or "tfst").</p>
+        <p><sup>[5]</sup> In <span class="MyVariablesProductShortName">RDM</span> ODBC, the processing of a SQL statement that is not read-only on a read-connection gives a STATE 42000 error at the statement preparation time.</p>
+        <p>For more information, reference MSDN&#160;documentation for <a href="http://msdn.microsoft.com/en-us/library/ms713605(v=VS.85).aspx" target="_blank">SQLSetConnectAttr.</a></p>
+        <hr MadCap:conditions="Default.ScreenOnly" width="100%" size="0" align="center" />
+        <p MadCap:conditions="Default.ScreenOnly" style="font-size: 8pt;"><span class="MyVariablesCopyright">Copyright © 2012, Raima Inc. All rights reserved.</span>
+        </p>
+        <script type="text/javascript" src="../../SkinSupport/MadCapBodyEnd.js">
+        </script>
+        <p class="MCWebHelpFramesetLink MCWebHelpFramesetLinkBottom" style="display: none;"><a href="../../../Default_CSH.htm#ODBCRM/api/SQLSetConnectAttr.htm" style="">Open topic with navigation</a>
+        </p>
+    </body>
+</html>

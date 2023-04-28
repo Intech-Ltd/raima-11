@@ -1,0 +1,38 @@
+<?xml version="1.0" encoding="utf-8"?>
+<!DOCTYPE html PUBLIC "-//W3C//DTD XHTML 1.0 Strict//EN" "http://www.w3.org/TR/xhtml1/DTD/xhtml1-strict.dtd">
+<html xmlns:MadCap="http://www.madcapsoftware.com/Schemas/MadCap.xsd" MadCap:tocPath="SQL API|JDBC User's Guide|RDMResultSet class" MadCap:InPreviewMode="false" MadCap:PreloadImages="false" MadCap:RuntimeFileType="Topic" MadCap:TargetType="WebHelp" lang="en-us" xml:lang="en-us" MadCap:PathToHelpSystem="../../../../" MadCap:HelpSystemFileName="Default.xml" MadCap:SearchType="Stem">
+    <head>
+        <meta http-equiv="Content-Type" content="text/html; charset=utf-8" /><title>close()</title>
+        <link rel="icon" type="image/png" href="http://docs.raima.com/favicon.png" />
+        <link href="../../../SkinSupport/MadCap.css" rel="stylesheet" />
+        <link href="../../../Resources/Stylesheets/raima.css" rel="stylesheet" />
+        <script src="../../../SkinSupport/MadCapAll.js">
+        </script>
+    </head>
+    <body>
+        <p class="MCWebHelpFramesetLink MCWebHelpFramesetLinkTop" style="display: none;"><a href="../../../../Default_CSH.htm#JAVARM/ResultSet/Method/close.htm" style="">Open topic with navigation</a>
+        </p>
+        <div class="MCBreadcrumbsBox_0"><span class="MCBreadcrumbsPrefix">You are here: </span><a class="MCBreadcrumbsLink" href="../../../dbRSQL.htm">SQL API</a><span class="MCBreadcrumbsDivider"> &gt; </span><a class="MCBreadcrumbsLink" href="../../dbJDBC.htm">JDBC User's Guide</a><span class="MCBreadcrumbsDivider"> &gt; </span><a class="MCBreadcrumbsLink" href="../RDMResultSet.htm">RDMResultSet class</a><span class="MCBreadcrumbsDivider"> &gt; </span><span class="MCBreadcrumbs">close()</span>
+        </div>
+        <h3 class="newpage">close()</h3>
+        <p class="Heading">Syntax:</p><pre xml:space="preserve">void close()
+           throws SQLException</pre>
+        <p class="Heading">Description:</p>
+        <p>Releases this <code>ResultSet</code> object's database and JDBC resources immediately instead of waiting for this to happen when it is automatically closed.</p>
+        <p>The closing of a <code>ResultSet</code> object does not close the <code>Blob</code>, <code>Clob</code> or <code>NClob</code> objects created by the <code>ResultSet</code>. <code>Blob</code>, <code>Clob</code> or <code>NClob</code> objects remain valid for at least the duration of the transaction in which they are created, unless their free method is invoked.</p>
+        <p>When a <code>ResultSet</code> is closed, any <code>ResultSetMetaData</code> instances that were created by calling the <code>getMetaData</code> method remain accessible.</p>
+        <p>Note: A <code>ResultSet</code> object is automatically closed by the <code>Statement</code> object that generated it when that <code>Statement</code> object is closed, re-executed, or is used to retrieve the next result from a sequence of multiple results.</p>
+        <p>Calling the method close on a <code>ResultSet</code> object that is already closed is a no-op.</p>
+        <p class="Heading">Throws:</p>
+        <p><span class="MCPopup"><a href="javascript:void(0);" MadCap:src="http://docs.oracle.com/javase/6/docs/api/java/sql/SQLException.html" onclick="FMCPopup( event, this ); return false;" class="MCPopupSpot_0">SQLException</a></span> - if a database access error occurs</p>
+        <p class="Heading">Reference:</p>
+        <p>For more information, reference JDBC&#160;documentation for:&#160;<a href="http://docs.oracle.com/javase/6/docs/api/java/sql/ResultSet.html#close()" target="_blank">ResultSet.close()</a></p>
+        <hr MadCap:conditions="Default.ScreenOnly" width="100%" size="0" align="center" />
+        <p MadCap:conditions="Default.ScreenOnly" style="font-size: 8pt;"><span class="MyVariablesCopyright">Copyright © 2012, Raima Inc. All rights reserved.</span>
+        </p>
+        <script type="text/javascript" src="../../../SkinSupport/MadCapBodyEnd.js">
+        </script>
+        <p class="MCWebHelpFramesetLink MCWebHelpFramesetLinkBottom" style="display: none;"><a href="../../../../Default_CSH.htm#JAVARM/ResultSet/Method/close.htm" style="">Open topic with navigation</a>
+        </p>
+    </body>
+</html>

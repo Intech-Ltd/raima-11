@@ -1,0 +1,553 @@
+<?xml version="1.0" encoding="utf-8"?>
+<!DOCTYPE html PUBLIC "-//W3C//DTD XHTML 1.0 Strict//EN" "http://www.w3.org/TR/xhtml1/DTD/xhtml1-strict.dtd">
+<html xmlns:MadCap="http://www.madcapsoftware.com/Schemas/MadCap.xsd" MadCap:tocPath="SQL API|SQL Language Guide|Reference Guide" MadCap:InPreviewMode="false" MadCap:PreloadImages="false" MadCap:RuntimeFileType="Topic" MadCap:TargetType="WebHelp" lang="en-us" xml:lang="en-us" MadCap:PathToHelpSystem="../../" MadCap:HelpSystemFileName="Default.xml" MadCap:SearchType="Stem">
+    <head>
+        <meta http-equiv="Content-Type" content="text/html; charset=utf-8" /><title>SQL Language Syntax Summary</title>
+        <link rel="icon" type="image/png" href="http://docs.raima.com/favicon.png" />
+        <link href="../SkinSupport/MadCap.css" rel="stylesheet" />
+        <link href="../Resources/Stylesheets/raima.css" rel="stylesheet" />
+        <script src="../SkinSupport/MadCapAll.js" type="text/javascript">
+        </script>
+    </head>
+    <body>
+        <p class="MCWebHelpFramesetLink MCWebHelpFramesetLinkTop" style="display: none;"><a href="../../Default_CSH.htm#SQL/SQLLanguage.htm" style="">Open topic with navigation</a>
+        </p>
+        <div class="MCBreadcrumbsBox_0"><span class="MCBreadcrumbsPrefix">You are here: </span><a class="MCBreadcrumbsLink" href="../dbRSQL.htm">SQL API</a><span class="MCBreadcrumbsDivider"> &gt; </span><a class="MCBreadcrumbsLink" href="dbSQL.htm">SQL Language Guide</a><span class="MCBreadcrumbsDivider"> &gt; </span><a class="MCBreadcrumbsLink" href="SQLStmtRef.htm">Reference Guide</a><span class="MCBreadcrumbsDivider"> &gt; </span><span class="MCBreadcrumbs">SQL Language Syntax Summary</span>
+        </div>
+        <h1><a MadCap:generatedBookmark="TOC" name="SQL_Language_Syntax_Summary"></a>SQL Language Syntax Summary</h1>
+        <p>The syntax for the SQL statements that are implemented in <span class="MyVariablesRSQLName">RDM SQL</span> is given below.  Note that those items in red have not yet been implemented.  Refer to "<a href="Chapter2.htm">A Language for Describing a Language</a>" for a description of how to read the syntax specification. C-style comments are explanatory and not part of the syntax.</p><pre class="Grammar" xml:space="preserve">RDM_SQL:
+		RDM_ddl_stmts&#160;|&#160;RDM_dml_stmts&#160;|&#160;RDM_proc_stmts</pre>
+        <h2><a MadCap:generatedBookmark="TOC" name="RDM&#160;DDL&#160;Statements"></a>RDM&#160;DDL&#160;Statements</h2><pre class="Grammar" xml:space="preserve">RDM_ddl_stmts:
+ 		create_schema_stmt 
+ 		{create_domain_stmt | create_table_stmt}...
+		{create_catalog_stmt}</pre><pre class="Grammar" xml:space="preserve">create_schema_stmt:
+ 		<b>create</b> {<b>schema</b> | <b>database</b>} <i>db_name</i>
+			[<b>pagesize</b> = <i>num</i>] [<b>inmemory</b> [<b>persistent</b> |&#160;<b>volatile</b> |&#160;<b>read</b>]]</pre><pre class="Grammar" xml:space="preserve">create_domain_stmt:
+		<b>create domain</b>   <![CDATA[ ]]><i>domain_name</i> [<b>as</b>] data_type
+			[<b>default</b> {<i>constant</i> | <b>null</b>}]
+</pre><pre class="Grammar" xml:space="preserve">create_catalog_stmt:
+		<b>create catalog for</b>   <![CDATA[ ]]><i>dbname</i></pre><pre class="Grammar" xml:space="preserve">create_table_stmt:
+		standard_table |&#160;virtual_table</pre><pre class="Grammar" xml:space="preserve">virtual_table:
+ 		<b>create virtual</b> [<b>read only</b>] <b>table</b>   <![CDATA[ ]]><i>table_name</i> (
+			vcolumn_def[, vcolumn_def]…
+ 		)</pre><pre class="Grammar" xml:space="preserve">vcolumn_def:
+		<i>column_name</i> base_type
+			[<b>distinct values</b> = <i>num</i>] [<b>range</b>   <![CDATA[ ]]><i>constant</i>   <![CDATA[ ]]><b>to</b>   <![CDATA[ ]]><i>constant</i>]
+			[<b>primary key</b>]</pre><pre class="Grammar" xml:space="preserve">standard_table:
+ 		<b>create</b> [<b>circular</b>] <b>table</b>   <![CDATA[  ]]><i>table_name</i> (
+ 			column_def[, column_def]...
+ 			[, key_def[, key_def]...]
+ 		) [<b>pagesize</b> = <i>num</i>] [<b>inmemory</b> [<b>persistent</b> | <b>volatile</b> | <b>read</b>]]
+			[<b>maxpgs</b> = <i>num</i>] [<b>maxrows</b> = <i>num</i>]</pre><pre class="Grammar" xml:space="preserve">column_def:
+ 		<i>column_name</i> {type_spec | <i>domain_name</i>}
+			[<b>distinct values</b> = <i>num</i>] [<b>range</b>   <![CDATA[ ]]><i>constant</i>   <![CDATA[ ]]><b>to</b>   <![CDATA[ ]]><i>constant</i>]
+			[<b>not null</b>] [key_spec] [refs_spec]</pre><pre class="Grammar">type_spec:
+ 		data_type [<b>default</b> {<i>constant</i> | <b>null</b>}]
+</pre><pre class="Grammar" xml:space="preserve">
+data_type:
+		base_type |&#160;blob_type</pre><pre class="Grammar" xml:space="preserve">
+base_type:
+ 	 	{<b>character</b> | <b>char</b> } [(<i>length</i>)]
+ 	|	{{<b>character</b> | <b>char</b>} <b>varying</b> | <b>varchar</b> } (<i>length</i>)
+ 	|	{<b>binary</b> [(<i>length</i>)]
+	|	{<b>double</b> [<b>precision</b>] | <b>float</b> | <b>real</b> }
+ 	|	{ <b>tinyint</b> | <b>smallint</b> | <b>int</b> | <b>integer</b> | <b>long</b> | <b>bigint</b>}
+ 	|	<b>date</b> | <b>time</b> | <b>timestamp</b>   <![CDATA[  
+]]></pre><pre class="Grammar" xml:space="preserve">
+blob_type:
+ 		{{<b>character</b> | <b>char</b>} <b>large object</b> | <b>long varchar</b> | <b>clob</b>} [(<i>length</i>)] file_option
+       |	{<b>binary large object</b> | <b>large varbinary</b> | <b>blob</b>} [(<i>length</i>)] file_option</pre><pre class="Grammar" xml:space="preserve">file_option:
+	[<b>pagesize</b> = <i>num</i>] [<b>inmemory</b> [<b>persistent</b> |&#160;<b>volatile</b> |&#160;<b>read</b>]]</pre><pre class="Grammar" xml:space="preserve">key_spec:
+		[<b>primary</b> | <b>unique</b>] <b>key</b> ['['<i>keysize</i>']']
+	|	{<b>primary</b> |&#160;<b>unique</b>}&#160;<b>key</b> [<b>hash</b> {&#160;<b>(</b><i>num</i><b>)</b> |&#160;<b>of</b>   <![CDATA[ ]]><i>num</i>   <![CDATA[ ]]><b>rows</b>}] ['['<i>keysize</i>']']</pre><pre class="Grammar" xml:space="preserve">
+refs_spec:
+		<b>references</b>    <![CDATA[  ]]><i>table_name</i>[.<i>column_name</i>] [triggered_action]</pre><pre class="Grammar" xml:space="preserve">key_def:
+		[<b>primary</b> | <b>unique</b>] <b>key</b> [<b>hash</b> {<b>(</b><i>num</i><b>)</b> |&#160;<b>of</b>   <![CDATA[   ]]><i>num</i>   <![CDATA[   ]]><b>rows</b>}] ['['<i>keysize</i>']'] [<i>key_name</i>] 
+ 			(<i>column_name</i>[<b>asc</b> |&#160;<b>desc</b>] [, <i>column_name</i>[<b>asc</b> |&#160;<b>desc</b>] ]...)
+			[<b>pagesize</b> = <i>num</i>] [<b>inmemory</b> [<b>persistent</b> |&#160;<b>volatile</b> | <b>read</b>]] [<b>maxpgs</b> = <i>num</i>] 
+ 	|	<b>foreign key</b> [<i>set_name</i>] <b>(</b><i>column_name</i>[, <i>column_name</i>]...
+			<b>references</b>   <![CDATA[ ]]><i>table_name</i>[<b>(</b><i>column_name</i>[, <i>column_name</i>]...<b>)</b>]
+ 			[triggered_action]</pre><pre class="Grammar" xml:space="preserve">
+triggered_action:
+ 		<b>on update</b> action_spec  [<b>on delete</b> action_spec]
+ 	| 	<b>on delete</b> action_spec [<b>on update</b> action_spec]</pre><pre class="Grammar" xml:space="preserve">action_spec:
+               <b>cascade</b> |&#160;<b>restrict</b>&#160;|&#160;<b>set null</b></pre>
+        <h2><a MadCap:generatedBookmark="TOC" name="RDM_DML&#160;Statements"></a>RDM DML&#160;Statements</h2><pre class="Grammar" xml:space="preserve">RDM_dml_stmt:
+ 		db_stmt | select_stmt | mod_stmt 
+ 	| 	trans_stmt | lock_stmt | set_stmt</pre><pre class="Grammar" xml:space="preserve">db_stmt:
+ 		open_db_stmt | close_db_stmt | init_db_stmt</pre><pre class="Grammar" xml:space="preserve">mod_stmt:
+		insert_stmt | update_stmt | delete_stmt |&#160;import_stmt |&#160;export_stmt</pre><pre class="Grammar" xml:space="preserve">trans_stmt:
+		start_stmt | savepoint_stmt | release_stmt&#160;
+	|	rollback_stmt | commit_stmt |&#160;end_trans_stmt</pre><pre class="Grammar" xml:space="preserve">lock_stmt:
+		lock_stmt | unlock_stmt</pre><pre class="Grammar" xml:space="preserve">open_db_stmt:
+ 		<b>open</b> [<b>database</b>] db_spec
+			[[<b>in</b>] {<b>share</b> | <b>read only</b> |&#160;<b>exclusive</b>} [<b>mode</b>] |&#160;<b>as union of</b> tfs_spec[, tfs_spec]...]
+</pre><pre class="Grammar" xml:space="preserve">db_spec:
+ 	<i>db_name</i> | "[<i>pathspec/</i>]<i>db_name</i>"
+</pre><pre class="Grammar" xml:space="preserve">close_db_stmt:
+ 		<b>close</b> [<b>database</b>] <i>db_name</i></pre><pre class="Grammar" xml:space="preserve">init_db_stmt:
+ 		<b>initialize</b> [<b>database</b>] <i>db_name</i></pre><pre class="Grammar" xml:space="preserve">dropdb_stmt:
+		<b>drop database</b> {<i>db_name</i> | "<i>db_name</i>@tfs_spec"}</pre><pre class="Grammar" xml:space="preserve">tfs_spec:
+		"<i>HostComputerName</i>[:<i>ddddd</i>]"</pre><pre class="Grammar" xml:space="preserve">select_stmt:
+ 		<b>select</b> [<b>first</b>] [<b>all</b> | <b>distinct</b>] {* | select_item[, select_item]...}
+ 			<b>from</b> table_ref[, table_ref]...
+ 			[<b>where</b> conditional_expr]
+ 			[grouping | sorting | grouping sorting]
+			[<b>limit (</b><i>num</i> {<b>rows</b> |&#160;<b>mins</b>&#160;|&#160;<b>secs</b>&#160;|&#160;<b>msecs</b>}<b>)</b>]
+			[<b>for</b> {<b>read only</b> |&#160;<b>update</b> [<b>of</b>       <![CDATA[ ]]><i>column_name</i>[, <i>column_name</i>]...]}]</pre><pre class="Grammar" xml:space="preserve">grouping:
+ 		<b>group by</b> sort_col[, sort_col]... [<b>having</b> conditional_expr]</pre><pre class="Grammar" xml:space="preserve">sorting:
+ 		<b>order by</b> sort_col [<b>asc</b> |&#160;<b>desc</b>][, sort_col [<b>asc</b> |&#160;<b>desc</b>]]...</pre><pre class="Grammar" xml:space="preserve">sort_col:
+		num | <i>column_name</i></pre><pre class="Grammar" xml:space="preserve">select_item:
+		expression [alias_name | "column heading"]</pre><pre class="Grammar" xml:space="preserve">table_ref:
+		table_primary | table_join</pre><pre class="Grammar" xml:space="preserve">table_primary:
+ 		table_spec | ( table_join )</pre><pre class="Grammar" xml:space="preserve">table_spec:
+ 		[<i>db_name</i>.]<i>table_name</i> [[<b>as</b>] correlation_name]</pre><pre class="Grammar" xml:space="preserve">table_join:
+		natural_join | qualified_join | cross_join</pre><pre class="Grammar" xml:space="preserve">natural_join:
+		table_ref <b>natural</b> [<b>inner</b> | {<b>left</b> | <b>right</b>} [<b>outer</b>]] <b>join</b> table_primary</pre><pre class="Grammar" xml:space="preserve">qualified _join:
+		table_ref [<b>inner</b> | {<b>left</b> | <b>right</b>} [<b>outer</b>]] <b>join</b> table_primary
+ 			[<b>using</b> (<i>column_name</i>[, <i>column_name</i>]...) | <b>on</b> conditional_expr]</pre><pre class="Grammar" xml:space="preserve">cross_join:
+		table_ref <b>cross join</b> table_primary</pre><pre class="Grammar" xml:space="preserve">arith_expr:
+ 		expression	/*&#160;involving only numeric operands and operations */
+
+dt_expr:
+ 		expression	/*&#160;involving only date/time/timestamp operands and operations */
+
+string_expr:
+ 		expression	/*&#160;involving only string operands and operations */
+</pre><pre class="Grammar" xml:space="preserve">expression:
+		operand [arith_operator operand]...</pre><pre class="Grammar" xml:space="preserve">operand:
+		<i>constant</i> |&#160;param_ref  |&#160;column_ref&#160;|&#160;function |&#160;(expr)</pre><pre class="Grammar" xml:space="preserve">param_ref:
+		?&#160;|&#160;:<i>param_name</i></pre><pre class="Grammar" xml:space="preserve">column_ref:
+		[{<i>table_name</i> |&#160;<i>correlation_name</i>}.]<i>column_name</i></pre><pre class="Grammar" xml:space="preserve">arith_operator:
+		+&#160;|&#160;- | * |&#160;/</pre><pre class="Grammar" xml:space="preserve">function:
+		aggregate_fcn&#160;|&#160;scalar_fcn</pre><pre class="Grammar" xml:space="preserve">aggregate_fcn:
+		{<b>sum</b> | <b>avg</b> | <b>max</b> | <b>min</b>} (expression) 
+ 	|	<b>count (</b>{* | column_ref }<b>)</b>
+	|	<i>aggregate_udf_name</i> ([expression][, expression]...)</pre><pre class="Grammar" xml:space="preserve">scalar_fcn:
+ 	|	<b>if (</b>conditional_expr, expression, expression<b>)</b>
+ 	|	numeric_function | datetime_function |&#160;string_function
+ 	|	<i>scalar_udf_name</i> ([expression][, expression]...)</pre><pre class="Grammar" xml:space="preserve">numeric_function:
+		<b>abs</b>(arith_expr)
+	|	<b>acos</b>(arith_expr)
+	|	<b>asin</b>(arith_expr)
+	|	<b>atan</b>(arith_expr)
+	|	<b>atan2</b>(arith_expr)
+	|	{<b>ceil</b> |&#160;<b>ceiling</b>}(arith_expr)
+	|	<b>cos</b>(arith_expr)
+	|	<b>cot</b>(arith_expr)
+	|	<b>exp</b>(arith_expr)
+	|	<b>floor</b>(arith_expr)
+	|	{<b>ln</b> |&#160;<b>log</b>}(arith_expr)
+	|	<b>mod</b>(arith_expr)
+	|	<b>pi</b>()
+	|	<b>rand</b>(<i>num</i>)
+	|	<b>sign</b>(arith_expr)
+	|	<b>sin</b>(arith_expr)
+	|	<b>sqrt</b>(arith_expr)
+	|	<b>tan</b>(arith_expr)</pre><pre class="Grammar" xml:space="preserve">datetime_function:
+		<b>age</b>(dt_expr)
+	|	{<b>curdate</b> |&#160;<b>current_date</b>}()
+	|	{<b>curtime</b> |&#160;<b>current_time</b>}()
+	|	<b>dayofmonth</b>(dt_expr)
+	|	<b>dayofyear</b>(dt_expr)
+	|	<b>hour</b>(dt_expr)
+	|	<b>minute</b>(dt_expr)
+	|	<b>month</b>(dt_expr)
+	|	<b>quarter</b>(dt_expr)
+	|	<b>second</b>(dt_expr)
+	|	<b>week</b>(dt_expr)
+	|	<b>year</b>(dt_expr)</pre><pre class="Grammar" xml:space="preserve">string_function:
+		<b>ascii</b>(string_expr)
+	|	<b>char</b>(<i>num</i>)
+	|	<b>concat</b>(string_expr, string_expr)
+	|	<b>convert</b>(expression, {convert_type | {<b>char</b>}, <i>width</i>, convert_format})
+	|	<b>lcase</b>(string_expr)
+	|	<b>left</b>(string_expr, <i>num</i>)
+	|	<b>length</b>(string_expr)
+	|	<b>locate</b>(string_expr, string_expr, <i>num</i>)
+	|	<b>ltrim</b>(string_expr)
+	|	<b>repeat</b>(string_expr, <i>num</i>)
+	|	<b>replace</b>(string_expr, string_expr, string_expr)
+	|	<b>right</b>(string_expr, <i>num</i>)
+	|	<b>rtrim</b>(string_expr)
+	|	<b>substring</b>(string_expr, <i>num</i>, <i>num</i>)
+	|	<b>ucase</b>(string_expr)
+	|	<b>unicode</b>(string_expr)</pre><pre class="Grammar" xml:space="preserve">convert_type:
+		<b>char</b> |<b>smallint</b> | <b>integer</b> | <b>real</b>
+	|	<b>double</b> | <b>date</b> | <b>time</b> | <b>timestamp</b> |&#160;<b>tinyint</b> |&#160;<b>bigint</b>
+
+convert_format:
+		numeric_format | datetime_format
+
+numeric_format:
+		"[&lt;&lt; | &gt;&gt; | &gt;&lt;]['text' | $][- | (][#,]#[.#[#]...][e | E]['text' | $ | %]"
+
+datetime_format:
+		"[&lt;&lt; | &gt;&gt; | &gt;&lt;]['text' | spchar | date_code | time_code]..."
+
+date_code:
+		<b>m</b> | <b>mm</b> | <b>mmm</b> | <b>mon</b> | <b>mmmm</b> | <b>month</b>
+	|	<b>d</b> | <b>dd</b> | <b>ddd</b> | <b>dddd</b> | <b>day</b>
+	|	<b>yy</b> | <b>yyyy</b>
+
+time_code:
+		<b>h</b> | <b>hh</b> | <b>m</b> | <b>mm</b> | <b>s</b> | <b>ss</b> | .<b>f</b>[<b>f</b>]... | [<b>a/p</b> | <b>am/pm</b> | <b>A/P</b> | <b>AM/PM</b>]
+</pre><pre class="Grammar" xml:space="preserve">conditional_expr:
+ 		rel_expr [bool_oper rel_expr]...</pre><pre class="Grammar" xml:space="preserve">rel_expr:
+		expression [<b>not</b>] rel_oper expression
+ 	|  	expression [<b>not</b>] <b>between</b>    <![CDATA[ ]]><i>constant</i>    <![CDATA[ ]]><b>and</b>    <![CDATA[ ]]><i>constant</i>
+ 	|  	expression [<b>not</b>] <b>in</b> (<i>constant</i>[, <i>constant</i>]...) 
+ 	|  	column_ref <b>is</b> [<b>not</b>] <b>null</b>
+ 	|  	string_expr [<b>not</b>] <b>like</b> "<i>string</i>"
+ 	|  	<b>not</b> rel_expr
+ 	|  	( conditional_expr )</pre><pre class="Grammar" xml:space="preserve">rel_oper:
+		=  |  ==
+ 	| 	&lt;
+ 	|  	&gt;
+ 	|  	&lt;=
+ 	|  	&gt;=
+ 	|  	&lt;&gt;  |  !=  |  /=</pre><pre class="Grammar" xml:space="preserve">bool_oper:
+		&amp;  |  &amp;&amp;  | <b>and</b>
+ 	|  	"|"  |  "||"  | <b>or</b></pre><pre class="Grammar" xml:space="preserve">insert_stmt:
+		<b>insert into</b> [<i>db_name</i>.]<i>table_name</i> [(<i>column_name</i>[, <i>column_name</i>]... )] data_source</pre><pre class="Grammar" xml:space="preserve">data_source:
+		<b>values</b> value_expr[, value_expr]...
+ 	|	[<b>from</b>] select_stmt
+
+value_expr:
+		value_operand [{+ | - | * | /} value_operand]…
+
+value_operand:
+ 		<i>constant</i> | <i>arg_name</i> | <i>column_name</i> | ? | scalar_fcn | ( value_expr )
+</pre><pre class="Grammar" xml:space="preserve">update_stmt:
+ 		<b>update</b>  [<i>db_name</i>.]<i>table_name</i> 
+			<b>set</b>  <i>column_name</i> = expression[, <i>column_name</i> = expression]... 
+ 			[<b>where</b> {conditional_expr | <b>current of</b>   <i>cursor_name</i>}]</pre><pre class="Grammar" xml:space="preserve">delete_stmt:
+ 		<b>delete from</b> [<i>db_name</i>.]<i>table_name</i> 
+ 			[<b>where</b> {conditional_expr | <b>current of</b>   <![CDATA[ ]]><i>cursor_name</i>}]</pre><pre class="Grammar" xml:space="preserve">import_stmt:
+ 		<b>import into</b>   <![CDATA[  ]]><i>table_name</i>   <![CDATA[  ]]><b>from</b> [<b>char</b> |&#160;<b>wchar</b> | <b>xml</b>] <b>file</b> "<i>filename</i>"</pre><pre class="Grammar" xml:space="preserve">export_stmt:
+ 		<b>export into</b> [<b>char</b> |&#160;<b>wchar</b> |&#160;<b>xml</b>] <b>file</b> "<i>filename</i>" <b>from</b> select_stmt</pre><pre class="Grammar" xml:space="preserve">start_stmt:
+		{<b>start trans</b>[<b>action</b>] |&#160;<b>begin</b> [<b>work</b>] [<b>trans</b>[<b>action</b>]]} [<b>read only</b>]</pre><pre class="Grammar" xml:space="preserve">savepoint_stmt:
+ 		<b>savepoint</b>   <![CDATA[ ]]><i>savepoint_id</i></pre><pre class="Grammar" xml:space="preserve">release_stmt:
+		<b>release savepoint</b>   <![CDATA[ ]]><i>savepoint_id</i>]</pre><pre class="Grammar" xml:space="preserve">rollback_stmt:
+		<b>rollback</b> [<b>work</b>] [[<b>to savepoint</b>] <i>savepoint_id</i>]</pre><pre class="Grammar" xml:space="preserve">commit_stmt:
+		{<b>commit</b> [<b>work</b>] |&#160;<b>end</b> [<b>trans</b>[<b>action</b>]]}</pre><pre class="Grammar" xml:space="preserve">end_trans_stmt:
+		<b>end read only trans</b>[<b>action</b>]</pre><pre class="Grammar" xml:space="preserve">lock_stmt:
+ 	<b>lock table</b> [<b>in</b>   <![CDATA[ ]]><i>db_name</i>]  table_lock[, table_lock]...</pre><pre class="Grammar" xml:space="preserve">table_lock:
+		table_name [<b>read</b> | <b>write</b>&#160;|&#160;<b>default</b>]</pre><pre class="Grammar" xml:space="preserve">unlock _stmt:
+ 	<b>unlock table</b> {[<i>db_name</i>.]<i>table_name</i> | <b>all</b>}</pre><pre class="Grammar" xml:space="preserve">set_stmt:
+	set_option_stmt |&#160;set_column_stmt</pre><pre class="Grammar" xml:space="preserve">set_option_stmt:
+ 		<b>set timeout</b> [<b>to</b> | =] <i>constant</i>
+	|	<b>set autocommit</b> [<b>to</b> | =] {<b>on</b> | <b>off</b>}
+ 	|	<b>set read only trans</b>[<b>action</b>] <b>mode</b> [<b>to</b> | =] {<b>auto</b> | <b>manual</b>}
+	|	<b>set debug</b> [<b>to</b> |&#160;=] {0 |&#160;1}</pre><pre class="Grammar" xml:space="preserve">set_column_stmt:
+ 		<b>set column</b> [<i>db_name</i>.]<i>table_name</i>.<i>column_name</i>  			
+ 			[<b>type</b> [<b>to</b> | =] {<b>date</b> |&#160;<b>time</b>&#160;|&#160;<b>timestamp</b>&#160;|&#160;<b>long</b> |&#160;{<b>varchar</b> |&#160;<b>wvarchar</b>}}]
+			[<b>distinct values</b> = <i>num</i>]
+ 			[<b>range</b>   <![CDATA[    ]]><i>constant</i>   <![CDATA[    ]]><b>to</b>   <![CDATA[    ]]><i>constant</i>]
+	|	<b>set column stats</b> [<i>db_name</i>.]<i>table_name</i>.<i>column_name</i>
+			[<b>distinct values</b> = <i>num</i>] 
+ 			[<b>range</b>   <![CDATA[    ]]><i>constant</i>   <![CDATA[    ]]><b>to</b>   <![CDATA[    ]]><i>constant</i>]</pre>
+        <h2><a MadCap:generatedBookmark="TOC" name="RDM&#160;Procedure&#160;Statements"></a>RDM&#160;Procedure&#160;Statements</h2><pre class="Grammar" xml:space="preserve">RDM_proc_stmts:
+		create_proc_stmt |&#160;drop_proc_stmt&#160;|&#160;execute_stmt</pre><pre class="Grammar">create_proc_stmt:
+		<b>create</b> {<b>proc</b> | <b>procedure</b>} <i>proc_name</i> [(<i>arg_name</i> arg_type[, <i>arg_name</i> arg_type]...)] <b>as</b>
+ 			{select_stmt... | 
+ 			[start_stmt] {insert_stmt | update_stmt | delete_stmt}... [commit_stmt]}
+		<b>end</b> {<b>proc</b> | <b>procedure</b>}</pre><pre class="Grammar" xml:space="preserve">
+arg_type:
+     		{<b>character</b> | <b>char</b> }
+ 	|	{<b>double</b> [<b>precision</b>] | <b>float</b> | <b>real</b> }
+ 	|	{<b>tinyint</b> |&#160;<b>smallint</b> | <b>int</b> | <b>integer</b>   <![CDATA[ ]]><b>long</b> | <b>bigint</b>}
+ 	|	<b>date</b> | <b>time</b> | <b>timestamp</b>   <![CDATA[
+]]></pre><pre class="Grammar" xml:space="preserve">
+arg_type:
+     		{<b>character</b> | <b>char</b> }
+ 	|	{<b>double</b> [<b>precision</b>] | <b>float</b> | <b>real</b> }
+ 	|	{<b>tinyint</b> |&#160;<b>smallint</b> | <b>int</b> | <b>integer</b>   <![CDATA[ ]]><b>long</b> | <b>bigint</b>}
+ 	|	<b>date</b> | <b>time</b> | <b>timestamp</b>   <![CDATA[
+]]></pre><pre class="Grammar" xml:space="preserve">drop_proc_stmt:
+		<b>drop proc</b>[<b>edure</b>]  <i>proc_name</i></pre><pre class="Grammar" xml:space="preserve">execute_stmt:
+		[<b>exec</b>[<b>ute</b>] |&#160;<b>run</b>] <i>proc_name</i> [<b>(</b><i>constant</i>[, <i>constant</i>]...<b>)</b>]</pre>
+        <h2><a MadCap:generatedBookmark="TOC" name="SQL_Reserved_Words_for_RDM"></a>SQL Reserved Words for RDM</h2>
+        <p>The table below lists reserved words that cannot be used when creating your SQL schema, except when used for their intended purpose (i.e., the reserved word "<code>DATABASE</code>" cannot be used as your database name because it is used in the SQL grammar "<code>CREATE DATABASE ...</code>").</p>
+        <p class="Notes">Note: * Represents reserved words that are not reserved in the SQL Standard but are reserved in the underlying Native DDL.</p>
+        <table>
+            <col style="width: 25%;" />
+            <col style="width: 25%;" />
+            <col style="width: 25%;" />
+            <col style="width: 25%;" />
+            <tbody>
+                <tr>
+                    <td style="font-size: 10pt;font-family: monospace;">BS</td>
+                    <td style="font-size: 10pt;font-family: monospace;">DAYOFWEEK</td>
+                    <td style="font-size: 10pt;font-family: monospace;">LEFT</td>
+                    <td style="font-size: 10pt;font-family: monospace;">ROLLBACK</td>
+                </tr>
+                <tr>
+                    <td style="font-size: 10pt;font-family: monospace;">ACOS</td>
+                    <td style="font-size: 10pt;font-family: monospace;">DAYOFYEAR</td>
+                    <td style="font-size: 10pt;font-family: monospace;">LENGTH</td>
+                    <td style="font-size: 10pt;font-family: monospace;">ROUND</td>
+                </tr>
+                <tr>
+                    <td style="font-size: 10pt;font-family: monospace;">AGE</td>
+                    <td style="font-size: 10pt;font-family: monospace;">DB_ADDR</td>
+                    <td style="font-size: 10pt;font-family: monospace;">LIMIT</td>
+                    <td style="font-size: 10pt;font-family: monospace;">ROWID</td>
+                </tr>
+                <tr>
+                    <td style="font-size: 10pt;font-family: monospace;">ALL</td>
+                    <td style="font-size: 10pt;font-family: monospace;">DBA4</td>
+                    <td style="font-size: 10pt;font-family: monospace;">LN</td>
+                    <td style="font-size: 10pt;font-family: monospace;">RTRIM</td>
+                </tr>
+                <tr>
+                    <td style="font-size: 10pt;font-family: monospace;">*ASC</td>
+                    <td style="font-size: 10pt;font-family: monospace;">DBA8</td>
+                    <td style="font-size: 10pt;font-family: monospace;">LOCALTIME</td>
+                    <td style="font-size: 10pt;font-family: monospace;">SECOND</td>
+                </tr>
+                <tr>
+                    <td style="font-size: 10pt;font-family: monospace;">*ASCENDING</td>
+                    <td style="font-size: 10pt;font-family: monospace;">DELETE</td>
+                    <td style="font-size: 10pt;font-family: monospace;">LOCALTIMESTAMP</td>
+                    <td style="font-size: 10pt;font-family: monospace;">SELECT</td>
+                </tr>
+                <tr>
+                    <td style="font-size: 10pt;font-family: monospace;">ASCII</td>
+                    <td style="font-size: 10pt;font-family: monospace;">*DESC</td>
+                    <td style="font-size: 10pt;font-family: monospace;">LOCATE</td>
+                    <td style="font-size: 10pt;font-family: monospace;">*SET</td>
+                </tr>
+                <tr>
+                    <td style="font-size: 10pt;font-family: monospace;">ASIN</td>
+                    <td style="font-size: 10pt;font-family: monospace;">*DESCENDING</td>
+                    <td style="font-size: 10pt;font-family: monospace;">LOG</td>
+                    <td style="font-size: 10pt;font-family: monospace;">SHORT</td>
+                </tr>
+                <tr>
+                    <td style="font-size: 10pt;font-family: monospace;">ATAN</td>
+                    <td style="font-size: 10pt;font-family: monospace;">DISTINCT</td>
+                    <td style="font-size: 10pt;font-family: monospace;">LONG</td>
+                    <td style="font-size: 10pt;font-family: monospace;">SIGN</td>
+                </tr>
+                <tr>
+                    <td style="font-size: 10pt;font-family: monospace;">ATAN2</td>
+                    <td style="font-size: 10pt;font-family: monospace;">DOUBLE</td>
+                    <td style="font-size: 10pt;font-family: monospace;">LOWER</td>
+                    <td style="font-size: 10pt;font-family: monospace;">SIN</td>
+                </tr>
+                <tr>
+                    <td style="font-size: 10pt;font-family: monospace;">AVG</td>
+                    <td style="font-size: 10pt;font-family: monospace;">END</td>
+                    <td style="font-size: 10pt;font-family: monospace;">LTRIM</td>
+                    <td style="font-size: 10pt;font-family: monospace;">SMALLINT</td>
+                </tr>
+                <tr>
+                    <td style="font-size: 10pt;font-family: monospace;">BEGIN</td>
+                    <td style="font-size: 10pt;font-family: monospace;">EXP</td>
+                    <td style="font-size: 10pt;font-family: monospace;">MAX</td>
+                    <td style="font-size: 10pt;font-family: monospace;">SQRT</td>
+                </tr>
+                <tr>
+                    <td style="font-size: 10pt;font-family: monospace;">BIGINT</td>
+                    <td style="font-size: 10pt;font-family: monospace;">EXPORT</td>
+                    <td style="font-size: 10pt;font-family: monospace;">*MAXPGS</td>
+                    <td style="font-size: 10pt;font-family: monospace;">*STATIC</td>
+                </tr>
+                <tr>
+                    <td style="font-size: 10pt;font-family: monospace;">BIT</td>
+                    <td style="font-size: 10pt;font-family: monospace;">FALSE</td>
+                    <td style="font-size: 10pt;font-family: monospace;">*MAXSLOTS</td>
+                    <td style="font-size: 10pt;font-family: monospace;">*STRUCT</td>
+                </tr>
+                <tr>
+                    <td style="font-size: 10pt;font-family: monospace;">*BLOB</td>
+                    <td style="font-size: 10pt;font-family: monospace;">*FILE</td>
+                    <td style="font-size: 10pt;font-family: monospace;">*MEMBER</td>
+                    <td style="font-size: 10pt;font-family: monospace;">SUBSTRING</td>
+                </tr>
+                <tr>
+                    <td style="font-size: 10pt;font-family: monospace;">BOOLEAN</td>
+                    <td style="font-size: 10pt;font-family: monospace;">FIRST</td>
+                    <td style="font-size: 10pt;font-family: monospace;">MIN</td>
+                    <td style="font-size: 10pt;font-family: monospace;">SUM</td>
+                </tr>
+                <tr>
+                    <td style="font-size: 10pt;font-family: monospace;">*BY</td>
+                    <td style="font-size: 10pt;font-family: monospace;">FLOAT</td>
+                    <td style="font-size: 10pt;font-family: monospace;">MINUTE</td>
+                    <td style="font-size: 10pt;font-family: monospace;">TAN</td>
+                </tr>
+                <tr>
+                    <td style="font-size: 10pt;font-family: monospace;">CEIL</td>
+                    <td style="font-size: 10pt;font-family: monospace;">FLOOR</td>
+                    <td style="font-size: 10pt;font-family: monospace;">MOD</td>
+                    <td style="font-size: 10pt;font-family: monospace;">*THRU</td>
+                </tr>
+                <tr>
+                    <td style="font-size: 10pt;font-family: monospace;">CEILING</td>
+                    <td style="font-size: 10pt;font-family: monospace;">FOR</td>
+                    <td style="font-size: 10pt;font-family: monospace;">MONTH</td>
+                    <td style="font-size: 10pt;font-family: monospace;">TIME</td>
+                </tr>
+                <tr>
+                    <td style="font-size: 10pt;font-family: monospace;">CHAR</td>
+                    <td style="font-size: 10pt;font-family: monospace;">FOREIGN</td>
+                    <td style="font-size: 10pt;font-family: monospace;">NAT</td>
+                    <td style="font-size: 10pt;font-family: monospace;">TIMESTAMP</td>
+                </tr>
+                <tr>
+                    <td style="font-size: 10pt;font-family: monospace;">CHARACTER</td>
+                    <td style="font-size: 10pt;font-family: monospace;">FROM</td>
+                    <td style="font-size: 10pt;font-family: monospace;">NATURAL</td>
+                    <td style="font-size: 10pt;font-family: monospace;">TINYINT</td>
+                </tr>
+                <tr>
+                    <td style="font-size: 10pt;font-family: monospace;">CHARACTER_LENGTH</td>
+                    <td style="font-size: 10pt;font-family: monospace;">FULL</td>
+                    <td style="font-size: 10pt;font-family: monospace;">*NEXT</td>
+                    <td style="font-size: 10pt;font-family: monospace;">TRUE</td>
+                </tr>
+                <tr>
+                    <td style="font-size: 10pt;font-family: monospace;">*CIRCULAR</td>
+                    <td style="font-size: 10pt;font-family: monospace;">GROUP</td>
+                    <td style="font-size: 10pt;font-family: monospace;">NOT</td>
+                    <td style="font-size: 10pt;font-family: monospace;">TYPE</td>
+                </tr>
+                <tr>
+                    <td style="font-size: 10pt;font-family: monospace;">COMMIT</td>
+                    <td style="font-size: 10pt;font-family: monospace;">HASH</td>
+                    <td style="font-size: 10pt;font-family: monospace;">NOW</td>
+                    <td style="font-size: 10pt;font-family: monospace;">*TYPEDEF</td>
+                </tr>
+                <tr>
+                    <td style="font-size: 10pt;font-family: monospace;">*COMPACT</td>
+                    <td style="font-size: 10pt;font-family: monospace;">HOUR</td>
+                    <td style="font-size: 10pt;font-family: monospace;">NULL</td>
+                    <td style="font-size: 10pt;font-family: monospace;">TYPEOF</td>
+                </tr>
+                <tr>
+                    <td style="font-size: 10pt;font-family: monospace;">*COMPOUND</td>
+                    <td style="font-size: 10pt;font-family: monospace;">IF</td>
+                    <td style="font-size: 10pt;font-family: monospace;">*NULLABLE</td>
+                    <td style="font-size: 10pt;font-family: monospace;">UCASE</td>
+                </tr>
+                <tr>
+                    <td style="font-size: 10pt;font-family: monospace;">CONCAT</td>
+                    <td style="font-size: 10pt;font-family: monospace;">IFNULL</td>
+                    <td style="font-size: 10pt;font-family: monospace;">OCTET_LENGTH</td>
+                    <td style="font-size: 10pt;font-family: monospace;">UNICODE</td>
+                </tr>
+                <tr>
+                    <td style="font-size: 10pt;font-family: monospace;">*CONST</td>
+                    <td style="font-size: 10pt;font-family: monospace;">IMPORT</td>
+                    <td style="font-size: 10pt;font-family: monospace;">ON</td>
+                    <td style="font-size: 10pt;font-family: monospace;">UNIQUE</td>
+                </tr>
+                <tr>
+                    <td style="font-size: 10pt;font-family: monospace;">*CONTAINS</td>
+                    <td style="font-size: 10pt;font-family: monospace;">IN</td>
+                    <td style="font-size: 10pt;font-family: monospace;">*OPT</td>
+                    <td style="font-size: 10pt;font-family: monospace;">UNLOCK</td>
+                </tr>
+                <tr>
+                    <td style="font-size: 10pt;font-family: monospace;">CONVERT</td>
+                    <td style="font-size: 10pt;font-family: monospace;">INDEX</td>
+                    <td style="font-size: 10pt;font-family: monospace;">*OPTIONAL</td>
+                    <td style="font-size: 10pt;font-family: monospace;">*UNSIGNED</td>
+                </tr>
+                <tr>
+                    <td style="font-size: 10pt;font-family: monospace;">COS</td>
+                    <td style="font-size: 10pt;font-family: monospace;">*INITIAL</td>
+                    <td style="font-size: 10pt;font-family: monospace;">*ORDER</td>
+                    <td style="font-size: 10pt;font-family: monospace;">UPDATE</td>
+                </tr>
+                <tr>
+                    <td style="font-size: 10pt;font-family: monospace;">COT</td>
+                    <td style="font-size: 10pt;font-family: monospace;">INNER</td>
+                    <td style="font-size: 10pt;font-family: monospace;">*OWNER</td>
+                    <td style="font-size: 10pt;font-family: monospace;">UPPER</td>
+                </tr>
+                <tr>
+                    <td style="font-size: 10pt;font-family: monospace;">COUNT</td>
+                    <td style="font-size: 10pt;font-family: monospace;">INSERT</td>
+                    <td style="font-size: 10pt;font-family: monospace;">*PAGESIZE</td>
+                    <td style="font-size: 10pt;font-family: monospace;">USING</td>
+                </tr>
+                <tr>
+                    <td style="font-size: 10pt;font-family: monospace;">CROSS</td>
+                    <td style="font-size: 10pt;font-family: monospace;">INSSTR</td>
+                    <td style="font-size: 10pt;font-family: monospace;">*PCTINCREASE</td>
+                    <td style="font-size: 10pt;font-family: monospace;">*VARDATA</td>
+                </tr>
+                <tr>
+                    <td style="font-size: 10pt;font-family: monospace;">CURDATE</td>
+                    <td style="font-size: 10pt;font-family: monospace;">INT</td>
+                    <td style="font-size: 10pt;font-family: monospace;">*PERSISTENT</td>
+                    <td style="font-size: 10pt;font-family: monospace;">*VOLATILE</td>
+                </tr>
+                <tr>
+                    <td style="font-size: 10pt;font-family: monospace;">CURRENT_DATE</td>
+                    <td style="font-size: 10pt;font-family: monospace;">*INT16_T</td>
+                    <td style="font-size: 10pt;font-family: monospace;">PI</td>
+                    <td style="font-size: 10pt;font-family: monospace;">WCHAR</td>
+                </tr>
+                <tr>
+                    <td style="font-size: 10pt;font-family: monospace;">CURRENT_TIME</td>
+                    <td style="font-size: 10pt;font-family: monospace;">*INT32_T</td>
+                    <td style="font-size: 10pt;font-family: monospace;">QUARTER</td>
+                    <td style="font-size: 10pt;font-family: monospace;">WCHARACTER</td>
+                </tr>
+                <tr>
+                    <td style="font-size: 10pt;font-family: monospace;">CURRENT_TIMESTAMP</td>
+                    <td style="font-size: 10pt;font-family: monospace;">*INT64_T</td>
+                    <td style="font-size: 10pt;font-family: monospace;">RAND</td>
+                    <td style="font-size: 10pt;font-family: monospace;">WEEK</td>
+                </tr>
+                <tr>
+                    <td style="font-size: 10pt;font-family: monospace;">CURTIME</td>
+                    <td style="font-size: 10pt;font-family: monospace;">*INMEMORY</td>
+                    <td style="font-size: 10pt;font-family: monospace;">*READ</td>
+                    <td style="font-size: 10pt;font-family: monospace;">WHERE</td>
+                </tr>
+                <tr>
+                    <td style="font-size: 10pt;font-family: monospace;">DATA</td>
+                    <td style="font-size: 10pt;font-family: monospace;">INTEGER</td>
+                    <td style="font-size: 10pt;font-family: monospace;">REAL</td>
+                    <td style="font-size: 10pt;font-family: monospace;">WORK</td>
+                </tr>
+                <tr>
+                    <td style="font-size: 10pt;font-family: monospace;">DATABASE</td>
+                    <td style="font-size: 10pt;font-family: monospace;">JOIN</td>
+                    <td style="font-size: 10pt;font-family: monospace;">*RECORD(S)</td>
+                    <td style="font-size: 10pt;font-family: monospace;">YEAR</td>
+                </tr>
+                <tr>
+                    <td style="font-size: 10pt;font-family: monospace;">DATE</td>
+                    <td style="font-size: 10pt;font-family: monospace;">KEY</td>
+                    <td style="font-size: 10pt;font-family: monospace;">REPEAT</td>
+                    <td style="font-size: 10pt;font-family: monospace;">&#160;</td>
+                </tr>
+                <tr>
+                    <td style="font-size: 10pt;font-family: monospace;">DATETIME</td>
+                    <td style="font-size: 10pt;font-family: monospace;">*LAST</td>
+                    <td style="font-size: 10pt;font-family: monospace;">REPLACE</td>
+                    <td style="font-size: 10pt;font-family: monospace;">&#160;</td>
+                </tr>
+                <tr>
+                    <td style="font-size: 10pt;font-family: monospace;">DAYOFMONTH</td>
+                    <td style="font-size: 10pt;font-family: monospace;">LCASE</td>
+                    <td style="font-size: 10pt;font-family: monospace;">RIGHT</td>
+                    <td style="font-size: 10pt;font-family: monospace;">&#160;</td>
+                </tr>
+            </tbody>
+        </table>
+        <hr MadCap:conditions="Default.ScreenOnly" width="100%" size="0" align="center" />
+        <p MadCap:conditions="Default.ScreenOnly" style="font-size: 8pt;"><span class="MyVariablesCopyright">Copyright © 2012, Raima Inc. All rights reserved.</span>
+        </p>
+        <script type="text/javascript" src="../SkinSupport/MadCapBodyEnd.js">
+        </script>
+        <p class="MCWebHelpFramesetLink MCWebHelpFramesetLinkBottom" style="display: none;"><a href="../../Default_CSH.htm#SQL/SQLLanguage.htm" style="">Open topic with navigation</a>
+        </p>
+    </body>
+</html>

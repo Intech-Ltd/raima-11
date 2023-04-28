@@ -1,0 +1,40 @@
+<?xml version="1.0" encoding="us-ascii"?>
+<product>
+   <name>
+      <long>Raima Database Manager</long>
+      <short>RDM</short>
+      <code>CastleRock</code>
+   </name>
+   <version>
+      <major>11</major>
+      <minor>0</minor>
+      <build>620</build>
+      <patch>3</patch>
+   </version>
+   <info>
+      <host>mojave.seattlead.bstep.us</host>
+      <date>
+         <time>10:52:55</time>
+         <day>30</day>
+         <month>8</month>
+         <year>2012</year>
+      </date>
+      <user>build</user>
+      <accurev>
+         <stream></stream>
+         <transaction></transaction>
+      </accurev>
+   </info>
+   <copyright>
+      <year>2012</year>
+      <holder>Raima Inc.</holder>
+      <holdershort>Raima</holdershort>
+      <text>All rights reserved.</text>
+   </copyright>
+   <website>http://www.raima.com/</website>
+   <support>http://www.raima.com/support</support>
+   <documentation>
+      <url>http://www.raima.com/docs/rdm/11_0/</url>
+      <published>Wed Dec 31 16:00:00 1969</published>
+   </documentation>
+</product>

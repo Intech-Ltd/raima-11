@@ -1,0 +1,92 @@
+<?xml version="1.0" encoding="utf-8"?>
+<!DOCTYPE html PUBLIC "-//W3C//DTD XHTML 1.0 Strict//EN" "http://www.w3.org/TR/xhtml1/DTD/xhtml1-strict.dtd">
+<html xmlns:MadCap="http://www.madcapsoftware.com/Schemas/MadCap.xsd" MadCap:tocPath="SQL API|ADO.NET User's Guide" MadCap:InPreviewMode="false" MadCap:PreloadImages="false" MadCap:RuntimeFileType="Topic" MadCap:TargetType="WebHelp" lang="en-us" xml:lang="en-us" MadCap:PathToHelpSystem="../../" MadCap:HelpSystemFileName="Default.xml" MadCap:SearchType="Stem">
+    <head>
+        <meta http-equiv="Content-Type" content="text/html; charset=utf-8" /><title>Getting Started with ADO.NET</title>
+        <link rel="icon" type="image/png" href="http://docs.raima.com/favicon.png" />
+        <link href="../SkinSupport/MadCap.css" rel="stylesheet" />
+        <link href="../Resources/Stylesheets/raima.css" rel="stylesheet" />
+        <script src="../SkinSupport/MadCapAll.js" type="text/javascript">
+        </script>
+    </head>
+    <body>
+        <p class="MCWebHelpFramesetLink MCWebHelpFramesetLinkTop" style="display: none;"><a href="../../Default_CSH.htm#ADO/VisualStudio.htm" style="">Open topic with navigation</a>
+        </p>
+        <div class="MCBreadcrumbsBox_0"><span class="MCBreadcrumbsPrefix">You are here: </span><a class="MCBreadcrumbsLink" href="../dbRSQL.htm">SQL API</a><span class="MCBreadcrumbsDivider"> &gt; </span><a class="MCBreadcrumbsLink" href="dbADO.htm">ADO.NET User's Guide</a><span class="MCBreadcrumbsDivider"> &gt; </span><span class="MCBreadcrumbs">Getting Started with ADO.NET</span>
+        </div>
+        <h1><a MadCap:generatedBookmark="TOC" name="Getting_Started_with_ADO.NET"></a>Getting Started with ADO.NET</h1>
+        <p>Using the ADO.NET API requires a little bit of set up before you can get your application to compile and run correctly. If you follow the steps below, you will be able to execute your application correctly in both the command line and Visual Studio GUI interfaces. There are also directions on using the DbProviderFactory class.</p>
+        <h2><a MadCap:generatedBookmark="TOC" name="Registering_the_Raima.Rdm.dll"></a>Registering the Raima.Rdm.dll</h2>
+        <ol>
+            <li value="1">Open a command prompt with Administrator permissions and navigate to the installation directory for the Raima product</li>
+            <li value="2">
+                <p>Run <code>gacutil /i Raima.Rdm.dll</code></p>
+                <p>
+                    <img src="../Resources/Images/ado_01.png" />
+                </p>
+            </li>
+        </ol>
+        <h2><a MadCap:generatedBookmark="TOC" name="Command_Line"></a>Command Line</h2>
+        <ol>
+            <li value="1">Find the version of the .NET framework you have installed:<ol style="list-style-type: lower-alpha;"><li value="1"><p>Run <code>csc.exe</code> from the command line and it should output something like: </p><pre xml:space="preserve">Microsoft (R) Visual C# 2010 Compiler version 4.0.30319.1</pre></li></ol></li>
+            <li value="2">Create your ADO.NET application. Look at <a href="Introduction.htm#Basic">Basic ADO.NET Application Steps</a> for more information on this topic.</li>
+            <li value="3">
+                <p>Find the location you installed the RDM product into.   The ADO.NET dll provided should be at the <code>install directory\Win32</code> or <code>Win64\Raima.Rdm.dll</code></p>
+                <p>
+                    <img src="../Resources/Images/ado_02.png" />
+                </p>
+            </li>
+            <li value="4">Compile your main class <code>.cs</code> file you have created above by using <code>csc.exe</code> "entry point <code>.cs</code> file" <br />(i.e., <code>csc.exe /r:"Install dll folder" HelloWorld_ADO_main.cs</code>)</li>
+        </ol>
+        <h2><a MadCap:generatedBookmark="TOC" name="Visual_Studio_GUI"></a>Visual Studio GUI</h2>
+        <ol>
+            <li value="1">Step 1: Create a new C# project by going to <b>File-&gt;New-&gt;Project</b>… This will go through a setup window for your new project.</li>
+            <li value="2">Select a C# project of any type and select <b>Ok</b>.</li>
+            <li value="3">On the right hand side, there will be a References folder.  You will need to add a reference to Raima.Rdm.dll there.  Do this by right clicking the References folder and selecting <b>Add Reference</b>…</li>
+            <li value="4">
+                <p>Click the Browse tab and navigate to your installation directory then select Raima.Rdm.dll</p>
+                <p>
+                    <img src="../Resources/Images/ado_03.png" />
+                </p>
+            </li>
+            <li value="5">Click <b>Ok</b> and you are now ready to use the Raima ADO.NET provider in  your project.</li>
+        </ol>
+        <h2><a MadCap:generatedBookmark="TOC" name="Using_DbProviderFactory"></a>Using DbProviderFactory</h2>
+        <ol>
+            <li value="1">If you wish to use the DbProviderFactory object to get access to the Raima ADO.NET provider then you will first need to find out the version of the .NET framework you are using by following the steps in step 1 of the command line section.</li>
+            <li value="2">
+                <p>Navigate to that folder in your Windows directory.</p>
+                <p>
+                    <img src="../Resources/Images/ado_04.png" />
+                </p>
+            </li>
+            <li value="3">
+                <p>Go into the folder for the version you are using and then into the Config folder there.</p>
+                <p>
+                    <img src="../Resources/Images/ado_05.png" />
+                </p>
+            </li>
+            <li value="4">
+                <p>Open the machine.config file.  On Windows 7, you will need to do so with notepad and Administrator access.</p>
+            </li>
+            <li value="5">
+                <p>Find the <code>&lt;DbProviderFactories&gt;</code> section and add the following entry:  </p><pre xml:space="preserve">&lt;add name="Raima RDM Embedded Data Provider" invariant="Raima.Rdm" 
+description=".NET Framework Data Provider for RDM" type="Raima.Rdm.RdmProviderFactory, 
+Raima.Rdm, Version=11.0.1000.0, Culture=neutral, PublicKeyToken=23f692695ad03bb6"/&gt;</pre>
+                <p>
+                    <img src="../Resources/Images/ado_06.png" />
+                </p>
+            </li>
+            <li value="6">
+                <p>&#160;</p>
+            </li>
+        </ol>
+        <hr MadCap:conditions="Default.ScreenOnly" width="100%" size="0" align="center" />
+        <p MadCap:conditions="Default.ScreenOnly" style="font-size: 8pt;"><span class="MyVariablesCopyright">Copyright © 2012, Raima Inc. All rights reserved.</span>
+        </p>
+        <script type="text/javascript" src="../SkinSupport/MadCapBodyEnd.js">
+        </script>
+        <p class="MCWebHelpFramesetLink MCWebHelpFramesetLinkBottom" style="display: none;"><a href="../../Default_CSH.htm#ADO/VisualStudio.htm" style="">Open topic with navigation</a>
+        </p>
+    </body>
+</html>

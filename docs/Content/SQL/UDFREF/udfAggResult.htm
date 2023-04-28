@@ -1,0 +1,146 @@
+<?xml version="1.0" encoding="utf-8"?>
+<!DOCTYPE html PUBLIC "-//W3C//DTD XHTML 1.0 Strict//EN" "http://www.w3.org/TR/xhtml1/DTD/xhtml1-strict.dtd">
+<html xmlns:MadCap="http://www.madcapsoftware.com/Schemas/MadCap.xsd" MadCap:tocPath="SQL API|SQL Language Guide|Reference Guide|SQL UDF Reference" MadCap:InPreviewMode="false" MadCap:PreloadImages="false" MadCap:RuntimeFileType="Topic" MadCap:TargetType="WebHelp" lang="en-us" xml:lang="en-us" MadCap:PathToHelpSystem="../../../" MadCap:HelpSystemFileName="Default.xml" MadCap:SearchType="Stem">
+    <head>
+        <meta http-equiv="Content-Type" content="text/html; charset=utf-8" /><title>udfAggResult</title>
+        <link rel="icon" type="image/png" href="http://docs.raima.com/favicon.png" />
+        <link href="../../SkinSupport/MadCap.css" rel="stylesheet" />
+        <link href="../../Resources/TableStyles/FunctionArgs.css" rel="stylesheet" />
+        <link href="../../Resources/TableStyles/SQLErrorCodes.css" rel="stylesheet" />
+        <link href="../../Resources/Stylesheets/raima.css" rel="stylesheet" />
+        <script src="../../SkinSupport/MadCapAll.js" type="text/javascript">
+        </script>
+    </head>
+    <body>
+        <p class="MCWebHelpFramesetLink MCWebHelpFramesetLinkTop" style="display: none;"><a href="../../../Default_CSH.htm#SQL/UDFREF/udfAggResult.htm" style="">Open topic with navigation</a>
+        </p>
+        <div class="MCBreadcrumbsBox_0"><span class="MCBreadcrumbsPrefix">You are here: </span><a class="MCBreadcrumbsLink" href="../../dbRSQL.htm">SQL API</a><span class="MCBreadcrumbsDivider"> &gt; </span><a class="MCBreadcrumbsLink" href="../dbSQL.htm">SQL Language Guide</a><span class="MCBreadcrumbsDivider"> &gt; </span><a class="MCBreadcrumbsLink" href="../SQLStmtRef.htm">Reference Guide</a><span class="MCBreadcrumbsDivider"> &gt; </span><span class="MCBreadcrumbs">udfAggResult</span>
+        </div>
+        <h3 class="newpage">udfAggResult<a name="kanchor252"></a></h3>
+        <p>Fetch aggregate user-defined function result calculation</p>
+        <p class="Heading">Prototype</p><pre xml:space="preserve">RSQL_ERRCODE EXTERNAL_FCN <i>udfAggResult</i>(
+    HSTMT               hStmt,  
+    void               *pFcnCtx,
+    RSQL_VALUE         *pResult)
+</pre>
+        <p class="Heading">Arguments</p>
+        <table style="width: 100%;mc-table-style: url('../../Resources/TableStyles/FunctionArgs.css');margin-left: 0;margin-right: auto;" class="TableStyle-FunctionArgs" cellspacing="0">
+            <col class="Column-Column1" />
+            <col class="Column-Column3" />
+            <col class="Column-Column2" />
+            <tbody>
+                <tr class="Body-Body1">
+                    <td class="BodyE-Column1-Body1">hStmt</td>
+                    <td class="BodyE-Column3-Body1">(input)</td>
+                    <td class="BodyD-Column2-Body1">Statement handle of SQL statement referencing this UDF.</td>
+                </tr>
+                <tr class="Body-Body1">
+                    <td class="BodyE-Column1-Body1">pFcnCtx</td>
+                    <td class="BodyE-Column3-Body1">(input)</td>
+                    <td class="BodyD-Column2-Body1">Pointer to the user program allocated registration context data area.</td>
+                </tr>
+                <tr class="Body-Body1">
+                    <td class="BodyB-Column1-Body1">pResult</td>
+                    <td class="BodyB-Column3-Body1">(output)</td>
+                    <td class="BodyA-Column2-Body1">Pointer to the <code>RSQL_VALUE</code> variable to contain the result value.</td>
+                </tr>
+            </tbody>
+        </table>
+        <p class="Heading">Description</p>
+        <p>The <i>udfAggResult</i> function is called by <span class="MyVariablesRSQLName">RDM SQL</span> during execution of the SQL statement containing the UDF function reference to perform and return the desired aggregate calculation result.  This function is designed to be called once after all of the detail rows have been processed. However, at this time, <span class="MyVariablesRSQLName">RDM SQL</span> actually calls this function after each detail row has been fetched and after the <i>udfAggCall</i> function has been called. So, this function should never reset the aggregate computational value—that is the job of the <i>udfAggReset</i> function.</p>
+        <p>The result value needs to be returned in the <code>RSQL_VALUE</code> variable pointed to by the <code>pResult</code> output argument.  Note that for <code>tCHAR</code>/<code>tVARCHAR</code> result values the <code>pResult-&gt;vt.cv</code> is assigned to a pointer to a null-terminated <code>char</code> array for a character string result value.  The memory containing the string must not be local to the <i>udfAggResult</i> function as it will go out of scope as soon as the function returns. The memory needed for results that are dynamic (e.g., character strings, binary arrays, etc.) will normally be contained or managed in the function context data area (<code>pFcnCtx</code>).  Refer to the <a href="../Chapter11.htm#SQL">SQL Data Types and Values</a> section for details on the use of the <code>RSQL_VALUE struct</code>.</p>
+        <p class="Heading">Example</p><pre xml:space="preserve">#include "rsql.h"
+	. . .
+/* ======================================================================
+   User function for matchcount() UDF
+*/
+static RSQL_ERRCODE EXTERNAL_FCN CntResult (
+    HSTMT              hStmt,   /* in:  system handle */
+    void              *cxtp,    /* in:  UDF context pointer */
+    RSQL_VALUE        *result)  /* out: result value */
+{
+    RSQL_ERRCODE stat;
+    COUNT_CTX *ccp  = (COUNT_CTX *)cxtp;
+
+    UNREF_PARM(hStmt)
+
+    if ( ccp-&gt;stat != errSUCCESS ) {
+        result-&gt;type = tSMALLINT;
+        result-&gt;vt.sv = (int16_t) ccp-&gt;stat;
+        stat = errSQLERROR;
+    }
+    else {
+        result-&gt;type   = tBIGINT;
+        result-&gt;vt.llv = ccp-&gt;count;
+        stat = errSUCCESS;
+    }
+    return stat;
+}
+</pre>
+        <p class="Heading">Return Codes</p>
+        <table class="TableStyle-SQLErrorCodes" cellspacing="0" style="mc-table-style: url('../../Resources/TableStyles/SQLErrorCodes.css');">
+            <col class="Column-Column1" />
+            <col class="Column-Column2" />
+            <col class="Column-Column3" />
+            <col class="Column-Column4" />
+            <tbody>
+                <tr class="Body-Body1">
+                    <th class="BodyB-Column1-Body1" style="font-weight: bold;">Error Code</th>
+                    <th class="BodyB-Column2-Body1" style="font-weight: bold;">Enum Identifier</th>
+                    <th class="BodyB-Column3-Body1" style="font-weight: bold;">SQL State</th>
+                    <th class="BodyA-Column4-Body1" style="font-weight: bold;">Description</th>
+                </tr>
+            </tbody>
+        </table>
+        <table class="TableStyle-SQLErrorCodes" cellspacing="0" style="mc-table-style: url('../../Resources/TableStyles/SQLErrorCodes.css');">
+            <col class="Column-Column1" />
+            <col class="Column-Column2" />
+            <col class="Column-Column3" />
+            <col class="Column-Column4" />
+            <tbody>
+                <tr class="Body-Body1">
+                    <td class="BodyB-Column1-Body1">0</td>
+                    <td class="BodyB-Column2-Body1">errSUCCESS</td>
+                    <td class="BodyB-Column3-Body1">00000</td>
+                    <td class="BodyA-Column4-Body1">no error was detected</td>
+                </tr>
+            </tbody>
+        </table>
+        <table class="TableStyle-SQLErrorCodes" cellspacing="0" style="mc-table-style: url('../../Resources/TableStyles/SQLErrorCodes.css');">
+            <col class="Column-Column1" />
+            <col class="Column-Column2" />
+            <col class="Column-Column3" />
+            <col class="Column-Column4" />
+            <tbody>
+                <tr class="Body-Body1">
+                    <td class="BodyB-Column1-Body1">-2</td>
+                    <td class="BodyB-Column2-Body1">errSQLERROR</td>
+                    <td class="BodyB-Column3-Body1">RX002</td>
+                    <td class="BodyA-Column4-Body1">internal SQL error</td>
+                </tr>
+            </tbody>
+        </table>
+        <p class="Heading">See Also</p>
+        <p><a href="../../SQLRM/rsqlRegisterUDFs.htm">rsqlRegisterUDFs</a>
+        </p>
+        <p><a href="udfCheck.htm">udfCheck</a>
+        </p>
+        <p><a href="udfInit.htm">udfInit</a>
+        </p>
+        <p><a href="udfTerm.htm">udfTerm</a>
+        </p>
+        <p><a href="udfScalarCall.htm">udfScalarCall</a>
+        </p>
+        <p><a href="udfAggCall.htm">udfAggCall</a>
+        </p>
+        <p><a href="udfAggReset.htm">udfAggReset</a>
+        </p>
+        <hr MadCap:conditions="Default.ScreenOnly" width="100%" size="0" align="center" />
+        <p MadCap:conditions="Default.ScreenOnly" style="font-size: 8pt;"><span class="MyVariablesCopyright">Copyright © 2012, Raima Inc. All rights reserved.</span>
+        </p>
+        <script type="text/javascript" src="../../SkinSupport/MadCapBodyEnd.js">
+        </script>
+        <p class="MCWebHelpFramesetLink MCWebHelpFramesetLinkBottom" style="display: none;"><a href="../../../Default_CSH.htm#SQL/UDFREF/udfAggResult.htm" style="">Open topic with navigation</a>
+        </p>
+    </body>
+</html>

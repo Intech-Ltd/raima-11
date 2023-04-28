@@ -1,0 +1,7 @@
+"JOE", "Fox, Joe", "1998-12-18", 0.025
+"KATE", "Kelly, Kathleen", "1998-12-18", 0.025
+"FRANK", "Doel, Frank", "1987-02-13", 0.03
+"ALFRED", "Kralik, Alfred", "1997-07-02", 0.025
+"KLARA", "Novac, Klara", "1990-01-02", 0.025
+"BARNEY", "Noble, Barney", "1972-05-08", 0.035
+"AMY", "Zonn, Amy", "1994-07-06", 0.025

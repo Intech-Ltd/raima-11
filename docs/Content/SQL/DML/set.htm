@@ -1,0 +1,50 @@
+<?xml version="1.0" encoding="utf-8"?>
+<!DOCTYPE html PUBLIC "-//W3C//DTD XHTML 1.0 Strict//EN" "http://www.w3.org/TR/xhtml1/DTD/xhtml1-strict.dtd">
+<html xmlns:MadCap="http://www.madcapsoftware.com/Schemas/MadCap.xsd" MadCap:tocPath="SQL API|SQL Language Guide|Reference Guide|SQL Statement Reference" MadCap:InPreviewMode="false" MadCap:PreloadImages="false" MadCap:RuntimeFileType="Topic" MadCap:TargetType="WebHelp" lang="en-us" xml:lang="en-us" MadCap:PathToHelpSystem="../../../" MadCap:HelpSystemFileName="Default.xml" MadCap:SearchType="Stem">
+    <head>
+        <meta http-equiv="Content-Type" content="text/html; charset=utf-8" /><title>set</title>
+        <link rel="icon" type="image/png" href="http://docs.raima.com/favicon.png" />
+        <link href="../../SkinSupport/MadCap.css" rel="stylesheet" />
+        <link href="../../Resources/Stylesheets/raima.css" rel="stylesheet" />
+        <script src="../../SkinSupport/MadCapAll.js" type="text/javascript">
+        </script>
+    </head>
+    <body>
+        <p class="MCWebHelpFramesetLink MCWebHelpFramesetLinkTop" style="display: none;"><a href="../../../Default_CSH.htm#SQL/DML/set.htm" style="">Open topic with navigation</a>
+        </p>
+        <div class="MCBreadcrumbsBox_0"><span class="MCBreadcrumbsPrefix">You are here: </span><a class="MCBreadcrumbsLink" href="../../dbRSQL.htm">SQL API</a><span class="MCBreadcrumbsDivider"> &gt; </span><a class="MCBreadcrumbsLink" href="../dbSQL.htm">SQL Language Guide</a><span class="MCBreadcrumbsDivider"> &gt; </span><a class="MCBreadcrumbsLink" href="../SQLStmtRef.htm">Reference Guide</a><span class="MCBreadcrumbsDivider"> &gt; </span><span class="MCBreadcrumbs">set</span>
+        </div>
+        <h3 class="newpage"><a name="kanchor245"></a>set</h3>
+        <p>Set an SQL operational parameter value</p>
+        <p class="Heading">Syntax</p><pre class="Grammar" xml:space="preserve">set_option_stmt:
+ 		<b>set timeout</b> [<b>to</b> | =] <i>constant</i>
+	|	<b>set autocommit</b> [<b>to</b> | =] {<b>on</b> | <b>off</b>}
+ 	|	<b>set read only trans</b>[<b>action</b>] <b>mode</b> [<b>to</b> | =] {<b>auto</b> | <b>manual</b>}
+	|	<b>set debug</b> [<b>to</b> |&#160;=] {0 |&#160;1}</pre>
+        <p class="Heading">Description</p>
+        <p>The <b>set</b> statement is used to set a variety of different <span class="MyVariablesRSQLName">RDM SQL</span> operational parameters.  The <b>set currency</b>, <b>thousands</b>, and <b>decimal</b> statements set the currency, thousands separator, and decimal symbols to be used in the format_spec of the <b>display</b> clause of the <b>create domain</b> and <b>create table</b> statements and the <b>convert</b> string function. All of the parameter settings apply to the connection handle and, thus, all of the statement handles that have been allocated on that connection.</p>
+        <p>The <b>set timeout</b> sets the number of seconds to wait for a locked table to become available.  The default is 30 seconds.  Setting timeout to -1 will disable timeouts which we do not recommend doing.  A timeout value of 0 will cause lock requests to timeout immediately when the requested lock is not available.</p>
+        <p>The <b>set autocommit</b> can be used to turn on or off autocommit mode.  When autocommit is on, each <b>insert</b>, <b>update</b>, and <b>delete</b> statement will automatically issue a transaction commit at the end of the statement unless a transaction was explicitly started by the application prior to the statement's execution.</p>
+        <p>The <b>read only transaction mode</b> is set to <b>manual</b> by default.  In manual mode, each <b>select</b> statement will issue read lock requests on the tables to be accessed.   In this mode, execution of a select statement can return an <code>errTIMEOUT</code> status.  When <b>read only transaction mode</b> is set to <b>auto</b>, <b>select</b> statements that are executed outside of a transaction will automatically execute a <b>start transaction read only</b> marking the beginning of a group of related database reads in which the data being read has been "frozen" to its state at the time the transaction was started.  Changes made after this by other connections are not blocked but they are also not visible.  When the <b>select</b> statement completes (i.e., the cursor is closed), the read only transaction is automatically terminated.</p>
+        <p>The <b>set debug</b> statement can be used to enable the writing of files named "<code>debug.ddd</code>" into the current directory where <code>ddd</code> begins with "000" and increases monotonically.  Each file contains information for a single compiled SQL <b>select</b>, <b>update</b>, or <b>delete</b> that is used by the <span class="MyVariablesRSQLName">RDM SQL</span> query optimizer.  At this time, this information is only of particular use to Raima support engineers and its use is, therefore, discouraged.</p>
+        <p class="Heading">Example</p><pre xml:space="preserve" style="font-weight: bold;">
+set read only transaction mode to auto;
+set timeout to 5;</pre>
+        <p class="Heading">See Also</p>
+        <p><a href="../DDL/createtable.htm">create table</a>
+        </p>
+        <p><a href="start.htm">start transaction</a>
+        </p>
+        <p><a href="../../SQLRM/rsqlSetAutoCommit.htm">rsqlSetAutoCommit</a>
+        </p>
+        <p><a href="../../SQLRM/rsqlSetReadOnlyTrmode.htm">rsqlSetReadOnlyTrmode</a>
+        </p>
+        <hr MadCap:conditions="Default.ScreenOnly" width="100%" size="0" align="center" />
+        <p MadCap:conditions="Default.ScreenOnly" style="font-size: 8pt;"><span class="MyVariablesCopyright">Copyright © 2012, Raima Inc. All rights reserved.</span>
+        </p>
+        <script type="text/javascript" src="../../SkinSupport/MadCapBodyEnd.js">
+        </script>
+        <p class="MCWebHelpFramesetLink MCWebHelpFramesetLinkBottom" style="display: none;"><a href="../../../Default_CSH.htm#SQL/DML/set.htm" style="">Open topic with navigation</a>
+        </p>
+    </body>
+</html>

@@ -1,0 +1,55 @@
+<?xml version="1.0" encoding="utf-8"?>
+<!DOCTYPE html PUBLIC "-//W3C//DTD XHTML 1.0 Strict//EN" "http://www.w3.org/TR/xhtml1/DTD/xhtml1-strict.dtd">
+<html xmlns:MadCap="http://www.madcapsoftware.com/Schemas/MadCap.xsd" MadCap:tocPath="Utility Programs|DB Repair Guide|Utility Descriptions" MadCap:InPreviewMode="false" MadCap:PreloadImages="false" MadCap:RuntimeFileType="Topic" MadCap:TargetType="WebHelp" lang="en-us" xml:lang="en-us" MadCap:PathToHelpSystem="../../../../" MadCap:HelpSystemFileName="Default.xml" MadCap:SearchType="Stem">
+    <head>
+        <meta http-equiv="Content-Type" content="text/html; charset=utf-8" /><title>dchain</title>
+        <link rel="icon" type="image/png" href="http://docs.raima.com/favicon.png" />
+        <link href="../../../SkinSupport/MadCap.css" rel="stylesheet" />
+        <link href="../../../Resources/TableStyles/ArgsTwoCol.css" rel="stylesheet" />
+        <link href="../../../Resources/Stylesheets/raima.css" rel="stylesheet" />
+        <script src="../../../SkinSupport/MadCapAll.js" type="text/javascript">
+        </script>
+    </head>
+    <body>
+        <p class="MCWebHelpFramesetLink MCWebHelpFramesetLinkTop" style="display: none;"><a href="../../../../Default_CSH.htm#util/dbrepair/UTL/dchain.htm" style="">Open topic with navigation</a>
+        </p>
+        <div class="MCBreadcrumbsBox_0"><span class="MCBreadcrumbsPrefix">You are here: </span><a class="MCBreadcrumbsLink" href="../../../dbUTIL.htm">Utility Programs</a><span class="MCBreadcrumbsDivider"> &gt; </span><span class="MCBreadcrumbsSelf">DB Repair Guide</span><span class="MCBreadcrumbsDivider"> &gt; </span><a class="MCBreadcrumbsLink" href="../Chapter2.htm">Utility Descriptions</a><span class="MCBreadcrumbsDivider"> &gt; </span><span class="MCBreadcrumbs">dchain</span>
+        </div>
+        <h3 class="newpage"><a MadCap:generatedBookmark="TOC" name="dchain"></a>dchain</h3>
+        <p>Delete chain sort utility</p>
+        <p class="Heading">Prototype</p><pre xml:space="preserve">
+            <b>dchain</b> [-docroot path] [-q] [-v] dbname [<i>dbfile</i>]...</pre>
+        <p class="Heading">Description</p>
+        <p>The <b>dchain</b> utility sorts the deleted record slots on the delete chains of the listed data files ([<i>dbfile</i>]...) from database dbname in database address order. If no files are listed, all data files in database dbname will be processed. This utility does not sort key file delete chains.</p>
+        <p>The purpose of this utility is to increase the probability that newly created records in the same file will be placed close together. The extent of any performance improvement, however, will depend upon the application. The most likely time to use this utility is after a periodic purge of a particular set of record types, many of which were entered together; thus there would be many contiguous record slots on the delete chain.</p>
+        <p class="Heading">Options</p>
+        <table style="width: 100%;mc-table-style: url('../../../Resources/TableStyles/ArgsTwoCol.css');margin-left: 0;margin-right: auto;" class="TableStyle-ArgsTwoCol" cellspacing="0">
+            <col class="Column-Column1" style="width: 160px;" />
+            <col class="Column-Column2" />
+            <tbody>
+                <tr class="Body-Body1">
+                    <td class="BodyE-Column1-Body1">-docroot <i>path</i></td>
+                    <td class="BodyD-Column2-Body1">[non-RPC configuration only] Specifies the document root when in Direct-Link or Standalone configuration.</td>
+                </tr>
+                <tr class="Body-Body1">
+                    <td class="BodyE-Column1-Body1">-q</td>
+                    <td class="BodyD-Column2-Body1">Only display error messages (to stderr).</td>
+                </tr>
+                <tr class="Body-Body1">
+                    <td class="BodyB-Column1-Body1">-v</td>
+                    <td class="BodyA-Column2-Body1">Display detailed output about all operations (to stdout).</td>
+                </tr>
+            </tbody>
+        </table>
+        <p class="Heading">See Also&#160;&#160;</p>
+        <p><a href="../RM/d_dchain.htm">d_dchain</a>
+        </p>
+        <hr MadCap:conditions="Default.ScreenOnly" width="100%" size="0" align="center" />
+        <p MadCap:conditions="Default.ScreenOnly" style="font-size: 8pt;"><span class="MyVariablesCopyright">Copyright © 2012, Raima Inc. All rights reserved.</span>
+        </p>
+        <script type="text/javascript" src="../../../SkinSupport/MadCapBodyEnd.js">
+        </script>
+        <p class="MCWebHelpFramesetLink MCWebHelpFramesetLinkBottom" style="display: none;"><a href="../../../../Default_CSH.htm#util/dbrepair/UTL/dchain.htm" style="">Open topic with navigation</a>
+        </p>
+    </body>
+</html>

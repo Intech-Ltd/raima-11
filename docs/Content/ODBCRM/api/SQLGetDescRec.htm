@@ -1,0 +1,218 @@
+<?xml version="1.0" encoding="utf-8"?>
+<!DOCTYPE html PUBLIC "-//W3C//DTD XHTML 1.0 Strict//EN" "http://www.w3.org/TR/xhtml1/DTD/xhtml1-strict.dtd">
+<html xmlns:MadCap="http://www.madcapsoftware.com/Schemas/MadCap.xsd" MadCap:tocPath="SQL API|ODBC User's Guide|ODBC API&#160;Reference" MadCap:InPreviewMode="false" MadCap:PreloadImages="false" MadCap:RuntimeFileType="Topic" MadCap:TargetType="WebHelp" lang="en-us" xml:lang="en-us" MadCap:PathToHelpSystem="../../../" MadCap:HelpSystemFileName="Default.xml" MadCap:SearchType="Stem">
+    <head>
+        <meta http-equiv="Content-Type" content="text/html; charset=utf-8" /><title>SQLGetDescRec</title>
+        <link rel="icon" type="image/png" href="http://docs.raima.com/favicon.png" />
+        <link href="../../SkinSupport/MadCap.css" rel="stylesheet" />
+        <link href="../../Resources/TableStyles/FunctionArgs.css" rel="stylesheet" />
+        <link href="../../Resources/TableStyles/ODBCErrorCodes.css" rel="stylesheet" />
+        <link href="../../Resources/Stylesheets/raima.css" rel="stylesheet" />
+        <script src="../../SkinSupport/MadCapAll.js" type="text/javascript">
+        </script>
+    </head>
+    <body>
+        <p class="MCWebHelpFramesetLink MCWebHelpFramesetLinkTop" style="display: none;"><a href="../../../Default_CSH.htm#ODBCRM/api/SQLGetDescRec.htm" style="">Open topic with navigation</a>
+        </p>
+        <div class="MCBreadcrumbsBox_0"><span class="MCBreadcrumbsPrefix">You are here: </span><a class="MCBreadcrumbsLink" href="../../dbRSQL.htm">SQL API</a><span class="MCBreadcrumbsDivider"> &gt; </span><a class="MCBreadcrumbsLink" href="../dbODBCUG.htm">ODBC User's Guide</a><span class="MCBreadcrumbsDivider"> &gt; </span><a class="MCBreadcrumbsLink" href="../ODBCCore.htm">ODBC API&#160;Reference</a><span class="MCBreadcrumbsDivider"> &gt; </span><span class="MCBreadcrumbs">SQLGetDescRec</span>
+        </div>
+        <h3 class="newpage"><a name="kanchor370"></a>SQLGetDescRec</h3>
+        <p>Returns the current settings or values of multiple fields of a descriptor record. The fields returned describe the name, data type, and storage of column or parameter data.</p>
+        <p class="Heading">Conformance</p>
+        <p>Version Introduced: ODBC 3.0 Standards Compliance: ISO 92</p>
+        <p class="Heading">Syntax </p><pre>SQLRETURN SQLGetDescRec(
+      SQLHDESC        DescriptorHandle,
+      SQLSMALLINT     RecNumber,
+      SQLCHAR *       Name,
+      SQLSMALLINT     BufferLength,
+      SQLSMALLINT *   StringLengthPtr,
+      SQLSMALLINT *   TypePtr,
+      SQLSMALLINT *   SubTypePtr,
+      SQLLEN *        LengthPtr,
+      SQLSMALLINT *   PrecisionPtr,
+      SQLSMALLINT *   ScalePtr,
+      SQLSMALLINT *   NullablePtr);</pre>
+        <p class="Heading">Arguments</p>
+        <table style="width: 100%;mc-table-style: url('../../Resources/TableStyles/FunctionArgs.css');margin-left: 0;margin-right: auto;" class="TableStyle-FunctionArgs" cellspacing="0">
+            <col style="width: 140px;" class="Column-Column1">
+            </col>
+            <col style="width: 80px;" class="Column-Column3">
+            </col>
+            <col class="Column-Column2">
+            </col>
+            <tbody>
+                <tr class="Body-Body1">
+                    <td style="" class="BodyE-Column1-Body1">DescriptorHandle     </td>
+                    <td style="" class="BodyE-Column3-Body1">(input)</td>
+                    <td style="" class="BodyD-Column2-Body1">Descriptor handle.
+</td>
+                </tr>
+                <tr class="Body-Body1">
+                    <td class="BodyE-Column1-Body1">RecNumber</td>
+                    <td class="BodyE-Column3-Body1">(input)</td>
+                    <td class="BodyD-Column2-Body1">Indicates the descriptor record from which the application seeks information. Descriptor records are numbered from 1, with record number 0 being the bookmark record. The <code>RecNumber</code> argument must be less than or equal to the value of SQL_DESC_COUNT. If <code>RecNumber</code> is less than or equal to SQL_DESC_COUNT but the row does not contain data for a column or parameter, a call to SQLGetDescRec will return the default values of the fields.</td>
+                </tr>
+                <tr class="Body-Body1">
+                    <td style="" class="BodyE-Column1-Body1">Name</td>
+                    <td style="" class="BodyE-Column3-Body1">(output)</td>
+                    <td style="" class="BodyD-Column2-Body1">A pointer to a buffer in which to return the SQL_DESC_NAME field for the descriptor record.<br />If <code>Name</code> is NULL, <code>StringLengthPtr</code> will still return the total number of characters (excluding the null-termination character for character data) available to return in the buffer pointed to by <code>Name</code>.
+
+</td>
+                </tr>
+                <tr class="Body-Body1">
+                    <td class="BodyE-Column1-Body1">BufferLength</td>
+                    <td class="BodyE-Column3-Body1">(input)</td>
+                    <td class="BodyD-Column2-Body1">Length of the *Name buffer, in characters.
+
+</td>
+                </tr>
+                <tr class="Body-Body1">
+                    <td style="" class="BodyE-Column1-Body1">StringLengthPtr</td>
+                    <td style="" class="BodyE-Column3-Body1">(output)</td>
+                    <td style="" class="BodyD-Column2-Body1">A pointer to a buffer in which to return the number of characters of data available to return in the <code>*Name</code> buffer, excluding the null-termination character. If the number of characters was greater than or equal to <code>BufferLength</code>, the data in <code>*Name</code> is truncated to <code>BufferLength</code> minus the length of a null-termination character, and is null-terminated by the driver.
+
+</td>
+                </tr>
+                <tr class="Body-Body1">
+                    <td class="BodyE-Column1-Body1">TypePtr</td>
+                    <td class="BodyE-Column3-Body1">(output)</td>
+                    <td class="BodyD-Column2-Body1">A pointer to a buffer in which to return the value of the SQL_DESC_TYPE field for the descriptor record.
+
+</td>
+                </tr>
+                <tr class="Body-Body1">
+                    <td style="" class="BodyE-Column1-Body1">SubTypePtr</td>
+                    <td style="" class="BodyE-Column3-Body1">(output)</td>
+                    <td style="" class="BodyD-Column2-Body1"> For records whose type is SQL_DATETIME or SQL_INTERVAL, this is a pointer to a buffer in which to return the value of the SQL_DESC_DATETIME_INTERVAL_CODE field.
+
+</td>
+                </tr>
+                <tr class="Body-Body1">
+                    <td class="BodyE-Column1-Body1">LengthPtr</td>
+                    <td class="BodyE-Column3-Body1">(output)</td>
+                    <td class="BodyD-Column2-Body1">A pointer to a buffer in which to return the value of the SQL_DESC_OCTET_LENGTH field for the descriptor record.
+
+</td>
+                </tr>
+                <tr class="Body-Body1">
+                    <td class="BodyE-Column1-Body1">PrecisionPtr</td>
+                    <td class="BodyE-Column3-Body1">(output)</td>
+                    <td class="BodyD-Column2-Body1">A pointer to a buffer in which to return the value of the SQL_DESC_PRECISION field for the descriptor record.
+
+</td>
+                </tr>
+                <tr class="Body-Body1">
+                    <td style="" class="BodyE-Column1-Body1">ScalePtr</td>
+                    <td style="" class="BodyE-Column3-Body1">(output)</td>
+                    <td style="" class="BodyD-Column2-Body1">A pointer to a buffer in which to return the value of the SQL_DESC_SCALE field for the descriptor record.
+
+</td>
+                </tr>
+                <tr class="Body-Body1">
+                    <td class="BodyB-Column1-Body1">NullablePtr</td>
+                    <td class="BodyB-Column3-Body1">(output)</td>
+                    <td class="BodyA-Column2-Body1">A pointer to a buffer in which to return the value of the SQL_DESC_NULLABLE field for the descriptor record.
+
+</td>
+                </tr>
+            </tbody>
+        </table>
+        <p class="Heading">Required Headers</p><pre xml:space="preserve">#include "sql.h"</pre>
+        <p class="Heading">Libraries</p>
+        <table style="width: 100%; margin-left: 0; margin-right: auto;">
+            <col style="width: 200px;">
+            </col>
+            <col>
+            </col>
+            <thead>
+                <tr>
+                    <th>Library Name</th>
+                    <th>Description</th>
+                </tr>
+            </thead>
+            <tbody>
+                <tr>
+                    <td><code>rdmrdbc<span class="MyVariablesLibraryVersion">11</span></code>
+                    </td>
+                    <td><span class="MyVariablesProductShortName">RDM</span>&#160;ODBC&#160;API Library</td>
+                </tr>
+            </tbody>
+        </table>
+        <p>See <a href="../../GS/distrib.htm#Library">Library Naming Conventions</a> section for full library name and a list of library dependencies.</p>
+        <p class="Heading">Returns</p>
+        <table class="TableStyle-ODBCErrorCodes" cellspacing="0" style="margin-left: 0;margin-right: auto;mc-table-style: url('../../Resources/TableStyles/ODBCErrorCodes.css');">
+            <col class="Column-Column1" />
+            <col class="Column-Column2" />
+            <tbody>
+                <tr class="Body-Body1">
+                    <th class="BodyB-Column1-Body1" style="font-weight: bold;">Return Code</th>
+                    <th class="BodyA-Column2-Body1" style="font-weight: bold;">Description</th>
+                </tr>
+            </tbody>
+        </table>
+        <table class="TableStyle-ODBCErrorCodes" cellspacing="0" style="mc-table-style: url('../../Resources/TableStyles/ODBCErrorCodes.css');">
+            <col class="Column-Column1" />
+            <col class="Column-Column2" />
+            <tbody>
+                <tr class="Body-Body1">
+                    <td class="BodyB-Column1-Body1">SQL_SUCCESS</td>
+                    <td class="BodyA-Column2-Body1">Function completed successfully. The application calls <code>SQLGetDiagField</code> to retrieve additional information from the header record.
+</td>
+                </tr>
+            </tbody>
+        </table>
+        <table class="TableStyle-ODBCErrorCodes" cellspacing="0" style="mc-table-style: url('../../Resources/TableStyles/ODBCErrorCodes.css');">
+            <col class="Column-Column1" />
+            <col class="Column-Column2" />
+            <tbody>
+                <tr class="Body-Body1">
+                    <td class="BodyB-Column1-Body1">SQL_SUCCESS_WITH_INFO</td>
+                    <td class="BodyA-Column2-Body1">Function completed successfully, possibly with a nonfatal error (warning). The application calls <code>SQLGetDiagRec</code> or <code>SQLGetDiagField</code> to retrieve additional information.
+</td>
+                </tr>
+            </tbody>
+        </table>
+        <table class="TableStyle-ODBCErrorCodes" cellspacing="0" style="mc-table-style: url('../../Resources/TableStyles/ODBCErrorCodes.css');">
+            <col class="Column-Column1" />
+            <col class="Column-Column2" />
+            <tbody>
+                <tr class="Body-Body1">
+                    <td class="BodyB-Column1-Body1">SQL_ERROR</td>
+                    <td class="BodyA-Column2-Body1">Function failed. The application calls <code>SQLGetDiagRec</code> or <code>SQLGetDiagField</code> to retrieve additional information. The contents of any output arguments to the function are undefined.
+</td>
+                </tr>
+            </tbody>
+        </table>
+        <table class="TableStyle-ODBCErrorCodes" cellspacing="0" style="mc-table-style: url('../../Resources/TableStyles/ODBCErrorCodes.css');">
+            <col class="Column-Column1" />
+            <col class="Column-Column2" />
+            <tbody>
+                <tr class="Body-Body1">
+                    <td class="BodyB-Column1-Body1">SQL_INVALID_HANDLE</td>
+                    <td class="BodyA-Column2-Body1">Function failed due to an invalid environment, connection, statement, or descriptor handle. This indicates a programming error. No additional information is available from <code>SQLGetDiagRec</code> or <code>SQLGetDiagField</code>. This code is returned only when the handle is a null pointer or is the wrong type, such as when a statement handle is passed for an argument that requires a connection handle.
+</td>
+                </tr>
+            </tbody>
+        </table>
+        <table class="TableStyle-ODBCErrorCodes" cellspacing="0" style="mc-table-style: url('../../Resources/TableStyles/ODBCErrorCodes.css');">
+            <col class="Column-Column1" />
+            <col class="Column-Column2" />
+            <tbody>
+                <tr class="Body-Body1">
+                    <td class="BodyB-Column1-Body1">SQL_NO_DATA</td>
+                    <td class="BodyA-Column2-Body1">No more data was available. The application calls <code>SQLGetDiagRec</code> or <code>SQLGetDiagField</code> to retrieve additional information.</td>
+                </tr>
+            </tbody>
+        </table>
+        <p>SQL_NO_DATA is returned if <code>RecNumber</code> is greater than the current number of descriptor records.</p>
+        <p>SQL_NO_DATA is returned if <code>DescriptorHandle</code> is an IRD handle and the statement is in the prepared or executed state but there was no open cursor associated with it.</p>
+        <p>For more information, reference MSDN&#160;documentation for <a href="http://msdn.microsoft.com/en-us/library/ms710921(v=VS.85).aspx" target="_blank">SQLGetDescRec.</a></p>
+        <hr MadCap:conditions="Default.ScreenOnly" width="100%" size="0" align="center" />
+        <p MadCap:conditions="Default.ScreenOnly" style="font-size: 8pt;"><span class="MyVariablesCopyright">Copyright © 2012, Raima Inc. All rights reserved.</span>
+        </p>
+        <script type="text/javascript" src="../../SkinSupport/MadCapBodyEnd.js">
+        </script>
+        <p class="MCWebHelpFramesetLink MCWebHelpFramesetLinkBottom" style="display: none;"><a href="../../../Default_CSH.htm#ODBCRM/api/SQLGetDescRec.htm" style="">Open topic with navigation</a>
+        </p>
+    </body>
+</html>

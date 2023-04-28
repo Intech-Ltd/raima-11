@@ -1,0 +1,173 @@
+<?xml version="1.0" encoding="utf-8"?>
+<!DOCTYPE html PUBLIC "-//W3C//DTD XHTML 1.0 Strict//EN" "http://www.w3.org/TR/xhtml1/DTD/xhtml1-strict.dtd">
+<html xmlns:MadCap="http://www.madcapsoftware.com/Schemas/MadCap.xsd" MadCap:tocPath="Native API|Reference Manual|Platform Support Functions (psp_ Prefix)" MadCap:InPreviewMode="false" MadCap:PreloadImages="false" MadCap:RuntimeFileType="Topic" MadCap:TargetType="WebHelp" lang="en-us" xml:lang="en-us" class="" MadCap:PathToHelpSystem="../../" MadCap:HelpSystemFileName="Default.xml" MadCap:SearchType="Stem">
+    <head>
+        <meta http-equiv="Content-Type" content="text/html; charset=utf-8" /><title>psp_fopen</title>
+        <link rel="icon" type="image/png" href="http://docs.raima.com/favicon.png" />
+        <link href="../SkinSupport/MadCap.css" rel="stylesheet" />
+        <link href="../Resources/TableStyles/FunctionArgs.css" rel="stylesheet" />
+        <link href="../Resources/Stylesheets/raima.css" rel="stylesheet" />
+        <script src="../SkinSupport/MadCapAll.js" type="text/javascript">
+        </script>
+    </head>
+    <body>
+        <p class="MCWebHelpFramesetLink MCWebHelpFramesetLinkTop" style="display: none;"><a href="../../Default_CSH.htm#PSPRM/psp_fopen.htm" style="">Open topic with navigation</a>
+        </p>
+        <div class="MCBreadcrumbsBox_0"><span class="MCBreadcrumbsPrefix">You are here: </span><a class="MCBreadcrumbsLink" href="../dbCore.htm">Native API</a><span class="MCBreadcrumbsDivider"> &gt; </span><a class="MCBreadcrumbsLink" href="../RM/dbRM.htm">Reference Manual</a><span class="MCBreadcrumbsDivider"> &gt; </span><a class="MCBreadcrumbsLink" href="../RM/Chapter5.htm">Platform Support Functions (psp_ Prefix)</a><span class="MCBreadcrumbsDivider"> &gt; </span><span class="MCBreadcrumbs">psp_fopen</span>
+        </div>
+        <h3 class="newpage"><a name="kanchor174"></a>psp_fopen</h3>
+        <p>Open a streaming file.</p>
+        <p class="Heading">Prototype</p><pre xml:space="preserve">PSP_FILE_STREAM <b>psp_fopen</b>(
+&#160;&#160;&#160;&#160;const char   *<i>name</i>,
+&#160;&#160;&#160;&#160;const char   *<i>mode</i>,
+&#160;&#160;&#160;&#160;PSP_FILE_MODE <i>fmode</i>);</pre><pre xml:space="preserve">PSP_FILE_STREAM <b>psp_fopen_std</b>(
+&#160;&#160;&#160;&#160;const char *<i>std_name</i>);</pre>
+        <p class="Heading">Parameters</p>
+        <table style="width: 100%;mc-table-style: url('../Resources/TableStyles/FunctionArgs.css');margin-left: 0;margin-right: auto;" class="TableStyle-FunctionArgs" cellspacing="0">
+            <col style="width: 140px;" class="Column-Column1" />
+            <col style="width: 80px;" class="Column-Column3" />
+            <col class="Column-Column2" />
+            <tbody>
+                <tr class="Body-Body1">
+                    <td style="" class="BodyE-Column1-Body1">name</td>
+                    <td style="" class="BodyE-Column3-Body1">(input)</td>
+                    <td style="" class="BodyD-Column2-Body1">The file name including the directory path.</td>
+                </tr>
+                <tr class="Body-Body1">
+                    <td class="BodyE-Column1-Body1">mode</td>
+                    <td class="BodyE-Column3-Body1">(input)</td>
+                    <td class="BodyD-Column2-Body1">Open mode. Read, Write, Append. See below.</td>
+                </tr>
+                <tr class="Body-Body1">
+                    <td style="" class="BodyB-Column1-Body1">fmode</td>
+                    <td style="" class="BodyB-Column3-Body1">(input)</td>
+                    <td style="" class="BodyA-Column2-Body1">File mode. Unknown, UTF-8 or UTF-16. See below.</td>
+                </tr>
+            </tbody>
+        </table>
+        <p class="Heading">Description</p>
+        <p>This function opens a file and returns a handle of type PSP_FILE_STREAM. Interprets or adds a Byte-Order-Mark (BOM) when necessary. If the file cannot be opened, NULL is returned. </p>
+        <p>The <code>psp_fopen_std</code> function expects the name of a standard I/O stream, "stdin", "stdout" or "stderr".
+
+</p>
+        <p class="Heading">Open Modes</p>
+        <table style="width: 100%;margin-left: 0;margin-right: auto;">
+            <col style="width: 115px;" />
+            <col />
+            <thead>
+                <tr>
+                    <th>Mode string</th>
+                    <th>Description</th>
+                </tr>
+            </thead>
+            <tbody>
+                <tr>
+                    <td>"a"</td>
+                    <td>Append. Will create the file if it doesn't exist.</td>
+                </tr>
+                <tr>
+                    <td>"r"</td>
+                    <td>Read only.</td>
+                </tr>
+                <tr>
+                    <td>"w"</td>
+                    <td>Write only. Will create new file if it doesn't exist. Will truncate an existing file.</td>
+                </tr>
+                <tr>
+                    <td>"r+"</td>
+                    <td>Read/write mode. Will not truncate an existing file.</td>
+                </tr>
+                <tr>
+                    <td>"w+"</td>
+                    <td>Read/write mode. Will create new file if it doesn't exist. Will truncate an existing file.</td>
+                </tr>
+            </tbody>
+        </table>
+        <p class="Heading">File Modes</p>
+        <table style="width: 100%;margin-left: 0;margin-right: auto;">
+            <col style="width: 242px;" />
+            <col />
+            <thead>
+                <tr>
+                    <th>Mode</th>
+                    <th>Description</th>
+                </tr>
+            </thead>
+            <tbody>
+                <tr>
+                    <td>PSP_FILE_MODE_UNKNOWN</td>
+                    <td>When opening a file to read, set from BOM in file, else UTF-8. When opening to write, set to UTF-8.</td>
+                </tr>
+                <tr>
+                    <td>PSP_FILE_MODE_UTF8</td>
+                    <td>When opening to write, set to UTF-8.</td>
+                </tr>
+                <tr>
+                    <td>PSP_FILE_MODE_UTF16</td>
+                    <td>When opening to write, set to UTF-16.</td>
+                </tr>
+            </tbody>
+        </table>
+        <p class="Heading">Required Headers</p><pre xml:space="preserve">#include "psp.h"</pre>
+        <p class="Heading">Libraries</p>
+        <table style="width: 100%; margin-left: 0; margin-right: auto;">
+            <col style="width: 200px;">
+            </col>
+            <col>
+            </col>
+            <thead>
+                <tr>
+                    <th>Library Name</th>
+                    <th>Description</th>
+                </tr>
+            </thead>
+            <tbody>
+                <tr>
+                    <td><code>rdmpsp<span class="MyVariablesLibraryVersion">11</span></code>
+                    </td>
+                    <td>Platform Support Library</td>
+                </tr>
+            </tbody>
+        </table>
+        <p>See <a href="../GS/distrib.htm#Library">Library Naming Conventions</a> section for full library name and a list of library dependencies.</p>
+        <p class="Heading">Return Codes</p>
+        <p>None.</p>
+        <p class="Heading">Example</p><pre xml:space="preserve">#include "psp.h"
+#include &lt;fcntl.h&gt;
+
+
+int16 OpenFiles(
+    const char      *inFileName,  /* IN:  input file name     */
+    const char      *outFileName, /* IN:  output file name    */
+    PSP_FILE_STREAM *phInFile,    /* OUT: input file pointer  */
+    PSP_FILE_STREAM *phOutFile)  &#160;/* OUT: output file pointer */
+{
+&#160;&#160;&#160;&#160;/* open files */
+&#160;&#160;&#160;&#160;*phInFile = psp_fopen(inFileName, "r", PSP_FILE_MODE_UNKNOWN);
+&#160;&#160;&#160;&#160;*phOutFile = psp_fopen(outFileName, "w+", PSP_FILE_MODE_UTF8);
+
+&#160;&#160;&#160;&#160;if (*phInFile == NULL || *phOutFile == NULL)
+&#160;&#160;&#160;&#160;&#160;&#160;&#160;&#160;return PSP_FAILED;
+
+&#160;&#160;&#160;&#160;return PSP_OKAY;
+}</pre>
+        <p class="Heading">See Also</p>
+        <p><a href="psp_fclose.htm">psp_fclose</a>
+        </p>
+        <p><a href="psp_fg.htm">Stream Input Functions</a>
+        </p>
+        <p><a href="psp_fp.htm">Stream Output Functions</a>
+        </p>
+        <p><a href="psp_fileRemove.htm">psp_fileRemove</a>
+        </p>
+        <p><a href="psp_fileRename.htm">psp_fileRename</a>
+        </p>
+        <hr MadCap:conditions="Default.ScreenOnly" width="100%" size="0" align="center" />
+        <p MadCap:conditions="Default.ScreenOnly" style="font-size: 8pt;"><span class="MyVariablesCopyright">Copyright © 2012, Raima Inc. All rights reserved.</span>
+        </p>
+        <script type="text/javascript" src="../SkinSupport/MadCapBodyEnd.js">
+        </script>
+        <p class="MCWebHelpFramesetLink MCWebHelpFramesetLinkBottom" style="display: none;"><a href="../../Default_CSH.htm#PSPRM/psp_fopen.htm" style="">Open topic with navigation</a>
+        </p>
+    </body>
+</html>

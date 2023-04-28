@@ -1,0 +1,252 @@
+<?xml version="1.0" encoding="utf-8"?>
+<!DOCTYPE html PUBLIC "-//W3C//DTD XHTML 1.0 Strict//EN" "http://www.w3.org/TR/xhtml1/DTD/xhtml1-strict.dtd">
+<html xmlns:MadCap="http://www.madcapsoftware.com/Schemas/MadCap.xsd" MadCap:tocPath="SQL API|RSQL User's Guide|RSQL API Function Reference" MadCap:InPreviewMode="false" MadCap:PreloadImages="false" MadCap:RuntimeFileType="Topic" MadCap:TargetType="WebHelp" lang="en-us" xml:lang="en-us" MadCap:PathToHelpSystem="../../" MadCap:HelpSystemFileName="Default.xml" MadCap:SearchType="Stem">
+    <head>
+        <meta http-equiv="Content-Type" content="text/html; charset=utf-8" /><title>rsqlRegisterVirtualTables</title>
+        <link rel="icon" type="image/png" href="http://docs.raima.com/favicon.png" />
+        <link href="../SkinSupport/MadCap.css" rel="stylesheet" />
+        <link href="../Resources/TableStyles/FunctionArgs.css" rel="stylesheet" />
+        <link href="../Resources/TableStyles/SQLErrorCodes.css" rel="stylesheet" />
+        <link href="../Resources/Stylesheets/raima.css" rel="stylesheet" />
+        <script src="../SkinSupport/MadCapAll.js" type="text/javascript">
+        </script>
+    </head>
+    <body>
+        <p class="MCWebHelpFramesetLink MCWebHelpFramesetLinkTop" style="display: none;"><a href="../../Default_CSH.htm#SQLRM/rsqlRegisterVirtualTables.htm" style="">Open topic with navigation</a>
+        </p>
+        <div class="MCBreadcrumbsBox_0"><span class="MCBreadcrumbsPrefix">You are here: </span><a class="MCBreadcrumbsLink" href="../dbRSQL.htm">SQL API</a><span class="MCBreadcrumbsDivider"> &gt; </span><a class="MCBreadcrumbsLink" href="../RSQLUG/dbSQLUG.htm">RSQL User's Guide</a><span class="MCBreadcrumbsDivider"> &gt; </span><a class="MCBreadcrumbsLink" href="SQLAPIReference.htm">RSQL API Function Reference</a><span class="MCBreadcrumbsDivider"> &gt; </span><span class="MCBreadcrumbs">rsqlRegisterVirtualTables</span>
+        </div>
+        <h3 class="newpage"><a name="kanchor315"></a>rsqlRegisterVirtualTables</h3>
+        <p>Register C-based virtual tables</p>
+        <p class="Heading">Prototype</p><pre xml:space="preserve">RSQL_ERRCODE EXTERNAL_FCN rsqlRegisterVirtualTables(
+    HCONN                hConn,  
+    const char          *dbname, 
+    int16_t              noVtabs,
+    const VTFLOADTABLE&#160;&#160;*vtabs,
+    void                *pRegCtx,
+    const size_t         szFetchCtx)</pre>
+        <p class="Heading">Arguments</p>
+        <table style="width: 100%;mc-table-style: url('../Resources/TableStyles/FunctionArgs.css');margin-left: 0;margin-right: auto;" class="TableStyle-FunctionArgs" cellspacing="0">
+            <col class="Column-Column1" />
+            <col class="Column-Column3" />
+            <col class="Column-Column2" />
+            <tbody>
+                <tr class="Body-Body1">
+                    <td style="font-family: monospace;" class="BodyE-Column1-Body1">hConn</td>
+                    <td class="BodyE-Column3-Body1">(input)</td>
+                    <td class="BodyD-Column2-Body1">Connection handle.</td>
+                </tr>
+                <tr class="Body-Body1">
+                    <td style="font-family: monospace;" class="BodyE-Column1-Body1">dbname</td>
+                    <td class="BodyE-Column3-Body1">(input)</td>
+                    <td class="BodyD-Column2-Body1">A pointer to a char string containing the name of the database in which the virtual tables are declared.</td>
+                </tr>
+                <tr class="Body-Body1">
+                    <td class="BodyE-Column1-Body1">noVtabs</td>
+                    <td class="BodyE-Column3-Body1">(input)</td>
+                    <td class="BodyD-Column2-Body1">The number of virtual tables (the size of the <code>vtabs</code> array).</td>
+                </tr>
+                <tr class="Body-Body1">
+                    <td style="font-family: monospace;" class="BodyE-Column1-Body1">vtabs</td>
+                    <td class="BodyE-Column3-Body1">(input)</td>
+                    <td class="BodyD-Column2-Body1">A pointer to the virtual table function load table.</td>
+                </tr>
+                <tr class="Body-Body1">
+                    <td style="font-family: monospace;" class="BodyE-Column1-Body1">pRegCtx</td>
+                    <td class="BodyE-Column3-Body1">(input)</td>
+                    <td class="BodyD-Column2-Body1">A pointer to application-specific registration context data area.</td>
+                </tr>
+                <tr class="Body-Body1">
+                    <td style="font-family: monospace;" class="BodyB-Column1-Body1">szFetchCtx</td>
+                    <td class="BodyB-Column3-Body1">(input)</td>
+                    <td class="BodyA-Column2-Body1">Size of the application-specific fetch context.</td>
+                </tr>
+            </tbody>
+        </table>
+        <p class="Heading">Description</p>
+        <p>Function <code>rsqlRegisterVirtualTables</code> must be called to make the function entry points associated with the virtual tables declared in database <code>dbname</code> available to the <span class="MyVariablesRSQLName">RDM SQL</span> engine on the connection identified by <code>hConn</code>.   This function can be called either before or after the database <code>dbname</code> has been opened.</p>
+        <p>Six arguments are passed to <code>rsqlRegisterVirtualTables</code>: the connection handle, the name of the database containing the declarations of the virtual tables, the number of virtual tables in the load table, the address of the virtual table load table, a pointer to a user registration context data area, and the maximum size that is needed for the fetch context data area.</p>
+        <p>The <code>pRegCtx</code> can be used by the application program to allocate the space for the data to be manipulated by the virtual table interface in order for the interface functions to operate reentrantly.  Of course, this only works when the data to be accessed does not need to be shared by multiple connections.  It can also be used to pass any information specific to the device that is to be accessed through the virtual table.  The <code>pRegCtx</code> pointer is passed all of the virtual table functions by the <span class="MyVariablesRSQLName">RDM SQL</span> engine. If no registration context is needed the <code>pRegCtx</code> argument should be <code>NULL</code>.</p>
+        <p>The <code>szFetchCtx</code> needs to be set to the largest fetch context data area used for all the virtual tables in database <code>dbname</code>.  This space will be automatically allocated by the <span class="MyVariablesRSQLName">RDM SQL</span> engine and passed to the execution-time functions (all but <code>vtRowCount</code>) through the <code>pFetchCtx</code> argument.  If no context is needed then <code>szFetchCtx</code> should be 0.</p>
+        <p>Only one call to <code>rsqlRegisterVirtualTables</code> can be made for any particular database on this connection.  Any successive calls will return error code <code>errREGISTERED</code>. There must be one entry in <code>vtftab</code> for each virtual table that is declared in database <code>dbname</code>. Error code <code>errNOVTENTRY</code> is returned for any of <code>dbname</code>'s virtual tables that does not have a corresponding entry in <code>vtftab</code>.</p>
+        <p class="Heading">Example</p>
+        <p><span class="MyVariablesRSQLName">RDM SQL</span> uses virtual tables to implement the ODBC catalog access functions (e.g., <code>SQLTable</code>).  The example below shows the code used to register the <code>syscat</code> virtual tables.</p><pre xml:space="preserve"><b>#include "rsql.h"</b>
+
+/* Function prototypes */
+static VTINIT     vcatInit;
+static VTROWCOUNT vtabRowCount;
+static VTEXECUTE  vtabExecute;
+static VTFETCH    vtabFetch;
+static VTCLOSE    vtabClose;
+static VTTERM     vcatTerm;
+
+static VTROWCOUNT vcolRowCount;
+static VTEXECUTE  vcolExecute;
+static VTFETCH    vcolFetch;
+static VTCLOSE    vcolClose;
+
+static VTINIT     vplanInit;
+static VTROWCOUNT vplanRowCount;
+static VTEXECUTE  vplanExecute;
+static VTFETCH    vplanFetch;
+static VTCLOSE    vplanClose;
+
+<b>VTFLOADTABLE vcatFcnTable[] = {</b>
+    {"sys$table",  vcatInit,vtabRowCount,vtabExecute,vtabFetch,vtabClose,vcatTerm},
+    {"sys$column", vcatInit,vcolRowCount,vcolExecute,vcolFetch,vcolClose,vcatTerm},
+    {"sys$plan",   vplanInit,vplanRowCount,vplanExecute,vplanFetch,vplanClose,vcatTerm}
+};
+<b>int16_t vcatNoFcns = sizeof(vcatFcnTable)/sizeof(VTFLOADTABLE);
+const size_t  vcatCtxSz  = RDM_MAX(sizeof(CAT_CTX), sizeof(PLAN_CTX));
+ 	...
+	rsqlRegisterVirtualTables(hdbc, "syscat", vcatNoFcns, vcatFcnTable, NULL, vcatCtxSz);</b></pre>
+        <p class="Heading">RSQL&#160;User Guide</p>
+        <p><a href="../SQL/Chapter13.htm#Virtual">Virtual Table Load Table Definition and Registration</a>
+        </p>
+        <p class="Heading">Required Headers</p><pre xml:space="preserve">#include "rsql.h"</pre>
+        <p class="Heading">Libraries</p>
+        <table style="width: 100%; margin-left: 0; margin-right: auto;">
+            <col style="width: 200px;">
+            </col>
+            <col>
+            </col>
+            <thead>
+                <tr>
+                    <th>Library Name</th>
+                    <th>Description</th>
+                </tr>
+            </thead>
+            <tbody>
+                <tr>
+                    <td><code>rdmrsql<span class="MyVariablesLibraryVersion">11</span></code>
+                    </td>
+                    <td>RSQL&#160;API Library</td>
+                </tr>
+            </tbody>
+        </table>
+        <p>See <a href="../GS/distrib.htm#Library">Library Naming Conventions</a> section for full library name and a list of library dependencies.</p>
+        <p class="Heading">Return Codes</p>
+        <table class="TableStyle-SQLErrorCodes" cellspacing="0" style="mc-table-style: url('../Resources/TableStyles/SQLErrorCodes.css');">
+            <col class="Column-Column1" />
+            <col class="Column-Column2" />
+            <col class="Column-Column3" />
+            <col class="Column-Column4" />
+            <tbody>
+                <tr class="Body-Body1">
+                    <th class="BodyB-Column1-Body1" style="font-weight: bold;">Error Code</th>
+                    <th class="BodyB-Column2-Body1" style="font-weight: bold;">Enum Identifier</th>
+                    <th class="BodyB-Column3-Body1" style="font-weight: bold;">SQL State</th>
+                    <th class="BodyA-Column4-Body1" style="font-weight: bold;">Description</th>
+                </tr>
+            </tbody>
+        </table>
+        <table class="TableStyle-SQLErrorCodes" cellspacing="0" style="mc-table-style: url('../Resources/TableStyles/SQLErrorCodes.css');">
+            <col class="Column-Column1" />
+            <col class="Column-Column2" />
+            <col class="Column-Column3" />
+            <col class="Column-Column4" />
+            <tbody>
+                <tr class="Body-Body1">
+                    <td class="BodyB-Column1-Body1">0</td>
+                    <td class="BodyB-Column2-Body1">errSUCCESS</td>
+                    <td class="BodyB-Column3-Body1">00000</td>
+                    <td class="BodyA-Column4-Body1">no error was detected</td>
+                </tr>
+            </tbody>
+        </table>
+        <table class="TableStyle-SQLErrorCodes" cellspacing="0" style="mc-table-style: url('../Resources/TableStyles/SQLErrorCodes.css');">
+            <col class="Column-Column1" />
+            <col class="Column-Column2" />
+            <col class="Column-Column3" />
+            <col class="Column-Column4" />
+            <tbody>
+                <tr class="Body-Body1">
+                    <td class="BodyB-Column1-Body1">-5</td>
+                    <td class="BodyB-Column2-Body1">errINVHANDLE</td>
+                    <td class="BodyB-Column3-Body1">02002</td>
+                    <td class="BodyA-Column4-Body1">invalid connection or statement handle</td>
+                </tr>
+            </tbody>
+        </table>
+        <table class="TableStyle-SQLErrorCodes" cellspacing="0" style="mc-table-style: url('../Resources/TableStyles/SQLErrorCodes.css');">
+            <col class="Column-Column1" />
+            <col class="Column-Column2" />
+            <col class="Column-Column3" />
+            <col class="Column-Column4" />
+            <tbody>
+                <tr class="Body-Body1">
+                    <td class="BodyB-Column1-Body1">29</td>
+                    <td class="BodyB-Column2-Body1">errINVNULL</td>
+                    <td class="BodyB-Column3-Body1">HY009</td>
+                    <td class="BodyA-Column4-Body1">invalid use of null pointer</td>
+                </tr>
+            </tbody>
+        </table>
+        <table class="TableStyle-SQLErrorCodes" cellspacing="0" style="mc-table-style: url('../Resources/TableStyles/SQLErrorCodes.css');">
+            <col class="Column-Column1" />
+            <col class="Column-Column2" />
+            <col class="Column-Column3" />
+            <col class="Column-Column4" />
+            <tbody>
+                <tr class="Body-Body1">
+                    <td class="BodyB-Column1-Body1">78</td>
+                    <td class="BodyB-Column2-Body1">errREGISTERED</td>
+                    <td class="BodyB-Column3-Body1">42000</td>
+                    <td class="BodyA-Column4-Body1">UDF/UDP/XTF already registered</td>
+                </tr>
+            </tbody>
+        </table>
+        <table class="TableStyle-SQLErrorCodes" cellspacing="0" style="mc-table-style: url('../Resources/TableStyles/SQLErrorCodes.css');">
+            <col class="Column-Column1" />
+            <col class="Column-Column2" />
+            <col class="Column-Column3" />
+            <col class="Column-Column4" />
+            <tbody>
+                <tr class="Body-Body1">
+                    <td class="BodyB-Column1-Body1">194</td>
+                    <td class="BodyB-Column2-Body1">errNOTINUDF</td>
+                    <td class="BodyB-Column3-Body1">42000</td>
+                    <td class="BodyA-Column4-Body1">function cannot be called from a UDF</td>
+                </tr>
+            </tbody>
+        </table>
+        <table class="TableStyle-SQLErrorCodes" cellspacing="0" style="mc-table-style: url('../Resources/TableStyles/SQLErrorCodes.css');">
+            <col class="Column-Column1" />
+            <col class="Column-Column2" />
+            <col class="Column-Column3" />
+            <col class="Column-Column4" />
+            <tbody>
+                <tr class="Body-Body1">
+                    <td class="BodyB-Column1-Body1">200</td>
+                    <td class="BodyB-Column2-Body1">errNOVTENTRY</td>
+                    <td class="BodyB-Column3-Body1">42000</td>
+                    <td class="BodyA-Column4-Body1">no registered function interface for virtual table</td>
+                </tr>
+            </tbody>
+        </table>
+        <table class="TableStyle-SQLErrorCodes" cellspacing="0" style="mc-table-style: url('../Resources/TableStyles/SQLErrorCodes.css');">
+            <col class="Column-Column1" />
+            <col class="Column-Column2" />
+            <col class="Column-Column3" />
+            <col class="Column-Column4" />
+            <tbody>
+                <tr class="Body-Body1">
+                    <td class="BodyB-Column1-Body1">201</td>
+                    <td class="BodyB-Column2-Body1">errNOVTSINDB</td>
+                    <td class="BodyB-Column3-Body1">42000</td>
+                    <td class="BodyA-Column4-Body1">database does not contain any virtual tables</td>
+                </tr>
+            </tbody>
+        </table>
+        <p class="Heading">See Also</p>
+        <p><a href="rsqlRegisterUDFs.htm">rsqlRegisterUDFs</a>
+        </p>
+        <hr MadCap:conditions="Default.ScreenOnly" width="100%" size="0" align="center" />
+        <p MadCap:conditions="Default.ScreenOnly" style="font-size: 8pt;"><span class="MyVariablesCopyright">Copyright © 2012, Raima Inc. All rights reserved.</span>
+        </p>
+        <script type="text/javascript" src="../SkinSupport/MadCapBodyEnd.js">
+        </script>
+        <p class="MCWebHelpFramesetLink MCWebHelpFramesetLinkBottom" style="display: none;"><a href="../../Default_CSH.htm#SQLRM/rsqlRegisterVirtualTables.htm" style="">Open topic with navigation</a>
+        </p>
+    </body>
+</html>

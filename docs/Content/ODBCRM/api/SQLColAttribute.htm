@@ -1,0 +1,182 @@
+<?xml version="1.0" encoding="utf-8"?>
+<!DOCTYPE html PUBLIC "-//W3C//DTD XHTML 1.0 Strict//EN" "http://www.w3.org/TR/xhtml1/DTD/xhtml1-strict.dtd">
+<html xmlns:MadCap="http://www.madcapsoftware.com/Schemas/MadCap.xsd" MadCap:tocPath="SQL API|ODBC User's Guide|ODBC API&#160;Reference" MadCap:InPreviewMode="false" MadCap:PreloadImages="false" MadCap:RuntimeFileType="Topic" MadCap:TargetType="WebHelp" lang="en-us" xml:lang="en-us" MadCap:PathToHelpSystem="../../../" MadCap:HelpSystemFileName="Default.xml" MadCap:SearchType="Stem">
+    <head>
+        <meta http-equiv="Content-Type" content="text/html; charset=utf-8" /><title>SQLColAttribute</title>
+        <link rel="icon" type="image/png" href="http://docs.raima.com/favicon.png" />
+        <link href="../../SkinSupport/MadCap.css" rel="stylesheet" />
+        <link href="../../Resources/TableStyles/FunctionArgs.css" rel="stylesheet" />
+        <link href="../../Resources/TableStyles/ODBCErrorCodes.css" rel="stylesheet" />
+        <link href="../../Resources/Stylesheets/raima.css" rel="stylesheet" />
+        <script src="../../SkinSupport/MadCapAll.js" type="text/javascript">
+        </script>
+    </head>
+    <body>
+        <p class="MCWebHelpFramesetLink MCWebHelpFramesetLinkTop" style="display: none;"><a href="../../../Default_CSH.htm#ODBCRM/api/SQLColAttribute.htm" style="">Open topic with navigation</a>
+        </p>
+        <div class="MCBreadcrumbsBox_0"><span class="MCBreadcrumbsPrefix">You are here: </span><a class="MCBreadcrumbsLink" href="../../dbRSQL.htm">SQL API</a><span class="MCBreadcrumbsDivider"> &gt; </span><a class="MCBreadcrumbsLink" href="../dbODBCUG.htm">ODBC User's Guide</a><span class="MCBreadcrumbsDivider"> &gt; </span><a class="MCBreadcrumbsLink" href="../ODBCCore.htm">ODBC API&#160;Reference</a><span class="MCBreadcrumbsDivider"> &gt; </span><span class="MCBreadcrumbs">SQLColAttribute</span>
+        </div>
+        <h3 class="newpage"><a name="kanchor348"></a>SQLColAttribute</h3>
+        <p>Returns descriptor information for a column in a result set. Descriptor information is returned as a character string, a 32-bit descriptor-dependent value, or an integer value.</p>
+        <p class="Heading">Conformance</p>
+        <p>Version Introduced: ODBC 3.0 Standards Compliance: ISO 92</p>
+        <p class="Heading">Syntax</p><pre xml:space="preserve">SQLRETURN SQLColAttribute (
+      SQLHSTMT        StatementHandle,
+      SQLUSMALLINT    ColumnNumber,
+      SQLUSMALLINT    FieldIdentifier,
+      SQLPOINTER      CharacterAttributePtr,
+      SQLSMALLINT     BufferLength,
+      SQLSMALLINT *   StringLengthPtr,
+      SQLPOINTER      NumericAttributePtr)</pre>
+        <p class="Heading">Arguments</p>
+        <table style="width: 100%;mc-table-style: url('../../Resources/TableStyles/FunctionArgs.css');margin-left: 0;margin-right: auto;" class="TableStyle-FunctionArgs" cellspacing="0">
+            <col style="width: 140px;" class="Column-Column1" />
+            <col style="width: 80px;" class="Column-Column3" />
+            <col class="Column-Column2" />
+            <tbody>
+                <tr class="Body-Body1">
+                    <td style="" class="BodyE-Column1-Body1">StatementHandle     </td>
+                    <td style="" class="BodyE-Column3-Body1">(input)</td>
+                    <td style="" class="BodyD-Column2-Body1">Statement handle.
+
+</td>
+                </tr>
+                <tr class="Body-Body1">
+                    <td class="BodyE-Column1-Body1">ColumnNumber</td>
+                    <td class="BodyE-Column3-Body1">(input)</td>
+                    <td class="BodyD-Column2-Body1">The number of the record in the IRD from which the field value is to be retrieved. This argument corresponds to the column number of result data, ordered sequentially in increasing column order, starting at 1. Columns can be described in any order.
+
+Column 0 can be specified in this argument, but all values except SQL_DESC_TYPE and SQL_DESC_OCTET_LENGTH will return undefined values.
+
+</td>
+                </tr>
+                <tr class="Body-Body1">
+                    <td style="" class="BodyE-Column1-Body1">FieldIdentifier</td>
+                    <td style="" class="BodyE-Column3-Body1">(input)</td>
+                    <td style="" class="BodyD-Column2-Body1">The descriptor handle. This handle defines which field in the IRD should be queried (for example, SQL_COLUMN_TABLE_NAME).
+
+</td>
+                </tr>
+                <tr class="Body-Body1">
+                    <td class="BodyE-Column1-Body1">CharacterAttributePtr</td>
+                    <td class="BodyE-Column3-Body1">(output)</td>
+                    <td class="BodyD-Column2-Body1">Pointer to a buffer in which to return the value in the FieldIdentifier field of the ColumnNumber row of the IRD, if the field is a character string. Otherwise, the field is unused.
+
+If CharacterAttributePtr is NULL, StringLengthPtr will still return the total number of bytes (excluding the null-termination character for character data) available to return in the buffer pointed to by CharacterAttributePtr.
+
+</td>
+                </tr>
+                <tr class="Body-Body1">
+                    <td style="" class="BodyE-Column1-Body1">BufferLength</td>
+                    <td style="" class="BodyE-Column3-Body1">(input)</td>
+                    <td style="" class="BodyD-Column2-Body1">If FieldIdentifier is an ODBC-defined field and CharacterAttributePtr points to a character string or binary buffer, this argument should be the length of *CharacterAttributePtr. If FieldIdentifier is an ODBC-defined field and *CharacterAttributePtr is an integer, this field is ignored. If the *CharacterAttributePtr is a Unicode string (when calling <b>SQLColAttributeW</b>), the BufferLength argument must be an even number. If FieldIdentifier is a driver-defined field, the application indicates the nature of the field to the Driver Manager by setting the BufferLength argument. BufferLength can have the following values:<ul style="font-size: 10pt;"><li style="font-size: 10pt;" value="1">If CharacterAttributePtr is a pointer to a pointer, BufferLength should have the value SQL_IS_POINTER.</li><li style="font-size: 10pt;" value="2">If CharacterAttributePtr is a pointer to a character string, the BufferLength is the length of the buffer.</li><li style="font-size: 10pt;" value="3">If CharacterAttributePtr is a pointer to a binary buffer, the application places the result of the SQL_LEN_BINARY_ATTR(length) macro in BufferLength. This places a negative value in BufferLength.</li><li style="font-size: 10pt;" value="4">If CharacterAttributePtr is a pointer to a fixed-length data type, BufferLength must be one of the following: SQL_IS_INTEGER, SQL_IS_UNINTEGER, SQL_SMALLINT, or SQLUSMALLINT.
+
+</li></ul></td>
+                </tr>
+                <tr class="Body-Body1">
+                    <td class="BodyE-Column1-Body1">StringLengthPtr</td>
+                    <td class="BodyE-Column3-Body1">(output)</td>
+                    <td class="BodyD-Column2-Body1">Pointer to a buffer in which to return the total number of bytes (excluding the null-termination byte for character data) available to return in *CharacterAttributePtr.
+
+For character data, if the number of bytes available to return is greater than or equal to BufferLength, the descriptor information in *CharacterAttributePtr is truncated to BufferLength minus the length of a null-termination character and is null-terminated by the driver.
+
+For all other types of data, the value of BufferLength is ignored and the driver assumes the size of *CharacterAttributePtr is 32 bits.
+
+</td>
+                </tr>
+                <tr class="Body-Body1">
+                    <td style="" class="BodyB-Column1-Body1">NumericAttributePtr</td>
+                    <td style="" class="BodyB-Column3-Body1">(output)</td>
+                    <td style="" class="BodyA-Column2-Body1"> Pointer to an integer buffer in which to return the value in the FieldIdentifier field of the ColumnNumber row of the IRD, if the field is a numeric descriptor type, such as SQL_DESC_COLUMN_LENGTH. Otherwise, the field is unused.
+
+</td>
+                </tr>
+            </tbody>
+        </table>
+        <p class="Heading">Required Headers</p><pre xml:space="preserve">#include "sql.h"</pre>
+        <p class="Heading">Libraries</p>
+        <table style="width: 100%; margin-left: 0; margin-right: auto;">
+            <col style="width: 200px;">
+            </col>
+            <col>
+            </col>
+            <thead>
+                <tr>
+                    <th>Library Name</th>
+                    <th>Description</th>
+                </tr>
+            </thead>
+            <tbody>
+                <tr>
+                    <td><code>rdmrdbc<span class="MyVariablesLibraryVersion">11</span></code>
+                    </td>
+                    <td><span class="MyVariablesProductShortName">RDM</span>&#160;ODBC&#160;API Library</td>
+                </tr>
+            </tbody>
+        </table>
+        <p>See <a href="../../GS/distrib.htm#Library">Library Naming Conventions</a> section for full library name and a list of library dependencies.</p>
+        <p class="Heading">Returns</p>
+        <table class="TableStyle-ODBCErrorCodes" cellspacing="0" style="margin-left: 0;margin-right: auto;mc-table-style: url('../../Resources/TableStyles/ODBCErrorCodes.css');">
+            <col class="Column-Column1" />
+            <col class="Column-Column2" />
+            <tbody>
+                <tr class="Body-Body1">
+                    <th class="BodyB-Column1-Body1" style="font-weight: bold;">Return Code</th>
+                    <th class="BodyA-Column2-Body1" style="font-weight: bold;">Description</th>
+                </tr>
+            </tbody>
+        </table>
+        <table class="TableStyle-ODBCErrorCodes" cellspacing="0" style="mc-table-style: url('../../Resources/TableStyles/ODBCErrorCodes.css');">
+            <col class="Column-Column1" />
+            <col class="Column-Column2" />
+            <tbody>
+                <tr class="Body-Body1">
+                    <td class="BodyB-Column1-Body1">SQL_SUCCESS</td>
+                    <td class="BodyA-Column2-Body1">Function completed successfully. The application calls <code>SQLGetDiagField</code> to retrieve additional information from the header record.
+</td>
+                </tr>
+            </tbody>
+        </table>
+        <table class="TableStyle-ODBCErrorCodes" cellspacing="0" style="mc-table-style: url('../../Resources/TableStyles/ODBCErrorCodes.css');">
+            <col class="Column-Column1" />
+            <col class="Column-Column2" />
+            <tbody>
+                <tr class="Body-Body1">
+                    <td class="BodyB-Column1-Body1">SQL_SUCCESS_WITH_INFO</td>
+                    <td class="BodyA-Column2-Body1">Function completed successfully, possibly with a nonfatal error (warning). The application calls <code>SQLGetDiagRec</code> or <code>SQLGetDiagField</code> to retrieve additional information.
+</td>
+                </tr>
+            </tbody>
+        </table>
+        <table class="TableStyle-ODBCErrorCodes" cellspacing="0" style="mc-table-style: url('../../Resources/TableStyles/ODBCErrorCodes.css');">
+            <col class="Column-Column1" />
+            <col class="Column-Column2" />
+            <tbody>
+                <tr class="Body-Body1">
+                    <td class="BodyB-Column1-Body1">SQL_ERROR</td>
+                    <td class="BodyA-Column2-Body1">Function failed. The application calls <code>SQLGetDiagRec</code> or <code>SQLGetDiagField</code> to retrieve additional information. The contents of any output arguments to the function are undefined.
+</td>
+                </tr>
+            </tbody>
+        </table>
+        <table class="TableStyle-ODBCErrorCodes" cellspacing="0" style="mc-table-style: url('../../Resources/TableStyles/ODBCErrorCodes.css');">
+            <col class="Column-Column1" />
+            <col class="Column-Column2" />
+            <tbody>
+                <tr class="Body-Body1">
+                    <td class="BodyB-Column1-Body1">SQL_INVALID_HANDLE</td>
+                    <td class="BodyA-Column2-Body1">Function failed due to an invalid environment, connection, statement, or descriptor handle. This indicates a programming error. No additional information is available from <code>SQLGetDiagRec</code> or <code>SQLGetDiagField</code>. This code is returned only when the handle is a null pointer or is the wrong type, such as when a statement handle is passed for an argument that requires a connection handle.
+</td>
+                </tr>
+            </tbody>
+        </table>
+        <p>For more information, reference MSDN&#160;documentation for <a href="http://msdn.microsoft.com/en-us/library/ms713558(v=VS.85).aspx" target="_blank">SQLColAttribute.</a></p>
+        <hr MadCap:conditions="Default.ScreenOnly" width="100%" size="0" align="center" />
+        <p MadCap:conditions="Default.ScreenOnly" style="font-size: 8pt;"><span class="MyVariablesCopyright">Copyright © 2012, Raima Inc. All rights reserved.</span>
+        </p>
+        <script type="text/javascript" src="../../SkinSupport/MadCapBodyEnd.js">
+        </script>
+        <p class="MCWebHelpFramesetLink MCWebHelpFramesetLinkBottom" style="display: none;"><a href="../../../Default_CSH.htm#ODBCRM/api/SQLColAttribute.htm" style="">Open topic with navigation</a>
+        </p>
+    </body>
+</html>

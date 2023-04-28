@@ -1,0 +1,40 @@
+<?xml version="1.0" encoding="utf-8"?>
+<!DOCTYPE html PUBLIC "-//W3C//DTD XHTML 1.0 Strict//EN" "http://www.w3.org/TR/xhtml1/DTD/xhtml1-strict.dtd">
+<html xmlns:MadCap="http://www.madcapsoftware.com/Schemas/MadCap.xsd" MadCap:tocPath="SQL API|SQL Language Guide|Reference Guide|SQL Statement Reference" MadCap:InPreviewMode="false" MadCap:PreloadImages="false" MadCap:RuntimeFileType="Topic" MadCap:TargetType="WebHelp" lang="en-us" xml:lang="en-us" MadCap:PathToHelpSystem="../../../" MadCap:HelpSystemFileName="Default.xml" MadCap:SearchType="Stem">
+    <head>
+        <meta http-equiv="Content-Type" content="text/html; charset=utf-8" /><title>initialize</title>
+        <link rel="icon" type="image/png" href="http://docs.raima.com/favicon.png" />
+        <link href="../../SkinSupport/MadCap.css" rel="stylesheet" />
+        <link href="../../Resources/Stylesheets/raima.css" rel="stylesheet" />
+        <script src="../../SkinSupport/MadCapAll.js" type="text/javascript">
+        </script>
+    </head>
+    <body>
+        <p class="MCWebHelpFramesetLink MCWebHelpFramesetLinkTop" style="display: none;"><a href="../../../Default_CSH.htm#SQL/DML/initialize.htm" style="">Open topic with navigation</a>
+        </p>
+        <div class="MCBreadcrumbsBox_0"><span class="MCBreadcrumbsPrefix">You are here: </span><a class="MCBreadcrumbsLink" href="../../dbRSQL.htm">SQL API</a><span class="MCBreadcrumbsDivider"> &gt; </span><a class="MCBreadcrumbsLink" href="../dbSQL.htm">SQL Language Guide</a><span class="MCBreadcrumbsDivider"> &gt; </span><a class="MCBreadcrumbsLink" href="../SQLStmtRef.htm">Reference Guide</a><span class="MCBreadcrumbsDivider"> &gt; </span><span class="MCBreadcrumbs">initialize</span>
+        </div>
+        <h3 class="newpage"><a name="kanchor237"></a>initialize</h3>
+        <p>Initialize database</p>
+        <p class="Heading">Syntax</p><pre class="Grammar" xml:space="preserve">init_db_stmt:
+ 		<b>initialize</b> [<b>database</b>] <i>db_name</i></pre>
+        <p class="Heading">Description </p>
+        <p>The <b>initialize</b> statement can be used to (re)initialize the database named <i>db_name</i>.  Execution of this statement requires that the database has been opened in exclusive access mode and that it is the only database that is open. </p>
+        <p class="Notes"> Note that this statement will delete the entire contents of the specified database so be sure you know what you're doing before you execute this statement!  </p>
+        <p class="Notes">Note that the <b>initialize</b> statement is not transactional - i.e., you cannot rollback the changes made by this statement.</p>
+        <p class="Heading">Example </p><pre>open database bookshop exclusive;
+<b>initialize bookshop;</b>
+...import bookshop tables
+</pre>
+        <p class="Heading">See Also</p>
+        <p><a href="open.htm">open</a>
+        </p>
+        <hr MadCap:conditions="Default.ScreenOnly" width="100%" size="0" align="center" />
+        <p MadCap:conditions="Default.ScreenOnly" style="font-size: 8pt;"><span class="MyVariablesCopyright">Copyright © 2012, Raima Inc. All rights reserved.</span>
+        </p>
+        <script type="text/javascript" src="../../SkinSupport/MadCapBodyEnd.js">
+        </script>
+        <p class="MCWebHelpFramesetLink MCWebHelpFramesetLinkBottom" style="display: none;"><a href="../../../Default_CSH.htm#SQL/DML/initialize.htm" style="">Open topic with navigation</a>
+        </p>
+    </body>
+</html>

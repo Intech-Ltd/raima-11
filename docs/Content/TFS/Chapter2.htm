@@ -1,0 +1,143 @@
+<?xml version="1.0" encoding="utf-8"?>
+<!DOCTYPE html PUBLIC "-//W3C//DTD XHTML 1.0 Strict//EN" "http://www.w3.org/TR/xhtml1/DTD/xhtml1-strict.dtd">
+<html xmlns:MadCap="http://www.madcapsoftware.com/Schemas/MadCap.xsd" MadCap:tocPath="TFS Configuration &amp; Extension API" MadCap:InPreviewMode="false" MadCap:PreloadImages="false" MadCap:RuntimeFileType="Topic" MadCap:TargetType="WebHelp" lang="en-us" xml:lang="en-us" class="" MadCap:PathToHelpSystem="../../" MadCap:HelpSystemFileName="Default.xml" MadCap:SearchType="Stem">
+    <head>
+        <meta http-equiv="Content-Type" content="text/html; charset=utf-8" /><title>TFS&#160;Server Configurations</title>
+        <link rel="icon" type="image/png" href="http://docs.raima.com/favicon.png" />
+        <link href="../SkinSupport/MadCap.css" rel="stylesheet" />
+        <link href="../Resources/TableStyles/TwoColNoLines.css" rel="stylesheet" />
+        <link href="../Resources/Stylesheets/raima.css" rel="stylesheet" />
+        <script src="../SkinSupport/MadCapAll.js" type="text/javascript">
+        </script>
+    </head>
+    <body>
+        <p class="MCWebHelpFramesetLink MCWebHelpFramesetLinkTop" style="display: none;"><a href="../../Default_CSH.htm#TFS/Chapter2.htm" style="">Open topic with navigation</a>
+        </p>
+        <div class="MCBreadcrumbsBox_0"><span class="MCBreadcrumbsPrefix">You are here: </span><a class="MCBreadcrumbsLink" href="dbTFSUG.htm">TFS Configuration &amp; Extension API</a><span class="MCBreadcrumbsDivider"> &gt; </span><span class="MCBreadcrumbs">TFS Configurations</span>
+        </div>
+        <h1 class="firstHeading" style="text-align: justify;"><a MadCap:generatedBookmark="TOC" name="TFS&#160;Server_Configurations"></a>TFS&#160;Server Configurations</h1>
+        <h2><a MadCap:generatedBookmark="TOC" name="Introduction_..3"></a>Introduction</h2>
+        <p>The TFS&#160;functionality is accessed through an API. This API&#160;is reentrant, so that its functions may be accessed by multiple threads concurrently. Anything that can be done with a database is done through the TFS&#160;API.</p>
+        <p>The runtime library is linked into an application's program space, and performs caching of database pages and manipulations of those page contents in order to implement database queries and updates. The application uses the runtime's API, sometimes referred to as the "d_"&#160;API. To obtain a page from a database, the runtime must call a TFS&#160;API&#160;function. To lock a record or set type, a TFS&#160;API&#160;function is called. To perform an update to the database (transaction), a series of TFS API's are called.</p>
+        <p>The location and invocation of TFS functions is configurable. The normal configuration is to have the TFS&#160;API&#160;directly linked into the application program. However, the TFS&#160;can be available through a multi-threaded TFS&#160;Server. This is what the <code>tfserver</code> utility is, where applications linked with runtimes remotely access TFS&#160;functions through a server, running in a different process.</p>
+        <p>A third configuration, discussed below, is a single-process, single-thread application. This special situation doesn't require much of the TFS functionality, and a special compact TFS is available for this situation.</p>
+        <p>The TFS&#160;Configuration types listed below are enumerated types used by <code>d_tfsinitEx</code> and <code>rsqlTFSInitEx</code>.</p>
+        <table style="width: 100%;mc-table-style: url('../Resources/TableStyles/TwoColNoLines.css');margin-left: 0;margin-right: auto;caption-side: top;" class="TableStyle-TwoColNoLines" cellspacing="0">
+            <caption>TFS&#160;Configuration Types</caption>
+            <col class="Column-Column1" style="width: 225px;" />
+            <col class="Column-Column2" />
+            <tbody>
+                <tr class="Body-Body1">
+                    <td class="BodyE-Column1-Body1"><code>TFS_TYPE_DEFAULT</code> <![CDATA[ ]]></td>
+                    <td class="BodyD-Column2-Body1">Factory default TFS type is <code>TFS_TYPE_TFS</code>.</td>
+                </tr>
+                <tr class="Body-Body1">
+                    <td class="BodyE-Column1-Body1"><code>TFS_TYPE_TFS</code> <![CDATA[ ]]></td>
+                    <td class="BodyD-Column2-Body1">See <a href="#2.3">Direct-Link Configuration</a></td>
+                </tr>
+                <tr class="Body-Body1">
+                    <td class="BodyE-Column1-Body1"><code>TFS_TYPE_RPC</code> <![CDATA[ ]]></td>
+                    <td class="BodyD-Column2-Body1">See <a href="#2.2">Standard Client/Server Configuration</a></td>
+                </tr>
+                <tr class="Body-Body1">
+                    <td class="BodyB-Column1-Body1"><code>TFS_TYPE_STANDALONE</code> <![CDATA[ ]]></td>
+                    <td class="BodyA-Column2-Body1">See <a href="#2.4">Standalone Configuration</a></td>
+                </tr>
+            </tbody>
+        </table>
+        <p>If a TFS&#160;type is not specified, the default TFS&#160;type will be used by functions <code>d_tfsinit</code>, <code>rsqlTFSinit</code> and <code>d_opentask</code>. Installations with source code can change this default.</p>
+        <h2><a MadCap:generatedBookmark="TOC" name="Direct-Link_Configuration"></a><a name="TFS_TFS"></a>Direct-Link Configuration</h2>
+        <p>If an application does not require a separate server, it is possible to link the TFS API with the application to make it run <i>in-process</i>. Because the TFS functions are reentrant, this application may be multi-threaded. Figure 14-2 shows this configuration.</p>
+        <p class="Caption">
+            <img src="../Resources/Images/UsersGuide/UG-Fig-14-2.png">
+            </img>
+            <br>
+            </br>Fig. 14-2. Direct-Link Configuration</p>
+        <p>An obvious benefit of this configuration is that the calls from the runtime to the TFS have no intermediate marshalling/demarshalling or TCP/IP&#160;send and receive, so this application should perform better than the same application in the client/server configuration.</p>
+        <p>Note that since the RPC mechanism in the client/server configuration makes the TFS functions look local, there are no changes required to the application or runtime library to make them work in either configuration.</p>
+        <p>Now note the similarity between the TFS&#160;Server Process in Figure 14-1 and the Application Program in Figure 14-2. The only difference between the Server Program and Application Program is that the Server Program starts up threads that exist to service connections with other runtimes and call TFS&#160;stub functions. The Application Program threads can exist side-by-side with the server connection threads, and an Application Program has the ability to start them up if it chooses. If it starts up connection threads, then it is acting as a TFS to other applications that are configured to run in the client/server configuration. Figure 14-3 attempts to illustrate this configuration, which is a combination of direct-link and client/server.</p>
+        <p class="Caption">
+            <img src="../Resources/Images/UsersGuide/UG-Fig-14-3.png">
+            </img>Fig. 14-3. Hybrid Direct-Link, Client/Server Configuration</p>
+        <p>By starting up the server connection threads, the application is allowing other applications to have access to the databases that are under the control of this TFS&#160;(application). The code below shows the necessary code to start up the server connection threads.</p><pre xml:space="preserve">TFS_HANDLE hTFS;    /* handle to control TFS&#160;server connection threads */
+char *docroot = "c:/RDM/databases";  /* should be command-line option */
+int32_t rc;
+...
+
+if ((rc = d_tfsinit(docroot, NULL, &amp;hTFS)) != S_OKAY)
+    error_exit(rc);
+
+if ((rc = d_tfsrun(hTFS, TRUE, NULL)) != S_OKAY)
+    error_exit(rc);
+
+/* begin Application code */
+
+...
+
+/* Application termination */
+
+if ((rc = d_tfsstop(hTFS)) == S_OKAY)   /* stop the server threads */
+    d_tfsterm(hTFS);                    /* free resources */</pre>
+        <p>It is possible to set the configuration programmatically through the use of the d_tfsinitex(..) function with one of the following three parameters: <span class="code">TFS_TYPE_TFS</span>, <span class="code">TFS_TYPE_STANDALONE</span>, or <span class="code">TFS_TYPE_RPC</span> as follows:</p>
+        <h3><a MadCap:generatedBookmark="TOC" name="Direct-Link_Configuration_(TFST):"></a>Direct-Link Configuration (TFST):</h3>
+        <p>This configuration runs the TFS engine within your application, and the database is stored there. The TFST configuration is ACID compliant. Optionally, the ability to accept remote connections (set in those applications as clients using TFS_TYPE_RPC) can also be enabled, allowing your application to act as a server to other users.</p><pre xml:space="preserve">TFS_HANDLE hTFS;<br />TFS_PARAMS tparams;<br />tparams.port= 21553;<br />tparams.rd_only= FALSE;<br />tparams.no_disk= FALSE;<br />tparams.verbose= FALSE;<br />tparams.logfile= NULL;<br />tparams.stdout_file= NULL;<br /><br />/* start Direct-Link TFS configuration */<br /><br />sStatus= d_tfsinitEx ("/my/directory", &amp;tparams, &amp;hTFS, TFS_TYPE_TFS);<br />if (sStatus == S_OKAY) {
+    DB_TASK *task;<br />    d_opentask (&amp;task);<br />    ...<br />    d_closetask (task);<br />    d_tfsterm (hTFS);<br />}</pre>
+        <h3><a MadCap:generatedBookmark="TOC" name="Client-Server_Configuration_(TFSR)"></a>Client-Server Configuration (TFSR)</h3>
+        <p>This configuration does not run any TFS engine in your application, requiring it to connect to a TFS (either tfserver or another application in TFST configuration) hosting the database over TCP/IP. This configuration is also ACID compliant.</p><pre xml:space="preserve">TFS_HANDLE hTFS;<br />TFS_PARAMS tparams;<br />tparams.port= 21553;<br />tparams.rd_only= FALSE;<br />tparams.no_disk= FALSE;<br />tparams.verbose= FALSE;<br />tparams.logfile= NULL;<br />tparams.stdout_file= NULL;<br /><br />/* start Direct-Link TFS configuration */<br /><br />sStatus= d_tfsinitEx (NULL, &amp;tparams, &amp;hTFS, TFS_TYPE_RPC);<br />if (sStatus == S_OKAY) {
+    DB_TASK *task;<br />    d_opentask (&amp;task);<br />    ...<br />    d_closetask (task);<br />    d_tfsterm (hTFS);<br />}</pre>
+        <h3><a MadCap:generatedBookmark="TOC" name="Standalone_Configuration_(TFSS)"></a>Standalone Configuration (TFSS)</h3>
+        <p>This configuration runs a TFS engine within your application, however it is not multi-user capable (and therefore cannot accept incoming connections), and is not ACID compliant. It is very fast however, and is useful for situations where complete safety is not required.</p><pre xml:space="preserve">TFS_HANDLE hTFS;<br />TFS_PARAMS tparams;<br />tparams.port= 21553;<br />tparams.rd_only= FALSE;<br />tparams.no_disk= FALSE;<br />tparams.verbose= FALSE;<br />tparams.logfile= NULL;<br />tparams.stdout_file= NULL;<br /><br />/* start Direct-Link TFS configuration */<br /><br />sStatus= d_tfsinitEx ("/my/directory", &amp;tparams, &amp;hTFS, TFS_TYPE_STANDALONE);<br />if (sStatus == S_OKAY) {
+    DB_TASK *task;<br />    d_opentask (&amp;task);<br />    ...<br />    d_closetask (task);<br />    d_tfsterm (hTFS);<br />}</pre>
+        <p>This hybrid configuration may involve application programs that are all identical (i.e. there is one designated to be the server, and others are clients), or the server program may be unique while client programs are different. An additional function exists to inform a program of the configuration in which it is running, in case there is different program logic involved, or if it is an error condition. This is shown by example below.</p><pre xml:space="preserve">
+uint16_t major;    /* RDM&#160; major version number */
+uint16_t minor;    /* RDM&#160; minor version number */
+TFS_LIB_TYPE&#160;type; /* TFS Library type */
+...
+ 
+d_tfsversion(&amp;major, &amp;minor, &amp;type);
+switch (type) {
+    case TFS_LIB_TYPE_TFS:
+        /* this program is direct-linked to the TFS library */
+        ...
+        break;
+    case TFS_LIB_TYPE_RPC:
+        /* this program is linked as a client to the server, using RPCs */
+        ...
+        break;
+    case TFS_LIB_TYPE_STANDALONE:
+        /* this program is linked to the standalone TFS library */
+        /* only one thread may access the database functions */
+        ...
+        break;
+}</pre>
+        <p>Note that there are two library types where starting up server connection threads does not make sense (<code>TYPE_RPC</code> and <code>TYPE_STANDALONE</code>), but in these libraries, the <code>d_tfsinit</code>, <code>d_tfsrun</code>, <code>d_tfsstop</code> and <code>d_tfsterm</code> functions simply return successfully, so there is no need to build an application in two ways if it is intended for two configurations. In fact, the <code>TYPE_STANDALONE</code> configuration requires the use of the <code>d_tfsinit</code> function to establish a root directory for the databases (if not always the current directory).</p>
+        <h2><a MadCap:generatedBookmark="TOC" name="Standard_Client_Server_Configuration"></a><a name="TFS_RPC"></a>Standard Client/Server Configuration</h2>
+        <p>The runtimes and TFS are running within different processes. The runtimes invoke the TFS functions through a Remote Procedure Call (RPC) mechanism, as shown in Figure 14-1 below.</p>
+        <p class="Caption">
+            <img src="../Resources/Images/UsersGuide/UG-Fig-14-1_626x481.png" style="width: 626;height: 481;" />
+            <br />Fig. 14-1. Standard Client/Server Configuration</p>
+        <p>In the client/server configuration, any number of runtimes can be connected to the TFS process. If an application program is multi-threaded, each thread can establish a connection with the server. For each runtime connection, the server will spawn a thread to service the RPCs from that thread for the duration of the thread's activity.</p>
+        <p>In this client/server configuration, the application process may be on the same computer as the server process, or a different one.</p>
+        <p>The TFS&#160;proxies that are linked into the application process "act like" the actual TFS API functions. The proxies will <i>marshal</i> the input parameters and send them in a packet to the server. The server will determine, from the contents of the packet, which function is being called, and will call the corresponding stub function. The stub function will interpret the marshaled parameter values and then call the real TFS function with those parameter values. Upon return from the function, there may be output parameters and a return code. These are all marshaled into a packet that is returned to the client, where the values are demarshaled and returned to the application. Again, the application, calling a TFS&#160;API function, does not know that the actual function was not local.</p>
+        <h2><a MadCap:generatedBookmark="TOC" name="Standalone_Configuration"></a><a name="TFS_STANDALONE"></a>Standalone Configuration</h2>
+        <p>The standalone configuration uses a version of the TFS API that assumes that only one thread within one process will be calling the functions. With this assumption, a number of simplifications can be made:</p>
+        <ul>
+            <li value="1">The program has exclusive access to all databases, even when opening them in shared mode. So all locking functions are accepted, but have no effect.</li>
+            <li value="2">No changes are ever made by other runtimes, so the cache need not be flushed, and the TFS need not keep a store of the modified pages.</li>
+            <li value="3">Read-only-transactions don't require any cache versioning because no other runtimes are making changes.</li>
+        </ul>
+        <p class="Notes">NOTE:&#160;The implementation of transactions in the standalone configuration leaves a database vulnerable to corruption if there is an interruption of the program's processing during the commit of a transaction, or if the computer or operating system crash before the database files are closed. It is not recommended that this configuration be used in unstable environments.</p>
+        <p>All of the above differences amount to an extremely high-performing configuration. If this configuration satisfies an application's requirements, it is preferable to the others.</p>
+        <p>The figure below illustrates the standalone configuration.</p>
+        <p class="Caption">
+            <img src="../Resources/Images/UsersGuide/UG-Fig-14-4_214x379.png" style="width: 214;height: 379;" />
+            <br />Fig. 14-4. Standalone Configuration</p>
+        <hr MadCap:conditions="Default.ScreenOnly" width="100%" size="0" align="center" />
+        <p MadCap:conditions="Default.ScreenOnly" style="font-size: 8pt;"><span class="MyVariablesCopyright">Copyright © 2012, Raima Inc. All rights reserved.</span>
+        </p>
+        <script type="text/javascript" src="../SkinSupport/MadCapBodyEnd.js">
+        </script>
+        <p class="MCWebHelpFramesetLink MCWebHelpFramesetLinkBottom" style="display: none;"><a href="../../Default_CSH.htm#TFS/Chapter2.htm" style="">Open topic with navigation</a>
+        </p>
+    </body>
+</html>

@@ -1,0 +1,2059 @@
+<?xml version="1.0" encoding="utf-8"?>
+<!DOCTYPE html PUBLIC "-//W3C//DTD XHTML 1.0 Strict//EN" "http://www.w3.org/TR/xhtml1/DTD/xhtml1-strict.dtd">
+<html xmlns:MadCap="http://www.madcapsoftware.com/Schemas/MadCap.xsd" MadCap:tocPath="Native API|User's Guide" MadCap:InPreviewMode="false" MadCap:PreloadImages="false" MadCap:RuntimeFileType="Topic" MadCap:TargetType="WebHelp" lang="en-us" xml:lang="en-us" class="" MadCap:PathToHelpSystem="../../" MadCap:HelpSystemFileName="Default.xml" MadCap:SearchType="Stem">
+    <head>
+        <meta http-equiv="Content-Type" content="text/html; charset=utf-8" /><title>Database Manipulation</title>
+        <link rel="icon" type="image/png" href="http://docs.raima.com/favicon.png" />
+        <link href="../SkinSupport/MadCap.css" rel="stylesheet" />
+        <link href="../Resources/TableStyles/TwoColNoLines.css" rel="stylesheet" />
+        <link href="../Resources/TableStyles/fncSummary.css" rel="stylesheet" />
+        <link href="../Resources/Stylesheets/raima.css" rel="stylesheet" />
+        <script src="../SkinSupport/MadCapAll.js">
+        </script>
+    </head>
+    <body>
+        <p class="MCWebHelpFramesetLink MCWebHelpFramesetLinkTop" style="display: none;"><a href="../../Default_CSH.htm#UG/Chapter5.htm" style="">Open topic with navigation</a>
+        </p>
+        <div class="MCBreadcrumbsBox_0"><span class="MCBreadcrumbsPrefix">You are here: </span><a class="MCBreadcrumbsLink" href="../dbCore.htm">Native API</a><span class="MCBreadcrumbsDivider"> &gt; </span><a class="MCBreadcrumbsLink" href="dbUG.htm">User's Guide</a><span class="MCBreadcrumbsDivider"> &gt; </span><span class="MCBreadcrumbs">Database Manipulation</span>
+        </div>
+        <h1 class="firstHeading"><a MadCap:generatedBookmark="TOC" name="Database_Manipulation"></a>Database Manipulation</h1>
+        <h2 class="Heading2"><a MadCap:generatedBookmark="TOC" name="5.1_Introduction"></a>5.1 Introduction </h2>
+        <p>Using <span class="MyVariablesProductShortName">RDM</span>, databases are manipulated by C language application programs through calls to functions provided in the <span class="MyVariablesProductShortName">RDM</span> runtime library. Database manipulation capabilities include all functions needed to create, retrieve, modify and delete information in a database. Also included are functions that control the operation of the <span class="MyVariablesProductShortName">RDM</span> runtime environment. The library functions that pertain specifically to multi-user database manipulation are described in the <a href="Chapter7.htm">Multi-User Overview</a> section. </p>
+        <p>The runtime library functions are grouped into different categories based on each one's purpose. See the list of categories below. </p>
+        <table style="width: 100%;border-collapse: collapse;mc-table-style: url('../Resources/TableStyles/TwoColNoLines.css');margin-left: 0;margin-right: auto;" class="TableStyle-TwoColNoLines" cellspacing="0">
+            <col style="width: 150px;" class="Column-Column1" />
+            <col class="Column-Column2" />
+            <tr class="Body-Body1">
+                <td class="BodyE-Column1-Body1"><a href="#5.2">database control</a>
+                </td>
+                <td class="BodyD-Column2-Body1">Functions that open, close, and initialize databases, and set runtime control parameters and options.
+                </td>
+            </tr>
+            <tr class="Body-Body1">
+                <td class="BodyE-Column1-Body1"><a href="#5.3">currency control</a>
+                </td>
+                <td class="BodyD-Column2-Body1">Functions that access and manipulate the currency tables. 
+                </td>
+            </tr>
+            <tr class="Body-Body1">
+                <td class="BodyE-Column1-Body1"><a href="#5.4">data retrieval</a>
+                </td>
+                <td class="BodyD-Column2-Body1">Functions that access and read information from the database. 
+                </td>
+            </tr>
+            <tr class="Body-Body1">
+                <td class="BodyE-Column1-Body1"><a href="#5.5">data creation</a>
+                </td>
+                <td class="BodyD-Column2-Body1">All functions used to store new information and relationships in the database. 
+                </td>
+            </tr>
+            <tr class="Body-Body1">
+                <td class="BodyE-Column1-Body1"><a href="#5.6">data modification</a>
+                </td>
+                <td class="BodyD-Column2-Body1">Functions that modify information and relationships stored in the database. 
+                </td>
+            </tr>
+            <tr class="Body-Body1">
+                <td class="BodyE-Column1-Body1"><a href="#5.7">data deletion</a>
+                </td>
+                <td class="BodyD-Column2-Body1">Functions used to remove information and relationships from the database. 
+                </td>
+            </tr>
+        </table>
+        <p>Note that in the <span class="MyVariablesProductShortName">RDM</span> runtime library all API function names are prefixed by d_ (for example, <code>d_keyfind</code>) so as to avoid name conflicts with other user or system library functions. The return value of all <span class="MyVariablesProductShortName">RDM</span> functions is an integer completion status for the requested operation. A status code of zero (<code>S_OKAY</code>) indicates that the operation completed successfully. These status codes will be introduced as required in the discussions that follow. A complete list can be found in <a href="#5.8">Database Error Reporting</a>, and complete descriptions are provided in the <span class="MyVariablesProductShortName">RDM</span> Reference Manual. </p>
+        <p>The purpose of this section is to introduce the use of the principal functions through explanation and examples. Complete details relating to the use of each function are provided with hyperlinks into the <span class="MyVariablesProductShortName">RDM</span> Reference Manual. </p>
+        <p>Most of the <span class="MyVariablesProductShortName">RDM</span> functions must be passed a task parameter and a database number. In the examples, a task pointer called <code>task</code> and a constant called <code>CURR_DB</code> ("use the current database") has been passed to the functions. The task pointer must always be passed to <span class="MyVariablesProductShortName">RDM</span> functions to facilitate reentrancy. The database number must always be passed, even when only one database is open. See <a href="#5.9">Accessing Multiple Databases</a>, for complete details regarding multiple database access and the database number argument. </p>
+        <h2 class="Heading2"><a MadCap:generatedBookmark="TOC" name="5.2_Database_Control"></a><a name="5.2"></a>5.2 Database Control </h2>
+        <p>Database control functions provide control over the runtime system's operational environment. They provide for the opening and closing of databases, initialization of databases and files, and various runtime tuning parameters and options. </p>
+        <p>The database control functions listed below have been grouped into two categories. The "pre-open" functions are those that can only be called prior to a <code>d_open</code> call, which opens a database. The "post-open" functions can only be called after databases have been opened. Functions <code>d_off_opt</code> and <code>d_on_opt</code>, however, can be executed either before or after databases have been opened. </p>
+        <table style="width: 100%;border-collapse: collapse;mc-table-style: url('../Resources/TableStyles/fncSummary.css');caption-side: top;margin-left: 0;margin-right: auto;" class="TableStyle-fncSummary" cellspacing="0">
+            <caption>Pre-Database Open Functions </caption>
+            <col class="Column-Column1" />
+            <col class="Column-Column2" />
+            <thead>
+                <tr class="Head-Header1">
+                    <th class="HeadE-Column1-Header1">Function</th>
+                    <th class="HeadD-Column2-Header1">Description</th>
+                </tr>
+            </thead>
+            <tbody>
+                <tr class="Body-Body1">
+                    <td class="BodyE-Column1-Body1"><a href="../RM/api/d_dbuserid.htm">d_dbuserid</a>
+                    </td>
+                    <td class="BodyD-Column2-Body1">Set database user identifier. </td>
+                </tr>
+                <tr class="Body-Body1">
+                    <td class="BodyE-Column1-Body1"><a href="../RM/api/d_dbver.htm">d_dbver</a>
+                    </td>
+                    <td class="BodyD-Column2-Body1">Obtain runtime library version information.</td>
+                </tr>
+                <tr class="Body-Body1">
+                    <td class="BodyE-Column1-Body1"><a href="../RM/api/d_open.htm">d_open</a>
+                    </td>
+                    <td class="BodyD-Column2-Body1">Open a (set of) database(s). </td>
+                </tr>
+                <tr MadCap:conditions="" class="Body-Body1">
+                    <td class="BodyE-Column1-Body1"><a href="../RM/api/d_open_ptr.htm">d_open_ptr</a>
+                    </td>
+                    <td class="BodyD-Column2-Body1">Open a database using a dbd array. </td>
+                </tr>
+                <tr class="Body-Body1">
+                    <td class="BodyE-Column1-Body1"><a href="../RM/api/d_opentask.htm">d_opentask</a>
+                    </td>
+                    <td class="BodyD-Column2-Body1">Create a new task context. </td>
+                </tr>
+                <tr class="Body-Body1">
+                    <td class="BodyE-Column1-Body1"><a href="../RM/api/d_setpages.htm">d_setpages</a>
+                    </td>
+                    <td class="BodyD-Column2-Body1">Set the number of pages in the cache. </td>
+                </tr>
+                <tr class="Body-Body1">
+                    <td class="BodyB-Column1-Body1"><a href="../RM/api/d_dbini.htm">d_dbini</a>
+                    </td>
+                    <td class="BodyA-Column2-Body1">Set path to the <span class="MyVariablesProductShortName">RDM</span> initialization file. </td>
+                </tr>
+            </tbody>
+        </table>
+        <p>Note, as of <span class="MyVariablesProductShortName">RDM</span> Version 10, dbuserid's are automatically assigned. Therefore <code>d_dbuserid</code> is unnecessary, but is left intact for compatibility.</p>
+        <h3 class="Heading3"><a MadCap:generatedBookmark="TOC" name="5.2.1_Opening_and_Closing_Databases"></a><a name="5.2.1"></a>5.2.1 Opening and Closing Databases </h3>
+        <p>Functions <code>d_open</code>, <code>d_iopen</code>, <code>d_open_ptr</code>, and <code>d_iopen_ptr</code> are called to open databases. They are called with the name(s) of the database(s) to be opened. The <code>d_open</code> and <code>d_open_ptr</code> functions have an additional parameter that identifies the mode of database access (see <a href="Chapter6.htm">Transaction Processing</a>). </p>
+        <p class="Heading">Opening Databases</p>
+        <p>The following code will open database TIMS in one-user access mode: </p><pre xml:space="preserve">status=d_opentask(&amp;task);
+status=d_open("tims", "o", task);</pre>
+        <p>The <code>d_opentask</code> function allocates a structure to store all context information normally associated with a task (normally a task is one process or thread). When <code>d_open</code> is called, the <span class="MyVariablesProductShortName">RDM</span> runtime library will allocate and initialize memory space for all of its internal tables, and will read into memory the database dictionary for the requested databases. Memory is also allocated for the <span class="MyVariablesProductShortName">RDM</span> cache. If there is not enough memory available for the tables or cache, <code>d_open</code> will return status code S_NOMEMORY (see function <code><a href="../RM/api/d_setpages.htm">d_setpages</a></code>). </p>
+        <p>The <code>d_open</code> function requires that the database's dictionary file (DBD) already exists in the TFS. Installation of the DBD file is accomplished through copying the <code>dbname.dbd</code> file into the TFS environment, in the database's directory, or by rerunning <code>ddlp</code> with the database's DDL&#160;file.</p>
+        <p>It is possible to avoid the above steps by using the <code>d_open_ptr</code> function, which embeds the database dictionary into the program. Thus the ddlp can be run in the development environment to create the program, but the DBD file is no longer necessary. The <code>ddlp</code> option "-c" is used to generate the necessary files. For example:</p><pre xml:space="preserve">ddlp -c tims.ddl</pre>
+        <p>Which results in the generation of three source files:&#160;<code>tims_dbd.c</code>, <code>tims_dbd.h</code>, and <code>tims.h</code>. The tims.h file is the one used for declaring variables that match record structures, and also contains constants to identify all database elements. The <code>tims_dbd.c</code> and <code>tims_dbd.h</code> files are used for embedding the TIMS dictionary into the program as follows:</p><pre xml:space="preserve">#include "rdm.h"
+/* include the TIMS&#160;dictionary */
+#include "tims_dbd.h"
+/* include the TIMS&#160;structures and constants */
+#include "tims.h"
+
+...
+main()
+{
+    ...
+    status = d_opentask(&amp;task);
+    status = d_open_ptr("tims", "o", &amp;tims_dbd, sizeof(tims_dbd), task);</pre>
+        <p>The <code>tims_dbd.c</code> file must be compiled and linked with the program. The following example assumes Microsoft C.</p><pre xml:space="preserve">cl -MD -DWINDOWS_X86 -I..\include tims.c tims_dbd.c ..\win32\lib\rdmrdm10.lib</pre>
+        <p>Database access or update functions called prior to a successful opening of the database will return error code <code>S_DBOPEN</code>.</p>
+        <p>If a subsequent <code>d_open</code> call is made before the first database is closed, <span class="MyVariablesProductShortName">RDM</span> will abort any active transaction, close the open database(s), and open the new database(s).</p>
+        <p><span class="MyVariablesProductShortName">RDM</span> also supports the ability to open multiple databases within the same task, and the ability to incrementally open (open one or more databases within the same task after one or more databases are already open) databases. See <a href="#5.9">Multiple Database Access</a> below for how to use <code>d_iopen</code> and <code>d_iopen_ptr</code>.</p>
+        <p class="Heading">Closing Databases</p>
+        <p>Function <code><a href="../RM/api/d_close.htm">d_close</a></code> will close all open databases. If a transaction was active, it will be aborted.</p>
+        <p>If multiple databases are open, then <code>d_iclose</code> may be used to close one of them. See <a href="#5.9">Multiple Database Access</a> below for the complete discussion.</p>
+        <h3 class="newpage"><a MadCap:generatedBookmark="TOC" name="5.2.2_Operational_Environment"></a><a name="5.2.2"></a>5.2.2 Operational Environment </h3>
+        <p>An <span class="MyVariablesProductShortName">RDM</span> database consists of its dictionary (<code><i>dbname</i>.dbd</code>) , the data, vardata, blob, hash and key files (as named in the DDL), and log files used for the purpose of committing transactions, mirroring and replication.</p>
+        <p style="font-style: normal;">All files associated with a database are stored in the <i>document root</i> of the <a href="Chapter3.htm#TFS">Transactional File Server</a> (TFS). When a program calls <code>d_open</code>, the <span class="MyVariablesProductShortName">RDM</span> runtime library will connect to the TFS. When the TFS is local (that is, on the same computer), the TFS will be located through a default name and port (<code>localhost</code> on port <code><span class="MyVariablesDefaultPort">21553</span></code>). If the TFS is running on a different computer, the name and port are taken from the TFS&#160;qualifier (part of the database name in the <code>d_open</code> call, see below), or the <code>RDM_TFSERVER</code> environment variable.</p>
+        <p style="font-style: normal;">Figure 5-1 shows the common same-computer configuration.</p>
+        <p class="Caption">
+            <img src="../Resources/Images/UsersGuide/UG-Fig-5-1_562x344.png" style="width: 562;height: 344;" />
+            <br />Fig. 5-1. Same-computer Configuration</p>
+        <p>Database files are stored in the TFS document root under a subdirectory named after the database. No database files will be stored or located outside the database's subdirectory.</p>
+        <p>If the TFS document root is <code>c:\RDM\databases</code>, then the following directory structure will exist for example databases <code>tims</code>, <code>sales</code> and <code>invntory</code>:</p><pre xml:space="preserve" style="text-decoration: none;">c:\RDM\databases\
+    invntory\
+        invntory.d00
+        invntory.d01
+        invntory.d02
+        invntory.dbd
+        invntory.k00
+        invntory.k01
+        invntory.k02
+        invntory.v00
+    tims\
+        tims.d01
+        tims.d02
+        tims.dbd
+        tims.k01
+        tims.k02
+        tims.v01
+        tims.v02
+    sales\
+        sales.d00
+        sales.d01
+        sales.dbd
+        sales.k00
+        sales.k01
+        sales.k02
+        sales.v00
+</pre>
+        <p>The TFS determines its document root from the command-line:</p><pre xml:space="preserve">c:\RDM&gt; tfserver -d c:\RDM\databases</pre>
+        <p>or if no command-line option is specified, the current directory:</p><pre xml:space="preserve">c:\RDM&gt; cd databases<br />c:\RDM\databases&gt; tfserver</pre>
+        <p>If the TFS is running on a different computer, the TFS host must be visible to the computer on which the application is running. In a LAN connecting the workstations in an office, the computers are normally visible to each other and have a high-bandwidth connection. If necessary, obtain the computer names from your network administrator.</p>
+        <p>Wide-area networks (WANs) are viable platforms for <span class="MyVariablesProductShortName">RDM</span> deployment, where the TFS hosts may be identified with domain names that are public on Internet (e.g. www.RaimaPublicData.com:<span class="MyVariablesDefaultPort">21553</span>). When a TFS is public, it is important, of course, to make sure that no private or vulnerable data is available.</p>
+        <p>NOTE: The computer or domain name is not the same as a TFS name (the TFS doesn't have a name), but the TFS will be located through the computer's name. You can test your connectivity to the computer with a ping command, for example:</p><pre xml:space="preserve">c:\RDM&gt; ping henry_lptp
+c:\RDM&gt; ping www.RaimaPublicData.com</pre>
+        <p>When an application calls <code>d_open</code>, the socket library function <code>gethostbyname</code> will be used to determine visibility of the TFS host's name.</p>
+        <p>Since each TFS operates within it's own document root, and each TFS is identified through it's host computer name and port, it is possible to have multiple TFS's running on the same computer, and to connect to multiple TFS's on the same or other computers. Figure 5-2 shows a variety of connectivity options:</p>
+        <p class="Caption">
+            <img src="../Resources/Images/UsersGuide/UG-Fig-5-2_545x383.png" style="width: 545;height: 383;" />
+            <br />Fig. 5-2 Connectivity Options</p>
+        <p>Multiple databases (see <a href="#5.9">Multiple Database Access</a>) that are located in different TFS's can be opened simply by qualifying the database name with the TFS computer name and port, as in the following example: </p><pre xml:space="preserve">d_open("tims;tims@RDM_svr", "o", task); </pre>
+        <p>Here, database 0 would be the <code>tims</code> database located on the TFS running on same computer (<code>localhost</code>) with default port <span class="MyVariablesDefaultPort">21553</span>, and database 1 would be the <code>tims</code> database located on the TFS running on the computer named <code>RDM_svr</code> with default port <span class="MyVariablesDefaultPort">21553</span>. Both database directories would need to contain the dictionary file <code>tims.dbd</code> even if they are identical. </p>
+        <p>If a local TFS is using a port other than the default port, it will be necessary to qualify the database name with "<code>@localhost:port</code>", which will work with any <i>local</i> TFS regardless of the computer name.</p>
+        <p>When multiple TFS's are running on the same computer, to avoid a port conflict, at least one must have a non-default port number. For example, on the computer <code>RDM_svr</code> above, the two TFS's could be started as follows:</p><pre xml:space="preserve">c:\RDM&gt; tfserver -d c:\RDM\databases<br />c:\RDM&gt; tfserver -d c:\RDM\directories -p 1730</pre>
+        <p>Then, the Application B running on <code>Joe_wkstation</code> could perform the following <code>d_open</code> call:</p><pre xml:space="preserve">d_open("tims@RDM_svr;phonelist@RDM_svr:1730", "o", task);</pre>
+        <div MadCap:conditions="Default.PKGMirroring">
+            <h4 class="Heading4"><a MadCap:generatedBookmark="TOC" name="Mirroring"></a>Mirroring</h4>
+            <p>When a database is mirrored from another TFS, it is placed into a subdirectory named after the host computer and port. For example, if the local TFS has a document root <code>c:\RDM\databases</code> containing a database <code>phlist</code>, and a database named <code>phlist</code> is being mirrored from a TFS on the computer named <code>tfs.corporate.com</code>, then the following local files will be found:</p><pre xml:space="preserve">c:\RDM\databases
+    phlist\
+        phlist.d00
+        phlist.dbd
+        phlist.k01
+        phlist.k02
+    tfs.corporate.com-<span class="MyVariablesDefaultPort">21553</span>\
+        phlist\
+            phlist.d00
+            phlist.dbd
+            phlist.k01
+            phlist.k02
+    tims\
+        tims.d01
+        ...</pre>
+            <p>Note that any other databases mirrored from the same remote site will be placed in the same subdirectory.</p>
+            <p>When a database is mirrored, it must be opened read-only on the local computer, so either of the following calls are valid:</p><pre xml:space="preserve">/* open two local databases */<br />d_open("tims;tfs.corporate.com-<span class="MyVariablesDefaultPort">21553</span>/phlist", "r", task);<br /><br />/* open locally maintained and mirrored phlist as a union */<br />d_open("phlist|tfs.corporate.com-<span class="MyVariablesDefaultPort">21553</span>/phlist, "r", task);</pre>
+            <p>Opening a mirrored database is different than opening a remote database. For example, the following open call is opening both the remote and local <code>phlist</code> databases in shared mode, meaning that updates may be made to either or both of the databases:</p><pre xml:space="preserve">/* open the local and remote phlist databases */<br />d_open("phlist;phlist@tfs.corporate.com", "s", task);</pre>
+        </div>
+        <h4 class="Heading4"><a MadCap:generatedBookmark="TOC" name="Environment_Variable"></a>Environment Variable</h4>
+        <p>The environment variable <code><a name="kanchor2"></a>RDM_TFSERVER</code> is checked when a database is being opened with no qualification on a database name. The value of <code>RDM_TFSERVER</code> may be a computer name, or a computer name followed by a port:</p><pre xml:space="preserve">c:\RDM&gt; set RDM_TFSERVER=henry_lptp</pre>
+        <p>which would use the default port <span class="MyVariablesDefaultPort">21553</span>, or:</p><pre xml:space="preserve">c:\RDM&gt; set RDM_TFSERVER=RDM_svr:1730</pre>
+        <p>to contact the TFS on RDM_svr with port 1730, which would have been started as follows:</p><pre xml:space="preserve">c:\RDM_svr\RDM\databases&gt; tfserver -p 1730 </pre>
+        <h4 MadCap:conditions=""><a MadCap:generatedBookmark="TOC" name="In-Memory_Files_and_Paths"></a>In-Memory Files and Paths 
+</h4>
+        <p MadCap:conditions="">The locations of <code>data</code>, <code>key</code> and <code>vardata</code> files specified through DDL as <code>inmemory</code> are the same as their disk-based counterparts. This way, more than one database and more than one TFS (each with its own document root) can be stored in the same shared memory on one computer host. </p>
+        <h3 class="newpage"><a MadCap:generatedBookmark="TOC" name="5.2.3_Dynamic_Database_Initialization"></a><a name="5.2.3"></a>5.2.3 Dynamic Database Initialization </h3>
+        <p>Dynamic database initialization functions allow a program to initialize an entire database, or one or more files, in a database at program execution time. These functions are useful when a first-time initialization needs to be included as part of an application or when a temporary database is needed. </p>
+        <p class="Notes">These functions will destroy existing data. They are not part of a normal database open sequence. </p>
+        <p>Function <code>d_initialize</code> will initialize all database data and key files associated with the open database. In multi-user environments, it can only be called when the database is opened in exclusive access mode, or if all of the record types in the database are write-locked. Function <code>d_destroy</code> is called to close the database and to delete all of the database files comprising the open database. </p>
+        <p>Individual files that have a <i>fileid </i>specified in the DDL file statement can be initialized using function <code>d_initfile</code>. For example, the following DDL defines files that keep track of a daily user login history: </p><pre>key file day_key = "dayfile.key" contains login_id; 
+data file day_data = "dayfile.dat" contains login_history; </pre>
+        <p>To create a specific user's own login database, <code>ddlp</code> can be run using the <i>namespace</i> option:</p><pre xml:space="preserve">c:\RDM&gt; ddlp -ns wlw login.ddl</pre>
+        <p>resulting in a database named <code>wlwlogin</code>.</p>
+        <p>Assuming that the following example program receives the user's initials as<code> argv[1]</code>, the login database files are initialized by the application when the user logs in at the beginning of the day, as follows: </p><pre xml:space="preserve">#include "rdm.h"
+#include "login.h"
+#include "mis.h"
+
+main(int arc, char *argv[])
+{
+    DB_TASK *task;
+    char myDbs[16];
+    ...
+
+    /* Open Login and Mgt Info System databases */
+    strcpy(myDbs, argv[1]);
+    strcat(myDbs, "login;mis");
+    d_opentask(&amp;task);
+    d_open(myDbs, "s", task);
+    ...
+
+    /* Since each user has his own login database, an
+       exclusive lock on that database will preclude the use of
+       other locks and yield better performance. */
+    d_reclock(LOGIN_HISTORY, "x", task, CURR_DB);
+
+    if (beginning_of_day) {
+        /* Initialize daily login files */
+        d_initfile(DAY_KEY, task, CURR_DB);
+        d_initfile(DAY_DATA, task, CURR_DB);
+    }
+    ...
+}</pre>
+        <h3 class="Heading3"><a MadCap:generatedBookmark="TOC" name="5.2.4_Runtime_Control"></a><a name="5.2.4"></a>5.2.4 Runtime Control </h3>
+        <p>Runtime control functions inform the <span class="MyVariablesProductShortName">RDM</span> runtime of the  size of the database cache, or to turn on or off one or more of several runtime options. These functions provide the flexibility to tune runtime performance to meet the requirements of individual applications. </p>
+        <h4 class="Heading4"><a MadCap:generatedBookmark="TOC" name="Size_of_Runtime_Cache"></a>Size of Runtime Cache </h4>
+        <p><span class="MyVariablesProductShortName">RDM</span> performs all input and output for the database files through a cache consisting of a fixed number of database page buffers. This technique yields large performance benefits by reducing the number of actual disk accesses required to read or write information in the database. </p>
+        <p>The programmer can specify the number of buffers to allocate for the cache with function <code>d_setpages</code>. In general, the more pages specified the better the potential performance gains. The first argument to this function specifies the number of pages in the standard database cache. The second argument is no longer used and exists to maintain backward compatibility.                                                                                    <![CDATA[ ]]></p>
+        <p>If <code>d_setpages</code> is not called, <span class="MyVariablesProductShortName">RDM</span> will allocate 100 pages in the database cache. The cache lookups are performed using a hashing algorithm, as shown below: </p><pre xml:space="preserve">d_setpages(200, 0, task); </pre>
+        <p>The initial size of the pages allocated for the database cache will be equal to the size of the largest page in the database. Thus, if the largest page is 4096 bytes long, then the database cache in the above example will occupy 800K bytes (200 * 4096). If there is not enough memory available to accommodate the requested number of pages, function <code>d_open</code> will return status S_NOMEMORY. </p>
+        <h4 class="Heading4"><a MadCap:generatedBookmark="TOC" name="Option_Settings"></a>Option Settings </h4>
+        <p>Various runtime option settings allow you to do these activities plus others: </p>
+        <ul>
+            <li value="1">Turn on or off the use of delete chain slots (for when new records are created) </li>
+            <li value="2">Change between case-insensitive and case-sensitive sorting </li>
+            <li value="3">Ignore any options that may be set through environment variables.       </li>
+        </ul>
+        <p>Rather than supplying separate functions to control the setting of these runtime options, <span class="MyVariablesProductShortName">RDM</span> provides two parameter-based system option setting functions called <code>d_on_opt</code> and <code>d_off_opt</code>. These functions are passed a bit status word, which has a bit associated with each option. These options have been assigned constants in <code>rdm.h</code>. See the <span class="MyVariablesProductShortName">RDM</span> Reference Manual for a complete list. </p>
+        <p>Here are some examples. To turn on case-insensitive sorting: </p><pre xml:space="preserve">d_on_opt(IGNORECASE, task); </pre>
+        <p>This option will re-define the collating sequence of characters, and must be used for the lifetime of a database. You cannot build a database with this option turned on, then later use it with it turned off. </p>
+        <p>To turn off delete chain use <i>and</i> stop ignoring environment variables: </p><pre xml:space="preserve">d_off_opt(DCHAINUSE | IGNOREENV, task); </pre>
+        <p>The ability to turn on or off the use of deleted record slots provides some application control over the placement of related records in the database. If all member record occurrences of a given set are entered together, and use of the delete chain is turned off, the records will all be physically placed in the order in which they're entered at the end of the data file. This will improve performance when, later, they are all accessed together. </p>
+        <p>The default settings have delete chain use turned <i>on</i>, and case-insensitive sorting turned <i>off</i>. </p>
+        <h2 class="Heading2"><a MadCap:generatedBookmark="TOC" name="5.3_Currency_Tables"></a><a name="5.3"></a>5.3 Currency Tables </h2>
+        <p>All of the data contained in an <span class="MyVariablesProductShortName">RDM</span> database is navigated through use of the <i>currency tables</i>. Thus, a thorough understanding of the use of these tables is necessary. </p>
+        <p>The retrieval of <span class="MyVariablesProductShortName">RDM</span> data is always a two-step process. First the location of the data is established, and then the data is read. The located data is always in the form of a specific record occurrence. The <i><span class="MCTextPopup"><a href="javascript:void(0);" class="MCTextPopupSpot_0" onclick="FMCTextPopup( event, this ); return false;">database address<img style="border: none;margin-left: 5px;" src="../SkinSupport/ExpandingClosed.gif" MadCap:altsrc="../SkinSupport/ExpandingOpen.gif" onload="if ( typeof( FMCPreloadImage ) == 'function' ) { FMCPreloadImage( '../SkinSupport/ExpandingOpen.gif' ); }" class="MCExpandingIcon" /></a><span class="MCTextPopupBody_0" style="display: none; ">The location in the database of a record occurrence, frequently referred to as a DB_ADDR. Composed of two numbers: the file index and the slot within the file. Either 4 or 8 bytes long.</span></span></i> of a record is the location in the database where the record is stored. Normally, a program will not need to obtain the actual database address, but can use a <i>current</i> database address. There will be current database address for the most recently visited record, called the <i>current record</i>, and for the most recently visited <i>set owner</i> or <i>set member</i> (one owner/member pair for each set type). Together, these are called the <i>currency tables</i>. They can be thought of as multiple bookmarks in the database. </p>
+        <p>A currency table value is established through the record location functions (for example, <code>d_keyfind</code> or <code>d_findnm</code>), and through additional functions that directly modify currency table entries (for example, <code>d_setor</code> copies the <i>current record</i> value to the <i>current owner</i> entry of the specified set). Once a record has been located, its database address is automatically stored in the currency table. Its contents can then be read (for example, <code>d_recread</code> reads the contents of the <i>current record</i>). </p>
+        <p>The following code fragment shows how currency tables are implicitly used by many of the core functions. It answers the question from the TIMS database "show me all articles published by the author who published the book <u>The Network-Model DBMS</u>" (the id code for this book is "db021").</p><pre xml:space="preserve">#include "tims.h"
+...
+
+struct info infoRec;
+int32_t rc;
+
+d_open("tims", "x", task);
+
+/* first task, find the article */
+d_keyfind(ID_CODE, "db021", task, 0);
+/* now this INFO record "db021" is current record */
+
+/* set the current member of HAS_PUBLISHED from the current record */
+d_setmr(HAS_PUBLISHED, task, 0);
+/* now current owner of HAS_PUBLISHED is AUTHOR "Kruglinshi, D." */
+/* now current member of HAS_PUBLISHED is INFO "db021" */
+
+rc = d_findfm(HAS_PUBLISHED, task, 0);
+/* now the current record is the first member of HAS_PUBLISHED */
+/* now the current member of HAS_PUBLISHED is the first member */
+
+/* scan through the HAS_PUBLISHED set for this AUTHOR */
+while (rc == S_OKAY) {
+    /* read the current record's data into a local variable */
+    d_recread(&amp;infoRec, task, 0);
+    printf("Title: %s\n", infoRec.info_title);
+ 
+    /* move to the next member, if there is one */
+    rc = d_findnm(HAS_PUBLISHED, task, 0);
+    /* now the current record is the next member of HAS_PUBLISHED */
+    /* now the current member of HAS_PUBLISHED is the next member */
+}</pre>
+        <p>Figure 5-3 below shows what the currency would represent after the first call to <code>d_findnm</code> above. Note that the loop will execute <code>d_findnm</code> a second time, but there is not another member in the set. This will cause the current member of <code>HAS_PUBLISHED</code> to be set to <code>NULL_DBA</code>, and <code>S_EOS </code>will be returned from the function. This will cause the loop to terminate correctly.</p>
+        <p class="Caption">
+            <img src="../Resources/Images/UsersGuide/UG-Fig-5-3_608x399.png" style="width: 608;height: 399;" />
+            <br />Fig. 5-3. Currency State</p>
+        <p>Because of the importance of the currency tables, a rich set of functions is provided to give the programmer complete control over currency table settings. These functions are listed below. The <code>d_setXY</code> functions have a naming convention in which X specifies the destination currency and Y specifies the source currency for the assignment operation. For example, in <code>d_setro</code>, the 'r' indicates that the current record is to be assigned and the 'o' indicates that it is to be assigned from the current owner of the specified set.       </p>
+        <table style="width: 100%;caption-side: top;border-collapse: collapse;mc-table-style: url('../Resources/TableStyles/fncSummary.css');border-left-style: solid;border-left-width: 1px;border-left-color: #c0c0c0;border-right-style: solid;border-right-width: 1px;border-right-color: #c0c0c0;border-top-style: solid;border-top-width: 1px;border-top-color: #c0c0c0;border-bottom-style: solid;border-bottom-width: 1px;border-bottom-color: #c0c0c0;margin-left: 0;margin-right: auto;" class="TableStyle-fncSummary" cellspacing="0">
+            <caption>Currency Manipulation Functions </caption>
+            <col class="Column-Column1" />
+            <col class="Column-Column2" />
+            <thead>
+                <tr class="Head-Header1">
+                    <th class="HeadE-Column1-Header1">Function</th>
+                    <th class="HeadD-Column2-Header1">Description</th>
+                </tr>
+            </thead>
+            <tbody>
+                <tr class="Body-Body1">
+                    <td class="BodyE-Column1-Body1"><a href="../RM/api/d_crset.htm">d_crset</a>
+                    </td>
+                    <td class="BodyD-Column2-Body1">Set database address of current record from variable.</td>
+                </tr>
+                <tr class="Body-Body1">
+                    <td class="BodyE-Column1-Body1"><a href="../RM/api/d_csmset.htm">d_csmset</a>
+                    </td>
+                    <td class="BodyD-Column2-Body1">Set database address of current member of <code>SET</code> from variable.</td>
+                </tr>
+                <tr class="Body-Body1">
+                    <td class="BodyE-Column1-Body1"><a href="../RM/api/d_csoset.htm">d_csoset</a>
+                    </td>
+                    <td class="BodyD-Column2-Body1">Set database address of current owner of <code>SET</code> from variable.</td>
+                </tr>
+                <tr class="Body-Body1">
+                    <td class="BodyE-Column1-Body1"><a href="../RM/api/d_setro.htm">d_setro</a>
+                    </td>
+                    <td class="BodyD-Column2-Body1">Set current record from current owner of <code>SET</code>. </td>
+                </tr>
+                <tr class="Body-Body1">
+                    <td class="BodyE-Column1-Body1"><a href="../RM/api/d_setrm.htm">d_setrm</a>
+                    </td>
+                    <td class="BodyD-Column2-Body1">Set current record from current member of <code>SET</code>. </td>
+                </tr>
+                <tr class="Body-Body1">
+                    <td class="BodyE-Column1-Body1"><a href="../RM/api/d_setor.htm">d_setor</a>
+                    </td>
+                    <td class="BodyD-Column2-Body1">Set current owner of <code>SET</code> from current record. </td>
+                </tr>
+                <tr class="Body-Body1">
+                    <td class="BodyE-Column1-Body1"><a href="../RM/api/d_setom.htm">d_setom</a>
+                    </td>
+                    <td class="BodyD-Column2-Body1">Set current owner of <code>SET1</code> from current member of <code>SET2</code>. </td>
+                </tr>
+                <tr class="Body-Body1">
+                    <td class="BodyE-Column1-Body1"><a href="../RM/api/d_setoo.htm">d_setoo</a>
+                    </td>
+                    <td class="BodyD-Column2-Body1">Set current owner of <code>SET1</code> from current owner of <code>SET2</code>. </td>
+                </tr>
+                <tr class="Body-Body1">
+                    <td class="BodyE-Column1-Body1"><a href="../RM/api/d_setmr.htm">d_setmr</a>
+                    </td>
+                    <td class="BodyD-Column2-Body1">Set current member of <code>SET</code> from current record. </td>
+                </tr>
+                <tr class="Body-Body1">
+                    <td class="BodyE-Column1-Body1"><a href="../RM/api/d_setmo.htm">d_setmo</a>
+                    </td>
+                    <td class="BodyD-Column2-Body1">Set current member of <code>SET1</code> from current owner of <code>SET2</code>. </td>
+                </tr>
+                <tr class="Body-Body1">
+                    <td class="BodyB-Column1-Body1"><a href="../RM/api/d_setmm.htm">d_setmm</a>
+                    </td>
+                    <td class="BodyA-Column2-Body1">Set current member of <code>SET1</code> from current member of <code>SET2</code>. </td>
+                </tr>
+            </tbody>
+        </table>
+        <table style="width: 100%;border-collapse: collapse;mc-table-style: url('../Resources/TableStyles/fncSummary.css');margin-left: 0;margin-right: auto;" class="TableStyle-fncSummary" cellspacing="0">
+            <caption>Currency Access Functions </caption>
+            <col class="Column-Column1" />
+            <col class="Column-Column2" />
+            <thead>
+                <tr class="Head-Header1">
+                    <th class="HeadE-Column1-Header1">Function</th>
+                    <th class="HeadD-Column2-Header1">Description</th>
+                </tr>
+            </thead>
+            <tbody>
+                <tr class="Body-Body1">
+                    <td class="BodyE-Column1-Body1"><a href="../RM/api/d_crget.htm">d_crget</a>
+                    </td>
+                    <td class="BodyD-Column2-Body1">Get database address of current record. </td>
+                </tr>
+                <tr class="Body-Body1">
+                    <td class="BodyE-Column1-Body1"><a href="../RM/api/d_csmget.htm">d_csmget</a>
+                    </td>
+                    <td class="BodyD-Column2-Body1">Get database address of current member of <code>SET</code>. </td>
+                </tr>
+                <tr class="Body-Body1">
+                    <td class="BodyB-Column1-Body1"><a href="../RM/api/d_csoget.htm">d_csoget</a>
+                    </td>
+                    <td class="BodyA-Column2-Body1">Get database address of current owner of <code>SET</code>. </td>
+                </tr>
+            </tbody>
+        </table>
+        <table style="width: 100%;border-collapse: collapse;mc-table-style: url('../Resources/TableStyles/fncSummary.css');border-left-style: solid;border-left-width: 1px;border-left-color: #c0c0c0;border-right-style: solid;border-right-width: 1px;border-right-color: #c0c0c0;border-top-style: solid;border-top-width: 1px;border-top-color: #c0c0c0;border-bottom-style: solid;border-bottom-width: 1px;border-bottom-color: #c0c0c0;margin-left: 0;margin-right: auto;" class="TableStyle-fncSummary" cellspacing="0">
+            <caption>Currency Table Functions </caption>
+            <col class="Column-Column1" />
+            <col class="Column-Column2" />
+            <thead>
+                <tr class="Head-Header1">
+                    <th class="HeadE-Column1-Header1">Function</th>
+                    <th class="HeadD-Column2-Header1">Description</th>
+                </tr>
+            </thead>
+            <tbody>
+                <tr class="Body-Body1">
+                    <td class="BodyE-Column1-Body1"><a href="../RM/api/d_rdcurr.htm">d_rdcurr</a>
+                    </td>
+                    <td class="BodyD-Column2-Body1">Read the currency table into buffer.</td>
+                </tr>
+                <tr class="Body-Body1">
+                    <td class="BodyE-Column1-Body1"><a href="../RM/api/d_rerdcurr.htm">d_rerdcurr</a>
+                    </td>
+                    <td class="BodyD-Column2-Body1">Reread the currency table into existing buffer.</td>
+                </tr>
+                <tr class="Body-Body1">
+                    <td class="BodyE-Column1-Body1"><a href="../RM/api/d_wrcurr.htm">d_wrcurr</a>
+                    </td>
+                    <td class="BodyD-Column2-Body1">Write the currency table from buffer and free buffer.</td>
+                </tr>
+                <tr class="Body-Body1">
+                    <td class="BodyE-Column1-Body1"><a href="../RM/api/d_keyrdstate.htm">d_keyrdstate</a>
+                    </td>
+                    <td class="BodyD-Column2-Body1">Read the key state information</td>
+                </tr>
+                <tr class="Body-Body1">
+                    <td class="BodyE-Column1-Body1"><a href="../RM/api/d_keyszstate.htm">d_keyszstate</a>
+                    </td>
+                    <td class="BodyD-Column2-Body1">Retrieve the size of the key state buffer</td>
+                </tr>
+                <tr class="Body-Body1">
+                    <td class="BodyB-Column1-Body1"><a href="../RM/api/d_keywrstate.htm">d_keywrstate</a>
+                    </td>
+                    <td class="BodyA-Column2-Body1">Restore the key state information</td>
+                </tr>
+            </tbody>
+        </table>
+        <h2 class="Heading2"><a MadCap:generatedBookmark="TOC" name="5.4_Data_Retrieval"></a><a name="5.4"></a>5.4 Data Retrieval </h2>
+        <p>Table 5-4 lists the functions used for data retrieval. </p>
+        <table style="width: 100%;caption-side: top;border-collapse: collapse;mc-table-style: url('../Resources/TableStyles/fncSummary.css');margin-left: 0;margin-right: auto;" class="TableStyle-fncSummary" cellspacing="0">
+            <caption>Key Access Functions </caption>
+            <col class="Column-Column1" />
+            <col class="Column-Column2" />
+            <thead>
+                <tr class="Head-Header1">
+                    <th class="HeadE-Column1-Header1">Function</th>
+                    <th class="HeadD-Column2-Header1">Description</th>
+                </tr>
+            </thead>
+            <tbody>
+                <tr class="Body-Body1">
+                    <td class="BodyE-Column1-Body1"><a href="../RM/api/d_keyexist.htm">d_keyexist</a>
+                    </td>
+                    <td class="BodyD-Column2-Body1">Determine if optional key has been stored. 
+                </td>
+                </tr>
+                <tr class="Body-Body1">
+                    <td class="BodyE-Column1-Body1"><a href="../RM/api/d_keyfrst.htm">d_keyfrst</a>
+                    </td>
+                    <td class="BodyD-Column2-Body1">Find record with first KEY. 
+                </td>
+                </tr>
+                <tr class="Body-Body1">
+                    <td class="BodyE-Column1-Body1"><a href="../RM/api/d_keylast.htm">d_keylast</a>
+                    </td>
+                    <td class="BodyD-Column2-Body1">Find record with last KEY. 
+                </td>
+                </tr>
+                <tr class="Body-Body1">
+                    <td class="BodyE-Column1-Body1"><a href="../RM/api/d_keyfind.htm">d_keyfind</a>
+                    </td>
+                    <td class="BodyD-Column2-Body1">Find first record with exactly matching KEY value. 
+                </td>
+                </tr>
+                <tr class="Body-Body1">
+                    <td class="BodyE-Column1-Body1"><a href="../RM/api/d_keynext.htm">d_keynext</a>
+                    </td>
+                    <td class="BodyD-Column2-Body1">Find record with next KEY. 
+                </td>
+                </tr>
+                <tr class="Body-Body1">
+                    <td class="BodyE-Column1-Body1"><a href="../RM/api/d_keyprev.htm">d_keyprev</a>
+                    </td>
+                    <td class="BodyD-Column2-Body1">Find record with previous KEY. 
+                </td>
+                </tr>
+                <tr class="Body-Body1">
+                    <td class="BodyE-Column1-Body1"><a href="../RM/api/d_keyread.htm">d_keyread</a>
+                    </td>
+                    <td class="BodyD-Column2-Body1">Read contents of last key scanned. 
+                </td>
+                </tr>
+                <tr class="Body-Body1">
+                    <td class="BodyE-Column1-Body1"><a href="../RM/api/d_curkey.htm">d_curkey</a>
+                    </td>
+                    <td class="BodyD-Column2-Body1">Set current keys from current record. 
+                </td>
+                </tr>
+                <tr class="Body-Body1">
+                    <td class="BodyB-Column1-Body1"><a href="../RM/api/d_keydir.htm">d_keydir</a>
+                    </td>
+                    <td class="BodyA-Column2-Body1">Set the search direction for a key</td>
+                </tr>
+            </tbody>
+        </table>
+        <table style="width: 100%;border-collapse: collapse;mc-table-style: url('../Resources/TableStyles/fncSummary.css');margin-left: 0;margin-right: auto;" class="TableStyle-fncSummary" cellspacing="0">
+            <caption>Set Navigation Functions</caption>
+            <col class="Column-Column1" />
+            <col class="Column-Column2" />
+            <thead>
+                <tr class="Head-Header1">
+                    <th class="HeadE-Column1-Header1">Function</th>
+                    <th class="HeadD-Column2-Header1">Description</th>
+                </tr>
+            </thead>
+            <tbody>
+                <tr class="Body-Body1">
+                    <td class="BodyE-Column1-Body1"><a href="../RM/api/d_findfm.htm">d_findfm</a>
+                    </td>
+                    <td class="BodyD-Column2-Body1">Find first member of SET. 
+                </td>
+                </tr>
+                <tr class="Body-Body1">
+                    <td class="BodyE-Column1-Body1"><a href="../RM/api/d_findlm.htm">d_findlm</a>
+                    </td>
+                    <td class="BodyD-Column2-Body1">Find last member of SET. 
+                </td>
+                </tr>
+                <tr class="Body-Body1">
+                    <td class="BodyE-Column1-Body1"><a href="../RM/api/d_findnm.htm">d_findnm</a>
+                    </td>
+                    <td class="BodyD-Column2-Body1">Find next member of SET. 
+                </td>
+                </tr>
+                <tr class="Body-Body1">
+                    <td class="BodyE-Column1-Body1"><a href="../RM/api/d_findpm.htm">d_findpm</a>
+                    </td>
+                    <td class="BodyD-Column2-Body1">Find previous member of SET. 
+                </td>
+                </tr>
+                <tr class="Body-Body1">
+                    <td class="BodyE-Column1-Body1"><a href="../RM/api/d_findco.htm">d_findco</a>
+                    </td>
+                    <td class="BodyD-Column2-Body1">Find owner of current record. 
+                </td>
+                </tr>
+                <tr class="Body-Body1">
+                    <td class="BodyE-Column1-Body1"><a href="../RM/api/d_ismember.htm">d_ismember</a>
+                    </td>
+                    <td class="BodyD-Column2-Body1">Determine set membership. 
+                </td>
+                </tr>
+                <tr class="Body-Body1">
+                    <td class="BodyE-Column1-Body1"><a href="../RM/api/d_isowner.htm">d_isowner</a>
+                    </td>
+                    <td class="BodyD-Column2-Body1">Determine set ownership. 
+                </td>
+                </tr>
+                <tr class="Body-Body1">
+                    <td class="BodyB-Column1-Body1"><a href="../RM/api/d_members.htm">d_members</a>
+                    </td>
+                    <td class="BodyA-Column2-Body1">Obtain a count of the members in this set instance. 
+                </td>
+                </tr>
+            </tbody>
+        </table>
+        <table style="width: 100%;border-collapse: collapse;mc-table-style: url('../Resources/TableStyles/fncSummary.css');margin-left: 0;margin-right: auto;" class="TableStyle-fncSummary" cellspacing="0">
+            <caption>Direct Access Functions </caption>
+            <col class="Column-Column1" />
+            <col class="Column-Column2" />
+            <thead>
+                <tr class="Head-Header1">
+                    <th class="HeadE-Column1-Header1">Function</th>
+                    <th class="HeadD-Column2-Header1">Description</th>
+                </tr>
+            </thead>
+            <tbody>
+                <tr class="Body-Body1">
+                    <td class="BodyE-Column1-Body1"><a href="../RM/api/d_recfrst.htm">d_recfrst</a>
+                    </td>
+                    <td class="BodyD-Column2-Body1">Find first occurrence of record type REC. 
+                </td>
+                </tr>
+                <tr class="Body-Body1">
+                    <td class="BodyE-Column1-Body1"><a href="../RM/api/d_reclast.htm">d_reclast</a>
+                    </td>
+                    <td class="BodyD-Column2-Body1">Find last occurrence of record type REC. 
+                </td>
+                </tr>
+                <tr class="Body-Body1">
+                    <td class="BodyE-Column1-Body1"><a href="../RM/api/d_recnext.htm">d_recnext</a>
+                    </td>
+                    <td class="BodyD-Column2-Body1">Find next occurrence of current record type.</td>
+                </tr>
+                <tr class="Body-Body1">
+                    <td class="BodyE-Column1-Body1"><a href="../RM/api/d_recprev.htm">d_recprev</a>
+                    </td>
+                    <td class="BodyD-Column2-Body1">Find previous occurrence of current record .
+                </td>
+                </tr>
+                <tr class="Body-Body1">
+                    <td class="BodyE-Column1-Body1"><a href="../RM/api/d_csmread.htm">d_csmread</a>
+                    </td>
+                    <td class="BodyD-Column2-Body1">Read data from field of current member.
+                </td>
+                </tr>
+                <tr class="Body-Body1">
+                    <td class="BodyE-Column1-Body1"><a href="../RM/api/d_csoread.htm">d_csoread</a>
+                    </td>
+                    <td class="BodyD-Column2-Body1">Read data from field of current owner. 
+                </td>
+                </tr>
+                <tr class="Body-Body1">
+                    <td class="BodyE-Column1-Body1"><a href="../RM/api/d_encode_dba.htm">d_encode_dba</a>
+                    </td>
+                    <td class="BodyD-Column2-Body1">Encode database address from file and slot number. 
+                </td>
+                </tr>
+                <tr class="Body-Body1">
+                    <td class="BodyB-Column1-Body1"><a href="../RM/api/d_decode_dba.htm">d_decode_dba</a>
+                    </td>
+                    <td class="BodyA-Column2-Body1">Decode file and slot number from database address. 
+                </td>
+                </tr>
+            </tbody>
+        </table>
+        <p>Record occurrences are located using <span class="MyVariablesProductShortName">RDM</span>'s key retrieval functions, set navigation functions, direct access, or any combination of these. </p>
+        <h3 class="Heading3"><a MadCap:generatedBookmark="TOC" name="5.4.1_Data_Retrieval_Using_Keys"></a><a name="5.4.1"></a>5.4.1 Data Retrieval Using Keys </h3>
+        <p>Key field usage from the database design perspective was introduced in <a href="Chapter4.htm#4.4.1">Logical Design Considerations</a>. The database manipulation aspects of key field usage is presented here, using the C code that would implement the examples presented in that section. </p>
+        <h4 class="Heading4"><a MadCap:generatedBookmark="TOC" name="Code_Validation"></a>Code Validation </h4>
+        <p>The following example from the "vehicle make" example illustrates how to use keys to validate coded data fields. </p><pre xml:space="preserve">char vma_desc[25]; 	       /* variable to contain vehicle make */
+struct fleet f; 		/* variable to hold a fleet record */
+
+get_user_info(&amp;f); 		/* fleet record entered by user */
+
+/* validate correct vehicle make code */
+if (d_keyfind(VMA_CODE, f.vma, task, CURR_DB) == S_NOTFOUND)
+    entry_error("invalid vma code");
+else
+{
+    /* read vehicle description */
+    d_crread(VMA_DESC, vma_desc, task, CURR_DB);
+
+    /* enter fleet record */
+    ...
+}</pre>
+        <p>The vehicle make code entered by the user as part of the fleet record is used as the key value argument of the <code>d_keyfind</code> function, to check that a vehicle record for that make exists in the database. If the record exists, its description is read (function <code>d_crread</code>) and is displayed to the user once the record entry is completed. VMA_CODE and VMA_DESC are constants defined in the database header file created by <code>ddlp</code>. The second argument to both <code>d_keyfind</code> and <code>d_crread</code> are pointers to the variables that contain the necessary data. </p>
+        <h4 class="Heading4"><a MadCap:generatedBookmark="TOC" name="Retrieval_Based_On_a_Range_of_Values"></a>Retrieval Based On a Range of Values </h4>
+        <p>Recall from the "checking account" database example of <a href="Chapter4.htm">Database Design</a>, that the <code>check</code> record type contained a key field called <code>check_date</code>. This field was defined as a key field to facilitate rapid retrieval of the check record occurrences for a particular time period. The example code below prints the checks dated in the month of May, 1993. </p><pre xml:space="preserve">#include "rdm.h"
+#include "ckngacct.h"
+
+struct check chk;     /* check record variable */
+int start_date;       /* julian of start date of range */
+int end_date;         /* julian of end date of range */
+int date;             /* last scanned check date */
+DB_TASK *task;        /* default task */
+
+/* application functions found elsewhere */
+extern char *calendar();     /* converts julian to calendar date */
+extern int julian();         /* converts calendar to julian date */
+
+main()
+{
+    int status;
+
+    status = d_opentask(&amp;task);
+    status = d_open("ckngacct", "o", task);
+
+    start_date = julian("05/01/93");
+    end_date = julian("05/31/93");
+
+    /* position to first key in range */
+    if ((status=d_keyfind(CHECK_DATE, &amp;start_date, task, CURR_DB)) == S_NOTFOUND)
+        status = d_keynext(CHECK_DATE, task, CURR_DB);
+
+
+    /* scan thru all keys in range */
+    while (status == S_OKAY)     {
+        d_keyread(&amp;date, task);
+        if (date &gt; end_date)
+            break;         /* no longer in range */
+
+        d_recread(&amp;chk, task, CURR_DB);
+        printf("number   : %d\n", chk.check_no);
+        printf("date     : %s\n", calendar(chk.check_date));
+        printf("paid to  : %s\n", chk.paid_to);
+        printf("amount   : $ %f.2\n", chk.amount);
+        status = d_keynext(CHECK_DATE, task, CURR_DB);
+    }
+    d_close(task);
+    d_closetask(task);
+}               </pre>
+        <p>The <code>d_keyfind</code> call will position to the first check date key equal to start_date. If there are no checks dated 05/01/93 on file, then function <code>d_keynext</code> is called to position to the first check whose date is greater than the start date. The while loop first reads the value of the positioned key using function <code>d_keyread</code>. Note that this reads the key value only and does not read the record. The record contents are only read if the check date returned from the <code>d_keyread</code> call is within the desired range. Function <code>d_recread</code> reads the contents of the current record for display by the subsequent <code>printf</code> calls. The final <code>d_keynext</code> call positions to the next check date key. </p>
+        <h4 class="Heading4"><a MadCap:generatedBookmark="TOC" name="Complex_Searches"></a>Complex Searches </h4>
+        <p>The m.o. (modus operandi) example of <a href="Chapter4.htm">Database Design</a>, introduced how complex searches can be rapidly performed through the use of keys. The m.o. record consists of a single 25-byte key field in which each element of the array represents a coded m.o. attribute. </p>
+        <p>The simplest approach is to scan through all of the <code>mo_data</code> keys, checking each one for a match, as follows: </p><pre xml:space="preserve">char mo_key[25]; 		       /* m.o. key is 25 byte array */
+char mo_search[25]; 			/* user entered search data */
+int status;
+
+... 					/* user enters m.o. search data */
+
+for (status = d_keyfrst(MO_DATA, task, CURR_DB);
+    status == S_OKAY;
+    status = d_keynext(MO_DATA, task, CURR_DB) )
+{
+    d_keyread(mo_key, task);
+    if (mo_match(mo_key, mo_search))
+        ... 				/* report match */
+}              </pre>
+        <p>Function <code>mo_match</code> checks the m.o. key against the m.o. search data entered by the user, returning true (that is, non-zero) if they match and false (that is, zero) if they do not. A zero value in an m.o. search data element means that attribute is not to be used in the search. </p><pre>/* Check for matching m.o.s */
+mo_match(char *mo1, char *mo2)
+{
+    int x;
+    for ( x = 0; x &lt; 25; ++x )
+    {
+        if ((mo2[x] != 0) &amp;&amp; (mo1[x] != mo2[x]))
+            return (0);
+    }
+    return (1);
+}</pre>
+        <p>Since keys are sorted, the number of keys that need to be scanned can be reduced when the first element (and any subsequent elements) is non-zero. For example, if the user has supplied m.o. values for the first three elements, a key scan of only the keys on file with those values can be performed, yielding great performance improvements. </p><pre xml:space="preserve">char mo_key[25];        /* m.o. key is 25 byte array */
+char mo_search[25];     /* user entered search data */
+int32_t mo_prefix;      /* initial non-0 elements in mo_search */
+int32_t lc;             /* loop control index */
+int32_t status;
+
+    ...                 /* user enters m.o. search data */
+
+/* compute mo_prefix */
+for (mo_prefix = 0; mo_search[mo_prefix] != 0; ++mo_prefix)
+    ;         /* count number of initial non-0 elements */
+
+/* initialize mo_key */
+for (lc = 0; lc &lt; 25; ++lc)
+{
+    if ( lc &lt; mo_prefix )
+        mo_key[lc] = mo_search[lc];
+    else
+        mo_key[lc] = 0;
+}
+
+/* position to first key with matching prefix */
+if ((status=d_keyfind(MO_DATA, mo_key, task, CURR_DB)) == S_NOTFOUND)
+    status = d_keynext(MO_DATA, task, CURR_DB);
+
+/* scan all keys with matching prefix */
+while (status == S_OKAY)
+{
+    d_keyread(mo_key, task);
+
+    /* ensure prefix still matches */
+    for (lc = 0; (lc &lt; mo_prefix) &amp;&amp; (mo_key[lc] == mo_search[lc]); ++lc)
+        ;
+    if (lc &lt; mo_prefix)
+        break;         /* prefix doesn't match - scan ends here */
+    if (mo_match(mo_key, mo_search))
+        ...             /* report match */
+    status = d_keynext(MO_DATA, task, CURR_DB);
+}</pre>
+        <p>Notice that this example is very similar to the example of retrieval by a range of values. Also notice that if the first element of <code>mo_search</code> is zero, all <code>mo_data</code> keys will be checked. </p>
+        <h4><a MadCap:generatedBookmark="TOC" name="Using_Compound_Keys"></a>Using Compound Keys </h4>
+        <p>Suppose that the <code>tims</code> borrower record definition (presented in <a href="Chapter4.htm">Database Design</a>) were modified such that the friend's name was not one field, but two (for the last and first name). A compound key may be defined to make one key from the two fields: </p><pre xml:space="preserve">record borrower
+{
+    key char fr_last[16];
+    char fr_first[16];
+    long date_borrowed;
+    long date_returned;
+    compound unique key friend
+    {
+        fr_last;
+        fr_first;
+    }
+}</pre>
+        <p>Note that the last name may be used as a key by itself. A new key definition, named friend, is defined in the record. (It must also be included in a key file list.) </p>
+        <p>When <code>ddlp</code> encounters a compound key, it creates a special structure for the key in the header file it generates. In this case, within <code>tims.h</code> will be the following structure definition: </p><pre>struct friend { 
+    char  fr_last[16];
+    char  fr_first[16]; 
+}; </pre>
+        <p>The definition is intended to be used to perform searches for compound keys, as in the following code fragment: </p><pre xml:space="preserve">#include "tims.h" 
+... 
+struct friend fr; 
+... 
+printf("Last name:  "); 
+gets(fr.fr_last); 
+printf("First name: "); 
+gets(fr.fr_first); 
+if (d_keyfind(FRIEND, &amp;fr, task, CURR_DB) == S_NOTFOUND)
+    printf( "No one by that name found\n" ); 
+else {
+    ...   /* use the borrower record */ 
+} </pre>
+        <h4><a MadCap:generatedBookmark="TOC" name="Using_Optional_Keys"></a>Using Optional Keys</h4>
+        <p>Key fields may be declared <i>optional</i> in the DDL. When a record containing optional key(s) is created, the optional key(s) is (are) not stored in a key index.</p>
+        <p>To include a record's optional key in the key file, the <code>d_keystore</code> function must be called while the record is the current record. An optional key may be deleted by using <code>d_keydel</code>. If an optional key has been stored, then the function <code>d_keyexist</code> will return <code>S_OKAY</code>. It will return the <code>S_NOTFOUND</code> status otherwise.</p>
+        <p>Optional keys may be used to defer key creation, or to permit key scanning or searching of a subset of a record type. For example, bulk record creation may occur during busy times, but an after-hours process may scan through the records and create the keys that don't yet exist.</p>
+        <h3 class="Heading3"><a MadCap:generatedBookmark="TOC" name="5.4.2_Data_Retrieval_Using_Sets"></a>5.4.2 Data Retrieval Using Sets </h3>
+        <p>The process of retrieving records from a database by moving through the various set relationships defined in the schema is called <i>set navigation</i>. A general procedure for navigating sets follows: </p>
+        <ol>
+            <li style="font-family: Arial;" value="1">Find the record that is the owner of the set whose members are to be read. Typically, this can be done using keys, by iteratively applying this procedure, or by a combination of both. </li>
+            <li style="font-family: Arial;" value="2">Make the located owner record the current owner of the set to be traversed, using an appropriate currency manipulation function (such as <code>d_setor</code>). </li>
+            <li style="font-family: Arial;" value="3">Find the members of the set, using the set navigation functions (for example, <code>d_findnm</code> will set the current record and current member of the set to the next member record).                                          </li>
+        </ol>
+        <p>Each of the set member find functions (<code>d_find<b>X</b>m</code>) will set both the current member and the current record to point to the found record occurrence. A reciprocal function, <code>d_findco</code>, will set the current owner of the specified set from a current record that is connected through the specified set. The currency changes made by each <span class="MyVariablesProductShortName">RDM</span> function are identified in the function descriptions in the <span class="MyVariablesProductShortName">RDM</span> Reference Manual. </p>
+        <p>As an example of the above procedure, consider the transactions set from the checking account example in the <a href="Chapter4.htm">Database Design</a>. The <code>budget</code> record is the owner and the <code>check</code> record is the member. The following code will display all of the checks written against budget category "FOOD". </p><pre>/* locate the budget record for the FOOD budget */ 
+d_keyfind(CODE, "FOOD", task, CURR_DB);
+ 
+/* make the FOOD budget the current owner of set transactions */ 
+d_setor(TRANSACTIONS, task, CURR_DB);
+
+/* find each member of the set and read and print its contents */ 
+for (status = d_findfm(TRANSACTIONS, task, CURR_DB);  
+    status == S_OKAY; 
+    status = d_findnm(TRANSACTIONS, task, CURR_DB)) 
+{ 
+    d_recread(&amp;chk, task, CURR_DB); 
+    ... /* print check record */ 
+} </pre>
+        <p>The set navigation procedure above describes a top-down navigation, wherein the owner is located and then the members. <span class="MyVariablesProductShortName">RDM</span> also provides the ability to first locate a member and then the owner by using function <code><a href="../RM/api/d_findco.htm">d_findco</a></code>, which finds the owner of the current record for the specified set. For example, the following code will locate a <code>check</code> record by check number, and then find and print its <code>budget</code> category. </p><pre xml:space="preserve">struct check chk;   /* check record variable */ 
+struct budget bud;  /* budget record variable */ 
+
+/* locate check numbered 3104 */ 
+chk.check_no = 3104; 
+d_keyfind(CHECK_NO, &amp;chk.check_no, task, CURR_DB); 
+
+/* read check record contents */ 
+d_recread(&amp;chk, task, CURR_DB); 
+
+/* find its owner thru the transactions set */ 
+d_findco(TRANSACTIONS, task, CURR_DB); 
+
+/* read budget record contents */ 
+d_recread(&amp;bud, task, CURR_DB); /* print results */ 
+printf("check    : %d\n", chk.check_no); 
+printf("date     : %s\n", calendar(chk.check_date)); 
+printf("paid to  : %s\n", chk.paid_to); 
+printf("amount   : $ %f.2\n", chk.amount); 
+printf("budget   : %s\n", bud.code); </pre>
+        <h4 class="Heading4"><a MadCap:generatedBookmark="TOC" name="Many-to-Many_Navigation"></a>Many-to-Many Navigation </h4>
+        <p>The navigation of the students to classes, many-to-many, set example in  <a href="Chapter4.htm">Database Design</a>, is shown in the following code, which lists the <code>student</code>s registered in <code>class</code> "CS101". </p><pre>struct class crec;     /* class record variable */ 
+struct student srec;   /* student record variable */ 
+
+/* find CS101 class record */ 
+d_keyfind(CLASS_ID, "CS101", task, CURR_DB); 
+
+/* read contents of class record */ 
+d_recread(&amp;crec, task, CURR_DB); 
+
+/* make the class record owner of the my_students set */ 
+d_setor(MY_STUDENTS, task, CURR_DB); 
+
+/* scan each member of my_students set */ 
+while (d_findnm(MY_STUDENTS, task, CURR_DB) == S_OKAY)  
+{ 
+    /* find student record which owns current intersect record */ 
+    d_findco(MY_CLASSES, task, CURR_DB); 
+       
+    /* read and print contents of student record */ 
+    d_recread(&amp;srec, task, CURR_DB); 
+    printf("CS101: %s\n", srec.name); 
+} </pre>
+        <p>Note that function <code>d_setor</code> actually sets both the current owner and the current member of set <code>my_students</code>. The current owner is set to the "CS101" record, and the current member is set to NULL_DBA. This allows the initial call to <code>d_findnm</code> to return the first member of the set. The output from execution of the above code might be: </p><pre>CS101: Carlson 
+CS101: Jones 
+CS101: Kelly 
+CS101: Smith </pre>
+        <p>From this example you should be able to produce the code for listing the classes in which a particular student is registered. </p>
+        <h4><a MadCap:generatedBookmark="TOC" name="Database_Examples_from_TIMS"></a>Database Examples from TIMS</h4>
+        <p>One of the requirements for the TIMS database examples was to list technical publications in the library by key word or phrase. This involves traversing the many-to-many relationship between the <code>key_word</code> record and the <code>info</code> record twice (once to get the <code>info</code> record from the specified key word, and again to retrieve all of the key words associated with that located <code>info</code> record), and then scanning the abstract set to retrieve the text for the abstract. </p>
+        <p>Function <code>by_key</code> lists all of the <code>info</code> records that have the user-entered key word or phrase. For each <code>info</code> record selected, all of its key words and its abstract are printed. </p><pre xml:space="preserve">#include &lt;stdio.h&gt; 
+#include "rdm.h" 
+#include "tims.h" 
+
+/* Find publications by key word */
+int32_t by_key(DB_TASK *task)
+{
+    int32_t status;
+    struct info irec;                /* info record variable */
+    char name[SIZEOF_NAME];          /* author's name */
+    char key[SIZEOF_KWORD];          /* key word */
+    char cmd[10];
+
+
+    /* find key word record */
+    printf("key word: ");
+    getstring(key,SIZEOF_KWORD);
+    if (d_keyfind(KWORD, key, task, CURR_DB) == S_NOTFOUND)
+        printf("no records found\n");
+    else
+    {
+        /* scan thru key_to_info set */
+        d_setor(KEY_TO_INFO, task, CURR_DB);
+        for (status = d_findfm(KEY_TO_INFO, task, CURR_DB); status == S_OKAY;
+             status = d_findnm(KEY_TO_INFO, task, CURR_DB))
+        {
+            /* find current owner (info) of current record (intersect) */
+            d_findco(INFO_TO_KEY, task, CURR_DB);
+
+            /* read contents of info record */
+            d_recread(&amp;irec, task, CURR_DB);
+
+            /* find author of info record */
+            d_findco(HAS_PUBLISHED, task, CURR_DB);
+            d_crread(NAME, name, task, CURR_DB);
+
+            /* print results */
+            printf("id_code: %s\n", irec.id_code);
+            printf("author : %s\n", name);
+            printf("title  : %s\n", irec.info_title);
+            printf("publ.  : %s, %s\n", irec.publisher, irec.pub_date);
+            pr_keywords(task);
+            pr_abstract(task);
+            printf("--- press &lt;enter&gt; to continue");
+            getstring(cmd,sizeof(cmd));
+        }
+    }
+    return (0);
+}      </pre>
+        <p>Figure 5-4 illustrates the operation of function <code>by_key</code> up to the point where function <code>pr_keywords</code> is called.
+ The <code>d_keyfind</code> locates the <code>key_word</code> record occurrence, which is then made the current
+ owner of set <code>key_to_info</code>. As each intersect record that is a member of the <code>info_to_key</code> set is found (usingi
+ <code>d_findnm(KEY_TO_INFO, ... )</code>), its owner through the <code>info_to_key</code> set is found
+ (using <code>d_findco(INFO_TO_KEY, ... )</code>), and the <code>info</code> record contents are read. The
+ author is found (and made current) through the <code>has_published</code> set (using <code>d_findco(HAS_PUBLISHED, ... )</code>) and the
+ name is read using function <code>d_crread</code> to read a field of the current record. </p>
+        <p class="Caption">
+            <img src="../Resources/Images/UsersGuide/UG-Fig-5-4.jpg" class="img_1" />
+            <br />Fig. 5-4. Function by_key Operation </p>
+        <p>Function <code>pr_keywords</code> is called to print all of the key words and phrases associated with an <code>info</code> record
+ (note that at least one key word will appear in each list, the one chosen in the call to <code>by_key</code>). Function
+ <code>d_members</code> returns, in variable count, the number of members in set <code>info_to_key</code>.
+ If there are any members, then the owner of each <code>intersect</code> member record is found through the <code>key_to_info</code> set,
+ and from this owner record the key word is read and displayed. This function (<code>pr_keywords</code>) will change the currency associated
+ with set <code>key_to_info</code>, which is used by function <code>by_key</code> in its scanning of that set. Thus, it is necessary for the
+ current member of <code>key_to_info</code> to be saved (by <code>d_csmget</code> ) before the key words are
+ retrieved, and then restored (by <code>d_csmset</code>, which sets both current member and current owner)
+ after they have been retrieved. </p><pre xml:space="preserve">/* Print key words */
+static void pr_keywords(DB_TASK *task)
+{
+    int32_t count;                      /* number of info_to_key members */
+    char key[SIZEOF_KWORD];          /* key word or phrase */
+    DB_ADDR dba;                     /* db addr of key_to_info member */
+
+    /* the current member of the has_published set is the info record whose
+     * key words are to be listed */
+    d_setom(INFO_TO_KEY, HAS_PUBLISHED, task, CURR_DB);
+
+    /* fetch number of members of info_to_key */
+    d_members(INFO_TO_KEY, &amp;count, task, CURR_DB);
+
+    /* list the key words, if any */
+    if (count &gt; 0L)
+    {
+        /* save current member of key_to_info because it's going to change and
+         * we may be currently scanning through that set */
+        d_csmget(KEY_TO_INFO, &amp;dba, task, CURR_DB);
+
+        printf("key words:\n----------\n");
+        /* find each intersect member record */
+        while (d_findnm(INFO_TO_KEY, task, CURR_DB) == S_OKAY)
+        {
+            /* find, read and print corresponding key_word */
+            d_findco(KEY_TO_INFO, task, CURR_DB);
+            d_crread(KWORD, key, task, CURR_DB);
+            printf("   %s\n", key);
+        }
+        printf("\n");
+
+        /* reset key_to_info current member and owner */
+        if (dba)
+            d_csmset(KEY_TO_INFO, &amp;dba, task, CURR_DB);
+    }
+}</pre>
+        <p>The abstract is printed by function <code>pr_abstract</code>, which simply scans through the <code>abstract</code> set owned by the current <code>info</code> record to read and display each line of abstract text. </p><pre xml:space="preserve">/* Print abstract */
+static void pr_abstract(DB_TASK *task)
+{
+    int32_t count;                      /* number of abstract members */
+    char txt[80];                    /* line of abstract text */
+
+    /* the current member of has_published is the info record whose abstract
+     * is to be printed */
+    d_setom(ABSTRACT, HAS_PUBLISHED, task, CURR_DB);
+
+    /* fetch number of lines in abstract */
+    d_members(ABSTRACT, &amp;count, task, CURR_DB);
+
+    /* print abstract, if one exists */
+    if (count &gt; 0)
+    {
+        printf("abstract:\n---------\n");
+
+        /* find, read and print each abstract text line */
+        while (d_findnm(ABSTRACT, task, CURR_DB) != S_EOS)
+        {
+            d_csmread(ABSTRACT, LINE, txt, task, CURR_DB);
+            printf("  %s\n", txt);
+        }
+    }
+    printf("\n");
+}      </pre>
+        <p>The other retrieval requirement is to be able to list all of the publications in the TIMS database that are by a particular <code>author</code>. This is accomplished with function <code>by_author</code>. The <code>author</code> is located by scanning through the (system-owned) <code>author_list</code> set, and comparing a user-specified name with the author name. When a match is found, each <code>info</code> record owned by the located <code>author</code> is read and displayed, along with its associated key words and abstract. </p><pre xml:space="preserve">/* Find publication by author
+*/
+int32_t by_author(DB_TASK *task)
+{
+    int32_t status;
+    size_t searchLen;
+    struct info irec;                /* info record variable */
+    char search[SIZEOF_NAME];        /* author to search for */
+    char name[SIZEOF_NAME];
+    char cmd[10];
+
+    /* find author record */
+    printf("author: ");
+    getstring(search,SIZEOF_NAME);
+    searchLen = strlen(search);
+    for (status = d_findfm(AUTHOR_LIST, task, CURR_DB); status == S_OKAY;
+         status = d_findnm(AUTHOR_LIST, task, CURR_DB))
+    {
+        d_crread(NAME, name, task, CURR_DB);
+        if (strncmp(search, name, searchLen) == 0)
+        {
+            d_setor(HAS_PUBLISHED, task, CURR_DB);
+            for (status = d_findfm(HAS_PUBLISHED, task, CURR_DB);
+                 status == S_OKAY;
+                 status = d_findnm(HAS_PUBLISHED, task, CURR_DB)) /*lint !e445 */
+            {
+                d_recread(&amp;irec, task, CURR_DB);
+
+                /* read and print info record */
+                printf("id_code: %s\n", irec.id_code);
+                printf("author : %s\n", name);
+                printf("title  : %s\n", irec.info_title);
+                printf("publ.  : %s, %s\n", irec.publisher, irec.pub_date);
+                pr_keywords(task);
+                pr_abstract(task);
+                printf("--- press &lt;enter&gt; to continue");
+                getstring(cmd,sizeof(cmd));
+            }
+        }
+        else if (strcmp(search, name) &lt; 0)
+        {
+            printf("author record not found\n");
+            return (0);
+        }
+    }
+    return (0); /*lint !e850 */
+}</pre>
+        <h3 class="Heading3"><a MadCap:generatedBookmark="TOC" name="5.4.3_Direct_Access_Retrieval"></a><a name="5.4.3"></a>5.4.3 Direct Access Retrieval </h3>
+        <p>Direct access retrieval is used to locate sequentially all occurrences of a particular record type and to directly read the contents of a record whose database address is known (for example, if it was located earlier through a key, set, or sequential retrieval). Sequential retrieval is performed using these functions: </p>
+        <table style="width: 100%;border-collapse: collapse;margin-left: 0;margin-right: auto;mc-table-style: url('../Resources/TableStyles/fncSummary.css');" class="TableStyle-fncSummary" cellspacing="0">
+            <col class="Column-Column1" />
+            <col class="Column-Column2" />
+            <tr class="Body-Body1">
+                <td class="BodyE-Column1-Body1"><a href="../RM/api/d_recfrst.htm">d_recfrst</a>
+                </td>
+                <td class="BodyD-Column2-Body1">Locates the first occurrence on the data file of the specified record type. 
+                </td>
+            </tr>
+            <tr class="Body-Body1">
+                <td class="BodyE-Column1-Body1"><a href="../RM/api/d_reclast.htm">d_reclast</a>
+                </td>
+                <td class="BodyD-Column2-Body1">Locates the last occurrence on the data file of the specified record type. 
+                </td>
+            </tr>
+            <tr class="Body-Body1">
+                <td class="BodyE-Column1-Body1"><a href="../RM/api/d_recnext.htm">d_recnext</a>
+                </td>
+                <td class="BodyD-Column2-Body1">Finds the next occurrence of a record of the same type. 
+                </td>
+            </tr>
+            <tr class="Body-Body1">
+                <td class="BodyE-Column1-Body1"><a href="../RM/api/d_recprev.htm">d_recprev</a>
+                </td>
+                <td class="BodyD-Column2-Body1">Finds the next previous occurrence of a record of the same type. 
+                </td>
+            </tr>
+            <tr class="Body-Body1">
+                <td class="BodyE-Column1-Body1"><a href="../RM/api/d_recread.htm">d_recread</a>
+                </td>
+                <td class="BodyD-Column2-Body1">Read the data in the current record. 
+                </td>
+            </tr>
+            <tr class="Body-Body1">
+                <td class="BodyE-Column1-Body1"><a href="../RM/api/d_recset.htm">d_recset</a>
+                </td>
+                <td class="BodyD-Column2-Body1">Set the current of record type for scanning position. 
+                </td>
+            </tr>
+        </table>
+        <p>When the retrieval order is not important (the physical order of records on a file may seem random), the sequential functions are the quickest way to scan records. The <code>id_list</code> function is an example of such a scan. </p><pre>/* produce a quick sequential listing of all id_code's */ 
+id_list(DB_TASK *task) 
+{ 
+   int status; 
+   char id_code[SIZEOF_ID_CODE]; 
+
+   for (status = d_recfrst(INFO, task, CURR_DB); 
+        status == S_OKAY;  
+        status = d_recnext(task, CURR_DB))  
+   { 
+      d_crread( ID_CODE, id_code, task, CURR_DB); 
+      printf("%s\n", id_code); 
+   } 
+} </pre>
+        <p>These functions maintain their own currency by record type. In a loop, these four functions will maintain their own positional information, even if there are other functions in the loop that change currency table settings. To establish or restore a position from which to continue scanning, the function <code>d_recset</code> can be used. This function will set the current position of a sequential scan from the current record. Thus if a <code>d_recfrst</code>/<code>d_recnext</code>  loop needs to contain an inner loop for a different record type, the position can be saved and restored around the inner loop, as follows: </p><pre>DB_ADDR t1dba; 
+int status1, status2; 
+
+for (status1 = d_recfrst(TYPE1, task, CURR_DB);  
+     status1 == S_OKAY;  
+     status1 = d_recnext(task, CURR_DB))  
+{ 
+   d_crget(&amp;t1dba, task, CURR_DB); 
+   ... 
+   for (status2 = d_reclast(TYPE2, task, CURR_DB); 
+        status2 == S_OKAY; 
+        status2 = d_recprev(task, CURR_DB))  
+   { 
+      ... 
+   } 
+   d_crset(&amp;t1dba, task, CURR_DB); 
+   d_recset(TYPE1, task, CURR_DB); 
+} </pre>
+        <p>The function <code>page_full</code> begins with the current record (which is assumed to be a <code>key_word</code> type), and creates a list of the next twenty key word occurrences, as shown below: </p><pre xml:space="preserve">/* create a list of key words for display */ 
+page_full( char **pglist, int dir, DB_TASK *task ) 
+ { 
+   int i, status; 
+
+   for (status = d_recset(KEY_WORD, task, CURR_DB), i = 0;  
+        (status == S_OKAY) &amp;&amp; (i &lt; 20); 
+        status = (dir ?   d_recnext(task, CURR_DB) : 
+                          d_recprev(task, CURR_DB)), i++ )  
+   { 
+      d_crread(KWORD, pglist[i], task, CURR_DB); 
+   } 
+} </pre>
+        <p>Functions <code>d_recread</code>, <code>d_crread</code>, <code>d_csoread</code>, and <code>d_csmread</code> read part or all of the contents of the current record, owner, or member, copying the data to an application program defined buffer. A pointer to this buffer is an argument to each of these functions. </p>
+        <p>Functions <code>d_decode_dba</code> and <code>d_encode_dba</code> are used to decode and encode a database address with its file number and slot number. They can be used in conjunction with functions <code>d_crget</code> and <code>d_crset</code> to utilize a record's database address as a primary key, which can be displayed and referenced by a user in order to directly access individual record occurrences. For example, a database address for the record at slot number 17112 on file number 11 could be displayed as a primary key field called id number that, to the user, could look like the following: </p><pre>id number:  11-17112 </pre>
+        <p>By always displaying this number (actually the database address) when a record is displayed, and by requiring this field to be entered whenever the record is modified, the record can be located in a single disk read. The code to display the field follows. </p><pre xml:space="preserve">DB_ADDR dba;         /* database address of current record */ 
+short file;          /* file number */ 
+F_ADDR8 slot;         /* slot number */ 
+... 
+/* record to be displayed is current record */ 
+d_crget(&amp;dba, task, CURR_DB); 
+d_decode_dba(dba, &amp;file, &amp;slot); 
+printf("id number: %d-%ld\n", file, slot); </pre>
+        <p>When the user has entered an id number, the record can be read as follows: </p><pre xml:space="preserve">DB_ADDR dba;         /* database address */ 
+int file;            /* file number */ 
+F_ADDR8 slot;        /* slot number */ 
+struct record rec;   /* rdm record buffer */ 
+... 
+/* extract file number of slot number from id number string */ 
+... (you supply the tedious stuff) 
+
+/* form database address */ 
+d_encode_dba(file, slot, &amp;dba); 
+
+/* set current record and read record contents */ 
+d_crset(&amp;dba, task, CURR_DB); 
+d_recread(&amp;rec, task, CURR_DB); 
+
+/* display record */ 
+... </pre>
+        <h2 class="Heading2"><a MadCap:generatedBookmark="TOC" name="5.5_Data_Creation"></a><a name="5.5"></a>5.5 Data Creation </h2>
+        <p>The <span class="MyVariablesProductShortName">RDM</span> functions used to create record and key occurrences and to make set connections are listed in Table 5-5 below. </p>
+        <table style="width: 100%;caption-side: top;border-collapse: collapse;mc-table-style: url('../Resources/TableStyles/fncSummary.css');border-left-style: solid;border-left-width: 1px;border-left-color: #c0c0c0;border-right-style: solid;border-right-width: 1px;border-right-color: #c0c0c0;border-top-style: solid;border-top-width: 1px;border-top-color: #c0c0c0;border-bottom-style: solid;border-bottom-width: 1px;border-bottom-color: #c0c0c0;margin-left: 0;margin-right: auto;" class="TableStyle-fncSummary" cellspacing="0">
+            <caption>Table 5-5 Data Creation Functions</caption>
+            <col class="Column-Column1" />
+            <col class="Column-Column2" />
+            <thead>
+                <tr class="Head-Header1">
+                    <th class="HeadE-Column1-Header1">Record/Key <br />Creation Functions </th>
+                    <th class="HeadD-Column2-Header1"> <![CDATA[
+                ]]></th>
+                </tr>
+            </thead>
+            <tbody>
+                <tr class="Body-Body1">
+                    <td class="BodyE-Column1-Body1"><a href="../RM/api/d_fillnew.htm">d_fillnew</a>
+                    </td>
+                    <td class="BodyD-Column2-Body1">Create and fill contents of new record occurrence. 
+                </td>
+                </tr>
+                <tr class="Body-Body1">
+                    <td class="BodyE-Column1-Body1"><a href="../RM/api/d_setkey.htm">d_setkey</a>
+                    </td>
+                    <td class="BodyD-Column2-Body1">Set key field value for new record. 
+                </td>
+                </tr>
+                <tr class="Body-Body1">
+                    <td class="BodyE-Column1-Body1"><a href="../RM/api/d_makenew.htm">d_makenew</a>
+                    </td>
+                    <td class="BodyD-Column2-Body1">Make a new record occurrence slot and store associated keys. 
+                </td>
+                </tr>
+                <tr class="Body-Body1">
+                    <td class="BodyE-Column1-Body1"><a href="../RM/api/d_crwrite.htm">d_crwrite</a>
+                    </td>
+                    <td class="BodyD-Column2-Body1">Write data to specified field of new record occurrence. 
+                </td>
+                </tr>
+                <tr class="Body-Body1">
+                    <td class="BodyE-Column1-Body1"><a href="../RM/api/d_keystore.htm">d_keystore</a>
+                    </td>
+                    <td class="BodyD-Column2-Body1">Create optional key entry. 
+                </td>
+                </tr>
+                <tr class="Body-Body1">
+                    <th class="BodyE-Column1-Body1" style="font-size: 11pt;font-family: sans-serif;font-weight: bold;">Set Creation <br />Function 
+                </th>
+                    <th class="BodyD-Column2-Body1"> <![CDATA[
+                ]]></th>
+                </tr>
+                <tr class="Body-Body1">
+                    <td class="BodyB-Column1-Body1"><a href="../RM/api/d_connect.htm">d_connect</a>
+                    </td>
+                    <td class="BodyA-Column2-Body1">Connect new record to SET. 
+                </td>
+                </tr>
+            </tbody>
+        </table>
+        <p>New record occurrences are entered into the database by using either the <code>d_fillnew</code> or <code>d_makenew</code> function. To <code>d_fillnew</code> is passed the record type of the record to be created and a pointer to the record's contents. This pointer usually points to a variable of that record's struct type, as declared in file <code><i>dbname</i>.h</code>. Function <code>d_makenew</code> creates an (almost) empty record occurrence, in which the field values will be stored later, usually through individual calls to <code>d_crwrite</code>. However, <code>d_makenew</code> must store the key fields in the record and create the key file entries at the time of the call. Prior to the call to <code>d_makenew</code>, function <code>d_setkey</code> must be called for each (non-optional) key field, to save the values of each key field for <code>d_makenew</code>. Generally, it is simplest to use only <code>d_fillnew</code>, which automatically creates the key entries for you without a call to <code>d_setkey</code>. Function <code>d_makenew</code> is useful when a record is to be created before the contents of the fields are known, or for creation of records that have no fields (such as an empty intersection record of a many-to-many set). </p>
+        <p>Function <code>d_keystore</code> is used to create the key file entries for optional keys in the current record. Optional keys are often used to defer key creation until non-peak system load times, in order to maximize data entry performance. </p>
+        <p>The data creation process involves not only record creation, but set creation as well. After a record has been created, it often needs to be connected to appropriate sets. This may involve data retrieval to set up the currency tables properly. </p>
+        <p>Entry of an <code>info</code> record into the TIMS database provides a good illustration of what is typically involved in creating <span class="MyVariablesProductShortName">RDM</span> data. </p>
+        <p>Three functions are presented below. Function <code>ent_info</code> enters the <code>info</code> record and, if necessary, the <code>author</code> record, and makes the proper set connections. Function <code>enter_key_words</code> is called by <code>enter_info</code> to read each key word from the user and set up the many-to-many relationship with the entered <code>info</code> record. Function <code>enter_abstract</code> is called to read from the user each line of the abstract and connect it to the <code>info</code> record through set <code>abstract</code>. One function that is called but not shown is function <code>get_info</code>, which reads from the user, the author name, and <code>info</code> record fields. </p><pre xml:space="preserve">/* Enter technical information records into TIMS database */
+int32_t ent_info(DB_TASK *task)
+{
+    int32_t status;
+    char s[SIZEOF_NAME];  /* generic string variable */
+
+    /* enter tech info into TIMS database */
+    while (get_info() != EOF)
+    {
+        /* see if author exists */
+        for (status = d_findfm(AUTHOR_LIST, task, CURR_DB); status == S_OKAY;
+             status = d_findnm(AUTHOR_LIST, task, CURR_DB))
+        {
+            d_crread(NAME, s, task, CURR_DB);
+            if (strcmp(arec.name, s) == 0)
+                break;                        /* author record on file */
+        }
+        if (status == S_EOS)
+        {
+            /* author not on file -- create record and connect to author list */
+            d_fillnew(AUTHOR, &amp;arec, task, CURR_DB);
+            d_connect(AUTHOR_LIST, task, CURR_DB);
+        }
+        /* make author current owner of has_published set */
+        d_setor(HAS_PUBLISHED, task, CURR_DB);
+
+        /* create new tech. info record */
+        if (d_fillnew(INFO, &amp;irec, task, CURR_DB) == S_DUPLICATE)
+            printf("duplicate id_code: %s\n", irec.id_code);
+        else
+        {
+            /* connect to author record */
+            d_connect(HAS_PUBLISHED, task, CURR_DB);
+
+            /* set current owner for key words and abstract */
+            d_setor(INFO_TO_KEY, task, CURR_DB);
+            d_setor(ABSTRACT, task, CURR_DB);
+
+            enter_key_words(task);
+
+            enter_abstract(task);
+        }
+    }
+    return (0);
+}      </pre>
+        <p>After the data has been collected from the user (<code>get_info</code>), function <code>ent_info</code> is used to scan the <code>author_list</code> set for the user-specified author name. If no match is found (status == <code>S_EOS</code>), an author record is created and connected to <code>author_list</code> (the current owner of <code>author_list</code> is always the <code>system</code> record). The found or newly created <code>author</code> record is set as the current owner of set <code>has_published</code>, using <code>d_setor</code>. The <code>info</code> record is created and if its <code>id_code</code> is not a duplicate, the id is connected to its <code>author</code> record. The new <code>info</code> record occurrence is then made the current owner of sets <code>info_to_key</code> and <code>abstract</code>. Key words and abstract text will be connected to it by the function calls that follow. </p><pre xml:space="preserve">/* Enter any key words */
+static void enter_key_words(DB_TASK *task)
+{
+    char s[SIZEOF_KWORD];
+
+    for (;;)
+    {
+        printf("key word: ");
+        if (getstring(s,SIZEOF_KWORD) == NULL || s[0] == '\0')
+            break;
+        /* see if key word record exists */
+        if (d_keyfind(KWORD, s, task, CURR_DB) == S_NOTFOUND)
+        {
+            /* create new key word record */
+            d_fillnew(KEY_WORD, s, task, CURR_DB);
+        }
+        d_setor(KEY_TO_INFO, task, CURR_DB);
+
+        /* create intersection record */
+        d_fillnew(INTERSECT, &amp;irec.info_type, task, CURR_DB);
+        d_connect(KEY_TO_INFO, task, CURR_DB);
+        d_connect(INFO_TO_KEY, task, CURR_DB);
+    }
+}</pre>
+        <p>Function <code>enter_key_words</code> shows how to create many-to-many relationships. For each key word entered by the user, <code>d_keyfind</code> is called to check if it is already on file. If not, a new <code>key_word</code> record is created. The found (or new) <code>key_word</code> is then set as the current owner of the <code>key_to_info</code> set, and an intersect record is created, which is then connected to both the <code>key_word</code> record through set <code>key_to_info</code> and the <code>info</code> record through set <code>info_to_key</code>. </p><pre xml:space="preserve">/* Enter abstract description */
+static void enter_abstract(DB_TASK *task)
+{
+    char text_line[SIZEOF_LINE];
+
+    for (;;)
+    {
+        printf("abstract: ");
+        if (getstring(text_line,SIZEOF_LINE) == NULL || text_line[0] == '\0')
+            return;
+
+        d_fillnew(INFOTEXT, text_line, task, CURR_DB);
+        d_connect(ABSTRACT, task, CURR_DB);
+    }
+}</pre>
+        <p>Function <code>enter_abstract</code> is very simple. As each line of abstract text is entered, the text record is created and connected to the <code>info</code> record, which is the current owner of set <code>abstract</code>. </p>
+        <h2 class="Heading2"><a MadCap:generatedBookmark="TOC" name="5.6_Data_Modification"></a><a name="5.6"></a>5.6 Data Modification </h2>
+        <p>The functions used to modify fields, records, and sets are shown in Table 5-6. </p>
+        <table style="width: 100%;caption-side: top;border-collapse: collapse;mc-table-style: url('../Resources/TableStyles/fncSummary.css');margin-left: 0;margin-right: auto;" class="TableStyle-fncSummary" cellspacing="0">
+            <caption>Table 5-6 Modification Functions</caption>
+            <col class="Column-Column1" />
+            <col class="Column-Column2" />
+            <tbody>
+                <tr class="Body-Body1">
+                    <th colspan="2" class="BodyE-Column1-Body1" style="font-weight: bold;font-style: normal;font-size: 11pt;font-family: sans-serif;">Record/Key Modification Functions </th>
+                </tr>
+                <tr class="Body-Body1">
+                    <td class="BodyE-Column1-Body1"><a href="../RM/api/d_recwrite.htm">d_recwrite</a>
+                    </td>
+                    <td class="BodyD-Column2-Body1">Write contents of current record. 
+                </td>
+                </tr>
+                <tr class="Body-Body1">
+                    <td class="BodyE-Column1-Body1"><a href="../RM/api/d_crwrite.htm">d_crwrite</a>
+                    </td>
+                    <td class="BodyD-Column2-Body1">Write data in field of current record. 
+                </td>
+                </tr>
+                <tr class="Body-Body1">
+                    <td class="BodyE-Column1-Body1"><a href="../RM/api/d_csmwrite.htm">d_csmwrite</a>
+                    </td>
+                    <td class="BodyD-Column2-Body1">Write data in field of current member of set. 
+                </td>
+                </tr>
+                <tr class="Body-Body1">
+                    <td class="BodyE-Column1-Body1"><a href="../RM/api/d_csowrite.htm">d_csowrite</a>
+                    </td>
+                    <td class="BodyD-Column2-Body1">Write data in field of current owner of set. 
+                </td>
+                </tr>
+                <tr class="Body-Body1">
+                    <th colspan="2" class="BodyE-Column1-Body1" style="font-weight: bold;font-style: normal;font-size: 11pt;font-family: sans-serif;">Set Modification Functions 
+                </th>
+                </tr>
+                <tr class="Body-Body1">
+                    <td class="BodyE-Column1-Body1"><a href="../RM/api/d_discon.htm">d_discon</a>
+                    </td>
+                    <td class="BodyD-Column2-Body1">Disconnect current member from set. 
+                </td>
+                </tr>
+                <tr class="Body-Body1">
+                    <td class="BodyB-Column1-Body1"><a href="../RM/api/d_connect.htm">d_connect</a>
+                    </td>
+                    <td class="BodyA-Column2-Body1">Connect current record to set. 
+                </td>
+                </tr>
+            </tbody>
+        </table>
+        <p>Modification of data is very straightforward. To modify a record or field, you first retrieve the record, read the record or field contents, make the desired changes and then write out the updated data using a record modification function. </p>
+        <p>Set modifications often involve disconnecting a record from one set and connecting it to another. </p>
+        <p class="Notes">If two or more fields in a record are used as sort fields in an ascending or descending set, and function <code>d_recwrite</code> is used to modify the contents of both fields, better performance will result if you first disconnect the record from the set before calling <code>d_recwrite</code> and then reconnect the record after returning from <code>d_recwrite</code>. Otherwise, <span class="MyVariablesProductShortName">RDM</span> will still adjust the position of the set for each field. </p>
+        <p>Optional keys are automatically modified if a key existed for the old value when its field was modified. If a key entry did not exist for the old value, none will be created for the new value. However, the field's value in the record is updated. </p>
+        <h2 class="Heading2"><a MadCap:generatedBookmark="TOC" name="5.7_Data_Deletion"></a><a name="5.7"></a>5.7 Data Deletion </h2>
+        <p>The functions involved in data deletion appear in Table 5-7. </p>
+        <table style="width: 100%;caption-side: top;border-collapse: collapse;margin-left: 0;margin-right: auto;mc-table-style: url('../Resources/TableStyles/fncSummary.css');" class="TableStyle-fncSummary" cellspacing="0">
+            <caption>Table 5-7. Data Deletion Functions</caption>
+            <col class="Column-Column1" />
+            <col class="Column-Column2" />
+            <tr class="Body-Body1">
+                <th colspan="2" class="BodyE-Column1-Body1" style="font-weight: bold;font-style: normal;font-size: 11pt;font-family: sans-serif;">Data Deletion Functions 
+                </th>
+            </tr>
+            <tr class="Body-Body1">
+                <td class="BodyE-Column1-Body1"><a href="../RM/api/d_delete.htm">d_delete</a>
+                </td>
+                <td class="BodyD-Column2-Body1">Delete current record. 
+                </td>
+            </tr>
+            <tr class="Body-Body1">
+                <td class="BodyE-Column1-Body1"><a href="../RM/api/d_keydel.htm">d_keydel</a>
+                </td>
+                <td class="BodyD-Column2-Body1">Delete optional key value. 
+                </td>
+            </tr>
+            <tr class="Body-Body1">
+                <td class="BodyE-Column1-Body1"><a href="../RM/api/d_discon.htm">d_discon</a>
+                </td>
+                <td class="BodyD-Column2-Body1">Disconnect current member from set. 
+                </td>
+            </tr>
+            <tr class="Body-Body1">
+                <td class="BodyE-Column1-Body1"><a href="../RM/api/d_disdel.htm">d_disdel</a>
+                </td>
+                <td class="BodyD-Column2-Body1">Disconnect current record from all sets and delete it. 
+                </td>
+            </tr>
+        </table>
+        <p>A record can only be deleted if it is not connected as an owner or member of any sets. The general deletion procedure is, therefore, to disconnect a record from all sets for which it is a member and disconnect all members from sets owned by that record, and then delete the record. All disconnections and the delete can be performed with one call by using function <code>d_disdel</code>. </p>
+        <p>Function <code>d_keydel</code> is used to delete the key entry of an optional key field in the current record. The field value in the record itself, however, does not change. All key entries, including optional keys, are deleted from their respective key files when a record is deleted using either function <code>d_delete</code> or <code>d_disdel</code>. </p>
+        <p>Below is the code for function <code>del_info</code>, which deletes an <code>info</code> record from the <code>tims</code> database. </p><pre xml:space="preserve">#include &lt;stdio.h&gt; 
+#include "rdm.h" 
+#include "tims.h" 
+
+/* Delete technical information records from TIMS database */
+int32_t del_info(DB_TASK *task)
+{
+    int32_t status;
+    struct info irec;
+    int32_t count;
+    char id[SIZEOF_ID_CODE], name[SIZEOF_NAME];
+
+    /* find info to be deleted */
+    printf("id_code: ");
+    getstring(id,SIZEOF_ID_CODE);
+    if (d_keyfind(ID_CODE, id, task, CURR_DB) == S_NOTFOUND)
+    {
+        printf("id_code %s not on file\n", id);
+        return (0);
+    }
+    d_recread(&amp;irec, task, CURR_DB);
+
+    /* get author name */
+    d_findco(HAS_PUBLISHED, task, CURR_DB);
+    d_crread(NAME, name, task, CURR_DB);
+
+    ... /* confirm delete request */
+    ... /* disconnect any listed articles */
+    ... /* disconnect and delete borrowers */
+    
+    /* disconnect and delete abstract */
+    d_setom(ABSTRACT, HAS_PUBLISHED, task, CURR_DB);
+    while (d_findfm(ABSTRACT, task, CURR_DB) == S_OKAY)
+    {
+        d_discon(ABSTRACT, task, CURR_DB);
+        d_delete(task, CURR_DB);
+    }
+
+    /* disconnect and delete intersect and (possibly) key word */
+    d_setom(INFO_TO_KEY, HAS_PUBLISHED, task, CURR_DB);
+    while (d_findfm(INFO_TO_KEY, task, CURR_DB) == S_OKAY)
+    {
+        d_discon(INFO_TO_KEY, task, CURR_DB);
+        d_setmr(KEY_TO_INFO, task, CURR_DB);
+        d_discon(KEY_TO_INFO, task, CURR_DB);
+        d_delete(task, CURR_DB);
+        d_members(KEY_TO_INFO, &amp;count, task, CURR_DB);
+        if (count == 0L)
+        {
+            /* delete key word */
+            d_setro(KEY_TO_INFO, task, CURR_DB);
+            d_delete(task, CURR_DB);
+        }
+    }
+
+    /* disconnect info record from author and delete */
+    d_discon(HAS_PUBLISHED, task, CURR_DB);
+    d_delete(task, CURR_DB);
+
+    /* delete author too, if he has no other pubs */
+    d_members(HAS_PUBLISHED, &amp;count, task, CURR_DB);
+    if (count == 0L)
+    {
+        d_setmo(AUTHOR_LIST, HAS_PUBLISHED, task, CURR_DB);
+        d_discon(AUTHOR_LIST, task, CURR_DB);
+        d_delete(task, CURR_DB);
+    }
+    return (0);
+}</pre>
+        <p>Function <code>del_info</code> first prompts the user for the id code of the <code>info</code> record to be deleted. If the id code is on file, the <code>info</code> record contents are read into variable <code>irec</code>, the author name is found from the owner of <code>info</code> through set <code>has_published</code>, and a confirmation of the delete is requested by displaying the data (not shown). </p>
+        <p>If the <code>info</code> item to be deleted is a journal or magazine, any articles contained in it must also be deleted. This is done first (not shown). </p>
+        <p>Next, any <code>borrower</code> records that are members of that info item are disconnected and deleted (also not shown). </p>
+        <p>The abstract is deleted by repeatedly disconnecting and deleting the first member of the <code>abstract</code> set until there are no more members. Note that the current owner of abstract had to be initially set to the <code>info</code> record that is the current member of <code>has_published</code> (as established by the earlier <code>d_findco</code>(<code>HAS_PUBLISHED</code>) call). </p>
+        <p>Deletion of the key words associated with the <code>info</code> record is similar, but more complicated. Intersect records are deleted just like the abstract was, except that they need to be disconnected from set <code>key_to_info</code> as well as from set <code>info_to_key</code>. If the <code>key_to_info</code> set is empty after deleting the intersect record, the <code>key_word</code> must also be deleted. Note the call to <code>d_setro</code> to set the current record from the current owner of set <code>key_to_info</code> (that is, the <code>key_word</code> record). This is necessary because function <code>d_delete</code> deletes the current record, and the <code>key_word</code> record was not the current record. </p>
+        <p>The <code>info</code> record is disconnected from its final set, <code>has_published</code>, and can now be deleted. Function <code>d_discon</code> disconnects the current member from the specified set and makes the disconnected member record the current record. </p>
+        <p>One last task is a check to see if the author has other <code>info</code> items in the database. If not, then the <code>author</code> record is disconnected from set <code>author_list</code> and is deleted as well. </p>
+        <h2 class="Heading2"><a MadCap:generatedBookmark="TOC" name="5.8_Database_Error_Reporting"></a><a name="5.8"></a>5.8 Database Error Reporting </h2>
+        <p>All <span class="MyVariablesProductShortName">RDM</span> runtime functions return an integer database status code as the value of the function. These status codes are classified into the following three categories: </p>
+        <table style="border-collapse: collapse;mc-table-style: url('../Resources/TableStyles/TwoColNoLines.css');margin-left: 0;margin-right: auto;" class="TableStyle-TwoColNoLines" cellspacing="0">
+            <col style="width: 190px;" class="Column-Column1" />
+            <col class="Column-Column2" />
+            <tr class="Body-Body1">
+                <td class="BodyE-Column1-Body1">User Errors 
+                </td>
+                <td class="BodyD-Column2-Body1">These correspond to programming errors, such as passing a record type to a function with a set type as its argument. User error codes range from -1 to -99. 
+                </td>
+            </tr>
+            <tr class="Body-Body1">
+                <td class="BodyE-Column1-Body1">System Errors 
+                </td>
+                <td class="BodyD-Column2-Body1">These errors occur when <span class="MyVariablesProductShortName">RDM</span> detects an abnormal database condition, such as no more file space. System error codes range from -900 to -999. 
+                </td>
+            </tr>
+            <tr class="Body-Body1">
+                <td class="BodyE-Column1-Body1">Function Statuses 
+                </td>
+                <td class="BodyD-Column2-Body1">These status codes are returned to inform the program of normal function results. For example, when function <code>d_keyfind</code> returns code S_NOTFOUND it indicates that the key value was not in the 
+                </td>
+            </tr>
+        </table>
+        <p>When user errors are reported, either the arguments to an <span class="MyVariablesProductShortName">RDM</span> function are not correct or the database environment has not been properly set up for the called function. For example, function <code>d_csoread</code> will return user error S_NOCO if the current owner of the specified set is NULL_DBA. All user errors in an <span class="MyVariablesProductShortName">RDM</span> program should be corrected. </p>
+        <p> System errors indicate that a serious error has occurred and processing should be terminated immediately. These errors are caused by improper use of pointers, by memory corruption, and by operations on strings that are not terminated by a null byte. The most common pointer error is passing a function argument by value rather than by reference (that is, rather than by using a pointer). </p>
+        <p>The standard <span class="MyVariablesProductShortName">RDM</span> C header file, <code>rdm.h</code>, contains constant definitions for all status codes that can be returned from an <span class="MyVariablesProductShortName">RDM</span> function. This file should be included in each C source file that uses <span class="MyVariablesProductShortName">RDM</span>. Detailed explanations for each status code can be found in the <span class="MyVariablesProductShortName">RDM</span> Reference Manual. </p>
+        <p>The recommended method is to use a <code>d_set_dberr</code> function, which allows you to supply the <span class="MyVariablesProductShortName">RDM</span> runtime with a callback function to call when reporting an error. After calling a <code>d_set_dberr</code> function, the <code>dberr</code> function will call the function you supply, instead of printing the message itself.</p>
+        <p>The <code>dberr</code> function that you define may have an error message string supplied in ASCII or UNICODE. Here are the two valid forms of your own <code>dberr</code> function (note, you choose the name):</p><pre xml:space="preserve">void EXTERNAL_FCN my_dberr(int32_t, char *);     /* ASCII message   */
+void EXTERNAL_FCN my_dberrW(int32_t, wchar_t *)  /* UNICODE message */</pre>
+        <p>The first parameter is the error number, and the second is the textual message that <code>dberr</code> would have printed regarding the error. The <code>void EXTERNAL_FCN</code> preceding the function name ensures that its declaration will match that expected by <span class="MyVariablesProductShortName">RDM</span>. The macros are defined in <code>rdm.h</code>.</p>
+        <p>Both of the above functions is supplied to the correct <code>d_set_dberr</code> function, as follows:</p><pre xml:space="preserve">d_set_dberr(my_dberr, task);
+d_set_dberrW(my_dberrW, task);
+</pre>
+        <p> Use the function as follows:  </p><pre xml:space="preserve">#define "rdm.h" 
+
+void EXTERNAL_FCN my_dberr(int32_t, char *); 
+... 
+main() 
+{ 
+   ... 
+   d_set_dberr(my_dberr, task); 
+   ... 
+} 
+void EXTERNAL_FCN my_dberr(int32_t err_no, char *err_msg) 
+{ 
+   /* Special handling of some error codes here */ 
+   if (err_no &lt;= -900) 
+   {  
+      exit(err_no); 
+   } 
+   ... 
+   /* You may choose to ignore some codes */ 
+   if (err_no == S_NOCM)  
+      return; 
+   ... 
+   /* Report errors */ 
+   ... 
+   return;
+} </pre>
+        <p class="Notes">NOTE:&#160;if your environment requires you to free all allocated memory and otherwise clean up, the <code>exit()</code> call may not be a proper way to terminate the program. An internal function named <code>psp_term()</code> can be used to ask <span class="MyVariablesProductShortName">RDM</span> to release its internal resources. It is a nested function, meaning that internally, <span class="MyVariablesProductShortName">RDM</span> will always call <code>psp_init()</code> and <code>psp_term()</code> in pairs. So if you must terminate the program abnormally, you should call <code>psp_term()</code> five times, just to be safe (extra calls will do no extra work). See below:</p><pre xml:space="preserve">/* My OS requires *everything* to be cleaned up! */ 
+if (err_no &lt;= -900) 
+{ 
+    /* clean up my own memory, file handles, etc. */
+    ...
+    /* clean up RDM&#160; resources */
+    psp_term(); psp_term(); psp_term(); psp_term(); psp_term();
+    exit(err_no); 
+} </pre>
+        <h2><a MadCap:generatedBookmark="TOC" name="5.9_Multiple_Database_Access"></a><a name="5.9"></a>5.9 Multiple Database Access </h2>
+        <p>Using <span class="MyVariablesProductShortName">RDM</span>, more than one database can be open and accessed within a single application program. This capability has been implemented with very little performance impact for those <span class="MyVariablesProductShortName">RDM</span> applications that only need to access a single database. <a href="Chapter4.htm#4.4.1">Logical Design Considerations</a> described some of the uses of multiple database access from a database design standpoint. This section explains how to open and access multiple databases. </p>
+        <h3 class="Heading3"><a MadCap:generatedBookmark="TOC" name="5.9.1_Opening_Multiple_Databases"></a><a name="5.9.1"></a>5.9.1 Opening Multiple Databases </h3>
+        <p>To open more than one database, the desired database names are passed, separated by a semicolon (;) as the first argument to function <code>d_open</code>. After one or more database has been opened, it is possible to open additional databases with either <code>d_iopen</code> or <code>d_iopen_ptr</code>. No white space (that is, spaces, tabs, etc.) should be embedded between the database names. An improperly constructed list will result in error <code>S_INVDB</code> being returned. Any number of databases may be opened, limited only by the amount of available memory. All opened databases are opened in the same mode. It is not possible to open some in exclusive access and others in shared access. </p>
+        <p><span class="MyVariablesProductShortName">RDM</span> keeps track internally of the current <i>database number</i>. The current database will be zero (that is, the first one listed) after execution of <code>d_open</code>. See the example below: </p><pre>if ((status=d_open("genledg;acctsrec;acctspay", "s", task)) != S_OKAY) { 
+   if (status == S_UNAVAIL) 
+      printf("database(s) not currently available\n"); 
+   exit(1); 
+} </pre>
+        <p>Here, the databases named <code>genledg</code>, <code>acctsrec</code> and <code>acctspay</code> are all opened for shared access. Each is assigned a number by the system in order from left to right, beginning with zero. Thus database 0 is <code>genledg</code>, database 1 is <code>acctsrec</code>, and database 2 is <code>acctspay</code>. These numbers are used to specify to the runtime functions which database to access. After the <code>d_open</code> call, database <code>genledg</code> will be the current database. </p>
+        <p>It is not necessary to open all databases at one time. The function <code>d_iopen</code> will incrementally open a new (set of) database(s) in the same open mode as the already opened databases. The following statements would be equivalent to the example above, except that the current database will be two instead of zero: </p><pre>if ((status = d_open("genledg", "s", task)) != S_OKAY || 
+    (status = d_iopen("acctsrec", task)) != S_OKAY    || 
+    (status = d_iopen("acctspay", task)) != S_OKAY))  
+{ 
+   if (status == S_UNAVAIL) 
+   { 
+      printf("database(s) not currently available\n"); 
+      exit(1); 
+   } 
+} </pre>
+        <p>Whether the databases are opened all at once, or incrementally, they may all be closed with the <code>d_close</code> call. They may be incrementally closed with the <code>d_iclose</code> call. For example, after the above code opens the database, the call below will close the <code>acctsrec</code> (second) database.  </p><pre>d_iclose(1, task); </pre>
+        <p>All database numbers will shift accordingly (in this case, the database number for <code>acctspay</code> will shift from two to one). If database 2 (<code>acctspay</code>) was the current database, then database 1 (still <code>acctspay</code>) will be the current database following the <code>d_iclose</code>. </p>
+        <p>In addition to the current database, a current record is maintained for each database. Whenever the current database is changed, the current record for the old database is saved and the current record for the database that is to be made current is restored. </p>
+        <h3 class="Heading3"><a MadCap:generatedBookmark="TOC" name="5.9.2_Embedded_Dictionaries"></a><a name="5.9.2"></a>5.9.2 Embedded Dictionaries</h3>
+        <p>To open a database, a database dictionary is required. Most commonly, the dictionary is stored in a file on the TFS, named after the database with a "<code>.dbd</code>" suffix. The <code>ddlp</code> utility will always (unless specifically requested not to by command-line option) create and store the dictionary in the proper location on the TFS. The d<code>_open</code> and <code>d_iopen</code> calls depend on the existence of a dictionary file.</p>
+        <p>An <i>embedded dictionary</i> is one that has been compiled into the application program, eliminating the need for a separate dictionary file. The embedding occurs once during the development of the application, and is not required again when the application is deployed with different TFSs. Without an embedded dictionary, each new TFS will need to have the dictionary file installed in it, either through use of the <code>ddlp</code> utility, or through administrative copying of the file into the correct location in the TFS domain (see <a href="#5.2.2">Operational Environment</a> for how the location is determined). However, if an embedded dictionary is used on a TFS&#160;that doesn't already have the corresponding <code>.dbd</code> file, this function will cause the <code>.dbd</code> file to be created in the proper location (even in-memory if the databases is defined as <code>inmemory</code>).</p>
+        <p>The open functions that use embedded dictionaries are <code>d_open_ptr</code> and <code>d_iopen_ptr</code>.</p>
+        <p>When using an embedded dictionary, it is not possible to open multiple databases in one call. Multiple calls are needed to open multiple databases, the first call is made to d_open_ptr, and all subsequent calls are made to d_iopen_ptr.</p>
+        <p>To embed multiple databases into a program, run the ddlp utility to create additional source files:</p><pre xml:space="preserve">ddlp -c genledg.ddl
+ddlp -c acctsrec.ddl
+ddlp -c acctspay.ddl</pre>
+        <p>For each database, the DDL&#160;compilation option will generate <code><i>dbname</i>_dbd.c</code> and <code><i>dbname</i>_dbd.h</code>. The .c file is compiled and linked with the application program, and the .h file is included in the source file that performs the <code>d_<i>[i]</i>open_ptr</code> call.</p>
+        <p>The following code shows the same databases being opened as in the example above, except that the dictionaries are embedded:</p><pre xml:space="preserve">
+#include "rdm.h"
+#include "genledg_dbd.h"
+#include "genledg.h"
+#include "acctsrec_dbd.h"
+#include "acctsrec.h"
+#include "acctspay_dbd.h"
+#include "acctspay.h"
+ 
+if ((status = d_open_ptr("genledg", "s", &amp;genledg_dbd, sizeof(genledg_dbd), task)) != S_OKAY || 
+    (status = d_iopen_ptr("acctsrec", &amp;acctsrec_dbd, sizeof(acctsrec_dbd),task)) != S_OKAY    || 
+    (status = d_iopen_ptr("acctspay", &amp;acctspay_dbd, sizeof(acctspay_dbd),task)) != S_OKAY))  
+{ 
+   if (status == S_UNAVAIL) 
+   { 
+      printf("database(s) not currently available\n"); 
+      exit(1); 
+   } 
+}</pre>
+        <h3 class="Heading3"><a MadCap:generatedBookmark="TOC" name="5.9.3_Accessing_Multiple_Databases"></a><a name="5.9.3"></a>5.9.3 Accessing Multiple Databases </h3>
+        <p>There are two methods for accessing multiple databases. Every database-specific function must be called with a database number (<i>dbn</i>). The <i>dbn</i> may be -1, which causes the <i>current database</i> to be used. The <code>rdm.h</code> header file contains a <code>#define</code> constant called CURR_DB that is equal to -1. The current database may be altered by the <code>d_iopen</code> or <code>d_setdb</code> functions. Alternatively, the <code>dbn</code> parameter may be a positive number that explicitly selects a database. These methods may be used interchangeably. </p>
+        <p>If only one database is opened, the database number parameter is still required and must be zero (0) or CURR_DB. </p>
+        <p class="Notes">Note: When a module (that is, a <code>.c</code> file) is to access multiple databases, care must be taken to ensure that there are no record, field, or set name conflicts between those databases, which will be manifested by the includes of multiple database header files. If there are, it will be necessary to disambiguate the names by using the <code>-d</code> option with <code>ddlp</code>, or change some of the names, or create separate modules, each of which access only the entities of a single database. </p>
+        <p class="Heading">Method 1 </p>
+        <p>In this method, function <code>d_setdb</code> is called to set the current database. The <code>dbn</code> parameter must be -1 (or its equivalent CURR_DB). An example of this technique follows. </p><pre>#include "rdm.h" 
+... 
+
+d_open("genledg;acctsrec", "s", task); 
+   ... 
+/* enter billing record into acctsrec database */ 
+d_setdb(1, task); 
+d_fillnew(BILLING, &amp;bill, task, CURR_DB); 
+
+/* find and update ledger account in genledg database */ 
+d_setdb(0, task); 
+d_keyfind(ACCT_ID, bill.gl_id, task, CURR_DB); 
+d_recread(&amp;glacct, task, CURR_DB); 
+   ..   /* update gen. ledger account record */ 
+d_recwrite(&amp;glacct, task, CURR_DB); </pre>
+        <p class="Heading">Method 2 </p>
+        <p>In this method, the database number is passed to the <span class="MyVariablesProductShortName">RDM</span> functions that access or control database content. An example of this technique follows. </p><pre xml:space="preserve">d_open("genledg;acctsrec", "s", task); 
+   ... 
+/* enter billing record into acctsrec database */ 
+d_fillnew(BILLING, &amp;bill, task, 1); 
+
+/* find and update ledger account in genledg database */ 
+d_keyfind(ACCT_ID, bill.gl_id, task, 0); 
+d_recread(&amp;glacct, task, 0); 
+   ..   /* update gen. ledger account record */ 
+d_recwrite(&amp;glacct, task, 0); </pre>
+        <p>If the position of a database is not always fixed, the <code>d_dbnum</code> function can be used to always be sure the correct database number is used. The following example shows the same code, but with <code>d_dbnum</code> instead of constants:</p><pre xml:space="preserve">d_open("genledg;acctsrec", "s", task); 
+   ... 
+acctsrec_num = d_dbnum("acctsrec", task);
+/* enter billing record into acctsrec database */ 
+d_fillnew(BILLING, &amp;bill, task, acctsrec_num); 
+
+genledg_num = d_dbnum("genledg", task);
+/* find and update ledger account in genledg database */ 
+d_keyfind(ACCT_ID, bill.gl_id, task, genledg_num); 
+d_recread(&amp;glacct, task, genledg_num); 
+   ..   /* update gen. ledger account record */ 
+d_recwrite(&amp;glacct, task, genledg_num);</pre>
+        <p class="Heading">Mixed Method </p>
+        <p>It is possible to use <code>d_setdb</code> to set the current database, but override it with an explicit database number when necessary. </p><pre>d_open("genledg;acctsrec", "s", task); 
+   ... 
+/* enter billing record into acctsrec database */ 
+d_setdb(0, task); 
+d_fillnew(BILLING, &amp;bill, task, 1); 
+
+/* find and update ledger account in genledg database */ 
+d_keyfind(ACCT_ID, bill.gl_id, task, CURR_DB); 
+d_recread(&amp;glacct, task, CURR_DB); 
+   ..   /* update gen. ledger account record */ 
+d_recwrite(&amp;glacct, task, CURR_DB); </pre>
+        <h2 class="Heading2"><a MadCap:generatedBookmark="TOC" name="5.10_Multiple_Tasks"></a><a name="5.10"></a>5.10 Multiple Tasks </h2>
+        <p>An application always has a current state. This includes such factors as which database is open, the current record, current set owners and members, record and set locks, and many other items that represent the situation of the application. Below is a list of the most significant task-specific data: </p>
+        <ul>
+            <li style="font-family: Arial;" value="1">Whether there is an open database </li>
+            <li style="font-family: Arial;" value="2">Whether a transaction is active</li>
+            <li style="font-family: Arial;" value="3">The status of all key files (position, last found value, etc.) </li>
+            <li style="font-family: Arial;" value="4">The database options </li>
+            <li style="font-family: Arial;" value="5">The default page size of database(s) </li>
+            <li style="font-family: Arial;" value="6">The current record </li>
+            <li style="font-family: Arial;" value="7">The current set owners </li>
+            <li style="font-family: Arial;" value="8">The current set members </li>
+            <li style="font-family: Arial;" value="9">The complete data dictionary (or dictionaries, if multiple databases are open) </li>
+            <li style="font-family: Arial;" value="10">The status of all record, set, and key locks </li>
+            <li style="font-family: Arial;" value="11">The current records as used by the sequential scanning functions </li>
+            <li style="font-family: Arial;" value="12">The database address of the system record </li>
+            <li style="font-family: Arial;" value="13">The transaction id </li>
+        </ul>
+        <p>A <i>task</i> is an <span class="MyVariablesProductShortName">RDM</span> structure used to store state information, and is created by a call to <code>d_opentask</code>. The one parameter to this function is a pointer to a structure of type DB_TASK. The <code>d_opentask</code> function will allocate a structure to contain all of the task-specific state information and point the task pointer to it. The <code>d_closetask</code> function should always be called to clean up and free all memory allocated by <code>d_opentask</code>. </p><pre>#include "rdm.h" 
+  
+main() 
+{ 
+   DB_TASK *task; 
+
+   d_opentask(&amp;task);         /* New task */ 
+
+   d_open("db", "x", task);   /* Open database in task */ 
+      /* Use the database */ 
+   d_close(task); 
+
+   d_closetask(task);         /* Close task, free memory */ 
+} </pre>
+        <p>The DB_TASK parameter must be supplied for nearly every <span class="MyVariablesProductShortName">RDM</span> function, and at least one call must be made to <code>d_opentask</code>. The task parameter is placed before the database number parameter for those functions that use a database number. Otherwise, it is the last argument. </p>
+        <p>An <span class="MyVariablesProductShortName">RDM</span> task equates to an independent unit of code execution, or it could also be referred to as a session. In addition to maintaining state information, each task may represent a different transaction. This is a deliberately broad definition. You can use multiple database tasks within a single process. You also may use multiple tasks in multiple threads, provided that no two threads use common tasks.</p>
+        <p class="Notes">The <span class="MyVariablesProductShortName">RDM</span> functions are thread-safe, provided each task is used within only one thread. </p>
+        <p>A separate task can be opened for the purpose of accessing additional databases in a different open mode. For example, you may have a database open in shared mode, but then want to open an additional database exclusively. </p>
+        <p>The following code shows a simple single-process application using two contexts. </p><pre>#include "rdm.h" 
+
+DB_TASK *ControlTask; 
+DB_TASK *ClientTask; 
+
+main() 
+{ 
+   struct client cl2; 
+   d_opentask(&amp;ControlTask); 
+   d_open("ctrl", "x", ControlTask); 
+   /* Initialize control database */ 
+   ... 
+   d_opentask(&amp;ClientTask); 
+   d_open("client1;client2;client3", "s", ClientTask); 
+   ... 
+   /* Access client3 database */ 
+   d_fillnew(CLIENT, &amp;cl2, ClientTask, 2); 
+   ... 
+   d_close(ClientTask); 
+   d_closetask(ClientTask); 
+   ... 
+   d_close(ControlTask); 
+   d_closetask(ControlTask); 
+} </pre>
+        <p>In this example, two variables of type DB_TASK* are defined. One task is created to open a single control database in exclusive access mode. Then a second task is created to open a group of shared databases, each representing one client. One or more client database may be updated by a transaction within the client task. </p>
+        <p>There are two functions that do not take a task parameter. They are <code>d_decode_dba</code> and <code>d_encode_dba</code>. </p>
+        <h2><a MadCap:generatedBookmark="TOC" name="5.11_Database_Unions"></a><a name="5.11"></a>5.11 Database Unions</h2>
+        <p>A <i>database union</i> is a unified view of the data in more than one identically structured database. It makes the multiple databases appear as one. A union of multiple databases differs from having multiple databases open in that:</p>
+        <ul>
+            <li value="1">unioned databases must have identical dictionaries (DBD files)</li>
+            <li value="2">the union is viewed as one database, using one database number</li>
+            <li value="3">it is read-only</li>
+        </ul>
+        <p>Database unions are intended to be used with distributed databases or database mirrors to create a single, merged view of data that is owned and updated in separate locations or by separate entities.</p>
+        <p class="Heading">Distributed Operation</p>
+        <p>Consider a corporate phone list where each corporate office maintains its own list of employees at the office where they work:</p>
+        <p class="Caption">
+            <img src="../Resources/Images/UsersGuide/UG-Fig-5-5_640x367.png" style="width: 640;height: 367;" />
+            <br />Fig. 5-5 Distributed Phone List</p>
+        <p>Assuming that the salesman in Wichita can establish a VPN with the computers named <code>seattle</code>, <code>boston</code> and <code>dallas</code>, then the following program can be run from there on non-unioned databases:</p><pre xml:space="preserve">
+/* print the names in this phlist database */
+static void print_list(DB_TASK *task)
+{
+    struct employee empl;
+    int32_t rc;
+ 
+    printf("LAST    FIRST   EXT\n");
+    for (rc=d_keyfrst(LAST, task, 0); rc==S_OKAY; rc=d_keynext(LAST, task, 0))
+    {
+        d_recread(&amp;empl, task, 0);
+        printf("%-7s %-7s %3d\n", empl.last, empl.first, empl.ext);
+    }
+}
+ 
+/* print phone list contents separately */
+main() {
+    ...
+    d_open("phlist@seattle", "r", task);
+    print_list(task);
+    d_close(task);
+ 
+    d_open("phlist@boston", "r", task);
+    print_list(task);
+    d_close(task);
+
+    d_open("phlist@dallas", "r", task);
+    print_list(task);
+    d_close(task);
+    ...
+}</pre>
+        <p>The output would be as follows:</p><pre xml:space="preserve">LAST    FIRST   EXT
+Bell    Eric    529
+Klaus   Ted     598
+Lee     Jeff    523
+Marsh   Rich    567
+
+LAST    FIRST   EXT
+Ellern  Karen   677
+Kent    Ian     612
+Ward    Ralph   643
+
+LAST    FIRST   EXT
+Clark   Susan   408
+Devin   Paul    445
+</pre>
+        <p>The union of these three databases is represented by a string listing the names separated by the OR bar, "|". After opening the union, the navigation and reading functions do not need to know that they are viewing the contents of more than one database. The following code opens a union in order to read the same lists as one list:</p><pre xml:space="preserve">
+/* print the names in this phlist database */
+static void print_list(DB_TASK *task)
+{
+    ...
+}
+ 
+/* print phone list contents together */
+main() {
+    ...
+    d_open("phlist@seattle|phlist@boston|phlist@dallas", "r", task);
+    print_list(task);
+    d_close(task);
+    ...
+}</pre>
+        <p>The output of the key scanning is a list where the keys are still in the same order:</p><pre xml:space="preserve">LAST    FIRST   EXT
+Bell    Eric    529
+Clark   Susan   408
+Devin   Paul    445
+Ellern  Karen   677
+Kent    Ian     612
+Klaus   Ted     598
+Lee     Jeff    523
+Marsh   Rich    567
+Ward    Ralph   643</pre>
+        <p class="Heading">Mirrored Operation</p>
+        <p>The above example illustrates how "live" data can be accessed from its sources. But a phone list is not updated frequently, nor it is extremely large, so it is a perfect candidate for mirroring.</p>
+        <p>If each of the three offices mirror the phone lists from the other two, then each office will have three local databases - one is their own updateable list, and two read-only mirrors. Each mirror would be kept up-to-date whenever there is a change in a master list from another office. This means that a union of three local databases will produce the same results as the distributed form shown in Figure 5-5.</p>
+        <p>The following shows a list of the databases that are available at each location:</p><pre xml:space="preserve">\\seattle\document-root:
+    phlist\
+    boston-<span class="MyVariablesDefaultPort">21553</span>\
+        phlist\
+    dallas-<span class="MyVariablesDefaultPort">21553</span>\
+        phlist\
+
+\\boston\document-root:
+    phlist\
+    seattle-<span class="MyVariablesDefaultPort">21553</span>\
+        phlist\
+    dallas-<span class="MyVariablesDefaultPort">21553</span>\
+        phlist\
+
+\\dallas\document-root:
+    phlist\
+    seattle-<span class="MyVariablesDefaultPort">21553</span>\
+        phlist\
+    boston-<span class="MyVariablesDefaultPort">21553</span>\
+        phlist\</pre>
+        <p>For a program running within the <code>seattle</code> computer, the following open statement would allow queries on the entire phone list:</p><pre xml:space="preserve">d_open("phlist|boston-<span class="MyVariablesDefaultPort">21553</span>/phlist|dallas-<span class="MyVariablesDefaultPort">21553</span>/phlist", "r", task);</pre>
+        <p>Similarly, an application running within <code>dallas</code> would use:</p><pre xml:space="preserve">d_open("phlist|seattle-<span class="MyVariablesDefaultPort">21553</span>/phlist|boston-<span class="MyVariablesDefaultPort">21553</span>/phlist", "r", task);</pre>
+        <p>The salesman in Wichita will have several options. One option is to go directly to each of the databases, as shown in the distributed example above. A second option is to select a nearby office (say "Dallas") and open the master and mirrors on that same machine. The first example below shows the use of the RDM_TFSERVER environment variable, the second shows the equivalent form when encoding the TFS into the database names:</p><pre xml:space="preserve">c:\RDM&gt; set RDM_TFSERVER=dallas
+c:\RDM&gt; phlist  {which executes
+   ...
+   d_open("phlist|seattle-<span class="MyVariablesDefaultPort">21553</span>/phlist|boston-<span class="MyVariablesDefaultPort">21553</span>/phlist", "r", task);
+   ...
+   }</pre>
+        <p>or</p><pre xml:space="preserve">d_open("phlist@dallas|seattle-<span class="MyVariablesDefaultPort">21553</span>/phlist@dallas|boston-<span class="MyVariablesDefaultPort">21553</span>/phlist@dallas", "r", task);</pre>
+        <p class="Heading">Key Navigation</p>
+        <p>The <code>d_keyfind</code> function will find the requested key in any of the unioned databases. If the key exists, the function will return S_OKAY and set the found record to be the current record. It is irrelevant which database the record came from. If the key does not exist, <code>d_keynext</code> or <code>d_keyprev</code> can be called to find the next or previous key, closest to the key that was provided in the <code>d_keyfind</code> call. This is the same behavior as with a single database. Following a <code>d_keyfind</code>, either <code>d_keynext</code> or <code>d_keyprev</code> will move to the next or previous key, regardless of which database it comes from. It is, in effect, a "sort/merge" of the keys of all databases.</p>
+        <p>Some databases have unique keys. When these databases are in a union, there may be duplicates among the unique keys, because the keys are unique in their own database, but no cross-checking is automatically done among all the databases when keys are inserted. Intrinsically unique keys like a SSN should not be a problem, but a part-number may be unique in one store, and duplicated in other stores. This kind of situation must be anticipated if converting a program to work on a union after being programmed for a single database.</p>
+        <p class="Heading">Record Scanning</p>
+        <p>The functions <code>d_recfrst</code>, <code>d_reclast</code>, <code>d_recnext</code>, <code>d_recprev</code> and <code>d_recset</code> perform sequential scanning of the records of one type. When these functions are used, it is implied that the order doesn't matter, because <span class="MyVariablesProductShortName">RDM</span> does not guarantee anything about ordering.</p>
+        <p>When using these functions in a database union, a complete scan from one end to the other will be guaranteed to return all records in all databases, but the order of retrieval will be based on an internal algorithm.</p>
+        <p class="Heading">Set Scanning</p>
+        <p>Set connections between records will only exist between records in the same database. The set navigation functions will never span different databases in a union. Thus a set will never appear any larger when the database containing it is in a union.</p>
+        <p class="Heading">Updates</p>
+        <p>Database unions are read only. If updates to a database are necessary, a program may open a database within another task (using the <code>d_opentask</code> function), in shared mode, to perform the update</p>
+        <h2><a MadCap:generatedBookmark="TOC" name="5.12_BLOB_Processing_in_RDM"></a><a name="5.12"></a>5.12 BLOB Processing in <span class="MyVariablesProductShortName">RDM</span></h2>
+        <p><span class="MyVariablesProductShortName">RDM</span> stores BLOB data in a separate file from the record that contains the BLOB data field. In the DDL, a file must be declared to be a "<code>blob file</code>", which will store BLOB fields that are listed in the file declaration. Within the file, a BLOB is stored as a linked list of fixed-length pages.  You can specify the page size for each BLOB file in the DDL.</p>
+        <p>A BLOB is not physically stored together with the record that contains it. The record containing the BLOB data field stores a number pointing to the BLOB's first page in its file.  The page number is stored as an F_ADDR in the record, which means that the record structure is fixed length. A BLOB is associated with only one record instance.</p>
+        <p>There are no special locking requirements associated with accessing BLOB data.  Because of the one-to-one relationship between a record and its associated BLOB data, the usual record locks secure access to both the record occurrence and the BLOB data.</p>
+        <p>The <span class="MyVariablesProductShortName">RDM</span> Core API functions for manipulating BLOB data model the standard C file I/O functions: read, write, seek, size, and tell.  One significant difference to note between the two, however, is that BLOBs are organized as a linked list and, therefore, random access does not perform like direct access (i.e., <code>d_blobseek</code> will not be as fast as seek because it needs to scan a linked list to arrive at the specified location).</p>
+        <h3><a MadCap:generatedBookmark="TOC" name="5.12.1_Working_with_BLOBs_in_a_Core_API_Application"></a>5.12.1 Working with BLOBs in a Core API Application</h3>
+        <h4><a MadCap:generatedBookmark="TOC" name="Define_BLOB_Data_in_a_Core_DDL_Specification"></a><a name="Define"></a>Define BLOB Data in a Core DDL Specification</h4>
+        <p>A BLOB is associated with a record type by declaring a data field of type <code>blob_id</code>.  The ID field designated by the <code>blob_id</code> type contains an F_ADDR equal to the page number in the field's BLOB file where the BLOB data begins.</p><pre xml:space="preserve">blob_id pictograph;</pre>
+        <p class="Notes">You may not define an index for a BLOB ID field.</p>
+        <p>The BLOB functions operate on the <code>blob_id</code> fields contained in the current record.</p>
+        <p>The following Core DDL specification shows some example BLOB declarations.</p><pre xml:space="preserve">database musiclib {
+    data file "musiclib.000" contains CDAlbum;
+    data file "musiclib.001" contains track;
+    blob file[16384] "musiclib.002" contains mp3;
+    blob file[512] "musiclib.003" contains notes, jacketpic;
+    key  file[2048] "musiclib.004" contains title;
+
+    record CDAlbum {
+        key char    title[81];
+            char    composer[33];
+            char    artist[33];
+            char    genre[21];
+            blob_id notes;
+            blob_id jacketpic;
+    }
+
+    record track {
+            char    name[81];
+            blob_id mp3;
+    }
+
+    set CDTracks {
+        order  last;
+        owner  CDAlbum;
+        member track;
+    }
+}</pre>
+        <p>The <code>CDAlbum</code> record has two BLOB fields.  The <code>jacketpic</code> field is used for storing a picture of the album jacket.  Field <code>notes</code> stores the text of a note about the album.  Data field <code>mp3</code> in the track record type is used to store the music for a given track in MP3 format. Note however, that <span class="MyVariablesProductShortName">RDM</span> does not recognize file formats such as MP3 or JPG in order to perform special handling according to their type.</p>
+        <p>Two BLOB files are used to contain the BLOB data.  The first one has a page size of 16384 bytes and is used to contain the MP3 formatted music.  The music for a given track will tend to be several megabytes in length, hence the large page size.  The second BLOB file is used to contain the text of <code>notes</code> and the picture image for <code>jacketpic</code>.</p>
+        <p>These BLOBs will typically be smaller so the specified page size is only 512 bytes and contains the BLOB data for both <code>blob_id</code> fields.</p>
+        <h4><a MadCap:generatedBookmark="TOC" name="Manipulate_BLOB_Data_Using_the_Core_API_Functions"></a>Manipulate BLOB Data Using the Core API Functions</h4>
+        <p>The Core BLOB functions are summarized in the Reference Manual in the <a href="../RM/Chapter3-Blob.htm">Core BLOB API Summary</a> section.</p>
+        <p>These BLOB functions all operate on a <code>blob_id</code> field (specified as a BLOB function argument) in the current record.  When a record instance is set as the new value of the current record, the initial position for all <code>blob_id</code> fields in that record is set to the beginning of the BLOB.  Until the current record is changed to a different record instance, the BLOB positions are controlled completely through calls to the Core BLOB functions.</p>
+        <p>A call to the <code>d_crread</code> function of a <code>blob_id</code> field returns the <code>blob_id</code> value.  However, the contents of a <code>blob_id</code> field can only be manipulated by the <code>d_blob</code> functions themselves.  You can, for example, write into the middle of a BLOB by doing first a <code>d_blobseek</code> and then a <code>d_blobwrite</code>.  If you attempt to use <code>d_recwrite</code>, <code>d_crwrite</code>, <code>d_csowrite</code>, or <code>d_csmwrite</code> to update a <code>blob_id</code> field, the <code>S_BLOBUPD</code> error message is returned.</p>
+        <p>A few additional facts concerning the operation of BLOBs:</p>
+        <ul>
+            <li value="1">BLOB data cannot be shared between record occurrences (just as no other fields in a record are ever shared between record occurrences).</li>
+            <li value="2">Since locking a record instance also locks all of its fields, no additional locking functionality is needed for BLOBs.</li>
+            <li value="3">When passed to <code>d_fillnew</code> as part of the record structure, the <code>blob_id</code> field must be 0 (NULL_BLOB).</li>
+        </ul>
+        <p>The example below shows a function called <code>PlayCD</code> that looks up the CD with the specified title and plays each of its music tracks.  After each track is retrieved from the <code>CDTRACKS</code> set, <code>d_blobread</code> is called to read the MP3 BLOB data one <i>bufsize</i> byte block at a time.</p><pre xml:space="preserve">/* ==================================================================
+   Play all tracks from specified CD
+*/
+int32_t PlayCD(
+    char    *title,   /*title of CD */
+    uint32_t bufsize, /* size of music buffer to use */
+    DB_TASK *task)    /* task handle for "musiclib" */
+{
+    char name[SIZEOF_NAME], *mbuf;
+    uint32_t size;
+    int32_t  stat;
+
+    if ((stat = d_keyfind(TITLE, title, task, CURR_DB)) != S_OKAY)
+        return stat;
+
+    /* allocate music buffer */
+    mbuf = psp_getMemory(bufsize, 0);
+
+    /* read and play each track for this CD */
+    d_setor(CDTRACKS, task, CURR_DB);
+    while (d_findnm(CDTRACKS, task, CURR_DB) == S_OKAY)
+    {
+        d_crread(NAME, name, task, CURR_DB);
+        ShowTrackName(name);
+        while (d_blobread(MP3, mbuf, bufsize, &amp;size, task, CURR_DB) == S_OKAY)
+        {
+            PlayMusicBlock(mbuf, size);
+            if (size &lt; bufsize)
+                break;
+        }
+    }
+
+    psp_freeMemory(mbuf, 0);
+    return stat;
+}</pre>
+        <p>Storing a BLOB is just about as easy as reading one.  The following code shows a function that is passed the name of a file containing an MP3 music track and the title of the CD in which it is included.  The function reads the music data from the file and stores it in the database as a BLOB.</p><pre xml:space="preserve">/* ==================================================================
+   Store a track from specified CD */
+int32_t StoreCDTrack(
+    char     *title,     /* title of CD */
+    char     *filename,  /* name of file containing MP3 music */
+    uint32_t  bufsize,   /* size of music buffer to use */
+    DB_TASK  *task)      /* task handle for "musiclib" */
+{
+    struct  track rTrack;
+    FILE   *fMp3;
+    char   *mbuf;
+    size_t  size;
+    int32_t stat;
+
+    if ((stat = d_keyfind(TITLE, title, task, CURR_DB)) != S_OKAY)
+        return stat;
+
+    if ((fMp3 = fopen(filename, "rb")) == NULL)
+        return S_NOFILE;
+
+    /* set the CDAlbum record as owner of set cdtracks */
+    d_setor(CDTRACKS, task, CURR_DB);
+
+    /* create track record, use the filename as the track name */
+    strncpy(rTrack.name, filename, SIZEOF_NAME-1);
+    rTrack.name[SIZEOF_NAME-1] = '\0';
+    rTrack.mp3 = 0;
+
+    if ((stat = d_trbegin("StoreCDTrack", task)) != S_OKAY)
+        return stat;
+
+    d_fillnew(TRACK, &amp;rTrack, task, CURR_DB);
+    d_connect(CDTRACKS, task, CURR_DB);
+
+    /* allocate music buffer */
+    mbuf = psp_getMemory(bufsize, 0);
+
+    while ((size = fread(mbuf, 1, 65536, fMp3)) &gt; 0) {
+        if ((stat = d_blobwrite(MP3, mbuf, size, task, CURR_DB)) != S_OKAY) {
+            psp_freeMemory(mbuf, 0);
+            fclose(fMp3);
+            d_trabort(task);
+            return stat;
+        }
+
+        if (size &lt; 65536)
+            break;
+    }
+
+    psp_freeMemory(mbuf, 0);
+    d_trend(task);
+    fclose(fMp3);
+
+    return stat;
+}</pre>
+        <p>The next code sample illustrates the use of <code>d_blobseek</code> and <code>d_blobtell</code>.  It plays a music track from a pre-specified position until either the play is completed or the play is paused.  The position is passed in through the <i>pTrackPos</i> argument that points to an integer containing the start position (*<i>pTrackPos</i> = 0 to play an entire track).  If the play is paused, the current position is stored back in *<i>pTrackPos</i>.</p>
+        <p>The <code>d_blobseek</code> function is called to position the BLOB to the specified starting position.  Then <i>bufsize</i> bytes of the music track BLOB is read and passed into a function called <code>PlayMusicBlock</code>, which plays the block of music.  If the user pauses the play, <code>PlayMusicBlock</code> returns the offset into the block where it paused, otherwise it returns 0.  When paused, the <code>d_blobtell</code> function is called to get the current BLOB position, which is used to compute the actual offset from the start of the BLOB to the paused position.</p><pre xml:space="preserve">/* ==================================================================
+   Resume play at specified position on track
+*/
+int32_t ResumePlay(
+  DB_ADDR   dbaTrack,    /* db addr of track record */
+  int32_t  *pTrackPos,   /* pointer to current offset */
+  uint32_t  bufsize,     /* size of music buffer to use */
+  DB_TASK  *task)        /* task handle for "musiclib" */
+{
+    /* returns 0 if play is paused, 1 when play is complete */
+    char    *mbuf;
+    uint32_t paused, pos = *pTrackPos;
+    uint32_t size;
+    int32_t  done = 1;
+
+    /* allocate music buffer */
+    mbuf = psp_getMemory(bufsize, 0);
+
+    /* reset current record to desired track */
+    d_crset(&amp;dbaTrack, task, CURR_DB);
+
+    /* position BLOB to where last left off */
+    d_blobseek(MP3, pos, B_START, task, CURR_DB);
+
+    /* read next block of music from BLOB */
+    while (d_blobread(MP3, mbuf, bufsize, &amp;size, task, CURR_DB) == S_OKAY) {
+        paused = PlayMusicBlock(mbuf, size);
+        if (size &lt; bufsize) {
+            *pTrackPos = 0;
+            break;  /* we're done */
+        }
+
+        if (paused) {
+            /* fetch current BLOB position */
+            d_blobtell(MP3, pTrackPos, task, CURR_DB);
+
+            /* adjust for where in current block music was paused */
+            *pTrackPos -= size-paused;
+
+            done = 0;
+            break;
+        }
+    }
+
+    psp_freeMemory(mbuf, 0);
+    return done;
+}</pre>
+        <p>As mentioned earlier, BLOBs are stored in the blob file in a linked list of fixed-length pages.  Thus an important distinction to remember between the <span class="MyVariablesProductShortName">RDM</span> BLOB functions and the low-level C file operations is that, whereas the C seek file operation performs direct, random access to the specified file position, the <code>d_blobseek</code> function must scan through the linked list to locate the desired position within the BLOB.  This can have a negative performance impact were you to use an <span class="MyVariablesProductShortName">RDM</span> BLOB in the same way you would a random access file.</p>
+        <p>You can delete a record by using a call to the <code>d_delete</code> function.  A <code>d_delete</code> of a record instance containing a BLOB deletes, along with the record instance, all BLOBs contained in the record.  To delete only the BLOB data from the current record, call <code>d_blobdelete</code>.</p>
+        <hr MadCap:conditions="Default.ScreenOnly" width="100%" size="0" align="center" />
+        <p MadCap:conditions="Default.ScreenOnly" style="font-size: 8pt;"><span class="MyVariablesCopyright">Copyright © 2012, Raima Inc. All rights reserved.</span>
+        </p>
+        <script type="text/javascript" src="../SkinSupport/MadCapBodyEnd.js">
+        </script>
+        <p class="MCWebHelpFramesetLink MCWebHelpFramesetLinkBottom" style="display: none;"><a href="../../Default_CSH.htm#UG/Chapter5.htm" style="">Open topic with navigation</a>
+        </p>
+    </body>
+</html>

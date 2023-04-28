@@ -1,0 +1,19 @@
+
+CREATE DATABASE sbomRSQL;
+
+create table ritem (
+   rid_code CHAR(16) PRIMARY KEY,
+   rdescription CHAR(58),
+   rcost DOUBLE,
+   rcomponent_count INT
+);
+
+create table rbill (
+   rcomponent CHAR(16),
+   rparent CHAR(16),
+   rsequence INT,
+   rquantity DOUBLE,
+   rlevel INT,
+   FOREIGN KEY(rcomponent) REFERENCES ritem(rid_code),
+   FOREIGN KEY(rparent) REFERENCES ritem(rid_code)
+);

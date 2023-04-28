@@ -1,0 +1,48 @@
+# RDM
+#
+# Copyright (c) 2010 Raima Inc.,  All rights reserved.
+#
+# Use of this software, whether in source code format, or in executable,
+# binary object code form, is governed by the Raima LICENSE which
+# is fully described in the LICENSE.TXT file, included within this
+# distribution of files.
+
+#
+# Linux
+#
+
+if (${CMAKE_SYSTEM_NAME} STREQUAL Linux)
+  # These are specific to Linux
+  set (LINUX on)
+  set (RDM_DLL_DIR "lib")
+  set (RDM_LIB_PREFIX "lib")
+  set (RDM_LIB_SUFFIX ".so")
+  set (RDM_DLL_SUFFIX ".so")
+  set (RDM_EXE_SUFFIX "")
+  set (RDM_LINK_INTERFACE_LANGUAGES "C")
+  if (CMAKE_SIZEOF_VOID_P EQUAL 8)
+    set (RDM_PLATFORM lnx64)
+    ADD_DEFINITIONS (-m64)
+    set (OS LINUX_X64)
+  else (CMAKE_SIZEOF_VOID_P EQUAL 8)
+    set (RDM_PLATFORM lnx)
+    ADD_DEFINITIONS (-m32)
+    set (OS LINUX_X86)
+  endif (CMAKE_SIZEOF_VOID_P EQUAL 8)
+  ADD_DEFINITIONS (-D_GNU_SOURCE)
+  ADD_DEFINITIONS (-D_REENTRANT)
+  ADD_DEFINITIONS (-Wall)
+
+  set(CMAKE_C_FLAGS "${CMAKE_C_FLAGS} -Wdeclaration-after-statement -std=c99")
+
+  # Do we need pthread
+  include(CheckLibraryExists)
+  CHECK_LIBRARY_EXISTS (pthread pthread_mutex_init /usr/lib REQUIRE_PTHREAD)
+  if (REQUIRE_PTHREAD)
+    set(PLATFORM_LIB ${PLATFORM_LIB} "pthread")
+  endif (REQUIRE_PTHREAD)
+  set(PLATFORM_LIB ${PLATFORM_LIB} "m")
+  set(PLATFORM_LIB ${PLATFORM_LIB} "rt")
+  set(PLATFORM_LIB ${PLATFORM_LIB} "termcap")
+#  set(PLATFORM_LIB ${PLATFORM_LIB} "profiler")
+endif (${CMAKE_SYSTEM_NAME} STREQUAL Linux)

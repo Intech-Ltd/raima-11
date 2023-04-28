@@ -1,0 +1,184 @@
+<?xml version="1.0" encoding="utf-8"?>
+<!DOCTYPE html PUBLIC "-//W3C//DTD XHTML 1.0 Strict//EN" "http://www.w3.org/TR/xhtml1/DTD/xhtml1-strict.dtd">
+<html xmlns:MadCap="http://www.madcapsoftware.com/Schemas/MadCap.xsd" MadCap:tocPath="SQL API|SQL Language Guide|Reference Guide|SQL Virtual Table Function Reference" MadCap:InPreviewMode="false" MadCap:PreloadImages="false" MadCap:RuntimeFileType="Topic" MadCap:TargetType="WebHelp" lang="en-us" xml:lang="en-us" MadCap:PathToHelpSystem="../../../" MadCap:HelpSystemFileName="Default.xml" MadCap:SearchType="Stem">
+    <head>
+        <meta http-equiv="Content-Type" content="text/html; charset=utf-8" /><title>vtFetch</title>
+        <link rel="icon" type="image/png" href="http://docs.raima.com/favicon.png" />
+        <link href="../../SkinSupport/MadCap.css" rel="stylesheet" />
+        <link href="../../Resources/TableStyles/FunctionArgs.css" rel="stylesheet" />
+        <link href="../../Resources/TableStyles/SQLErrorCodes.css" rel="stylesheet" />
+        <link href="../../Resources/Stylesheets/raima.css" rel="stylesheet" />
+        <script src="../../SkinSupport/MadCapAll.js" type="text/javascript">
+        </script>
+    </head>
+    <body>
+        <p class="MCWebHelpFramesetLink MCWebHelpFramesetLinkTop" style="display: none;"><a href="../../../Default_CSH.htm#SQL/VTREF/vtFetch.htm" style="">Open topic with navigation</a>
+        </p>
+        <div class="MCBreadcrumbsBox_0"><span class="MCBreadcrumbsPrefix">You are here: </span><a class="MCBreadcrumbsLink" href="../../dbRSQL.htm">SQL API</a><span class="MCBreadcrumbsDivider"> &gt; </span><a class="MCBreadcrumbsLink" href="../dbSQL.htm">SQL Language Guide</a><span class="MCBreadcrumbsDivider"> &gt; </span><a class="MCBreadcrumbsLink" href="../SQLStmtRef.htm">Reference Guide</a><span class="MCBreadcrumbsDivider"> &gt; </span><span class="MCBreadcrumbs">vtFetch</span>
+        </div>
+        <h3 class="newpage">vtFetch<a name="kanchor257"></a></h3>
+        <p>Fetch the next row in the virtual table</p>
+        <p class="Heading">Prototype</p><pre xml:space="preserve">RSQL_ERRCODE EXTERNAL_FCN <i>vtFetch</i>( 
+    HSTMT            hstmt,   
+    uint16_t         nocols,  
+    VCOL_INFO       *colsvals,
+    void            *pRegCtx, 
+    void            *pFetchCtx) 
+</pre>
+        <p class="Heading">Arguments</p>
+        <table style="width: 100%;mc-table-style: url('../../Resources/TableStyles/FunctionArgs.css');margin-left: 0;margin-right: auto;" class="TableStyle-FunctionArgs" cellspacing="0">
+            <col class="Column-Column1" />
+            <col class="Column-Column3" />
+            <col class="Column-Column2" />
+            <tbody>
+                <tr class="Body-Body1">
+                    <td class="BodyE-Column1-Body1">hstmt</td>
+                    <td class="BodyE-Column3-Body1">(input)</td>
+                    <td class="BodyD-Column2-Body1">Statement handle of SQL statement containing the virtual table reference.</td>
+                </tr>
+                <tr class="Body-Body1">
+                    <td class="BodyE-Column1-Body1">nocols</td>
+                    <td class="BodyE-Column3-Body1">(input)</td>
+                    <td class="BodyD-Column2-Body1">Number of referenced columns (size of <code>colsvals</code> array).</td>
+                </tr>
+                <tr class="Body-Body1">
+                    <td class="BodyE-Column1-Body1">colsvals</td>
+                    <td class="BodyE-Column3-Body1">(input)</td>
+                    <td class="BodyD-Column2-Body1">Array of referenced column value containers.</td>
+                </tr>
+                <tr class="Body-Body1">
+                    <td class="BodyE-Column1-Body1">pRegCtx</td>
+                    <td class="BodyE-Column3-Body1">(input)</td>
+                    <td class="BodyD-Column2-Body1">Pointer to the user program allocated context data area that was originally passed in through the call to <code>rsqlRegisterVirtualTables</code>.</td>
+                </tr>
+                <tr class="Body-Body1">
+                    <td class="BodyB-Column1-Body1">pFetchCtx</td>
+                    <td class="BodyB-Column3-Body1">(input)</td>
+                    <td class="BodyA-Column2-Body1">Pointer to the fetch context data area.</td>
+                </tr>
+            </tbody>
+        </table>
+        <p class="Heading">Description</p>
+        <p>This function is called by SQL to fetch the next row from the virtual table. The fetch context pointer, <code>pFCtx</code>, references the fetch context data area containing any virtual table specific data needed for processing the fetch (e.g., current row number).  If a primary key lookup value was specified, then only one row should be retrieved.  If not, then all rows in the table should be retrieved with status <code>errNOMOREDATA</code> being returned on the first call after the last row has been fetched.   The necessary programming logic is best explained through the <code>virtab</code> example as shown below.</p>
+        <p class="Heading">Example</p><pre xml:space="preserve"> 1	/* ========================================================================
+ 2	    Virtual table fetch function 
+ 3	*/
+ 4	static RSQL_ERRCODE EXTERNAL_FCN vtabFetch(  /* vtFetch() */
+ 5	    HSTMT        hstmt,        /* in:  statement handle */
+ 6	    uint16_t     nocols,       /* in:  no. of ref'd columns */
+ 7	    VCOL_INFO   *colsvals,     /* in:  array of ref'd col value containers */
+ 8	    void        *pRegCtx,      /* in:  ptr to registration context */
+ 9	    void        *pFCtx)        /* in:  ptr to fetch context */
+10	{
+11	    int16_t      cno;
+12	    VTAB_CTX    *pCtx = (VTAB_CTX *)pFCtx;
+13	    uint32_t     rno = (uint32_t)pCtx-&gt;rowno;
+14    
+15	    vtabEnter();
+16	    
+17	    if ( rno == norows || (pCtx-&gt;pkeyval &amp;&amp; pCtx-&gt;rowcnt) ) {
+18	        pCtx-&gt;rowno = 0;
+19	        vtabExit();
+20	        return errNOMOREDATA;
+21	    }
+22	    for (cno = 0; cno &lt; nocols; ++cno) {
+23	        const VCOL_INFO *pCVal = &amp;colsvals[cno];
+24	        if ( vtabrows[rno].is_null[pCVal-&gt;colno] )
+25	            *pCVal-&gt;is_null = 1;
+26	        else {
+27	            *pCVal-&gt;is_null = 0;
+28	            switch ( pCVal-&gt;colno ) {
+29	                case 0: 
+30	                    memcpy(pCVal-&gt;data, &amp;vtabrows[rno].pkey, sizeof(int32_t));
+31	                    break;
+32	                case 1:
+33	                    strcpy(pCVal-&gt;data, vtabrows[rno].name);
+34	                    break;
+35	                case 2:
+36	                    strcpy(pCVal-&gt;data, vtabrows[rno].addr);
+37	                    break;
+38	                case 3:
+39	                    strcpy(pCVal-&gt;data, vtabrows[rno].city);
+40	                    break;
+41	                case 4:
+42	                    strcpy(pCVal-&gt;data, vtabrows[rno].state);
+43	                    break;
+44	                case 5:
+45	                    strcpy(pCVal-&gt;data, vtabrows[rno].zip);
+46	                    break;
+47	            } /*lint !e744 */
+48	        }
+49	    }
+50	    ++pCtx-&gt;rowcnt;
+51	    ++pCtx-&gt;rowno;
+52	
+53	    vtabExit();
+54	    
+55	    return errSUCCESS;
+56	}
+</pre>
+        <p>Note the call to <code>vtabEnter</code> at line 15 and its reciprocal calls to <code>vtabExit</code> at lines 19 and 53 serializing access to the <code>norows</code> and <code>vtabrows</code> variables.  The if statement at line 17 tests the two conditions under which an <code>errNOMOREDATA</code> status code is to be returned.</p>
+        <p>The loop at lines 22 to 49 is used to copy the fetched row's information for each column in the <code>colsvals</code> array.  This involves setting the correct null value indicator (lines 24-25) and, for the non-null columns, copying its value into the column's data buffer pointed to by the <code>VCOL_INFO</code> data field (lines 30, 33, 36, 39, 42, and 45).</p>
+        <p class="Heading">Return Codes</p>
+        <table class="TableStyle-SQLErrorCodes" cellspacing="0" style="mc-table-style: url('../../Resources/TableStyles/SQLErrorCodes.css');">
+            <col class="Column-Column1" />
+            <col class="Column-Column2" />
+            <col class="Column-Column3" />
+            <col class="Column-Column4" />
+            <tbody>
+                <tr class="Body-Body1">
+                    <th class="BodyB-Column1-Body1" style="font-weight: bold;">Error Code</th>
+                    <th class="BodyB-Column2-Body1" style="font-weight: bold;">Enum Identifier</th>
+                    <th class="BodyB-Column3-Body1" style="font-weight: bold;">SQL State</th>
+                    <th class="BodyA-Column4-Body1" style="font-weight: bold;">Description</th>
+                </tr>
+            </tbody>
+        </table>
+        <table class="TableStyle-SQLErrorCodes" cellspacing="0" style="mc-table-style: url('../../Resources/TableStyles/SQLErrorCodes.css');">
+            <col class="Column-Column1" />
+            <col class="Column-Column2" />
+            <col class="Column-Column3" />
+            <col class="Column-Column4" />
+            <tbody>
+                <tr class="Body-Body1">
+                    <td class="BodyB-Column1-Body1">0</td>
+                    <td class="BodyB-Column2-Body1">errSUCCESS</td>
+                    <td class="BodyB-Column3-Body1">00000</td>
+                    <td class="BodyA-Column4-Body1">no error was detected</td>
+                </tr>
+            </tbody>
+        </table>
+        <table class="TableStyle-SQLErrorCodes" cellspacing="0" style="mc-table-style: url('../../Resources/TableStyles/SQLErrorCodes.css');">
+            <col class="Column-Column1" />
+            <col class="Column-Column2" />
+            <col class="Column-Column3" />
+            <col class="Column-Column4" />
+            <tbody>
+                <tr class="Body-Body1">
+                    <td class="BodyB-Column1-Body1">-1</td>
+                    <td class="BodyB-Column2-Body1">errNOMOREDATA</td>
+                    <td class="BodyB-Column3-Body1">02000</td>
+                    <td class="BodyA-Column4-Body1">no more data</td>
+                </tr>
+            </tbody>
+        </table>
+        <p class="Heading">See Also</p>
+        <p><a href="../../SQLRM/rsqlRegisterVirtualTables.htm">rsqlRegisterVirtualTables</a>
+        </p>
+        <p><a href="vtRowCount.htm">vtRowCount</a>
+        </p>
+        <p><a href="vtSelectCount.htm">vtSelectCount</a>
+        </p>
+        <p><a href="vtSelectOpen.htm">vtSelectOpen</a>
+        </p>
+        <p><a href="vtSelectClose.htm">vtSelectClose</a>
+        </p>
+        <hr MadCap:conditions="Default.ScreenOnly" width="100%" size="0" align="center" />
+        <p MadCap:conditions="Default.ScreenOnly" style="font-size: 8pt;"><span class="MyVariablesCopyright">Copyright © 2012, Raima Inc. All rights reserved.</span>
+        </p>
+        <script type="text/javascript" src="../../SkinSupport/MadCapBodyEnd.js">
+        </script>
+        <p class="MCWebHelpFramesetLink MCWebHelpFramesetLinkBottom" style="display: none;"><a href="../../../Default_CSH.htm#SQL/VTREF/vtFetch.htm" style="">Open topic with navigation</a>
+        </p>
+    </body>
+</html>

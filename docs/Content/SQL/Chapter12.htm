@@ -1,0 +1,943 @@
+<?xml version="1.0" encoding="utf-8"?>
+<!DOCTYPE html PUBLIC "-//W3C//DTD XHTML 1.0 Strict//EN" "http://www.w3.org/TR/xhtml1/DTD/xhtml1-strict.dtd">
+<html xmlns:MadCap="http://www.madcapsoftware.com/Schemas/MadCap.xsd" MadCap:tocPath="SQL API|SQL Language Guide|User's Guide" MadCap:InPreviewMode="false" MadCap:PreloadImages="false" MadCap:RuntimeFileType="Topic" MadCap:TargetType="WebHelp" lang="en-us" xml:lang="en-us" MadCap:PathToHelpSystem="../../" MadCap:HelpSystemFileName="Default.xml" MadCap:SearchType="Stem">
+    <head>
+        <meta http-equiv="Content-Type" content="text/html; charset=utf-8" /><title>User-Defined Functions (UDFs)&#160;in SQL</title>
+        <link rel="icon" type="image/png" href="http://docs.raima.com/favicon.png" />
+        <link href="../SkinSupport/MadCap.css" rel="stylesheet" />
+        <link href="../Resources/TableStyles/Col3DataType.css" rel="stylesheet" />
+        <link href="../Resources/TableStyles/fncSummary.css" rel="stylesheet" />
+        <link href="../Resources/TableStyles/ParamStruct.css" rel="stylesheet" />
+        <link href="../Resources/Stylesheets/raima.css" rel="stylesheet" />
+        <script src="../SkinSupport/MadCapAll.js" type="text/javascript">
+        </script>
+    </head>
+    <body>
+        <p class="MCWebHelpFramesetLink MCWebHelpFramesetLinkTop" style="display: none;"><a href="../../Default_CSH.htm#SQL/Chapter12.htm" style="">Open topic with navigation</a>
+        </p>
+        <div class="MCBreadcrumbsBox_0"><span class="MCBreadcrumbsPrefix">You are here: </span><a class="MCBreadcrumbsLink" href="../dbRSQL.htm">SQL API</a><span class="MCBreadcrumbsDivider"> &gt; </span><a class="MCBreadcrumbsLink" href="dbSQL.htm">SQL Language Guide</a><span class="MCBreadcrumbsDivider"> &gt; </span><a class="MCBreadcrumbsLink" href="Chapter1.htm">User's Guide</a><span class="MCBreadcrumbsDivider"> &gt; </span><span class="MCBreadcrumbs">User-Defined Functions (UDFs)&#160;in SQL</span>
+        </div>
+        <h1>User-Defined Functions (UDFs)&#160;in SQL</h1>
+        <p class="Quotation">Civilization advances by extending the</p>
+        <p class="Quotation">number of important operations which</p>
+        <p class="Quotation">we can perform without thinking about them.</p>
+        <p class="QuoteAuthor">- Alfred North Whitehead, Introduction to Mathematics (1911)</p>
+        <p>A User-Defined Function (UDF) is an application-specific function used just like the <span class="MyVariablesRSQLName">RDM SQL</span> scalar and aggregate functions as described in the <a href="Chapter5.htm">Retrieving Data from a Database</a> section, but developed to meet the specific needs of your application.  UDFs are created in a C program module that conforms to a pre-defined API that will be called by the SQL runtime system whenever the specific function is used in an SQL statement.</p>
+        <p>Your UDF can be either a scalar or an aggregate function.  A scalar UDF operates on a single row and retrieves a single value.  An aggregate function is used with the <b>group by</b> clause of a <b>select</b> statement and performs computations on sets of rows that result from the <b>select</b> statement.</p>
+        <p>This section will show you how to write a <span class="MyVariablesRSQLName">RDM SQL</span> UDF in C through two simple example UDFs: a scalar UDF that implements a soundex code for names, and an aggregate UDF that counts the number of occurrences of a column (or expression) of type character that match a specified string.</p>
+        <p>The <code>soundex</code> function takes a single character string argument that should contain the name of a person beginning with the last name.  It returns the 4 character soundex code based on the rules given in the Wikipedia article "soundex" (<a href="http://en.wikipedia.org/wiki/Soundex">http://en.wikipedia.org/wiki/Soundex</a>).  If the string does not conform to a name, the function returns code "<code>xERR</code>".  For example, the following query returns the name and soundex code for each row of the person table in the <code>nsfawards</code> database.</p><pre xml:space="preserve">select name, soundex(name) from person;</pre>
+        <p>The example aggregate UDF is called <code>matchcount</code> and takes two character arguments.  The first is a column or string expression and the second is a character column or string expression that the first is to match.  The function tracks the count of the number of matches that are encountered in each group.  For example, the query below returns the counts of the number of person table rows in the <code>nsfawards</code> database of male, female, and unknown gender.</p><pre xml:space="preserve">select matchcount(gender,"F"), matchcount(gender,"M"), matchcount(gender,"U")
+ 	from person;
+ matchcount(gender, "F")  matchcount(gender, "M")  matchcount(gender, "U")
+                   17537                    57385                    10982
+</pre>
+        <h2><a name="UDF"></a>UDF Load Table Definition and Registration</h2>
+        <p>A UDF implementation consists of the seven C functions described in the following table.</p>
+        <table style="margin-left: 0;margin-right: auto;caption-side: top;mc-table-style: url('../Resources/TableStyles/fncSummary.css');" class="TableStyle-fncSummary" cellspacing="0">
+            <caption>Table 1. UDF Implementation Functions</caption>
+            <col class="Column-Column1" style="width: 16%;" />
+            <col class="Column-Column2" style="width: 42%;" />
+            <col class="Column-Column3" style="width: 42%;" />
+            <thead>
+                <tr class="Head-Header1">
+                    <th class="HeadE-Column1-Header1">Function Entry</th>
+                    <th class="HeadE-Column2-Header1">Description</th>
+                    <th class="HeadD-Column3-Header1">When Called by SQL</th>
+                </tr>
+            </thead>
+            <tbody>
+                <tr class="Body-Body1">
+                    <td class="BodyE-Column1-Body1" style="font-family: monospace;">udfCheck</td>
+                    <td class="BodyE-Column2-Body1">Checks argument types and returns result data type.</td>
+                    <td class="BodyD-Column3-Body1">When SQL statement is compiled.</td>
+                </tr>
+                <tr class="Body-Body1">
+                    <td class="BodyE-Column1-Body1" style="font-family: monospace;">udfInit</td>
+                    <td class="BodyE-Column2-Body1">Initializes a given execution of the UDF usually needed to allocate memory for any needed UDF context data.</td>
+                    <td class="BodyD-Column3-Body1">When SQL statement is executed.</td>
+                </tr>
+                <tr class="Body-Body1">
+                    <td class="BodyE-Column1-Body1" style="font-family: monospace;">udfTerm</td>
+                    <td class="BodyE-Column2-Body1">Performs any needed cleanup—usually to free any memory allocated by the <code>udfInit</code> or <code>udfCall</code> functions.</td>
+                    <td class="BodyD-Column3-Body1">When execution completes or when the cursor is closed (on a <b>select</b> statement).</td>
+                </tr>
+                <tr class="Body-Body1">
+                    <td class="BodyE-Column1-Body1" style="font-family: monospace;">udfScalarCall</td>
+                    <td class="BodyE-Column2-Body1">Performs one execution of the scalar function.</td>
+                    <td class="BodyD-Column3-Body1">When next row is processed.</td>
+                </tr>
+                <tr class="Body-Body1">
+                    <td class="BodyE-Column1-Body1" style="font-family: monospace;">udfAggCall</td>
+                    <td class="BodyE-Column2-Body1">Performs one execution of the aggregate function for each row of the group</td>
+                    <td class="BodyD-Column3-Body1">When next row of group is processed.</td>
+                </tr>
+                <tr class="Body-Body1">
+                    <td class="BodyE-Column1-Body1" style="font-family: monospace;">udfAggResult</td>
+                    <td class="BodyE-Column2-Body1">Called to return the aggregate computation value.</td>
+                    <td class="BodyD-Column3-Body1">Either during or after aggregate accumulation.</td>
+                </tr>
+                <tr class="Body-Body1">
+                    <td class="BodyB-Column1-Body1" style="font-family: monospace;">udfAggReset</td>
+                    <td class="BodyB-Column2-Body1">Resets the aggregate calculation.</td>
+                    <td class="BodyA-Column3-Body1">When group changes.</td>
+                </tr>
+            </tbody>
+        </table>
+        <p>The entry points for these functions are provided through a UDF load table that is passed from your application to the <span class="MyVariablesRSQLName">RDM SQL</span> system by calling function <code>rsqlRegisterUDFs</code>.   This table is an array of type <code>UDFLOADTABLE</code> defined in header file <code>rsqltypes.h</code> (automatically included with header file <code>rsql.h</code>) and shown below.</p><pre xml:space="preserve">typedef struct udfloadtable {
+    char           udfName[NAMELEN];  /* name of user function */
+    SQL_T          udfType;           /* data type of return value */
+    PUDFCHECK      udfCheck;          /* address of arg type checking function */
+    PUDFINIT       udfInit;           /* address of initialization function */
+    PUDFINIT       udfTerm;           /* address of termination function */
+    PUDFSCALARCALL udfScalarCall;     /* address of user function */
+    PUDFAGGCALL    udfAggCall;        /* address of user function */
+    PUDFAGGRESULT  udfAggResult;      /*&#160;address of user function */
+    PUDFRESET      udfAggReset;       /* address of aggregate reset function */
+} UDFLOADTABLE;
+</pre>
+        <p>The first field in the table, <code>udfName</code>, is a char string containing the name of the UDF that will be used in SQL statements.  The second field, <code>udfType</code>, is the data type of the value returned by the function.  If the return type of the function depends on the type of its argument then this should be set to <code>tNOVAL</code>.   In any case, the data type returned by function <code>udfCheck</code> is the type that is used by SQL during compilation.  The other fields in <code>UDFLOADTABLE</code> contain pointers to the functions that implement the UDF.  Note that <code>udfInit</code>, <code>udfTerm</code>, <code>udfScalarCall</code>, <code>udfAggCall</code>, <code>udfAggResult</code> and <code>udfAggReset</code> can all be <code>NULL</code>.  However, <code>udfScalarCall</code> must be specified and all three <code>udfAgg</code> functions must be <code>NULL</code>&#160;for a scalar UDF. Similarly, all three <code>udfAgg</code> functions must be specified and <code>udfScalarCall</code> must be <code>NULL</code>&#160;for an aggregate UDF.  Each of the seven implementation functions must conform to its prototype definition given in header file <code>rsqltypes.h</code> as follows.</p><pre xml:space="preserve">typedef RSQL_ERRCODE (EXTERNAL_FCN UDFCHECK)( /* udfCheck */
+    HSTMT             hstmt,    /* in:  statement handle */
+    void             *pRegCtx,  /* in:  ptr to registration context */
+    uint16_t          noargs,   /* in:  number of arguments */ 
+    const RSQL_VALUE *pArgs,    /* in:  ptr to array of arg values (types) */
+    SQL_T            *pType,    /* out: result data type */
+    int16_t          *pDeterm); /* out: deterministic fcn flag (0 or 1) */</pre><pre xml:space="preserve">typedef RSQL_ERRCODE (EXTERNAL_FCN UDFINIT)( /* udfInit */
+    HSTMT             hstmt,    /* in:  statement handle */
+    void             *pRegCtx,  /* in:  ptr to registration context */
+    void             *pFcnCtx); /* in:  ptr to fcn execution context data area */</pre><pre xml:space="preserve">typedef void (EXTERNAL_FCN UDFTERM)( /* udfTerm */
+    HSTMT             hstmt,    /* in:  statement handle */
+    void             *pFcnCtx); /* in:  ptr to fcn execution context data area */</pre><pre xml:space="preserve">typedef RSQL_ERRCODE (EXTERNAL_FCN UDFSCALARCALL)( /* udfScalarCall */
+    HSTMT             hstmt,    /* in:  statement handle */
+    void             *pFcnCtx,  /* in:  ptr to fcn execution context data area */
+    uint16_t          noargs,   /* in:  number of arguments */ 
+    const RSQL_VALUE *pArgs,    /* in:  ptr to array of argument values */
+    RSQL_VALUE       *pResult); /* out: ptr to function result value */</pre><pre xml:space="preserve">typedef RSQL_ERRCODE (EXTERNAL_FCN UDFAGGCALL)( /* udfAggCall */
+    HSTMT             hstmt,    /* in:  statement handle */
+    void             *pFcnCtx,  /* in:  ptr to fcn execution context data area */
+    uint16_t          noargs,   /* in:  number of arguments */ 
+    const RSQL_VALUE *pArgs);   /* in:  ptr to array of argument values */</pre><pre xml:space="preserve">typedef RSQL_ERRCODE (EXTERNAL_FCN UDFAGGRESULT)( /* udfAggResult */
+    HSTMT             hstmt,    /* in:  statement handle */
+    void             *pFcnCtx,  /* in:  ptr to fcn execution context data area */
+    RSQL_VALUE       *pResult); /* out: ptr to function result value */</pre><pre xml:space="preserve">typedef RSQL_ERRCODE (EXTERNAL_FCN UDFAGGRESET)( /* udfAggRest */
+    HSTMT             hstmt,    /* in:  statement handle */
+    void             *pFcnCtx); /* in:  ptr to fcn execution context data area */
+</pre>
+        <p>The function names are italicized to indicate that they can be named whatever you like.   Note that the first argument to each function is a statement handle.  This is the statement handle of the SQL statement that contains the reference to the UDF. You will only need to use this argument when your UDF needs to make calls to the <span class="MyVariablesRSQLName">RDM SQL</span> functions. Details on how to do this will be discussed later on in this section.</p>
+        <p>The code snippet below is from the example UDF C module <code>udf.c</code> (contained in the <code>GettingStarted\examples\sqlUDF</code> directory) and shows the definition of the <code>UDFLOADTABLE</code> for the <code>soundex</code> and <code>matchcount</code> functions. Each uses a predefined prototype (e.g., <code>UDFCHECK</code>) to ensure that the arguments are properly defined.</p><pre xml:space="preserve">/* UDF functions for soundex */
+static UDFCHECK      SndxCheck;
+static UDFSCALARCALL SndxCall;
+
+/* user function for matchcount */
+static UDFCHECK      CntCheck;
+static UDFAGGCALL    CntCall;
+static UDFAGGRESULT  CntResult;
+static UDFAGGRESET   CntReset;
+
+/*--------------------------------------------------------------------------
+    Table of user-defined functions for this module
+---------------------------------------------------------------------------*/
+
+/* table of user functions callable from within an sql expression */
+const UDFLOADTABLE UdfTable[] = {
+    /*                                        Scalar   Aggregate--------------- */
+    /* Name       Type    Check     Init Term Call     Call    Result    Reset  */
+    /* --------   ------- --------- ---- ---- -------- ------- --------- ------ */
+    {"soundex",   tCHAR,  SndxCheck,NULL,NULL,SndxCall,NULL,   NULL,     NULL},
+    {"matchcount",tBIGINT,CntCheck, NULL,NULL,NULL,    CntCall,CntResult,CntReset}
+};
+</pre>
+        <p><span class="MyVariablesRSQLName">RDM SQL</span> is informed about the existence of these functions by the application through a call to function <code>rsqlRegisterUDFs</code> (which must occur before compiling/executing any SQL statement that references them).</p>
+        <p>The code snippet below shows how this is done.</p><pre xml:space="preserve"><b>extern const UDFLOADTABLE UdfTable[];
+extern const size_t szUdfCtx;</b>
+MyApplication() 
+{
+	HCONN hdbc;
+
+	if ( rsqlAllocConn(&amp;hdbc) == errSUCCESS ) {
+		<b>rsqlRegisterUDFs(hdbc, 2, UdfTable, NULL, szUdfCtx);</b>
+ 	...
+}
+</pre>
+        <p>Five arguments are passed into function <code>rsqlRegisterUDFs</code>: the connection handle, the number of entries in the UDF load table, the address of the UDF load table, a pointer to a user registration context data area (which can be <code>NULL</code> if unnecessary), and the maximum size that is needed for a UDF execution context (e.g., aggregate functions in particular will use this space to keep track of computationally important data from each detail row of the set of rows comprising each aggregate).  The prototype for <code>rsqlRegisterUDFs</code> is given below.  Note that only one call to this function is allowed for any given connection.</p><pre xml:space="preserve">RSQL_ERRCODE EXTERNAL_FCN rsqlRegisterUDFs(
+    HCONN               hConn,    /* in:  connection handle */
+    uint16_t            noudfs,   /* in:  number of UDFs */
+    const UDFLOADTABLE *udftab,   /* in:  ptr to UDF load table */
+    void               *pRegCtx,  /* in:  ptr to user's registration context */
+    const size_t        szFcnCtx) /* in:  size of function context space to be alloc'd */
+</pre>
+        <p>The <code>pRegCtx</code> can be used by the application program to pass in any application-specific, execution-independent data that will be needed by one or more UDFs.  If no registration context is needed the <code>pRegCtx</code> argument should be <code>NULL</code>. The specified <code>pRefCtx</code> pointer is passed to the <code>udfCheck</code> and <code>udfInit</code> functions.</p>
+        <p>The <code>szFcnCtx</code> needs to be set to the largest context data area used for all of the UDFs. This space will be automatically allocated by the <span class="MyVariablesRSQLName">RDM SQL</span> engine and passed to the execution-time UDF functions (all but <code>udfCheck</code>).  If no function context is needed then <code>szFcnCtx</code> should be 0.</p>
+        <h2>UDF Type Checking Function: <i>udfCheck</i><a name="kanchor209"></a></h2>
+        <p>This function is called by SQL during compilation (i.e. <code>rsqlPrepare</code>) of a SQL statement that contains a reference to the UDF.   Six arguments are passed into the <code>udfCheck</code> function as described in the following table.</p>
+        <table style="mc-table-style: url('../Resources/TableStyles/ParamStruct.css');margin-left: 0;margin-right: auto;caption-side: top;" class="TableStyle-ParamStruct" cellspacing="0">
+            <caption>Table 2. Function udfCheck Argument Descriptions</caption>
+            <col class="Column-Column1" />
+            <col class="Column-Column2" />
+            <col class="Column-Column3" />
+            <thead>
+                <tr class="Head-Header1">
+                    <th class="HeadE-Column1-Header1">Argument</th>
+                    <th class="HeadE-Column2-Header1">Type</th>
+                    <th class="HeadD-Column3-Header1">Description</th>
+                </tr>
+            </thead>
+            <tbody>
+                <tr class="Body-Body1">
+                    <td class="BodyE-Column1-Body1">hStmt</td>
+                    <td class="BodyE-Column2-Body1">HSTMT</td>
+                    <td class="BodyD-Column3-Body1">Statement handle of SQL statement referencing this UDF</td>
+                </tr>
+                <tr class="Body-Body1">
+                    <td class="BodyE-Column1-Body1">pRegCtx</td>
+                    <td class="BodyE-Column2-Body1">void *</td>
+                    <td class="BodyD-Column3-Body1">Pointer to the user program allocated registration context data area that was originally passed in through the call to <code>rsqlRegisterUDFs</code>.</td>
+                </tr>
+                <tr class="Body-Body1">
+                    <td class="BodyE-Column1-Body1">noargs</td>
+                    <td class="BodyE-Column2-Body1">uint16_t</td>
+                    <td class="BodyD-Column3-Body1">Number of arguments specified in SQL statement's UDF call</td>
+                </tr>
+                <tr class="Body-Body1">
+                    <td class="BodyE-Column1-Body1">args</td>
+                    <td class="BodyE-Column2-Body1">RSQL_VALUE *</td>
+                    <td class="BodyD-Column3-Body1">Array of <code>noargs</code> argument value entries.  The first argument is contained in <code>args[0]</code>.   As this function is called during compilation, only the data type specified in each <code>args</code> entry should be referenced as the actual data value will only be present for literal constant arguments.</td>
+                </tr>
+                <tr class="Body-Body1">
+                    <td class="BodyE-Column1-Body1">fcntype</td>
+                    <td class="BodyE-Column2-Body1">SQL_T *</td>
+                    <td class="BodyD-Column3-Body1">The data type of the value that will be returned by the UDF is returned in this output variable.</td>
+                </tr>
+                <tr class="Body-Body1">
+                    <td class="BodyB-Column1-Body1">pDeterm</td>
+                    <td class="BodyB-Column2-Body1">int16_t *</td>
+                    <td class="BodyA-Column3-Body1">Set to 1 to indicate that the function is deterministic otherwise set to 0.  A function is deterministic if it always returns the same value for the same arguments.  SQL will call deterministic functions at compile time when all of the argument values are known (i.e., literals) and replace the call with the result value in the compiled code.</td>
+                </tr>
+            </tbody>
+        </table>
+        <p>If no errors are detected the function needs to return status <code>errSUCCESS</code>.  If an error is detected, then the status code associated with that particular error needs to be returned by the <code>udfCheck</code> function.   The specific error code that is returned can be any of the <span class="MyVariablesRSQLName">RDM SQL</span> codes but it is recommended that the following codes be used.</p>
+        <table style="margin-left: 0;margin-right: auto;caption-side: top;mc-table-style: url('../Resources/TableStyles/fncSummary.css');" class="TableStyle-fncSummary" cellspacing="0">
+            <caption>Table 3. UDF Error Return Codes</caption>
+            <col class="Column-Column1" />
+            <col class="Column-Column2" />
+            <thead>
+                <tr class="Head-Header1">
+                    <th class="HeadE-Column1-Header1">Error Code</th>
+                    <th class="HeadD-Column2-Header1">Description</th>
+                </tr>
+            </thead>
+            <tbody>
+                <tr class="Body-Body1">
+                    <td class="BodyE-Column1-Body1">errUDFNOARGS</td>
+                    <td class="BodyD-Column2-Body1">Incorrect number of function arguments</td>
+                </tr>
+                <tr class="Body-Body1">
+                    <td class="BodyE-Column1-Body1">errUDFARG</td>
+                    <td class="BodyD-Column2-Body1">Invalid function argument type</td>
+                </tr>
+                <tr class="Body-Body1">
+                    <td class="BodyB-Column1-Body1">errUDF</td>
+                    <td class="BodyA-Column2-Body1">Other UDF error</td>
+                </tr>
+            </tbody>
+        </table>
+        <p>Most of the time only the data type from the the <code>args</code> <![CDATA[ ]]><code>RSQL_VALUE</code> array (e.g., <code>args[0].type</code>) needs to be inspected as the actual data value will only be present when a literal constant value is being passed to the function.   In order to know which arguments have a literal value, the status field of <code>RSQL_VALUE</code> can be checked (e.g., <code>args[0].status</code>).  When a value is present the status will be set to <code>vsOKAY</code>, if no value is present the status will be set to <code>vsNOVAL</code>.  You can use this, for example, when you want to define an argument for a particular function that is only allowed to take a literal constant.If an argument was specified using a parameter marker then its corresponding type will be tPARAMREF or if the argument is a stored procedure argument the type will be tPROCVAR.  In either case, the actual type checking will need to be done at execution time by the udfScalarCall/udfAggCall function.</p>
+        <p>The data type returned by the UDF is returned through the <code>pType</code> argument.  The valid <span class="MyVariablesProductShortName">RDM</span> <![CDATA[ ]]><code>SQL_T</code> data type values that can be returned by a UDF are specified in the table below.</p>
+        <table style="caption-side: top;width: 60%;margin-left: 0;margin-right: auto;mc-table-style: url('../Resources/TableStyles/Col3DataType.css');" class="TableStyle-Col3DataType" cellspacing="0">
+            <caption>Table 4. SQL Data Type Values</caption>
+            <col class="Column-Column1" />
+            <col class="Column-Column2" />
+            <col class="Column-Column3" />
+            <thead>
+                <tr class="Head-Header1">
+                    <th class="HeadE-Column1-Header1">SQL Data Type</th>
+                    <th class="HeadE-Column2-Header1">SQL_T value</th>
+                    <th class="HeadD-Column3-Header1">C Data Type</th>
+                </tr>
+            </thead>
+            <tbody>
+                <tr class="Body-Body1">
+                    <td class="BodyE-Column1-Body1" style="font-family: monospace;">char</td>
+                    <td class="BodyE-Column2-Body1" style="text-align: left;font-family: monospace;">tCHAR</td>
+                    <td class="BodyD-Column3-Body1" style="font-family: monospace;">char</td>
+                </tr>
+                <tr class="Body-Body1">
+                    <td class="BodyE-Column1-Body1" style="font-family: monospace;">varchar</td>
+                    <td class="BodyE-Column2-Body1" style="text-align: left;font-family: monospace;">tVARCHAR</td>
+                    <td class="BodyD-Column3-Body1" style="font-family: monospace;">char</td>
+                </tr>
+                <tr class="Body-Body1">
+                    <td class="BodyE-Column1-Body1" style="font-family: monospace;">wchar</td>
+                    <td class="BodyE-Column2-Body1" style="text-align: left;font-family: monospace;">tWCHAR</td>
+                    <td class="BodyD-Column3-Body1" style="font-family: monospace;">wchar_t</td>
+                </tr>
+                <tr class="Body-Body1">
+                    <td class="BodyE-Column1-Body1" style="font-family: monospace;">wvarchar</td>
+                    <td class="BodyE-Column2-Body1" style="text-align: left;font-family: monospace;">tWVARCHAR</td>
+                    <td class="BodyD-Column3-Body1" style="font-family: monospace;">wchar_t</td>
+                </tr>
+                <tr class="Body-Body1">
+                    <td class="BodyE-Column1-Body1" style="font-family: monospace;">binary</td>
+                    <td class="BodyE-Column2-Body1" style="text-align: left;font-family: monospace;">tBINARY</td>
+                    <td class="BodyD-Column3-Body1" style="font-family: monospace;">uint8_t</td>
+                </tr>
+                <tr class="Body-Body1">
+                    <td class="BodyE-Column1-Body1" style="font-family: monospace;">varbinary</td>
+                    <td class="BodyE-Column2-Body1" style="text-align: left;font-family: monospace;">tVARBINARY</td>
+                    <td class="BodyD-Column3-Body1" style="font-family: monospace;">uint8_t</td>
+                </tr>
+                <tr class="Body-Body1">
+                    <td class="BodyE-Column1-Body1" style="font-family: monospace;">boolean</td>
+                    <td class="BodyE-Column2-Body1" style="text-align: left;font-family: monospace;">tBOOL</td>
+                    <td class="BodyD-Column3-Body1" style="font-family: monospace;">int8_t</td>
+                </tr>
+                <tr class="Body-Body1">
+                    <td class="BodyE-Column1-Body1" style="font-family: monospace;">tinyint</td>
+                    <td class="BodyE-Column2-Body1" style="text-align: left;font-family: monospace;">tTINYINT</td>
+                    <td class="BodyD-Column3-Body1" style="font-family: monospace;">int8_t</td>
+                </tr>
+                <tr class="Body-Body1">
+                    <td class="BodyE-Column1-Body1" style="font-family: monospace;">smallint</td>
+                    <td class="BodyE-Column2-Body1" style="text-align: left;font-family: monospace;">tSMALLINT</td>
+                    <td class="BodyD-Column3-Body1" style="font-family: monospace;">int16_t</td>
+                </tr>
+                <tr class="Body-Body1">
+                    <td class="BodyE-Column1-Body1" style="font-family: monospace;">integer</td>
+                    <td class="BodyE-Column2-Body1" style="text-align: left;font-family: monospace;">tINTEGER</td>
+                    <td class="BodyD-Column3-Body1" style="font-family: monospace;">int32_t</td>
+                </tr>
+                <tr class="Body-Body1">
+                    <td class="BodyE-Column1-Body1" style="font-family: monospace;">bigint</td>
+                    <td class="BodyE-Column2-Body1" style="text-align: left;font-family: monospace;">tBIGINT</td>
+                    <td class="BodyD-Column3-Body1" style="font-family: monospace;">int64_t</td>
+                </tr>
+                <tr class="Body-Body1">
+                    <td class="BodyE-Column1-Body1" style="font-family: monospace;">real</td>
+                    <td class="BodyE-Column2-Body1" style="text-align: left;font-family: monospace;">tREAL</td>
+                    <td class="BodyD-Column3-Body1" style="font-family: monospace;">float</td>
+                </tr>
+                <tr class="Body-Body1">
+                    <td class="BodyE-Column1-Body1" style="font-family: monospace;">float, double</td>
+                    <td class="BodyE-Column2-Body1" style="text-align: left;font-family: monospace;">tFLOAT, tDOUBLE</td>
+                    <td class="BodyD-Column3-Body1" style="font-family: monospace;">double</td>
+                </tr>
+                <tr class="Body-Body1">
+                    <td class="BodyE-Column1-Body1" style="font-family: monospace;">date</td>
+                    <td class="BodyE-Column2-Body1" style="text-align: left;font-family: monospace;">tDATE</td>
+                    <td class="BodyD-Column3-Body1" style="font-family: monospace;">int32_t</td>
+                </tr>
+                <tr class="Body-Body1">
+                    <td class="BodyE-Column1-Body1" style="font-family: monospace;">time</td>
+                    <td class="BodyE-Column2-Body1" style="text-align: left;font-family: monospace;">tTIME</td>
+                    <td class="BodyD-Column3-Body1" style="font-family: monospace;">int32_t</td>
+                </tr>
+                <tr class="Body-Body1">
+                    <td class="BodyB-Column1-Body1" style="font-family: monospace;">timestamp</td>
+                    <td class="BodyB-Column2-Body1" style="text-align: left;font-family: monospace;">tTIMESTAMP</td>
+                    <td class="BodyA-Column3-Body1" style="font-family: monospace;">int64_t</td>
+                </tr>
+            </tbody>
+        </table>
+        <p>The <code>udfCheck</code> implementation for the <code>soundex</code> UDF is given below.</p><pre xml:space="preserve">/* ======================================================================
+   Soundex - type checking function (1 argument == name to be encoded)
+*/
+static RSQL_ERRCODE EXTERNAL_FCN SndxCheck(
+    HSTMT             hStmt,        /* in:  statement handle */
+    void             *pRegCtx,      /* in:  ptr to registration context */
+    uint16_t          noargs,       /* in:  number of arguments to function */
+    const RSQL_VALUE *args,         /* in:  array of argument values */
+    SQL_T            *fcntype,      /* out: result data type */
+    int16_t          *pDeterm)      /* out: = 1 deterministic */
+{
+    RSQL_ERRCODE status;
+
+    UNREF_PARM(hStmt)
+    UNREF_PARM(pRegCtx)
+
+    if ( !args || noargs != 1 )
+        status = errUDFNOARGS;
+    else if ( args-&gt;type != tNOVAL &amp;&amp; args-&gt;type !=tCHAR &amp;&amp; args-&gt;type !=tVARCHAR )
+        status = errUDFARG;
+    else {
+        status = errSUCCESS;
+        *fcntype = tCHAR;
+        *pDeterm = 1;
+    }
+    return status;
+}
+</pre>
+        <p>When an argument has been specified with a parameter marker, SQL will not know its data type at compilation time.  In those situations, the argument type will be <code>tNOVAL</code> and it is therefore a good idea to allow this by the <code>udfCheck</code> function.  So you can see that both <code>tNOVAL</code> and <code>tCHAR</code>/<code>tVARCHAR</code> are allowed in the soundex type checking function.  This also means that the <code>udfScalarCall</code> function will also need to validate the argument type.</p>
+        <p>The <code>soundex</code> function is deterministic (i.e., always computes the same value for a particular set of argument values), so it sets <code>*pDeterm</code> to 1.  This means that when all of the argument values for a particular call are literals then SQL will call <code>udfInit</code>, <code>udfScalarCall</code>, and <code>udfTerm</code> when the statement that references the UDF is compiled and then replace the call with the literal result value in the compiled statement code.</p>
+        <p>The <code>udfCheck</code> function for the <code>matchcount</code> UDF is as follows.</p><pre xml:space="preserve">/* ======================================================================
+   Type checking call, used for matchcount() UDF
+*/
+static RSQL_ERRCODE EXTERNAL_FCN CntCheck (
+    HSTMT             hStmt,        /* in:  system handle */
+    void             *pRegCtx,      /* in:  ptr to registration context */
+    uint16_t          noargs,       /* in:  number of arguments to function */
+    const RSQL_VALUE *args,         /* in:  array of argument values */
+    SQL_T            *fcntype,      /* out: result data type */
+    int16_t          *pDeterm)      /* out: = 0: not deterministic  */
+{
+    RSQL_ERRCODE stat;
+    
+    UNREF_PARM(hStmt)
+    UNREF_PARM(pRegCtx)
+    
+    if ( noargs != 2 )
+        stat = errUDFNOARGS;
+    else if ( args[0].type != tNOVAL 
+                &amp;&amp; args[0].type != tCHAR &amp;&amp; args[0].type != tVARCHAR
+            &amp;&amp; args[1].type != tNOVAL 
+                &amp;&amp; args[1].type != tCHAR &amp;&amp; args[1].type != tVARCHAR )
+        stat = errUDFARG;
+    else {
+        stat = errSUCCESS;
+        *fcntype = tBIGINT;
+        *pDeterm = 0;
+    }
+    return stat;
+}
+</pre>
+        <h2>UDF Initialization Function: <i>udfInit</i><a name="kanchor210"></a></h2>
+        <p>The <code>udfInit</code> function is called by <span class="MyVariablesRSQLName">RDM SQL</span> when the SQL statement containing the UDF call is executed (<code>rsqlExecute</code>).  This function is used to initialize data that needs to survive multiple calls to the <code>udfScalarCall</code> or <code>udfAggCall</code> functions during the processing of the SQL statement.  The pointer to this allocated memory is called the function context pointer and is passed to the <code>udfInit</code> function (as well as each of the other execution-time functions) through the <code>pFcnCtx</code> argument.  If no initialization is needed then this function is unnecessary and its entry in the <code>UDFLOADTABLE</code> can be assigned to <code>NULL</code> (as is the case with both the <code>soundex</code> and <code>matchcount</code> UDFs).</p>
+        <p>The three arguments that are passed to the <code>udfInit</code> function are described below.</p>
+        <table style="mc-table-style: url('../Resources/TableStyles/ParamStruct.css');margin-left: 0;margin-right: auto;" class="TableStyle-ParamStruct" cellspacing="0">
+            <caption>Table 5. Function udfInit Argument Descriptions</caption>
+            <col class="Column-Column1" />
+            <col class="Column-Column2" />
+            <col class="Column-Column3" />
+            <thead>
+                <tr class="Head-Header1">
+                    <th class="HeadE-Column1-Header1">Argument</th>
+                    <th class="HeadE-Column2-Header1">Type</th>
+                    <th class="HeadD-Column3-Header1">Description</th>
+                </tr>
+            </thead>
+            <tbody>
+                <tr class="Body-Body1">
+                    <td class="BodyE-Column1-Body1">hStmt</td>
+                    <td class="BodyE-Column2-Body1">HSTMT</td>
+                    <td class="BodyD-Column3-Body1">Statement handle of SQL statement referencing this UDF</td>
+                </tr>
+                <tr class="Body-Body1">
+                    <td class="BodyE-Column1-Body1">pRegCtx</td>
+                    <td class="BodyE-Column2-Body1">void *</td>
+                    <td class="BodyD-Column3-Body1">Pointer to the user program allocated registration context data area that was originally passed in through the call to <code>rsqlRegisterUDFs</code>.</td>
+                </tr>
+                <tr class="Body-Body1">
+                    <td class="BodyB-Column1-Body1">pFcnCtx</td>
+                    <td class="BodyB-Column2-Body1">void *</td>
+                    <td class="BodyA-Column3-Body1">Pointer to the user function context data area.</td>
+                </tr>
+            </tbody>
+        </table>
+        <p>The context data is typically defined as a <code>struct</code> type with fields defined for any of the data that needs to survive the calls to the <code>udfScalarCall</code>or <code>udfAggCall</code> functions.   For example, the context declarations for the <code>soundex</code> and <code>matchcount</code> functions' context is given below.</p><pre xml:space="preserve">/* Soundex UDF data context packet */
+typedef struct sndx_ctx {
+    char       sndx[5];    /* code buffer needs to survive each soundex() call */
+} SNDX_CTX;
+
+/* Matchcount UDF data context packet */
+typedef struct count_cxt {
+    RSQL_ERRCODE stat;     /* CntCall error status */
+    int64_t      count;    /* Current match count  */
+} COUNT_CTX;
+
+const size_t szUdfCtx = RDM_MAX(sizeof(SNDX_CTX), sizeof(COUNT_CTX));
+</pre>
+        <p>Note how the <code>szUdfCtx</code> variable is initialized to the maximum of the sizes of the two <code>struct   typedef</code>s.  This is the variable that is passed in to <code>rsqlRegisterUDFs</code> to specify the amount of space the <span class="MyVariablesRSQLName">RDM SQL</span> system will allocate for the UDF function context.</p>
+        <p>The <code>sndx</code> field will contain the last <code>soundex</code> code returned by the <code>udfScalarCall</code> function. It is placed in the UDF context so that repeated allocations for the code string do not have to occur on each call. The count field of <code>COUNT_CTX</code> keeps track of the match count for the current aggregate set.  The stat field is simply used by the <code>udfAggCall</code> function to inform the <code>udfAggResult</code> function of an argument error.</p>
+        <p>As initialization functions are not needed for the two example UDFs as stub version is given below.</p><pre xml:space="preserve">/* ======================================================================
+   Initialization function for generic UDF
+*/
+static RSQL_ERRCODE EXTERNAL_FCN MyUdfInit (
+    HSTMT    hstmt,        /* in:  statement handle */
+    void    *pRegCtx,      /* in:  ptr to registration context */
+    void    *pFcnCtx);     /* in:  ptr to fcn execution context data area */
+{
+    MYUDF_CTX *pCtx = (MYUDF_CTX *)pFcnCtx;
+
+    UNREF_PARM(hStmt)
+    UNREF_PARM(pRegCtx)
+
+    /* do needed initialization of pCtx */
+
+    return errSUCCESS;
+}
+</pre>
+        <h2>UDF Termination Function: <i>udfTerm</i><a name="kanchor211"></a></h2>
+        <p>The <code>udfTerm</code> function is called after the SQL statement containing the UDF reference has completed executing which, in the case of a select, means when the cursor has been closed either through the call to <code>rsqlFetch</code> that returns status <code>errNOMOREDATA</code> (automatically closing the cursor) or through a call to <code>rsqlCloseStmt</code> which is used to close a cursor before having scrolled completely through it.</p>
+        <p>The two arguments that are passed to the <code>udfterm</code> function are described below.</p>
+        <table style="mc-table-style: url('../Resources/TableStyles/ParamStruct.css');margin-left: 0;margin-right: auto;" class="TableStyle-ParamStruct" cellspacing="0">
+            <caption>Table 6. Function udfTerm Argument Descriptions</caption>
+            <col class="Column-Column1" />
+            <col class="Column-Column2" />
+            <col class="Column-Column3" />
+            <thead>
+                <tr class="Head-Header1">
+                    <th class="HeadE-Column1-Header1">Argument</th>
+                    <th class="HeadE-Column2-Header1">Type</th>
+                    <th class="HeadD-Column3-Header1">Description</th>
+                </tr>
+            </thead>
+            <tbody>
+                <tr class="Body-Body1">
+                    <td class="BodyE-Column1-Body1">hStmt</td>
+                    <td class="BodyE-Column2-Body1">HSTMT</td>
+                    <td class="BodyD-Column3-Body1">Statement handle of SQL statement referencing this UDF</td>
+                </tr>
+                <tr class="Body-Body1">
+                    <td class="BodyB-Column1-Body1">pFcnCtx</td>
+                    <td class="BodyB-Column2-Body1">void *</td>
+                    <td class="BodyA-Column3-Body1">Pointer to the user function context data area. </td>
+                </tr>
+            </tbody>
+        </table>
+        <p>This function is called to perform any needed termination processing when the SQL statement containing the UDF reference has completed its execution. For example, any memory allocated by the <code>udfInit</code> function would be freed by <code>udfTerm</code>.</p>
+        <p>As termination functions are not needed for the two example UDFs as stub version is given below.</p><pre xml:space="preserve">/* ======================================================================
+   Termination function for generic UDF
+*/
+static void EXTERNAL_FCN MyUdfTerm (
+    HSTMT    hstmt,        /* in:  statement handle */
+    void    *pFcnCtx);     /* in:  ptr to fcn execution context data area */
+{
+    MYUDF_CTX *pCtx = (MYUDF_CTX *)pFcnCtx;
+
+    UNREF_PARM(hStmt)
+
+    /* do needed termination from pCtx */
+}
+</pre>
+        <h2>Scalar Call Function: <i>udfScalarCall</i><a name="kanchor212"></a></h2>
+        <p>The <code>udfScalarCall</code> function is called by <span class="MyVariablesRSQLName">RDM SQL</span> during execution of the SQL statement containing the UDF function reference to perform the desired calculation/evaluation.  The five arguments to <code>udfScalarCall</code> are described in the following table.</p>
+        <table style="mc-table-style: url('../Resources/TableStyles/ParamStruct.css');margin-left: 0;margin-right: auto;" class="TableStyle-ParamStruct" cellspacing="0">
+            <caption>Table 7. Function udfScalar Call Argument Descriptions</caption>
+            <col class="Column-Column1" />
+            <col class="Column-Column2" />
+            <col class="Column-Column3" />
+            <thead>
+                <tr class="Head-Header1">
+                    <th class="HeadE-Column1-Header1">Argument</th>
+                    <th class="HeadE-Column2-Header1">Type</th>
+                    <th class="HeadD-Column3-Header1">Description</th>
+                </tr>
+            </thead>
+            <tbody>
+                <tr class="Body-Body1">
+                    <td class="BodyE-Column1-Body1">hStmt</td>
+                    <td class="BodyE-Column2-Body1">HSTMT</td>
+                    <td class="BodyD-Column3-Body1">Statement handle of SQL statement referencing this UDF</td>
+                </tr>
+                <tr class="Body-Body1">
+                    <td class="BodyE-Column1-Body1">pFcnCtx</td>
+                    <td class="BodyE-Column2-Body1">void *</td>
+                    <td class="BodyD-Column3-Body1">A pointer to the UDF function context pointer</td>
+                </tr>
+                <tr class="Body-Body1">
+                    <td class="BodyE-Column1-Body1">uint16_t</td>
+                    <td class="BodyE-Column2-Body1">noargs</td>
+                    <td class="BodyD-Column3-Body1">Number of arguments (i.e., size of <code>args</code> array)</td>
+                </tr>
+                <tr class="Body-Body1">
+                    <td class="BodyE-Column1-Body1">args</td>
+                    <td class="BodyE-Column2-Body1">const RSQL_VALUE *</td>
+                    <td class="BodyD-Column3-Body1">Pointer to an array of <code>noargs</code> argument value entries.  The first argument is contained in <code>args[0]</code>.  The argument value is contained in the <code>vt</code> field of <code>RSQL_VALUE</code>.</td>
+                </tr>
+                <tr class="Body-Body1">
+                    <td class="BodyB-Column1-Body1">result</td>
+                    <td class="BodyB-Column2-Body1">RSQL_VALUE *</td>
+                    <td class="BodyA-Column3-Body1">Pointer to the output <code>RSQL_VALUE</code> variable that will contain the function result value.</td>
+                </tr>
+            </tbody>
+        </table>
+        <p>The <code>udfScalarCall</code> implementation for the <code>soundex</code> UDF is given below.</p><pre xml:space="preserve"> 1	/* ======================================================================
+ 2	   Soundex() UDF - return soundex code for specified name
+ 3	*/
+ 4	static RSQL_ERRCODE EXTERNAL_FCN SndxFunc (
+ 5	    HSTMT             hStmt,    /* in:  system handle */
+ 6	    void             *cxtp,     /* in:  UDF context pointer */
+ 7	    uint16_t          noargs,   /* in:  number of arguments to function */
+ 8	    const RSQL_VALUE *args,     /* in:  array of arguments */
+ 9	    RSQL_VALUE       *result)   /* out: result value */
+10	{	
+11	    /* Soundex conversion table. See Wikipedia "Soundex" page */
+12	    static char *codes[] = {"bfpv", "cgjkqsxz", "dt", "l", "mn", "r", "hw", NULL};
+13	    static char  sndxerr[] = "xERR";
+14	    int          cpos, cndx;
+15	    char         cur_c, last_c;
+16	    SNDX_CTX    *scp  = (SNDX_CTX&#160;*)cxtp;
+17	    char        *sndx = &amp;scp-&gt;sndx[0];
+18	    char        *name = args-&gt;vt.cv;
+19	    
+20	    UNREF_PARM(hStmt)
+21	    UNREF_PARM(noargs)
+22	
+23	    result-&gt;type  = tCHAR;
+24	    result-&gt;len   = 0;
+25	
+26	    if ( !name || !isalpha(*name) 
+27	            || (args-&gt;type != tCHAR &amp;&amp; args-&gt;type != tVARCHAR) ) {
+28	        result-&gt;vt.cv = sndxerr;
+29	        return errSUCCESS;
+30	    }
+31	    sndx[0] = toupper(*name++);
+32	    strcpy(&amp;sndx[1], "000");
+33	
+34	    for (last_c = 0, cpos = 1; cpos &lt; 4 &amp;&amp; isalpha(*name); ++name) {
+35	        for (cndx = 0; codes[cndx]; ++cndx) {
+36	            if ( strchr(codes[cndx], tolower(*name)) ) {
+37	                if ( cndx &lt; 6 ) { /* "hw" */
+38	                    cur_c = '1' + cndx;
+39	                    if ( cur_c != last_c ) {
+40	                        sndx[cpos++] = cur_c;
+41	                        last_c = cur_c;
+42	                    }
+43	                }
+44	                break;
+45	            }
+46	        }
+47	        if ( !codes[cndx] )
+48	            last_c = 0;
+49	    }
+50	    result-&gt;vt.cv = sndx;
+51	
+52	    return errSUCCESS;
+53	}
+</pre>
+        <p>Function <code>SndxFunc</code> will never be called by SQL without having executed a prior successful call to <code>SndxCheck</code>.  Hence it is certain that <code>noargs</code> is equal to <code>1</code> and does not need to be checked.  However, it is possible that the argument type not be equal to <code>tCHAR</code> (or <code>tVARCHAR</code>) because it may have been specified with a parameter marker that was assigned to a non-<code>tCHAR</code> (or <code>tVARCHAR</code>) variable.  Lines 26 to 30 contain a check of the argument types and if they are not correct, rather than returning an error code, <code>SndxFunc</code> returns a special code that indicates that an error for that particular row occurred.  If an actual error code is returned then SQL will abort the processing at that point, returning the error to the application program.  Of course, for many UDFs that will be exactly the correct thing to do.  Note that in this case, the type of the argument could be valid but if the character string does not begin with a letter then it cannot be a name (the isalpha test at line 26).</p>
+        <p>The details of the <code>soundex</code> algorithm are not particularly important except to note that the code is a four character code where the first is the upper-case first letter of the name followed by three digits.  The result is stored in the context field, <code>sndx</code> (see lines 17, 31-32, and 40).  The result type field is <code>tCHAR</code> (line 23) and the result <code>len</code> field is zero (line 24) indicating that this is not an SQL allocated string.  The pointer to the result string is assigned to field <code>vt.cv</code> at line 50.</p>
+        <h2>Aggregate UDF Call Function: <i>udfAggCall<a name="kanchor213"></a></i></h2>
+        <p>The <code>udfAggCall</code> function is called by <span class="MyVariablesRSQLName">RDM SQL</span> for each detail row from the current set of aggregate rows to perform the detail calculations needed by the aggregate function.  The four arguments to <code>udfAggCall</code> are described in the following table.</p>
+        <table style="margin-left: 0;margin-right: auto;mc-table-style: url('../Resources/TableStyles/ParamStruct.css');" class="TableStyle-ParamStruct" cellspacing="0">
+            <caption>Table 8. Function udfAggCall Argument Descriptions</caption>
+            <col class="Column-Column1" />
+            <col class="Column-Column2" />
+            <col class="Column-Column3" />
+            <thead>
+                <tr class="Head-Header1">
+                    <th class="HeadE-Column1-Header1">Argument</th>
+                    <th class="HeadE-Column2-Header1">Type</th>
+                    <th class="HeadD-Column3-Header1">Description</th>
+                </tr>
+            </thead>
+            <tbody>
+                <tr class="Body-Body1">
+                    <td class="BodyE-Column1-Body1">hStmt</td>
+                    <td class="BodyE-Column2-Body1">HSTMT</td>
+                    <td class="BodyD-Column3-Body1">Statement handle of SQL statement referencing this UDF</td>
+                </tr>
+                <tr class="Body-Body1">
+                    <td class="BodyE-Column1-Body1">pFcnCtx</td>
+                    <td class="BodyE-Column2-Body1">void *</td>
+                    <td class="BodyD-Column3-Body1">A pointer to the UDF function context pointer</td>
+                </tr>
+                <tr class="Body-Body1">
+                    <td class="BodyE-Column1-Body1">uint16_t</td>
+                    <td class="BodyE-Column2-Body1">noargs</td>
+                    <td class="BodyD-Column3-Body1">Number of arguments (i.e., size of <code>args</code> array)</td>
+                </tr>
+                <tr class="Body-Body1">
+                    <td class="BodyB-Column1-Body1">args</td>
+                    <td class="BodyB-Column2-Body1">const RSQL_VALUE *</td>
+                    <td class="BodyA-Column3-Body1">Pointer to an array of <code>noargs</code> argument value entries.  The first argument is contained in <code>args[0]</code>.  The argument value is contained in the <code>vt</code> field of <code>RSQL_VALUE</code>.</td>
+                </tr>
+            </tbody>
+        </table>
+        <p>Note that a locally-declared 5 character array variable could not be used to contain the resulting <code>soundex</code> code and assigned to <code>result-&gt;vt.cv</code> because it would go out of context when the function returns.  This is why it is necessary to the UDF function context to contain the buffer.   Moreover, a global variable cannot be used as that is not thread safe should the function be called from another thread from the same program.</p>
+        <p>The <code>udfAggCall</code> implementation for the <code>matchcount</code> UDF is shown below.</p><pre xml:space="preserve"> 1	/* ======================================================================
+ 2	   User function for matchcount() UDF
+ 3	*/
+ 4	static RSQL_ERRCODE EXTERNAL_FCN CntCall (
+ 5	    HSTMT              hStmt,   /* in:  system handle */
+ 6	    void              *cxtp,    /* in:  UDF context pointer */
+ 7	    uint16_t           noargs,  /* in:  number of arguments to function */
+ 8	    const RSQL_VALUE  *args)    /* in:  array of arguments */
+ 9	{
+10	    COUNT_CTX *ccp  = cxtp;
+11	
+12	    UNREF_PARM(hStmt)
+13	    UNREF_PARM(noargs)
+14	
+15	    if ( args[0].type != tNOVAL &amp;&amp; args[1].type != tNOVAL ) {
+16	        if (args[0].type != tNULL) {
+17	            if (  (args[0].type != tCHAR &amp;&amp; args[0].type != tVARCHAR) 
+18	                ||(args[1].type != tCHAR &amp;&amp; args[1].type != tVARCHAR) )
+19	                ccp-&gt;stat = errUDFARG;
+20	            else {
+21	                ccp-&gt;stat = errSUCCESS;
+22	                if ( strstr(args[0].vt.cv, args[1].vt.cv) )
+23	                    ++ccp-&gt;count;
+24	            }
+25	        }
+26	    }
+27	    return errSUCCESS;
+28	}
+</pre>
+        <p>The <code>count</code> field of the UDF context <code>COUNT_CTX</code> is declared as type <code>int64_t</code> (the _t integer types are defined in the <span class="MyVariablesProductShortName">RDM</span> header files).  It is used to contain the count of the number of calls to <code>CntFunc</code> when the two arguments match.   There are two points that need to be made from this example to which you will want to pay particular attention.</p>
+        <p>First, notice the checks for <code>tNOVAL</code> at line 15 and the check for <code>tNULL</code> in line 16.  In the implementation of an aggregate function, the <code>tNOVAL</code> types will be passed in on the initial call to the function for each aggregate set so they should not be considered erroneous but no computation needs to occur.   It is also possible that a null argument can be passed in and this too needs to be allowed.  Note that in standard SQL aggregate computations are supposed to ignore nulls.  In this example that has no effect on the result.  However, it does matter with any computation that depends on the number of candidate rows.</p>
+        <p>Lines 17-20 show how error handling from within the <code>udfAggCall</code> function needs to be done.  It is not quite the same as in the <code>udfCheck</code> function where a simple status code is returned.   Two methods for returning an error can be used.  In this example, <code>result-&gt;type</code> is set to <code>tSMALLINT</code> and <code>result-&gt;vt.sv</code> is set to the desired error code (<code>errUDFARG</code>) and status <code>errSQLERROR</code> is returned by the function.  SQL will then return the specified status along with the name of the UDF to the application from the invoking function (either <code>rsqlExecute</code> or <code>rsqlFetch</code>).  Another method is to set <code>result-&gt;type</code> to <code>tCHAR</code> and assign a pointer to a <code>static char</code> string error message to <code>result-&gt;vt.cv</code>.  SQL will then return that message along with the UDF name in the error info buffer associated with that statement (retrievable through a call to function <code>rsqlGetErrorInfo</code>) and return error code errUDF to the application from the invoking function (<code>rsqlExecute</code> or <code>rsqlFetch</code>).  This alternative approach could be coded for <code>CntFunc</code> as follows.</p><pre xml:space="preserve">17	            if ( args[0].type != tCHAR || args[1].type != tCHAR ) {
+18	                result-&gt;type = tCHAR;
+19	                result-&gt;vt.cv = "invalid argument type";
+20	                return errSQLERROR;
+</pre>
+        <h2>Aggregate UDF Result Function: <i>udfAggResult</i><a name="kanchor214"></a></h2>
+        <p>The <code>udfAggResult</code> function is called by <span class="MyVariablesRSQLName">RDM SQL</span> during execution of the SQL statement containing the UDF function reference to perform and return the desired aggregate calculation result.  This function is designed to be called once after all of the detail rows have been processed. However, at this time, <span class="MyVariablesRSQLName">RDM SQL</span> actually calls this function after each detail row has been fetched and after the <code>udfAggCall</code> function has been called. So, this function should never reset the aggregate computational value—that is the job of the <code>udfAggReset</code> function described in the next section. The three arguments to <code>udfAggResult</code> are described in the following table.</p>
+        <table style="margin-left: 0;margin-right: auto;mc-table-style: url('../Resources/TableStyles/ParamStruct.css');" class="TableStyle-ParamStruct" cellspacing="0">
+            <caption>Table 9. Function udfAggResult Argument Descriptions</caption>
+            <col class="Column-Column1" />
+            <col class="Column-Column2" />
+            <col class="Column-Column3" />
+            <thead>
+                <tr class="Head-Header1">
+                    <th class="HeadE-Column1-Header1">Argument</th>
+                    <th class="HeadE-Column2-Header1">Type</th>
+                    <th class="HeadD-Column3-Header1">Description</th>
+                </tr>
+            </thead>
+            <tbody>
+                <tr class="Body-Body1">
+                    <td class="BodyE-Column1-Body1">hStmt</td>
+                    <td class="BodyE-Column2-Body1">HSTMT</td>
+                    <td class="BodyD-Column3-Body1">Statement handle of SQL statement referencing this UDF</td>
+                </tr>
+                <tr class="Body-Body1">
+                    <td class="BodyE-Column1-Body1">pFcnCtx</td>
+                    <td class="BodyE-Column2-Body1">void *</td>
+                    <td class="BodyD-Column3-Body1">A pointer to the UDF function context pointer</td>
+                </tr>
+                <tr class="Body-Body1">
+                    <td class="BodyB-Column1-Body1">result</td>
+                    <td class="BodyB-Column2-Body1">RSQL_VALUE *</td>
+                    <td class="BodyA-Column3-Body1">Pointer to the output <code>RSQL_VALUE</code> variable the will contain the function result value.</td>
+                </tr>
+            </tbody>
+        </table>
+        <p>The <code>udfAggResult</code> implementation for the <code>matchcount</code> UDF is given below.</p><pre xml:space="preserve">/* ======================================================================
+   User function for matchcount() UDF
+*/
+static RSQL_ERRCODE EXTERNAL_FCN CntResult (
+    HSTMT              hStmt,   /* in:  system handle */
+    void              *cxtp,    /* in:  UDF context pointer */
+    RSQL_VALUE        *result)  /* out: result value */
+{
+    RSQL_ERRCODE stat;
+    COUNT_CTX *ccp  = (COUNT_CTX *)cxtp;
+
+    UNREF_PARM(hStmt)
+
+    if ( ccp-&gt;stat != errSUCCESS ) {
+        result-&gt;type = tSMALLINT;
+        result-&gt;vt.sv = (int16_t) ccp-&gt;stat;
+        stat = errSQLERROR;
+    }
+    else {
+        result-&gt;type   = tBIGINT;
+        result-&gt;vt.llv = ccp-&gt;count;
+        stat = errSUCCESS;
+    }
+    return stat;
+}
+</pre>
+        <h2>Aggregate UDF Reset Function: <i>udfAggReset</i><a name="kanchor215"></a></h2>
+        <p>The <code>udfAggReset</code> function is only used with aggregate UDFs.  Its function is to reset the aggregated computational result to its initial value.  The function is called by SQL each time the group by column values change.</p>
+        <p>The two arguments that are passed to the <code>udfReset</code> function are described below.</p>
+        <table style="mc-table-style: url('../Resources/TableStyles/ParamStruct.css');margin-left: 0;margin-right: auto;caption-side: top;" class="TableStyle-ParamStruct" cellspacing="0">
+            <caption>Table 10. Function udfReset Argument Descriptions</caption>
+            <col class="Column-Column1" />
+            <col class="Column-Column2" />
+            <col class="Column-Column3" />
+            <thead>
+                <tr class="Head-Header1">
+                    <th class="HeadE-Column1-Header1">Argument</th>
+                    <th class="HeadE-Column2-Header1">Type</th>
+                    <th class="HeadD-Column3-Header1">Description</th>
+                </tr>
+            </thead>
+            <tbody>
+                <tr class="Body-Body1">
+                    <td class="BodyE-Column1-Body1">hStmt</td>
+                    <td class="BodyE-Column2-Body1">HSTMT</td>
+                    <td class="BodyD-Column3-Body1">Statement handle of SQL statement referencing this UDF</td>
+                </tr>
+                <tr class="Body-Body1">
+                    <td class="BodyB-Column1-Body1">ctxp</td>
+                    <td class="BodyB-Column2-Body1">void *</td>
+                    <td class="BodyA-Column3-Body1">A pointer to the allocated UDF context pointer containing the aggregated computational result value.</td>
+                </tr>
+            </tbody>
+        </table>
+        <p>The <code>udfReset</code> implementation for the <code>matchcount</code> UDF is shown below.  As it is quite trivial no further comment is needed.</p><pre xml:space="preserve">/* ======================================================================
+   Reset function for matchcount() UDF
+*/
+static RSQL_ERRCODE EXTERNAL_FCN CntReset(
+    HSTMT         hStmt,        /* in:  system handle */
+    void         *cxtp)         /* in:  UDF context pointer */
+{
+    COUNT_CTX *ccp  = (COUNT_CTX *)cxtp;
+
+    UNREF_PARM(hStmt)
+
+    ccp-&gt;count = 0;
+
+    return errSUCCESS;
+}
+</pre>
+        <h2>Calling RSQL API Functions from a UDF</h2>
+        <p>If your UDF needs to make calls to the <span class="MyVariablesRSQLName">RDM SQL</span> API functions there are some important things that you need to know.   The statement handle that is passed into each of the UDF implementation functions is the one associated with the statement containing the call to the UDF.  There are only a limited number of functions that can be safely called using this statement handle as listed in the table below.</p>
+        <table style="caption-side: top;margin-left: 0;margin-right: auto;mc-table-style: url('../Resources/TableStyles/fncSummary.css');" class="TableStyle-fncSummary" cellspacing="0">
+            <caption>Table 11. Function Calls that Can Be Made Using hStmt</caption>
+            <col class="Column-Column1" />
+            <col class="Column-Column2" />
+            <thead>
+                <tr class="Head-Header1">
+                    <th class="HeadE-Column1-Header1">Function</th>
+                    <th class="HeadD-Column2-Header1">Description</th>
+                </tr>
+            </thead>
+            <tbody>
+                <tr class="Body-Body1">
+                    <td class="BodyE-Column1-Body1">rsqlGetColDescr</td>
+                    <td class="BodyD-Column2-Body1">Get description information for a <b>select</b> statement result column</td>
+                </tr>
+                <tr class="Body-Body1">
+                    <td class="BodyE-Column1-Body1">rsqlGetConnHandle</td>
+                    <td class="BodyD-Column2-Body1">Get connection handle associated with specified statement handle</td>
+                </tr>
+                <tr class="Body-Body1">
+                    <td class="BodyE-Column1-Body1">rsqlGetCursorName</td>
+                    <td class="BodyD-Column2-Body1">Get the cursor name associated for the specified statement handle</td>
+                </tr>
+                <tr class="Body-Body1">
+                    <td class="BodyE-Column1-Body1">rsqlGetNumParams</td>
+                    <td class="BodyD-Column2-Body1">Get the number of parameter markers in the compiled statement</td>
+                </tr>
+                <tr class="Body-Body1">
+                    <td class="BodyE-Column1-Body1">rsqlGetNumResultCols</td>
+                    <td class="BodyD-Column2-Body1">Get the number of result columns in the compiled <b>select</b> statement</td>
+                </tr>
+                <tr class="Body-Body1">
+                    <td class="BodyE-Column1-Body1">rsqlGetParamDescr</td>
+                    <td class="BodyD-Column2-Body1">Get description information for a SQL statement parameter marker</td>
+                </tr>
+                <tr class="Body-Body1">
+                    <td class="BodyE-Column1-Body1">rsqlGetRowCount</td>
+                    <td class="BodyD-Column2-Body1">Get the count of the # of rows affected by the executed statement</td>
+                </tr>
+                <tr class="Body-Body1">
+                    <td class="BodyE-Column1-Body1">rsqlGetSelectType</td>
+                    <td class="BodyD-Column2-Body1">Get the type of <b>select</b> statement</td>
+                </tr>
+                <tr class="Body-Body1">
+                    <td class="BodyE-Column1-Body1">rsqlGetStmtState</td>
+                    <td class="BodyD-Column2-Body1">Get the statement handle's statement state</td>
+                </tr>
+                <tr class="Body-Body1">
+                    <td class="BodyE-Column1-Body1">rsqlGetStmtString</td>
+                    <td class="BodyD-Column2-Body1">Get the SQL statement string</td>
+                </tr>
+                <tr class="Body-Body1">
+                    <td class="BodyE-Column1-Body1">rsqlGetStmtType</td>
+                    <td class="BodyD-Column2-Body1">Get the statement type of the prepared statement</td>
+                </tr>
+                <tr class="Body-Body1">
+                    <td class="BodyB-Column1-Body1">rsqlGetTableName</td>
+                    <td class="BodyA-Column2-Body1">Get result column’s table name</td>
+                </tr>
+            </tbody>
+        </table>
+        <p>Calls to any other <span class="MyVariablesRSQLName">RDM SQL</span> API function into which you pass <code>hStmt</code> will return error code <code>errNOTINUDF</code>.</p>
+        <p>Most often you will want to allocate a new statement handle to use within the UDF.  Function <code>rsqlGetConnHandle</code> must be called to retrieve the connection handle associated with the calling statement handle.  You can then pass this into <code>rsqlAllocStmt</code> in order to allocate a statement handle for use within the UDF.</p>
+        <p>If the UDF is deterministic, it may be important to know whether the UDF is being called during compilation or execution.  This can be discovered via a call to function <code>rsqlGetStmtState</code> using the original statement handle.   Note that when called during compilation, the locks that are needed by the invoking statement cannot be guaranteed to be in place when the UDF is called.  If the UDF relies on those locks then <code>udfCheck</code> needs to indicate that the UDF is not deterministic.</p>
+        <p>You can also use the connection handle returned from the call to <code>rsqlGetConnHandle</code> to call some, but not all, connection-related <span class="MyVariablesRSQLName">RDM SQL</span> API calls.  The following table lists those functions which can be called.</p>
+        <table style="caption-side: top;mc-table-style: url('../Resources/TableStyles/fncSummary.css');margin-left: 0;margin-right: auto;" class="TableStyle-fncSummary" cellspacing="0">
+            <caption>Table 12. Function Calls that Can Be Made Using hStmt's Connection Handle</caption>
+            <col class="Column-Column1" />
+            <col class="Column-Column2" />
+            <thead>
+                <tr class="Head-Header1">
+                    <th class="HeadE-Column1-Header1">Function</th>
+                    <th class="HeadD-Column2-Header1">Description</th>
+                </tr>
+            </thead>
+            <tbody>
+                <tr class="Body-Body1">
+                    <td class="BodyE-Column1-Body1">rsqlAllocStmt</td>
+                    <td class="BodyD-Column2-Body1">Allocate a statement handle</td>
+                </tr>
+                <tr class="Body-Body1">
+                    <td class="BodyE-Column1-Body1">rsqlCloseDB</td>
+                    <td class="BodyD-Column2-Body1">Close a database</td>
+                </tr>
+                <tr class="Body-Body1">
+                    <td class="BodyE-Column1-Body1">rsqlGetAutoCommit</td>
+                    <td class="BodyD-Column2-Body1">Get the connection handle’s current auto commit status</td>
+                </tr>
+                <tr class="Body-Body1">
+                    <td class="BodyE-Column1-Body1">rsqlGetDateFormat</td>
+                    <td class="BodyD-Column2-Body1">Get the current date format setting</td>
+                </tr>
+                <tr class="Body-Body1">
+                    <td class="BodyE-Column1-Body1">rsqlGetDateSeparator</td>
+                    <td class="BodyD-Column2-Body1">Get the current date separator character</td>
+                </tr>
+                <tr class="Body-Body1">
+                    <td class="BodyE-Column1-Body1">rsqlGetDBNames</td>
+                    <td class="BodyD-Column2-Body1">Get a list of the names of the currently opened databases</td>
+                </tr>
+                <tr class="Body-Body1">
+                    <td class="BodyE-Column1-Body1">rsqlGetDBTask</td>
+                    <td class="BodyD-Column2-Body1">Get the <span class="MyVariablesProductShortName">RDM</span> task handle associated with a connection handle</td>
+                </tr>
+                <tr class="Body-Body1">
+                    <td class="BodyE-Column1-Body1">rsqlGetGenCFiles</td>
+                    <td class="BodyD-Column2-Body1">Get the connection handle's "generate C files" mode</td>
+                </tr>
+                <tr class="Body-Body1">
+                    <td class="BodyE-Column1-Body1">rsqlGetTimeout</td>
+                    <td class="BodyD-Column2-Body1">Get lock wait timeout in seconds for the connection</td>
+                </tr>
+                <tr class="Body-Body1">
+                    <td class="BodyE-Column1-Body1">rsqlLockTables</td>
+                    <td class="BodyD-Column2-Body1">Issue an explicit lock request for one or more database tables</td>
+                </tr>
+                <tr class="Body-Body1">
+                    <td class="BodyE-Column1-Body1">rsqlOpenCat</td>
+                    <td class="BodyD-Column2-Body1">Open a database through its compiled catalog module</td>
+                </tr>
+                <tr class="Body-Body1">
+                    <td class="BodyE-Column1-Body1">rsqlOpenDB</td>
+                    <td class="BodyD-Column2-Body1">Open a database by name</td>
+                </tr>
+                <tr class="Body-Body1">
+                    <td class="BodyE-Column1-Body1">rsqlSetDateFormat</td>
+                    <td class="BodyD-Column2-Body1">Set the date constant format for the connection</td>
+                </tr>
+                <tr class="Body-Body1">
+                    <td class="BodyE-Column1-Body1">rsqlSetDateSeparator</td>
+                    <td class="BodyD-Column2-Body1">Set the current date constant separator character for the connection</td>
+                </tr>
+                <tr class="Body-Body1">
+                    <td class="BodyE-Column1-Body1">rsqlSetTimeout</td>
+                    <td class="BodyD-Column2-Body1">Set lock wait timeout in seconds for the connection</td>
+                </tr>
+                <tr class="Body-Body1">
+                    <td class="BodyE-Column1-Body1">rsqlTransStatus</td>
+                    <td class="BodyD-Column2-Body1">Return the current transaction state for the specified connection</td>
+                </tr>
+                <tr class="Body-Body1">
+                    <td class="BodyB-Column1-Body1">rsqlUnlockTable</td>
+                    <td class="BodyA-Column2-Body1">Free a read lock on a database table</td>
+                </tr>
+            </tbody>
+        </table>
+        <p>Calls to any other <span class="MyVariablesRSQLName">RDM SQL</span> API function into which you pass the connection handle associated with <code>hStmt</code> will return error code <code>errNOTINUDF</code>.</p>
+        <p>All of the connection's open databases and locks are inherited by the UDF.  You can call <code>rsqlGetDBNames</code> to get a semi-colon separated list of the names of the open databases.  If <code>rsqlOpenDB</code> (<code>rsqlOpenCat</code>) is called then the UDF needs to make sure that those databases are closed in <code>udfCleanup</code>.  If you call <code>rsqlAllocStmt</code> to allocate a separate statement handle on the connection handle returned from the call to <code>rsqlGetConnHandle</code> you can use it with any <span class="MyVariablesRSQLName">RDM SQL</span> API call that takes a statement handle.</p>
+        <p>You can allocate a separate connection handle with no restrictions on the calls that can be made.  Note, however, that the open databases and locks held by the original connection are not inherited and you will need to be very careful not to attempt to lock a table that is blocked by a lock held by the original connection because it will not regain control (and free the lock) until the UDF returns.  Because of this we recommend that you never call <code>rsqlAllocConn</code> from a UDF.</p>
+        <hr MadCap:conditions="Default.ScreenOnly" width="100%" size="0" align="center" />
+        <p MadCap:conditions="Default.ScreenOnly" style="font-size: 8pt;"><span class="MyVariablesCopyright">Copyright © 2012, Raima Inc. All rights reserved.</span>
+        </p>
+        <script type="text/javascript" src="../SkinSupport/MadCapBodyEnd.js">
+        </script>
+        <p class="MCWebHelpFramesetLink MCWebHelpFramesetLinkBottom" style="display: none;"><a href="../../Default_CSH.htm#SQL/Chapter12.htm" style="">Open topic with navigation</a>
+        </p>
+    </body>
+</html>

@@ -1,0 +1,322 @@
+<?xml version="1.0" encoding="utf-8"?>
+<!DOCTYPE html PUBLIC "-//W3C//DTD XHTML 1.0 Strict//EN" "http://www.w3.org/TR/xhtml1/DTD/xhtml1-strict.dtd">
+<html xmlns:MadCap="http://www.madcapsoftware.com/Schemas/MadCap.xsd" MadCap:tocPath="SQL API" MadCap:InPreviewMode="false" MadCap:PreloadImages="false" MadCap:RuntimeFileType="Topic" MadCap:TargetType="WebHelp" lang="en-us" xml:lang="en-us" MadCap:PathToHelpSystem="../../" MadCap:HelpSystemFileName="Default.xml" MadCap:SearchType="Stem">
+    <head>
+        <meta http-equiv="Content-Type" content="text/html; charset=utf-8" /><title>Accessing a Core (non-SQL) Database in RDM SQL</title>
+        <link rel="icon" type="image/png" href="http://docs.raima.com/favicon.png" />
+        <link href="../SkinSupport/MadCap.css" rel="stylesheet" />
+        <link href="../Resources/TableStyles/Col3DataType.css" rel="stylesheet" />
+        <link href="../Resources/Stylesheets/raima.css" rel="stylesheet" />
+        <script src="../SkinSupport/MadCapAll.js">
+        </script>
+    </head>
+    <body>
+        <p class="MCWebHelpFramesetLink MCWebHelpFramesetLinkTop" style="display: none;"><a href="../../Default_CSH.htm#SQL/Chapter14.htm" style="">Open topic with navigation</a>
+        </p>
+        <div class="MCBreadcrumbsBox_0"><span class="MCBreadcrumbsPrefix">You are here: </span><a class="MCBreadcrumbsLink" href="../dbRSQL.htm">SQL API</a><span class="MCBreadcrumbsDivider"> &gt; </span><span class="MCBreadcrumbs">Accessing a Core (non-SQL) Database in RDM SQL</span>
+        </div>
+        <h1><a MadCap:generatedBookmark="TOC" name="Accessing_a_Core_(non-SQL)_Database_in_RDM_SQL"></a>Accessing a Core (non-SQL) Database in <span class="MyVariablesRSQLName">RDM SQL</span></h1>
+        <p class="Quotation">I am as vulnerable and fragile as it is</p>
+        <p class="Quotation">possible to be. I am shredded to the core.</p>
+        <p class="Quotation">I am at the point where I am stripped bare.</p>
+        <p class="QuoteAuthor">- Rachel Hunter,</p>
+        <p class="QuoteAuthor">New Zealand model (1968 - )</p>
+        <p><span class="MyVariablesRSQLName">RDM SQL</span> allows opening a <span class="MyVariablesProductShortName">RDM</span> core database (i.e., a native, non-SQL, database) in read only mode.  Besides providing the ability to perform SQL queries using the native <span class="MyVariablesRSQLName">RDM SQL</span> API it also allows access to <span class="MyVariablesProductShortName">RDM</span> core databases from ODBC, JDBC, or ADO.NET clients.</p>
+        <p>A core database is one for which the schema was created using the core API instead of through SQL.  SQL will internally create a compatible catalog based on the database dictionary contents.   However, <span class="MyVariablesProductShortName">RDM</span> core databases have features that are not available through SQL.  This section will describe how core databases are mapped into a SQL database.  Knowledge of both <span class="MyVariablesProductShortName">RDM</span> native and SQL database definition is assumed throughout this section.</p>
+        <h2><a MadCap:generatedBookmark="TOC" name="How_Core_Database_Record_Types_are_Mapped_to_SQL_Tables"></a>How Core Database Record Types are Mapped to SQL Tables</h2>
+        <p>Each core record type will map directly into an SQL table that will have the same name.  This includes the system record even though it will not have any columns and is not used in SQL.</p>
+        <p>Each data field in a core record type will map into its equivalent SQL column.  However, since SQL does not support unsigned integer types, unsigned integers map into the signed integer type of the same size.   Grouped (<code>struct</code>) fields, array fields and <code>DB_ADDR</code> fields will map into a SQL binary array of the appropriate size.   </p>
+        <p>Note that meaningful access to the binary form can only occur when the computer on which the data is returned through SQL has the same native architecture as the computer on which the database is stored because of byte ordering and alignment differences that necessarily exist between different computers. This is only possible when using remote access to the database through <a href="../util/rdmsqlserver.htm"><span class="MyVariablesUrdmsqlserver">rdmsqlserver</span></a>.</p>
+        <p>Fields of type <code>blob_id</code> will map into SQL <b>long varbinary</b> columns.</p>
+        <p>The table below summarizes the core data type mappings into SQL.</p>
+        <table style="margin-left: 0;margin-right: auto;caption-side: top;mc-table-style: url('../Resources/TableStyles/Col3DataType.css');width: 75%;" class="TableStyle-Col3DataType" cellspacing="0">
+            <caption>Table 1. Core Data Type SQL Mappings</caption>
+            <col class="Column-Column1" style="width: 50%;" />
+            <col class="Column-Column2" style="width: 50%;" />
+            <thead>
+                <tr class="Head-Header1">
+                    <th class="HeadE-Column1-Header1">Core Data Type</th>
+                    <th class="HeadD-Column2-Header1">Mapped SQL Data Type</th>
+                </tr>
+            </thead>
+            <tbody>
+                <tr class="Body-Body1">
+                    <td class="BodyE-Column1-Body1">char</td>
+                    <td class="BodyD-Column2-Body1">char</td>
+                </tr>
+                <tr class="Body-Body1">
+                    <td class="BodyE-Column1-Body1">uint8_t</td>
+                    <td class="BodyD-Column2-Body1">tinyint</td>
+                </tr>
+                <tr class="Body-Body1">
+                    <td class="BodyE-Column1-Body1">[unsigned] short, uint16_t, int16_t</td>
+                    <td class="BodyD-Column2-Body1">smallint</td>
+                </tr>
+                <tr class="Body-Body1">
+                    <td class="BodyE-Column1-Body1">[unsigned] int, uint32_t, int32_t</td>
+                    <td class="BodyD-Column2-Body1">integer</td>
+                </tr>
+                <tr class="Body-Body1">
+                    <td class="BodyE-Column1-Body1">[unsigned] long</td>
+                    <td class="BodyD-Column2-Body1">integer </td>
+                </tr>
+                <tr class="Body-Body1">
+                    <td class="BodyE-Column1-Body1">uint64_t, int64_t</td>
+                    <td class="BodyD-Column2-Body1">bigint</td>
+                </tr>
+                <tr class="Body-Body1">
+                    <td class="BodyE-Column1-Body1">float</td>
+                    <td class="BodyD-Column2-Body1">real</td>
+                </tr>
+                <tr class="Body-Body1">
+                    <td class="BodyE-Column1-Body1">double</td>
+                    <td class="BodyD-Column2-Body1">float (double)</td>
+                </tr>
+                <tr class="Body-Body1">
+                    <td class="BodyE-Column1-Body1">[unsigned] char[33]</td>
+                    <td class="BodyD-Column2-Body1">char(32)<span class="MCTextPopup"><span class="MCTextPopupBody_0" style="display: none; ">Note that the core char array size includes the null byte whereas the SQL declared size does not (but internally it does).  Same is true for varchar, etc. </span><a href="javascript:void(0);" class="popupHead_1" onclick="FMCTextPopup( event, this ); return false;" style="font-size: 0.9em; vertical-align: super">1</a></span></td>
+                </tr>
+                <tr class="Body-Body1">
+                    <td class="BodyE-Column1-Body1">wchar, wchar_t</td>
+                    <td class="BodyD-Column2-Body1">wchar</td>
+                </tr>
+                <tr class="Body-Body1">
+                    <td class="BodyE-Column1-Body1">varchar[256]</td>
+                    <td class="BodyD-Column2-Body1">varchar(255)</td>
+                </tr>
+                <tr class="Body-Body1">
+                    <td class="BodyE-Column1-Body1">varwchar</td>
+                    <td class="BodyD-Column2-Body1">wvarchar</td>
+                </tr>
+                <tr class="Body-Body1">
+                    <td class="BodyE-Column1-Body1">blob_id</td>
+                    <td class="BodyD-Column2-Body1">long varbinary</td>
+                </tr>
+                <tr class="Body-Body1">
+                    <td class="BodyE-Column1-Body1">int32_t[10]</td>
+                    <td class="BodyD-Column2-Body1">binary(40)<span class="MCTextPopup"><span class="MCTextPopupBody_0" style="display: none; ">The actual binary column size depends on computer alignment issues.  True for all of the following binary mappings.</span><a href="javascript:void(0);" class="popupHead_1" onclick="FMCTextPopup( event, this ); return false;" style="font-size: 0.9em; vertical-align: super">2</a></span></td>
+                </tr>
+                <tr class="Body-Body1">
+                    <td class="BodyE-Column1-Body1">char[2][10]</td>
+                    <td class="BodyD-Column2-Body1">binary(20)</td>
+                </tr>
+                <tr class="Body-Body1">
+                    <td class="BodyE-Column1-Body1">struct { int32_t, char[20]}</td>
+                    <td class="BodyD-Column2-Body1">binary(24)</td>
+                </tr>
+                <tr class="Body-Body1">
+                    <td class="BodyB-Column1-Body1">DB_ADDR</td>
+                    <td class="BodyA-Column2-Body1">binary(8)</td>
+                </tr>
+            </tbody>
+        </table>
+        <h2><a MadCap:generatedBookmark="TOC" name="Mapping_Core_Keys_to_SQL_Keys"></a>Mapping Core Keys to SQL Keys</h2>
+        <p>Key fields and compound keys map directly into SQL keys.  Unique keys will map into a primary key.  Where a record type has more than one unique key, SQL will identify which one will serve as the primary key based on the following criteria in order of priority.</p>
+        <ol>
+            <li value="1">The first declared hash key.</li>
+            <li value="2">The smallest, single field key (i.e., not compound key).</li>
+            <li value="3">The smallest key.</li>
+        </ol>
+        <p>If two or more candidate keys have the same length then the first declared key is chosen as primary.</p>
+        <table style="width: 100%;margin-left: 0;margin-right: auto;mc-table-style: url('../Resources/TableStyles/Col3DataType.css');" class="TableStyle-Col3DataType" cellspacing="0">
+            <caption>Table 2. Example Core Keys to SQL Mappings</caption>
+            <col class="Column-Column1" style="width: 50%;" />
+            <col class="Column-Column2" style="width: 50%;" />
+            <thead>
+                <tr class="Head-Header1">
+                    <th class="HeadE-Column1-Header1">Core DDL SnippetCore DDL Snippet</th>
+                    <th class="HeadD-Column2-Header1">Mapped SQL DDL Snippet</th>
+                </tr>
+            </thead>
+            <tbody>
+                <tr class="Body-Body1">
+                    <td class="BodyE-Column1-Body1"><pre xml:space="preserve">record recname {
+    unique key char name[25];
+    hash[1000] int32_t code;
+    char text[81];
+}
+</pre>
+                    </td>
+                    <td class="BodyD-Column2-Body1"><pre xml:space="preserve">create table recname(
+    name char(24) unique key,
+    code integer primary key hash[1000],
+    text char(80)
+);
+</pre>
+                    </td>
+                </tr>
+                <tr class="Body-Body1">
+                    <td class="BodyB-Column1-Body1"><pre xml:space="preserve">record recname {
+    char name[25];
+    int32_t code;
+    unique key char soundex[5];
+    compound unique key name_code {
+       code; name;
+    }
+}
+</pre>
+                    </td>
+                    <td class="BodyA-Column2-Body1"><pre xml:space="preserve">create table recname(
+    name(24),
+    code integer,
+    soundex char(4) primary key,
+    unique key name_code(code, name)
+);
+</pre>
+                    </td>
+                </tr>
+            </tbody>
+        </table>
+        <p>Since SQL does not support unsigned integer types, core keys on unsigned integer fields cannot be used except for equality lookups due to the potential problem that can occur should an unsigned value map into a signed negative value.  If the values actually stored in the unsigned data field can never be that large then simply removing the unsigned attribute from the core DDL field declaration will allow SQL to use the key.  Core <i>unique</i> keys on unsigned integer fields are treated by SQL as if it were a hash key which allows the key to be used for equality lookups.</p>
+        <h2><a MadCap:generatedBookmark="TOC" name="Mapping_Core_Sets_to_SQL_Foreign_Keys"></a>Mapping Core Sets to SQL Foreign Keys</h2>
+        <p>Sets map into SQL foreign keys but only when the owner record type has a unique key.  Foreign key columns are added to the SQL table that corresponds to the set member record type.  These columns match their primary key counterparts in the SQL table that corresponds to the set owner record type.  The values for foreign key columns will be retrieved by SQL via the set from the primary key (i.e. set owner) table.</p>
+        <p>The names of the foreign key columns will be assigned the same name as its corresponding field in the owner record.   However, if the member record already has a field with that same name then the name will be appended with "$r" followed by a number to make the column name unique.</p>
+        <p>Table 3 below gives two examples of how core sets map into SQL foreign keys.</p>
+        <table style="width: 100%;margin-left: 0;margin-right: auto;mc-table-style: url('../Resources/TableStyles/Col3DataType.css');" class="TableStyle-Col3DataType" cellspacing="0">
+            <caption>Table 3. Example Core Set to Foreign Key Mappings</caption>
+            <col class="Column-Column1" style="width: 50%;" />
+            <col class="Column-Column2" style="width: 50%;" />
+            <thead>
+                <tr class="Head-Header1">
+                    <th class="HeadE-Column1-Header1">Core DDL SnippetCore DDL Snippet</th>
+                    <th class="HeadD-Column2-Header1">Mapped SQL DDL Snippet</th>
+                </tr>
+            </thead>
+            <tbody>
+                <tr class="Body-Body1">
+                    <td class="BodyE-Column1-Body1"><pre xml:space="preserve">record info {
+    unique key varchar id_code[48];
+    varchar info_title[80];        
+    char publisher[32];
+    char pub_date[12]; 
+    int16_t info_type; 
+}
+record key_word {
+    unique key char kword[32];
+}
+record intersect {
+    int16_t int_type;
+}                    
+set key_to_info {
+    order last;
+    owner key_word;
+    member intersect;
+}
+set info_to_key {
+    order last;
+    owner info;
+    member intersect;
+}
+</pre>
+                    </td>
+                    <td class="BodyD-Column2-Body1"><pre xml:space="preserve">create table info(
+    id_code char(47) primary key,
+    info_title char(79),
+    publisher char(31),
+    pub_date char(11),
+    info_type smallint
+);
+create table key_word(
+    kword char(31) primary key
+);
+create table intersect(
+    int_type smallint,
+    kword char(31) references key_word,
+    id_code char(47) references info
+);
+</pre>
+                    </td>
+                </tr>
+                <tr class="Body-Body1">
+                    <td class="BodyB-Column1-Body1"><pre xml:space="preserve">record ownrec {
+    unique key char idcode[9];
+    char title[33];
+}
+record memrec {
+    key int32_t idcode;
+    char txtln[81];
+}
+set notes {
+    order last;
+    owner ownrec;
+    member memrec;
+}
+</pre>
+                    </td>
+                    <td class="BodyA-Column2-Body1"><pre xml:space="preserve">create table ownrec(
+    idcode char(8) primary key,
+    title char(32)
+);
+create table memrec(
+    idcode integer,
+    txtln char(80),
+    idcode$r1 char(8) references ownrec
+);
+</pre>
+                    </td>
+                </tr>
+            </tbody>
+        </table>
+        <h2><a MadCap:generatedBookmark="TOC" name="Multi-Member_Sets_and_Explicit_Locking"></a>Multi-Member Sets and Explicit Locking</h2>
+        <p>Multi-member sets can be declared in the core level database.  These present no problem for SQL except in the event that explicit table is being used (see <a href="Chapter9.htm#Locking">Locking in <span class="MyVariablesRSQLName">RDM SQL</span></a>).  If locks are being explicitly issue through use of the <b>lock table</b> statement then it will be necessary to lock all of the tables that participate as a member of a set that may be used to access one of the member tables.   An <code>errNOTLOCKED</code> status will be returned when SQL attempts to access the next member of a multi-member set that is a row from an alternate member table that has not been explicitly locked.</p>
+        <h2><a MadCap:generatedBookmark="TOC" name="Order_of_Columns_in_the_Table"></a>Order of Columns in the Table</h2>
+        <p>The fields declared in the core record type map directly into columns of its corresponding SQL table in exactly the same order.  These are followed by the  virtual columns for each foreign key which are created in the order in which the sets in which the record type is a member are declared in the core DDL specification (e.g., see "<code>create table intersect</code>" above in Table 3).</p>
+        <h2><a MadCap:generatedBookmark="TOC" name="Null_Values"></a>Null Values</h2>
+        <p><span class="MyVariablesProductShortName">RDM</span> core databases do not support null data field values.  Note that this does not mean that null values can not occur.  Foreign key references can still be null and outer joins can produce null values.</p>
+        <h2><a MadCap:generatedBookmark="TOC" name="Adding_Column_Information_and_Creating_a_Catalog"></a>Adding Column Information and Creating a Catalog</h2>
+        <p>Two <span class="MyVariablesProductShortName">RDM</span>-specific SQL statements can be used in conjunction with core databases.  The <b>set column</b> statement can be used to specify the SQL data type for certain core data fields that contained SQL-understandable data (e.g., <b>long varchar</b>).  It can also be used to specify the number of <b>distinct values</b> and/or the <b>range</b> values used by the SQL query optimizer.  Once all of the needed <b>set column</b> statements have been processed for a given core database, the <b>create catalog</b> statement can be executed which will create and store the SQL catalog file for the core database.</p>
+        <p>The syntax for the set column statement is given below.</p><pre class="Grammar" xml:space="preserve">set_column_stmt:
+ 		<b>set column</b> [<i>db_name</i>.]<i>table_name</i>.<i>column_name</i>  			
+ 			[<b>type</b> [<b>to</b> | =] {<b>date</b> |&#160;<b>time</b>&#160;|&#160;<b>timestamp</b>&#160;|&#160;<b>long</b> |&#160;{<b>varchar</b> |&#160;<b>wvarchar</b>}}]
+			[<b>distinct values</b> = <i>num</i>]
+ 			[<b>range</b>   <![CDATA[    ]]><i>constant</i>   <![CDATA[    ]]><b>to</b>   <![CDATA[    ]]><i>constant</i>]
+	|	<b>set column stats</b> [<i>db_name</i>.]<i>table_name</i>.<i>column_name</i>
+			[<b>distinct values</b> = <i>num</i>] 
+ 			[<b>range</b>   <![CDATA[    ]]><i>constant</i>   <![CDATA[    ]]><b>to</b>   <![CDATA[    ]]><i>constant</i>]</pre>
+        <p>The <b>type</b> clause can be used to specify an SQL-specific data type for a core database field.   You can specify <b>date</b> for an (32-bit) integer field but it must contain a valid <code>DATE_VAL</code> value (the number of elapsed days since Jan 1, 1 AD which has a value 1).  You can specify <b>time</b> for an (32-bit) integer field but it must contain a valid <code>TIME_VAL</code> value (the number of elapsed seconds since midnight times 10,000).  You can specify <b>timestamp</b> for a (64-bit) <b>bigint</b> field but it must contain a valid <code>TIMESTAMP_VAL</code> value (<code>DATE_VAL</code> and <code>TIME_VAL</code> combined).   Since core databases do not differentiate between binary and character blob fields, you can also specify <b>long varchar</b> or <b>long wvarchar</b> for a blob field.</p>
+        <p>Two types of statistics can be specified.  The number of <b>distinct values</b> specifies the approximate number of different values stored in the column.  For example, a column of type <b>smallint</b> can theoretically contain 65,535 different values.  If, however, the actual number of different values is considerably smaller then that can have an important impact on the access choices the optimizer might be inclined to make.  Similarly, the <b>range</b> clause is used to identify the range of values that the column can contain.  Note that specifying the <b>range</b> only affects the optimizer.   It does not mean that the SQL system will check to ensure that only those values are stored in the column.   The values specified in these two clauses are understood to be estimates and no problems are created when, for example, a column value actually falls outside the specified <b>range</b>.  The database in which the table column is declared must be opened when <b>set column</b> is called.</p>
+        <p>The syntax for the create catalog statement is as follows.</p><pre class="Grammar" xml:space="preserve">create_catalog_stmt:
+		<b>create catalog for</b>   <![CDATA[ ]]><i>dbname</i></pre>
+        <p>The database must be opened in exclusive access mode in order to execute the <b>create catalog</b> statement.</p>
+        <p>For example, the following snippet shows a portion of a core DDL version of the bookshop database definition.</p><pre xml:space="preserve">record author {
+    unique key char last_name[14];
+    char full_name[36];
+    char gender[2];
+    int16_t yr_born;
+    int16_t yr_died;
+    blob_id short_bio;
+    compound key yob_gender_key {
+        yr_born ascending;
+        gender ascending;
+    }
+}
+record book {
+    unique key char bookid[15];
+    key varchar title[256];
+    char descr[62];
+    varchar publisher[137];
+    key int16_t publ_year;
+    char lc_class[34];
+    int32_t date_acqd;
+    int32_t date_sold;
+    double price;
+    double cost;
+}
+</pre>
+        <p>The following SQL statement script shows how the <b>set column</b> statement is used to specify the needed data types and stats as specified in its SQL DDL counterpart (see "<a href="Chapter4.htm#Antiquar">Antiquarian Bookshop Database</a>" in the "Example Databases" section in the <a href="Chapter4.htm">Defining a Database</a> section).</p><pre xml:space="preserve">open database bookshop in exclusive mode;
+set column author.gender distinct values = 2;
+set column author.short_bio type to long varchar;
+set column book.publ_year range 1500 to 1980;
+set column book.date_acqd type to date;
+set column book.date_sold type to date;
+create catalog for bookshop;
+</pre>
+        <hr MadCap:conditions="Default.ScreenOnly" width="100%" size="0" align="center" />
+        <p MadCap:conditions="Default.ScreenOnly" style="font-size: 8pt;"><span class="MyVariablesCopyright">Copyright © 2012, Raima Inc. All rights reserved.</span>
+        </p>
+        <script type="text/javascript" src="../SkinSupport/MadCapBodyEnd.js">
+        </script>
+        <p class="MCWebHelpFramesetLink MCWebHelpFramesetLinkBottom" style="display: none;"><a href="../../Default_CSH.htm#SQL/Chapter14.htm" style="">Open topic with navigation</a>
+        </p>
+    </body>
+</html>

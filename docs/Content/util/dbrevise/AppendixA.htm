@@ -1,0 +1,107 @@
+<?xml version="1.0" encoding="utf-8"?>
+<!DOCTYPE html PUBLIC "-//W3C//DTD XHTML 1.0 Strict//EN" "http://www.w3.org/TR/xhtml1/DTD/xhtml1-strict.dtd">
+<html xmlns:MadCap="http://www.madcapsoftware.com/Schemas/MadCap.xsd" MadCap:tocPath="Utility Programs|DBRevise Utility" MadCap:InPreviewMode="false" MadCap:PreloadImages="false" MadCap:RuntimeFileType="Topic" MadCap:TargetType="WebHelp" lang="en-us" xml:lang="en-us" MadCap:PathToHelpSystem="../../../" MadCap:HelpSystemFileName="Default.xml" MadCap:SearchType="Stem">
+    <head>
+        <meta http-equiv="Content-Type" content="text/html; charset=utf-8" /><title>A.1 Compilation Phase </title>
+        <link rel="icon" type="image/png" href="http://docs.raima.com/favicon.png" />
+        <link href="../../SkinSupport/MadCap.css" rel="stylesheet" />
+        <link href="../../Resources/Stylesheets/raima.css" rel="stylesheet" />
+        <script src="../../SkinSupport/MadCapAll.js" type="text/javascript">
+        </script>
+    </head>
+    <body>
+        <p class="MCWebHelpFramesetLink MCWebHelpFramesetLinkTop" style="display: none;"><a href="../../../Default_CSH.htm#util/dbrevise/AppendixA.htm" style="">Open topic with navigation</a>
+        </p>
+        <div class="MCBreadcrumbsBox_0"><span class="MCBreadcrumbsPrefix">You are here: </span><a class="MCBreadcrumbsLink" href="../../dbUTIL.htm">Utility Programs</a><span class="MCBreadcrumbsDivider"> &gt; </span><span class="MCBreadcrumbsSelf">DBRevise Utility</span><span class="MCBreadcrumbsDivider"> &gt; </span><span class="MCBreadcrumbs">Warnings and Errors </span>
+        </div>
+        <h2 class="Heading2"><a MadCap:generatedBookmark="TOC" name="A.1_Compilation_Phase"></a>A.1 Compilation Phase </h2>
+        <p>Warnings are provided during the compilation phase of db_REVISE when a potential error condition exists or when db_REVISE will not be able to perform a specified action.&#160; Compilation warnings will be printed by default.&#160; The -c option may be used to suppress the printing of warnings (i.e., -c0).&#160; Errors during the compilation phase will terminate the compilation. </p>
+        <h3 class="Heading3"><a MadCap:generatedBookmark="TOC" name="A.1.1_Warnings"></a>A.1.1 Warnings </h3>
+        <p>A compilation warning has the following form: </p><pre>dbrev compilation warning: <i>message </i></pre>
+        <p>Individual compilation warning messages are listed below.&#160; Each message appears in an example box and is followed by an explanation of its meaning.&#160; </p><pre>conversion to sorted set not allowed, set <i><i>setname</i></i></pre>
+        <p>A destination set is ordered ascending or descending, but the source set order is different.&#160; db_REVISE cannot sort a set during revision.&#160; </p><pre>'convert field' statement ignored for field <i>fieldname </i>because both 
+source and destination must be character type </pre>
+        <p>A convert field statement specifying centering, left justification, or right justification has been used between source and destination fields where the source field type is not character.&#160; (See the convert field statement in section 3.4.2, "Field Changes.")&#160; </p><pre>'convert field' statement ignored for field fieldname 
+because it is a new field </pre>
+        <p>A field can only be converted when it is contained in the source database.&#160; Only new fields may be initialized.&#160; </p><pre>'convert field' statement ignored for field fieldname because 
+neither source nor destination are character type </pre>
+        <p>A convert field statement specifying an sprintf/sscanf format must be used between a character type field and a non-character type field.&#160; See the convert field statement in section 3.4.2, "Field Changes."&#160; </p><pre>'convert field' statement ignored for field fieldname because 
+source and destination are both character type </pre>
+        <p>A convert field statement specifying an sprintf/sscanf format must be used between a character type field and a non-character type field.&#160; See the convert field statement in section 3.4.2, "Field Changes."&#160; </p><pre>destination set type <i>setname</i> is new because source set type of same 
+name is combined </pre>
+        <p>A combine set statement has named <i>setname</i> to be combined with a set with another name.&#160; If <i>setname</i> is used in the destination database, it will be treated as a new set type because all existing connections are now a part of the combined set.&#160; </p><pre>field type fieldname is used in a 'sorted by' clause, and should 
+not be converted </pre>
+        <p>A field used to order a set can be converted, but if a conversion is made that changes the sequence of the set, the set will become out of order.&#160; (See section 3.4.2, "Field Changes.")&#160; The negative effects of this revision may not be experienced until the database is updated.&#160; </p><pre>field type fieldname is used in a 'sorted by' clause, and 
+should not be shortened </pre>
+        <p>Field fieldname is a character string and its length has been shortened in the destination database.&#160; This will probably cause the sorting sequence of the field to be changed.&#160; (See section 3.4.2, "Field Changes.")&#160; The negative effects of this revision may not be experienced until the database is updated.&#160; </p><pre>set ordering changed from 'order' to 'order' in <i>setname</i></pre>
+        <p>When the ordering of a set is changed, the physical order of the set members will not be changed during the revision.&#160; This message is more of a reminder than a warning because all ordering changes (except to ascending or descending) will have no adverse effects on the database. </p>
+        <h3 class="newpage"><a MadCap:generatedBookmark="TOC" name="A.1.2_Errors"></a>A.1.2 Errors </h3>
+        <p>A compilation error has the following form: </p><pre>dbrev fatal compile error: message </pre>
+        <p>Individual compilation error messages are listed below.&#160; Each message appears in an example box and is followed by an explanation of its meaning.&#160; </p><pre>destination record type... <i>recordname</i> is illegal member of project of <i>recordname</i></pre>
+        <p>A record type named in a project record statement contains fields from a source record type other than the one named in the statement.&#160; </p><pre>destination <i>recordname</i> involved in project and join </pre>
+        <p>A record type named in a join record statement contains fields from a source record type other than those named in the statement.&#160; </p><pre>destination record type <i>recordname</i>, member of set <i>setname</i>, 
+must be derivable from a member of the combined sets in the source database </pre>
+        <p>Destination set <i>setname</i> has been named in a combine set statement.&#160; Record type <i>recordname</i> is a member, in the destination database, of <i>setname</i>.&#160; But for the combine statement to work, all destination member record types must be derivable from records in the source, which are members of the sets being combined.&#160; </p><pre>destination record type <i>recordname</i> must be included in 
+'project record' statement for <i>recordname</i></pre>
+        <p>A project record statement has been used, but record type <i>recordname</i> was not listed in the statement.&#160; However, the record type has been derived to be a member of the same projection.&#160; </p><pre>destination record type <i>recordname</i> needs 'join record' statement </pre>
+        <p>Destination record type <i>recordname</i> contains fields from multiple source record types, but has not been named in a join record statement.&#160; </p><pre>errors in command-line script </pre>
+        <p>The statement(s) on the dbrev command line (following the -e option) contain syntax errors.&#160; (The most common error is the absence of a semicolon at the end of the script.)&#160; </p><pre>errors in RDL file </pre>
+        <p>The RDL file contains syntax errors. </p><pre>illegal join: non-tail record type <i>recordname</i> cannot own set type <i>setname</i></pre>
+        <p>Source record type <i>recordname</i> is named in a join record statement as a non-tail record.&#160; This means that it may be replicated two or more times in the destination database.&#160; (See the join record statement in section 3.4.1, "Record Changes.")&#160; Because of the potential replication, the destination record type cannot be made the owner of an existing set type (except for one owned by the tail record type).&#160; </p><pre>illegal split of set <i>setname</i> into <i>setname</i>: destination 
+member record type <i>recordname</i> not derivable from source </pre>
+        <p>A split set statement names a multiple-member source set type and two or more destination set types.&#160; Each member of the destination set types must be derivable from a member of the source set type.&#160; </p><pre>initialized record type <i>recordname</i> cannot be target of join </pre>
+        <p>Record type <i>recordname</i> has been named in a join record statement and an initialize record statement.&#160; This would result in the loss of all data from all records named in the join.&#160; Eliminate one of the statements.&#160; </p><pre>initialized record type <i>recordname</i> cannot be target of project </pre>
+        <p>Record type <i>recordname</i> is the target of a project operation and has also been named in an initialize record statement.&#160; This can cause the inadvertent loss of data.&#160; If this is the desired action, the destination field types should be statically renamed before the revision, then changed back after the revision.&#160; </p><pre>initialized record type <i>recordname</i> must not be contained in any 
+non-empty sets (<i>setname</i>) </pre>
+        <p>When a record type is initialized, any sets it is either owner or member of must be either deleted or initialized.&#160; </p><pre>line number: error limit </pre>
+        <p>In the RDL file, more than 10 syntax errors have been detected.&#160; </p><pre>line number missing brace (}) </pre>
+        <p>A syntax error in the RDL file. </p><pre>line number missing quote </pre>
+        <p>A syntax error in the RDL file.&#160; </p><pre>line number out of memory </pre>
+        <p>During compilation of the RDL, temporary memory is allocated for building lists.&#160; This error indicates that the calloc function has not been able to allocate more memory.&#160; You may need to delete resident programs (on DOS) or increase memory on&#160; your computer.&#160; </p><pre>line number: premature EOF: probably missing '*/' </pre>
+        <p>The end of the RDL file that did not follow a statement-terminating semicolon has been located.&#160; </p><pre>member of normalized set <i>setname</i> (<i>recordname</i>) must be product of a project operation </pre>
+        <p>A normalize set statement has named a set that is not between two records that are components of the same projection from one source record.&#160; </p><pre>out of memory </pre>
+        <p>This error indicates that the calloc function was unable to allocate more memory. You may need to delete resident programs (on DOS) or increase memory on your computer.&#160; </p><pre>owner of normalized set <i>setname</i> (<i>recordname</i>) must be product of a project operation </pre>
+        <p>A normalize set statement has named a set that is not between two records that are components of the same projection from one source record.&#160; </p><pre>record type <i>recordname</i> is not legal owner of set type <i>setname</i></pre>
+        <p>A split set statement has named set type <i>setname</i> as a destination set type.&#160; All destination set types listed in the statement must have an owner record type that is derivable from the same source owner record type.&#160; </p><pre>set type <i>setname</i> mismatching members </pre>
+        <p>A set type with the same name and owner record type in both source and destination databases contains no destination members that are derived from source members.&#160; </p><pre>set type <i>setname</i> mismatching owners: source <i>recordname</i>, destination <i>recordname</i></pre>
+        <p>The owner record type of a set type in the destination database cannot be derived from the owner of the same set type in the source database.&#160; </p><pre>source record type <i>recordname</i> involved in project and join </pre>
+        <p>Source record type <i>recordname</i> is named in a join record statement, but its fields are found in destination record types other than the one named in the statement.&#160; </p><pre>source record type <i>recordname</i> needs 'join record' statement </pre>
+        <p>Source record type <i>recordname</i> has not been named in a join record statement, but some of its fields are included in a joined record.&#160; </p><pre>source record type <i>recordname</i>, member of set <i>setname</i>, has no corresponding member 
+type in destination set <i>setname</i></pre>
+        <p>A source set type that is named in a combine set statement contains a member record type, which is not included in the combined destination set.&#160; </p><pre>unable to open RDL file <i>filename</i></pre>
+        <p>The RDL file, as named on the command line (following the -s option) cannot be opened.&#160; It may be the wrong name or may not have read permission.&#160; The file name must be the complete absolute or relative path name of the file.&#160; </p><pre>unable to open report file <i>filename</i></pre>
+        <p>The report file name is created from the source database path name, with a .rep suffix added.&#160; If the report file cannot be opened, there may be some operating system restriction on the directory.&#160; Check permissions or directory size.&#160; </p><pre>unable to open temporary file </pre>
+        <p>When a command line script is used, it is placed into a temporary file that is named dbr followed by a number (e.g., dbr8776).&#160; This error will occur if the file cannot be created. </p>
+        <h2 class="Heading2"><a MadCap:generatedBookmark="TOC" name="A.2_Execution_Phase"></a>A.2 Execution Phase </h2>
+        <p>Warnings are provided during the execution phase of db_REVISE when an action is not able to be carried out or when some data is lost.&#160; Execution warnings will be printed by default.&#160; The -x option can be used to suppress the printing of warnings (i.e., -x0).&#160; By default, db_REVISE will continue to execute if there are warnings.&#160; The -a option (abort level) can be used to request termination if there are any execution warnings (i.e., -a1). </p>
+        <p>Errors during the execution phase will cause db_REVISE to close the databases and terminate. </p>
+        <h3 class="Heading3"><a MadCap:generatedBookmark="TOC" name="A.2.1_Warnings"></a>A.2.1 Warnings </h3>
+        <p>An execution warning has the following form: </p><pre>dbrev execution warning: message File: <i>filename</i>, Record type: <i>recordname</i>, 
+Record number: number </pre>
+        <p>Individual execution warning messages are listed below.&#160; Each message appears in an example box and is followed by an explanation of its meaning.&#160; </p><pre>field conversion for value too long, truncated </pre>
+        <p>A convert field statement using a printf format has created an ASCII string too long to fit into the destination field.&#160; </p><pre>Not enough value of fieldname in destination; truncated from 'value' to value </pre>
+        <p>While a numeric field was converted into an ASCII string, the program discovered that the string was not long enough to hold the entire result.&#160; </p><pre>not enough room for value of fieldname in destination; truncated from 
+'value' to value </pre>
+        <p>While an ASCII string was converted into a numeric value, the program discovered that the full value could not be stored in the numeric field.&#160; </p><pre>not enough room for value of fieldname in destination; truncated from 
+'value' to value </pre>
+        <p>A numeric value has been shortened in the destination database (e.g., from long to int) and the full value of the number cannot be stored in the destination. </p>
+        <h3 class="Heading3"><a MadCap:generatedBookmark="TOC" name="A.2.2_Errors"></a>A.2.2 Errors </h3>
+        <p>An execution error has the following form: </p><pre>dbrev fatal execution error: message File: <i>filename</i>, Record type: <i>recordname</i>, 
+Record number: number </pre>
+        <p>For example, if db_REVISE printed the following message: </p><pre>dbrev fatal execution error: duplicate key File: tims.d02, Record type: INFO, 
+Record number: 43 </pre>
+        <p>This is an indication of a database corruption in the source database. See the <a href="../dbrepair/UTL/dbcheck.htm">dbcheck</a> utility for how to determine about the corruption and possible remedies.</p>
+        <p>Individual execution warning messages are listed below.&#160; Each message appears in an example box and is followed by an explanation of its meaning. </p><pre>database error # number </pre>
+        <p>This message will be printed whenever any <span class="MyVariablesProductShortName">RDM</span> error is generated in the source, working, or destination database.&#160; The interpretation of the codes is found in the <a href="../../RM/Chapter4.htm">Return Codes</a> section.&#160; (A common error that appears indicates that the destination database files do not exist.&#160; In this case, you should first run initdb on the destination database.) </p><pre>delete record out of sequence, turn off -q </pre>
+        <p>An inconsistency has been found in the database address sequence in a file.&#160; Assumptions are made about this sequence to perform optimization of the revision.&#160; To turn off the optimization, do not use the -q command line option. </p><pre>duplicate key </pre>
+        <p>During a d_fillnew call to the destination database, the S_DUPLICATE status was returned.&#160; There are several reasons this can occur.&#160; The most likely problem is that a non-unique, or non-key field has been changed into a unique key field.&#160; Other possibilities include: the initialize field statement was used on a unique key field, the field was shortened, or a conversion was done that changed two formerly different values into the same value. </p><pre>internal error </pre>
+        <p>There is an apparent software error in db_REVISE that should be reported to <span class="MyVariablesShortCompanyName">Raima</span> Technical Support.&#160; </p>
+        <hr MadCap:conditions="Default.ScreenOnly" width="100%" size="0" align="center" />
+        <p MadCap:conditions="Default.ScreenOnly" style="font-size: 8pt;"><span class="MyVariablesCopyright">Copyright © 2012, Raima Inc. All rights reserved.</span>
+        </p>
+        <script type="text/javascript" src="../../SkinSupport/MadCapBodyEnd.js">
+        </script>
+        <p class="MCWebHelpFramesetLink MCWebHelpFramesetLinkBottom" style="display: none;"><a href="../../../Default_CSH.htm#util/dbrevise/AppendixA.htm" style="">Open topic with navigation</a>
+        </p>
+    </body>
+</html>

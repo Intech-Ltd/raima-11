@@ -1,0 +1,46 @@
+<?xml version="1.0" encoding="utf-8"?>
+<!DOCTYPE html PUBLIC "-//W3C//DTD XHTML 1.0 Strict//EN" "http://www.w3.org/TR/xhtml1/DTD/xhtml1-strict.dtd">
+<html xmlns:MadCap="http://www.madcapsoftware.com/Schemas/MadCap.xsd" MadCap:tocPath="SQL API|JDBC User's Guide" MadCap:InPreviewMode="false" MadCap:PreloadImages="false" MadCap:RuntimeFileType="Topic" MadCap:TargetType="WebHelp" lang="en-us" xml:lang="en-us" MadCap:PathToHelpSystem="../../" MadCap:HelpSystemFileName="Default.xml" MadCap:SearchType="Stem">
+    <head>
+        <meta http-equiv="Content-Type" content="text/html; charset=utf-8" /><title>Getting Started with JDBC</title>
+        <link rel="icon" type="image/png" href="http://docs.raima.com/favicon.png" />
+        <link href="../SkinSupport/MadCap.css" rel="stylesheet" />
+        <link href="../Resources/Stylesheets/raima.css" rel="stylesheet" />
+        <script src="../SkinSupport/MadCapAll.js" type="text/javascript">
+        </script>
+    </head>
+    <body>
+        <p class="MCWebHelpFramesetLink MCWebHelpFramesetLinkTop" style="display: none;"><a href="../../Default_CSH.htm#JAVARM/Eclipse.htm" style="">Open topic with navigation</a>
+        </p>
+        <div class="MCBreadcrumbsBox_0"><span class="MCBreadcrumbsPrefix">You are here: </span><a class="MCBreadcrumbsLink" href="../dbRSQL.htm">SQL API</a><span class="MCBreadcrumbsDivider"> &gt; </span><a class="MCBreadcrumbsLink" href="dbJDBC.htm">JDBC User's Guide</a><span class="MCBreadcrumbsDivider"> &gt; </span><span class="MCBreadcrumbs">Getting Started with JDBC</span>
+        </div>
+        <h1 class="firstHeading"><a MadCap:generatedBookmark="TOC" name="Getting_Started_with_JDBC"></a>Getting Started with JDBC</h1>
+        <p>Using the JDBC API requires a little bit of set up before you can get your application to compile and run correctly. If you follow the steps below, you will be able to execute your application correctly in both the command line and Eclipse GUI interfaces.</p>
+        <p class="Heading">Command Line</p>
+        <ol>
+            <li value="1">Set your environment variables to the correct value. The variables you will need to set are:<ol style="list-style-type: lower-alpha;"><li value="1">CLASSPATH: Set to the current directory of the <code>rdmjdbcjni<span class="MyVariablesLibraryVersion">11</span>.jar</code>  file along with your current working directory (i.e., <span style="font-family: monospace;" class="MyVariablesInstallHome">/Raima/RDM/</span><code>bin/</code><code>rdmjdbcjni<span class="MyVariablesLibraryVersion">11</span>.jar</code>:.)</li><li value="2">JAVA_HOME: Set to the current directory where your jdk is installed (i.e., <code>/opt/java/jdk</code>)</li></ol></li>
+            <li value="2">Create your JDBC application. Look at <a href="JDBC.htm#Basic">Basic JDBC Application Steps</a> for more information on this topic.</li>
+            <li value="3">Compile your main class .java file you have created above by using <code>javac</code> "entry point .java file" (i.e., <code>javac HelloWorld_JDBCTutorial_main.java</code>)</li>
+            <li value="4">If your CLASSPATH and other environment variables are set up correctly, you should be able to launch your application using the java command on the entry point to your program. This is the name of your main class (i.e., <code>java HelloWorld_JDBCTutorial_main</code>) If using JNI make sure that the <code>rdmjdbcjni<span class="MyVariablesLibraryVersion">11</span></code> dynamic library is added into your <code>java.library.path</code>. This can be done several ways, one of which would be by typing "<code>java –Djava.library.path={path to <code>rdmjdbcjni<span class="MyVariablesLibraryVersion">11</span></code>} HelloWorld_JDBCTutorial_main</code>"</li>
+        </ol>
+        <p class="Heading">Eclipse GUI</p>
+        <ol>
+            <li value="1">
+                <div>Step 1: Create a workspace inside of your Eclipse IDE. Enter the workbench by clicking the image below<p><img src="../Resources/Images/EclipseIDE_01.png" /></p></div>
+            </li>
+            <li value="2">
+                <div>Create a new project by going to <b>File-&gt;New-&gt;Project</b>. You will see a menu for a New Project Wizard, which looks like the corresponding image.<p><img src="../Resources/Images/EclipseIDE_02.png" /></p></div>
+            </li>
+            <li value="3">Click <b>Next</b> on the New Java Project Wizard box. From there you will need to enter a few parameters. First of which being your Project Name. This can be whatever you would like. Next make sure to use execution environment JRE: JavaSE-1.6 as that is what <span class="MyVariablesProductShortName">RDM</span> supports. Again, click <b>Next</b>.</li>
+            <li value="4">This next screen is important, as it will contain any source code or libraries that you will need to import. Along with specific steps you will need to follow for using each communication protocol.<ol style="list-style-type: lower-alpha;"><li value="1">First of all, from the source tab you can click link additional source to your Eclipse workspace to import any source that you have made previously that you would like to be included in this project. If you are using TCP/IP skip step 4f, if using Direct Link skip step 4e.</li><li value="2"><div> Now click on the Libraries tab. Here is where you will link the RDM JDBC/JNI library. The next image shows this tab including <code>rdmjdbcjni<span class="MyVariablesLibraryVersion">11</span>.jar</code> which is the file you will include.<p><img src="../Resources/Images/EclipseIDE_03.png" /></p></div></li><li value="3">Click "<b>Add External Jars</b>". From here, navigate to where your <code>rdmjdbcjni<span class="MyVariablesLibraryVersion">11</span>.jar</code> is located.</li><li value="4">Click Finish.</li><li value="5">If using TCP/IP now is a good time to make sure your <b>rdmsqlserver</b> is running.</li><li value="6">If Using Direct Link through JNI, you must include the <code>rdmjdbcjni<span class="MyVariablesLibraryVersion">11</span></code> shared library file by expanding the <code>rdmjdbcjni<span class="MyVariablesLibraryVersion">11</span>.jar</code> file that you just including and add it to your native library path</li></ol></li>
+            <li value="5">From here you will need to create a run configuration for your program. This is assuming you have either included enough source to execute or you have written code in your project that has compiled correctly. Click the down arrow on the green "run" button directly above the drop down menu’s left edge, which is shown in the image below.<ol style="list-style-type: lower-alpha;"><li value="1">Click <b>Run Configurations</b><p><img src="../Resources/Images/EclipseIDE_04.png" /></p></li><li value="2">You may have to set up a new run configuration. Simply select new Java Application on the next screen.</li><li value="3">Make sure that in the "<b>Project</b>" field, your current project is shown, and in the "<b>Main Class</b>" field, the class containing the main entry point is shown. It should look similar to the image below. Once you have verified everything is correct and you are ready to run your application, click "<b>Run</b>".<p><img src="../Resources/Images/EclipseIDE_05.png" /></p></li></ol></li>
+        </ol>
+        <hr MadCap:conditions="Default.ScreenOnly" width="100%" size="0" align="center" />
+        <p MadCap:conditions="Default.ScreenOnly" style="font-size: 8pt;"><span class="MyVariablesCopyright">Copyright © 2012, Raima Inc. All rights reserved.</span>
+        </p>
+        <script type="text/javascript" src="../SkinSupport/MadCapBodyEnd.js">
+        </script>
+        <p class="MCWebHelpFramesetLink MCWebHelpFramesetLinkBottom" style="display: none;"><a href="../../Default_CSH.htm#JAVARM/Eclipse.htm" style="">Open topic with navigation</a>
+        </p>
+    </body>
+</html>

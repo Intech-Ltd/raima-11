@@ -1,0 +1,1140 @@
+/* MadCap Table Style: */
+
+/*<meta Version="7" />*/
+
+mcTableStyle
+{
+	name: fnc2Summary;
+	border-collapse: collapse;
+	border-left-style: solid;
+	border-left-width: 1px;
+	border-left-color: #c0c0c0;
+	border-right-style: solid;
+	border-right-width: 1px;
+	border-right-color: #c0c0c0;
+	border-top-style: solid;
+	border-top-width: 1px;
+	border-top-color: #c0c0c0;
+	border-bottom-style: solid;
+	border-bottom-width: 1px;
+	border-bottom-color: #c0c0c0;
+	max-id: 5;
+}
+
+mcTableColumnStyle
+{
+	span: 1;
+	separator-style: solid;
+	separator-width: 1px;
+	separator-color: #c0c0c0;
+	name: Column1;
+	id: 0;
+	size: 175px;
+	vertical-align: top;
+}
+
+mcTableColumnStyle
+{
+	span: 1;
+	id: 4;
+	name: Column2;
+	vertical-align: top;
+	size: 175px;
+	separator-style: solid;
+	separator-width: 1px;
+	separator-color: #c0c0c0;
+}
+
+mcTableColumnStyle
+{
+	span: 1;
+	id: 5;
+	name: Column3;
+	vertical-align: top;
+	separator-style: solid;
+	separator-width: 1px;
+	separator-color: #c0c0c0;
+}
+
+mcTableHeadStyle
+{
+	span: 1;
+	separator-style: solid;
+	separator-width: 1px;
+	separator-color: #c0c0c0;
+	name: Header1;
+	id: 2;
+}
+
+mcTableBodyStyle
+{
+	span: 1;
+	font-weight: normal;
+	separator-style: solid;
+	separator-width: 1px;
+	separator-color: #c0c0c0;
+	name: Body1;
+	id: 1;
+}
+
+mcTableFootStyle
+{
+	span: 1;
+	separator-style: solid;
+	separator-width: 1px;
+	separator-color: #c0c0c0;
+	name: Footer1;
+	id: 3;
+}
+
+
+/* Cell Styles: */
+ 
+.TableStyle-fnc2Summary
+{
+	border-collapse: collapse;
+	border-left-style: solid;
+	border-left-color: #c0c0c0;
+	border-left-width: 1px;
+	border-right-style: solid;
+	border-right-color: #c0c0c0;
+	border-right-width: 1px;
+	border-top-style: solid;
+	border-top-color: #c0c0c0;
+	border-top-width: 1px;
+	border-bottom-style: solid;
+	border-bottom-color: #c0c0c0;
+	border-bottom-width: 1px;
+	border-spacing: 0px 0px;
+}
+
+.TableStyle-fnc2Summary .Column-Column1
+{
+	width: 175px;
+}
+
+.TableStyle-fnc2Summary .Column-Column2
+{
+	width: 175px;
+}
+
+.TableStyle-fnc2Summary .Column-Column3
+{
+	
+}
+
+.TableStyle-fnc2Summary .Head-Header1
+{
+	
+}
+
+.TableStyle-fnc2Summary .HeadI-Column1-Header1
+{
+	vertical-align: top;
+}
+
+.TableStyle-fnc2Summary .HeadI-Column1-Header1 p
+{
+	
+}
+
+.TableStyle-fnc2Summary .HeadE-Column1-Header1
+{
+	vertical-align: top;
+	border-right-width: 1px;
+	border-right-color: #c0c0c0;
+	border-right-style: solid;
+	border-bottom-width: 1px;
+	border-bottom-color: #c0c0c0;
+	border-bottom-style: solid;
+}
+
+.TableStyle-fnc2Summary .HeadE-Column1-Header1 p
+{
+	
+}
+
+.TableStyle-fnc2Summary .HeadF-Column1-Header1
+{
+	vertical-align: top;
+	border-bottom-width: 1px;
+	border-bottom-color: #c0c0c0;
+	border-bottom-style: solid;
+}
+
+.TableStyle-fnc2Summary .HeadF-Column1-Header1 p
+{
+	
+}
+
+.TableStyle-fnc2Summary .HeadH-Column1-Header1
+{
+	vertical-align: top;
+	border-right-width: 1px;
+	border-right-color: #c0c0c0;
+	border-right-style: solid;
+}
+
+.TableStyle-fnc2Summary .HeadH-Column1-Header1 p
+{
+	
+}
+
+.TableStyle-fnc2Summary .HeadD-Column1-Header1
+{
+	vertical-align: top;
+	border-bottom-width: 1px;
+	border-bottom-color: #c0c0c0;
+	border-bottom-style: solid;
+}
+
+.TableStyle-fnc2Summary .HeadD-Column1-Header1 p
+{
+	
+}
+
+.TableStyle-fnc2Summary .HeadC-Column1-Header1
+{
+	vertical-align: top;
+}
+
+.TableStyle-fnc2Summary .HeadC-Column1-Header1 p
+{
+	
+}
+
+.TableStyle-fnc2Summary .HeadB-Column1-Header1
+{
+	vertical-align: top;
+	border-right-width: 1px;
+	border-right-color: #c0c0c0;
+	border-right-style: solid;
+}
+
+.TableStyle-fnc2Summary .HeadB-Column1-Header1 p
+{
+	
+}
+
+.TableStyle-fnc2Summary .HeadA-Column1-Header1
+{
+	vertical-align: top;
+}
+
+.TableStyle-fnc2Summary .HeadA-Column1-Header1 p
+{
+	
+}
+
+.TableStyle-fnc2Summary .HeadG-Column1-Header1
+{
+	vertical-align: top;
+}
+
+.TableStyle-fnc2Summary .HeadG-Column1-Header1 p
+{
+	
+}
+
+.TableStyle-fnc2Summary .HeadI-Column2-Header1
+{
+	vertical-align: top;
+}
+
+.TableStyle-fnc2Summary .HeadI-Column2-Header1 p
+{
+	
+}
+
+.TableStyle-fnc2Summary .HeadE-Column2-Header1
+{
+	vertical-align: top;
+	border-right-width: 1px;
+	border-right-color: #c0c0c0;
+	border-right-style: solid;
+	border-bottom-width: 1px;
+	border-bottom-color: #c0c0c0;
+	border-bottom-style: solid;
+}
+
+.TableStyle-fnc2Summary .HeadE-Column2-Header1 p
+{
+	
+}
+
+.TableStyle-fnc2Summary .HeadF-Column2-Header1
+{
+	vertical-align: top;
+	border-bottom-width: 1px;
+	border-bottom-color: #c0c0c0;
+	border-bottom-style: solid;
+}
+
+.TableStyle-fnc2Summary .HeadF-Column2-Header1 p
+{
+	
+}
+
+.TableStyle-fnc2Summary .HeadH-Column2-Header1
+{
+	vertical-align: top;
+	border-right-width: 1px;
+	border-right-color: #c0c0c0;
+	border-right-style: solid;
+}
+
+.TableStyle-fnc2Summary .HeadH-Column2-Header1 p
+{
+	
+}
+
+.TableStyle-fnc2Summary .HeadD-Column2-Header1
+{
+	vertical-align: top;
+	border-bottom-width: 1px;
+	border-bottom-color: #c0c0c0;
+	border-bottom-style: solid;
+}
+
+.TableStyle-fnc2Summary .HeadD-Column2-Header1 p
+{
+	
+}
+
+.TableStyle-fnc2Summary .HeadC-Column2-Header1
+{
+	vertical-align: top;
+}
+
+.TableStyle-fnc2Summary .HeadC-Column2-Header1 p
+{
+	
+}
+
+.TableStyle-fnc2Summary .HeadB-Column2-Header1
+{
+	vertical-align: top;
+	border-right-width: 1px;
+	border-right-color: #c0c0c0;
+	border-right-style: solid;
+}
+
+.TableStyle-fnc2Summary .HeadB-Column2-Header1 p
+{
+	
+}
+
+.TableStyle-fnc2Summary .HeadA-Column2-Header1
+{
+	vertical-align: top;
+}
+
+.TableStyle-fnc2Summary .HeadA-Column2-Header1 p
+{
+	
+}
+
+.TableStyle-fnc2Summary .HeadG-Column2-Header1
+{
+	vertical-align: top;
+}
+
+.TableStyle-fnc2Summary .HeadG-Column2-Header1 p
+{
+	
+}
+
+.TableStyle-fnc2Summary .HeadI-Column3-Header1
+{
+	vertical-align: top;
+}
+
+.TableStyle-fnc2Summary .HeadI-Column3-Header1 p
+{
+	
+}
+
+.TableStyle-fnc2Summary .HeadE-Column3-Header1
+{
+	vertical-align: top;
+	border-right-width: 1px;
+	border-right-color: #c0c0c0;
+	border-right-style: solid;
+	border-bottom-width: 1px;
+	border-bottom-color: #c0c0c0;
+	border-bottom-style: solid;
+}
+
+.TableStyle-fnc2Summary .HeadE-Column3-Header1 p
+{
+	
+}
+
+.TableStyle-fnc2Summary .HeadF-Column3-Header1
+{
+	vertical-align: top;
+	border-bottom-width: 1px;
+	border-bottom-color: #c0c0c0;
+	border-bottom-style: solid;
+}
+
+.TableStyle-fnc2Summary .HeadF-Column3-Header1 p
+{
+	
+}
+
+.TableStyle-fnc2Summary .HeadH-Column3-Header1
+{
+	vertical-align: top;
+	border-right-width: 1px;
+	border-right-color: #c0c0c0;
+	border-right-style: solid;
+}
+
+.TableStyle-fnc2Summary .HeadH-Column3-Header1 p
+{
+	
+}
+
+.TableStyle-fnc2Summary .HeadD-Column3-Header1
+{
+	vertical-align: top;
+	border-bottom-width: 1px;
+	border-bottom-color: #c0c0c0;
+	border-bottom-style: solid;
+}
+
+.TableStyle-fnc2Summary .HeadD-Column3-Header1 p
+{
+	
+}
+
+.TableStyle-fnc2Summary .HeadC-Column3-Header1
+{
+	vertical-align: top;
+}
+
+.TableStyle-fnc2Summary .HeadC-Column3-Header1 p
+{
+	
+}
+
+.TableStyle-fnc2Summary .HeadB-Column3-Header1
+{
+	vertical-align: top;
+	border-right-width: 1px;
+	border-right-color: #c0c0c0;
+	border-right-style: solid;
+}
+
+.TableStyle-fnc2Summary .HeadB-Column3-Header1 p
+{
+	
+}
+
+.TableStyle-fnc2Summary .HeadA-Column3-Header1
+{
+	vertical-align: top;
+}
+
+.TableStyle-fnc2Summary .HeadA-Column3-Header1 p
+{
+	
+}
+
+.TableStyle-fnc2Summary .HeadG-Column3-Header1
+{
+	vertical-align: top;
+}
+
+.TableStyle-fnc2Summary .HeadG-Column3-Header1 p
+{
+	
+}
+
+.TableStyle-fnc2Summary .Foot-Footer1
+{
+	
+}
+
+.TableStyle-fnc2Summary .FootI-Column1-Footer1
+{
+	vertical-align: top;
+}
+
+.TableStyle-fnc2Summary .FootI-Column1-Footer1 p
+{
+	
+}
+
+.TableStyle-fnc2Summary .FootE-Column1-Footer1
+{
+	vertical-align: top;
+	border-right-width: 1px;
+	border-right-color: #c0c0c0;
+	border-right-style: solid;
+	border-top-width: 1px;
+	border-top-color: #c0c0c0;
+	border-top-style: solid;
+}
+
+.TableStyle-fnc2Summary .FootE-Column1-Footer1 p
+{
+	
+}
+
+.TableStyle-fnc2Summary .FootF-Column1-Footer1
+{
+	vertical-align: top;
+	border-top-width: 1px;
+	border-top-color: #c0c0c0;
+	border-top-style: solid;
+}
+
+.TableStyle-fnc2Summary .FootF-Column1-Footer1 p
+{
+	
+}
+
+.TableStyle-fnc2Summary .FootH-Column1-Footer1
+{
+	vertical-align: top;
+	border-right-width: 1px;
+	border-right-color: #c0c0c0;
+	border-right-style: solid;
+}
+
+.TableStyle-fnc2Summary .FootH-Column1-Footer1 p
+{
+	
+}
+
+.TableStyle-fnc2Summary .FootD-Column1-Footer1
+{
+	vertical-align: top;
+	border-top-width: 1px;
+	border-top-color: #c0c0c0;
+	border-top-style: solid;
+}
+
+.TableStyle-fnc2Summary .FootD-Column1-Footer1 p
+{
+	
+}
+
+.TableStyle-fnc2Summary .FootC-Column1-Footer1
+{
+	vertical-align: top;
+}
+
+.TableStyle-fnc2Summary .FootC-Column1-Footer1 p
+{
+	
+}
+
+.TableStyle-fnc2Summary .FootB-Column1-Footer1
+{
+	vertical-align: top;
+	border-right-width: 1px;
+	border-right-color: #c0c0c0;
+	border-right-style: solid;
+}
+
+.TableStyle-fnc2Summary .FootB-Column1-Footer1 p
+{
+	
+}
+
+.TableStyle-fnc2Summary .FootA-Column1-Footer1
+{
+	vertical-align: top;
+}
+
+.TableStyle-fnc2Summary .FootA-Column1-Footer1 p
+{
+	
+}
+
+.TableStyle-fnc2Summary .FootG-Column1-Footer1
+{
+	vertical-align: top;
+}
+
+.TableStyle-fnc2Summary .FootG-Column1-Footer1 p
+{
+	
+}
+
+.TableStyle-fnc2Summary .FootI-Column2-Footer1
+{
+	vertical-align: top;
+}
+
+.TableStyle-fnc2Summary .FootI-Column2-Footer1 p
+{
+	
+}
+
+.TableStyle-fnc2Summary .FootE-Column2-Footer1
+{
+	vertical-align: top;
+	border-right-width: 1px;
+	border-right-color: #c0c0c0;
+	border-right-style: solid;
+	border-top-width: 1px;
+	border-top-color: #c0c0c0;
+	border-top-style: solid;
+}
+
+.TableStyle-fnc2Summary .FootE-Column2-Footer1 p
+{
+	
+}
+
+.TableStyle-fnc2Summary .FootF-Column2-Footer1
+{
+	vertical-align: top;
+	border-top-width: 1px;
+	border-top-color: #c0c0c0;
+	border-top-style: solid;
+}
+
+.TableStyle-fnc2Summary .FootF-Column2-Footer1 p
+{
+	
+}
+
+.TableStyle-fnc2Summary .FootH-Column2-Footer1
+{
+	vertical-align: top;
+	border-right-width: 1px;
+	border-right-color: #c0c0c0;
+	border-right-style: solid;
+}
+
+.TableStyle-fnc2Summary .FootH-Column2-Footer1 p
+{
+	
+}
+
+.TableStyle-fnc2Summary .FootD-Column2-Footer1
+{
+	vertical-align: top;
+	border-top-width: 1px;
+	border-top-color: #c0c0c0;
+	border-top-style: solid;
+}
+
+.TableStyle-fnc2Summary .FootD-Column2-Footer1 p
+{
+	
+}
+
+.TableStyle-fnc2Summary .FootC-Column2-Footer1
+{
+	vertical-align: top;
+}
+
+.TableStyle-fnc2Summary .FootC-Column2-Footer1 p
+{
+	
+}
+
+.TableStyle-fnc2Summary .FootB-Column2-Footer1
+{
+	vertical-align: top;
+	border-right-width: 1px;
+	border-right-color: #c0c0c0;
+	border-right-style: solid;
+}
+
+.TableStyle-fnc2Summary .FootB-Column2-Footer1 p
+{
+	
+}
+
+.TableStyle-fnc2Summary .FootA-Column2-Footer1
+{
+	vertical-align: top;
+}
+
+.TableStyle-fnc2Summary .FootA-Column2-Footer1 p
+{
+	
+}
+
+.TableStyle-fnc2Summary .FootG-Column2-Footer1
+{
+	vertical-align: top;
+}
+
+.TableStyle-fnc2Summary .FootG-Column2-Footer1 p
+{
+	
+}
+
+.TableStyle-fnc2Summary .FootI-Column3-Footer1
+{
+	vertical-align: top;
+}
+
+.TableStyle-fnc2Summary .FootI-Column3-Footer1 p
+{
+	
+}
+
+.TableStyle-fnc2Summary .FootE-Column3-Footer1
+{
+	vertical-align: top;
+	border-right-width: 1px;
+	border-right-color: #c0c0c0;
+	border-right-style: solid;
+	border-top-width: 1px;
+	border-top-color: #c0c0c0;
+	border-top-style: solid;
+}
+
+.TableStyle-fnc2Summary .FootE-Column3-Footer1 p
+{
+	
+}
+
+.TableStyle-fnc2Summary .FootF-Column3-Footer1
+{
+	vertical-align: top;
+	border-top-width: 1px;
+	border-top-color: #c0c0c0;
+	border-top-style: solid;
+}
+
+.TableStyle-fnc2Summary .FootF-Column3-Footer1 p
+{
+	
+}
+
+.TableStyle-fnc2Summary .FootH-Column3-Footer1
+{
+	vertical-align: top;
+	border-right-width: 1px;
+	border-right-color: #c0c0c0;
+	border-right-style: solid;
+}
+
+.TableStyle-fnc2Summary .FootH-Column3-Footer1 p
+{
+	
+}
+
+.TableStyle-fnc2Summary .FootD-Column3-Footer1
+{
+	vertical-align: top;
+	border-top-width: 1px;
+	border-top-color: #c0c0c0;
+	border-top-style: solid;
+}
+
+.TableStyle-fnc2Summary .FootD-Column3-Footer1 p
+{
+	
+}
+
+.TableStyle-fnc2Summary .FootC-Column3-Footer1
+{
+	vertical-align: top;
+}
+
+.TableStyle-fnc2Summary .FootC-Column3-Footer1 p
+{
+	
+}
+
+.TableStyle-fnc2Summary .FootB-Column3-Footer1
+{
+	vertical-align: top;
+	border-right-width: 1px;
+	border-right-color: #c0c0c0;
+	border-right-style: solid;
+}
+
+.TableStyle-fnc2Summary .FootB-Column3-Footer1 p
+{
+	
+}
+
+.TableStyle-fnc2Summary .FootA-Column3-Footer1
+{
+	vertical-align: top;
+}
+
+.TableStyle-fnc2Summary .FootA-Column3-Footer1 p
+{
+	
+}
+
+.TableStyle-fnc2Summary .FootG-Column3-Footer1
+{
+	vertical-align: top;
+}
+
+.TableStyle-fnc2Summary .FootG-Column3-Footer1 p
+{
+	
+}
+
+.TableStyle-fnc2Summary .Body-Body1
+{
+	
+}
+
+.TableStyle-fnc2Summary .BodyI-Column1-Body1
+{
+	font-weight: normal;
+	vertical-align: top;
+}
+
+.TableStyle-fnc2Summary .BodyI-Column1-Body1 p
+{
+	font-weight: normal;
+}
+
+.TableStyle-fnc2Summary .BodyE-Column1-Body1
+{
+	font-weight: normal;
+	border-bottom-width: 1px;
+	border-bottom-color: #c0c0c0;
+	border-bottom-style: solid;
+	vertical-align: top;
+	border-right-width: 1px;
+	border-right-color: #c0c0c0;
+	border-right-style: solid;
+}
+
+.TableStyle-fnc2Summary .BodyE-Column1-Body1 p
+{
+	font-weight: normal;
+}
+
+.TableStyle-fnc2Summary .BodyF-Column1-Body1
+{
+	font-weight: normal;
+	border-bottom-width: 1px;
+	border-bottom-color: #c0c0c0;
+	border-bottom-style: solid;
+	vertical-align: top;
+}
+
+.TableStyle-fnc2Summary .BodyF-Column1-Body1 p
+{
+	font-weight: normal;
+}
+
+.TableStyle-fnc2Summary .BodyH-Column1-Body1
+{
+	font-weight: normal;
+	vertical-align: top;
+	border-right-width: 1px;
+	border-right-color: #c0c0c0;
+	border-right-style: solid;
+}
+
+.TableStyle-fnc2Summary .BodyH-Column1-Body1 p
+{
+	font-weight: normal;
+}
+
+.TableStyle-fnc2Summary .BodyD-Column1-Body1
+{
+	font-weight: normal;
+	border-bottom-width: 1px;
+	border-bottom-color: #c0c0c0;
+	border-bottom-style: solid;
+	vertical-align: top;
+}
+
+.TableStyle-fnc2Summary .BodyD-Column1-Body1 p
+{
+	font-weight: normal;
+}
+
+.TableStyle-fnc2Summary .BodyC-Column1-Body1
+{
+	font-weight: normal;
+	vertical-align: top;
+}
+
+.TableStyle-fnc2Summary .BodyC-Column1-Body1 p
+{
+	font-weight: normal;
+}
+
+.TableStyle-fnc2Summary .BodyB-Column1-Body1
+{
+	font-weight: normal;
+	vertical-align: top;
+	border-right-width: 1px;
+	border-right-color: #c0c0c0;
+	border-right-style: solid;
+}
+
+.TableStyle-fnc2Summary .BodyB-Column1-Body1 p
+{
+	font-weight: normal;
+}
+
+.TableStyle-fnc2Summary .BodyA-Column1-Body1
+{
+	font-weight: normal;
+	vertical-align: top;
+}
+
+.TableStyle-fnc2Summary .BodyA-Column1-Body1 p
+{
+	font-weight: normal;
+}
+
+.TableStyle-fnc2Summary .BodyG-Column1-Body1
+{
+	font-weight: normal;
+	vertical-align: top;
+}
+
+.TableStyle-fnc2Summary .BodyG-Column1-Body1 p
+{
+	font-weight: normal;
+}
+
+.TableStyle-fnc2Summary .BodyI-Column2-Body1
+{
+	font-weight: normal;
+	vertical-align: top;
+}
+
+.TableStyle-fnc2Summary .BodyI-Column2-Body1 p
+{
+	font-weight: normal;
+}
+
+.TableStyle-fnc2Summary .BodyE-Column2-Body1
+{
+	font-weight: normal;
+	border-bottom-width: 1px;
+	border-bottom-color: #c0c0c0;
+	border-bottom-style: solid;
+	vertical-align: top;
+	border-right-width: 1px;
+	border-right-color: #c0c0c0;
+	border-right-style: solid;
+}
+
+.TableStyle-fnc2Summary .BodyE-Column2-Body1 p
+{
+	font-weight: normal;
+}
+
+.TableStyle-fnc2Summary .BodyF-Column2-Body1
+{
+	font-weight: normal;
+	border-bottom-width: 1px;
+	border-bottom-color: #c0c0c0;
+	border-bottom-style: solid;
+	vertical-align: top;
+}
+
+.TableStyle-fnc2Summary .BodyF-Column2-Body1 p
+{
+	font-weight: normal;
+}
+
+.TableStyle-fnc2Summary .BodyH-Column2-Body1
+{
+	font-weight: normal;
+	vertical-align: top;
+	border-right-width: 1px;
+	border-right-color: #c0c0c0;
+	border-right-style: solid;
+}
+
+.TableStyle-fnc2Summary .BodyH-Column2-Body1 p
+{
+	font-weight: normal;
+}
+
+.TableStyle-fnc2Summary .BodyD-Column2-Body1
+{
+	font-weight: normal;
+	border-bottom-width: 1px;
+	border-bottom-color: #c0c0c0;
+	border-bottom-style: solid;
+	vertical-align: top;
+}
+
+.TableStyle-fnc2Summary .BodyD-Column2-Body1 p
+{
+	font-weight: normal;
+}
+
+.TableStyle-fnc2Summary .BodyC-Column2-Body1
+{
+	font-weight: normal;
+	vertical-align: top;
+}
+
+.TableStyle-fnc2Summary .BodyC-Column2-Body1 p
+{
+	font-weight: normal;
+}
+
+.TableStyle-fnc2Summary .BodyB-Column2-Body1
+{
+	font-weight: normal;
+	vertical-align: top;
+	border-right-width: 1px;
+	border-right-color: #c0c0c0;
+	border-right-style: solid;
+}
+
+.TableStyle-fnc2Summary .BodyB-Column2-Body1 p
+{
+	font-weight: normal;
+}
+
+.TableStyle-fnc2Summary .BodyA-Column2-Body1
+{
+	font-weight: normal;
+	vertical-align: top;
+}
+
+.TableStyle-fnc2Summary .BodyA-Column2-Body1 p
+{
+	font-weight: normal;
+}
+
+.TableStyle-fnc2Summary .BodyG-Column2-Body1
+{
+	font-weight: normal;
+	vertical-align: top;
+}
+
+.TableStyle-fnc2Summary .BodyG-Column2-Body1 p
+{
+	font-weight: normal;
+}
+
+.TableStyle-fnc2Summary .BodyI-Column3-Body1
+{
+	font-weight: normal;
+	vertical-align: top;
+}
+
+.TableStyle-fnc2Summary .BodyI-Column3-Body1 p
+{
+	font-weight: normal;
+}
+
+.TableStyle-fnc2Summary .BodyE-Column3-Body1
+{
+	font-weight: normal;
+	border-bottom-width: 1px;
+	border-bottom-color: #c0c0c0;
+	border-bottom-style: solid;
+	vertical-align: top;
+	border-right-width: 1px;
+	border-right-color: #c0c0c0;
+	border-right-style: solid;
+}
+
+.TableStyle-fnc2Summary .BodyE-Column3-Body1 p
+{
+	font-weight: normal;
+}
+
+.TableStyle-fnc2Summary .BodyF-Column3-Body1
+{
+	font-weight: normal;
+	border-bottom-width: 1px;
+	border-bottom-color: #c0c0c0;
+	border-bottom-style: solid;
+	vertical-align: top;
+}
+
+.TableStyle-fnc2Summary .BodyF-Column3-Body1 p
+{
+	font-weight: normal;
+}
+
+.TableStyle-fnc2Summary .BodyH-Column3-Body1
+{
+	font-weight: normal;
+	vertical-align: top;
+	border-right-width: 1px;
+	border-right-color: #c0c0c0;
+	border-right-style: solid;
+}
+
+.TableStyle-fnc2Summary .BodyH-Column3-Body1 p
+{
+	font-weight: normal;
+}
+
+.TableStyle-fnc2Summary .BodyD-Column3-Body1
+{
+	font-weight: normal;
+	border-bottom-width: 1px;
+	border-bottom-color: #c0c0c0;
+	border-bottom-style: solid;
+	vertical-align: top;
+}
+
+.TableStyle-fnc2Summary .BodyD-Column3-Body1 p
+{
+	font-weight: normal;
+}
+
+.TableStyle-fnc2Summary .BodyC-Column3-Body1
+{
+	font-weight: normal;
+	vertical-align: top;
+}
+
+.TableStyle-fnc2Summary .BodyC-Column3-Body1 p
+{
+	font-weight: normal;
+}
+
+.TableStyle-fnc2Summary .BodyB-Column3-Body1
+{
+	font-weight: normal;
+	vertical-align: top;
+	border-right-width: 1px;
+	border-right-color: #c0c0c0;
+	border-right-style: solid;
+}
+
+.TableStyle-fnc2Summary .BodyB-Column3-Body1 p
+{
+	font-weight: normal;
+}
+
+.TableStyle-fnc2Summary .BodyA-Column3-Body1
+{
+	font-weight: normal;
+	vertical-align: top;
+}
+
+.TableStyle-fnc2Summary .BodyA-Column3-Body1 p
+{
+	font-weight: normal;
+}
+
+.TableStyle-fnc2Summary .BodyG-Column3-Body1
+{
+	font-weight: normal;
+	vertical-align: top;
+}
+
+.TableStyle-fnc2Summary .BodyG-Column3-Body1 p
+{
+	font-weight: normal;
+}
+
+

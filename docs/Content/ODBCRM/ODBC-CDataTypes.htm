@@ -1,0 +1,130 @@
+<?xml version="1.0" encoding="utf-8"?>
+<!DOCTYPE html PUBLIC "-//W3C//DTD XHTML 1.0 Strict//EN" "http://www.w3.org/TR/xhtml1/DTD/xhtml1-strict.dtd">
+<html xmlns:MadCap="http://www.madcapsoftware.com/Schemas/MadCap.xsd" MadCap:tocPath="SQL API|ODBC User's Guide" MadCap:InPreviewMode="false" MadCap:PreloadImages="false" MadCap:RuntimeFileType="Topic" MadCap:TargetType="WebHelp" lang="en-us" xml:lang="en-us" MadCap:PathToHelpSystem="../../" MadCap:HelpSystemFileName="Default.xml" MadCap:SearchType="Stem">
+    <head>
+        <meta http-equiv="Content-Type" content="text/html; charset=utf-8" /><title>ODBC C Data Types</title>
+        <link rel="icon" type="image/png" href="http://docs.raima.com/favicon.png" />
+        <link href="../SkinSupport/MadCap.css" rel="stylesheet" />
+        <link href="../Resources/TableStyles/Col3DataType.css" rel="stylesheet" />
+        <link href="../Resources/Stylesheets/raima.css" rel="stylesheet" />
+        <script src="../SkinSupport/MadCapAll.js" type="text/javascript">
+        </script>
+    </head>
+    <body>
+        <p class="MCWebHelpFramesetLink MCWebHelpFramesetLinkTop" style="display: none;"><a href="../../Default_CSH.htm#ODBCRM/ODBC-CDataTypes.htm" style="">Open topic with navigation</a>
+        </p>
+        <div class="MCBreadcrumbsBox_0"><span class="MCBreadcrumbsPrefix">You are here: </span><a class="MCBreadcrumbsLink" href="../dbRSQL.htm">SQL API</a><span class="MCBreadcrumbsDivider"> &gt; </span><a class="MCBreadcrumbsLink" href="dbODBCUG.htm">ODBC User's Guide</a><span class="MCBreadcrumbsDivider"> &gt; </span><span class="MCBreadcrumbs">ODBC C Data Types</span>
+        </div>
+        <h1>ODBC C Data Types</h1>
+        <p>The C data type is specified in the <code>SQLBindCol</code> and <code>SQLGetData</code> functions with the <code>TargetType</code> argument and in the <code>SQLBindParameter</code> function with the <code>ValueType</code> argument. It can also be specified by calling <code>SQLSetDescField</code> to set the <code>SQL_DESC_CONCISE_TYPE</code> field of an ARD or APD, or by calling <code>SQLSetDescRec</code> with the <code>Type</code> argument (and the <code>SubType</code> argument if needed) and the <code>DescriptorHandle</code> argument set to the handle of an ARD or APD.</p>
+        <p>The following table lists valid type identifiers for the C data types. The table also lists the ODBC C data type that corresponds to each identifier and the definition of this data type.</p>
+        <table style="mc-table-style: url('../Resources/TableStyles/Col3DataType.css');caption-side: top;width: 75%;margin-left: 0;margin-right: auto;" class="TableStyle-Col3DataType" cellspacing="0">
+            <col class="Column-Column1" />
+            <col class="Column-Column2" />
+            <col class="Column-Column3" />
+            <thead>
+                <tr class="Head-Header1">
+                    <th class="HeadE-Column1-Header1">C type identifier</th>
+                    <th class="HeadE-Column2-Header1">ODBC C typedef</th>
+                    <th class="HeadD-Column3-Header1">C type</th>
+                </tr>
+            </thead>
+            <tbody>
+                <tr class="Body-Body1">
+                    <td class="BodyE-Column1-Body1">SQL_C_CHAR</td>
+                    <td class="BodyE-Column2-Body1">SQLCHAR *</td>
+                    <td class="BodyD-Column3-Body1">unsigned char *</td>
+                </tr>
+                <tr class="Body-Body1">
+                    <td class="BodyE-Column1-Body1">SQL_C_WCHAR</td>
+                    <td class="BodyE-Column2-Body1">SQLWCHAR *</td>
+                    <td class="BodyD-Column3-Body1">wchar_t *</td>
+                </tr>
+                <tr class="Body-Body1">
+                    <td class="BodyE-Column1-Body1">SQL_C_SSHORT</td>
+                    <td class="BodyE-Column2-Body1">SQLSMALLINT</td>
+                    <td class="BodyD-Column3-Body1">int16_t</td>
+                </tr>
+                <tr class="Body-Body1">
+                    <td class="BodyE-Column1-Body1">SQL_C_USHORT</td>
+                    <td class="BodyE-Column2-Body1">SQLUSMALLINT</td>
+                    <td class="BodyD-Column3-Body1">uint16_t</td>
+                </tr>
+                <tr class="Body-Body1">
+                    <td class="BodyE-Column1-Body1">SQL_C_SLONG</td>
+                    <td class="BodyE-Column2-Body1">SQLINTEGER</td>
+                    <td class="BodyD-Column3-Body1">int32_t</td>
+                </tr>
+                <tr class="Body-Body1">
+                    <td class="BodyE-Column1-Body1">SQL_C_ULONG</td>
+                    <td class="BodyE-Column2-Body1">SQLUINTEGER</td>
+                    <td class="BodyD-Column3-Body1">uint32_t</td>
+                </tr>
+                <tr class="Body-Body1">
+                    <td class="BodyE-Column1-Body1">SQL_C_FLOAT</td>
+                    <td class="BodyE-Column2-Body1">SQLREAL</td>
+                    <td class="BodyD-Column3-Body1">float</td>
+                </tr>
+                <tr class="Body-Body1">
+                    <td class="BodyE-Column1-Body1">SQL_C_DOUBLE</td>
+                    <td class="BodyE-Column2-Body1">SQLDOUBLE, SQLFLOAT</td>
+                    <td class="BodyD-Column3-Body1">double</td>
+                </tr>
+                <tr class="Body-Body1">
+                    <td class="BodyE-Column1-Body1">SQL_C_BIT</td>
+                    <td class="BodyE-Column2-Body1">SQLCHAR</td>
+                    <td class="BodyD-Column3-Body1">unsigned char</td>
+                </tr>
+                <tr class="Body-Body1">
+                    <td class="BodyE-Column1-Body1">SQL_C_STINYINT</td>
+                    <td class="BodyE-Column2-Body1">SQLSCHAR</td>
+                    <td class="BodyD-Column3-Body1">int8_t</td>
+                </tr>
+                <tr class="Body-Body1">
+                    <td class="BodyE-Column1-Body1">SQL_C_UTINYINT</td>
+                    <td class="BodyE-Column2-Body1">SQLCHAR</td>
+                    <td class="BodyD-Column3-Body1">uint8_t</td>
+                </tr>
+                <tr class="Body-Body1">
+                    <td class="BodyE-Column1-Body1">SQL_C_SBIGINT</td>
+                    <td class="BodyE-Column2-Body1">SQLBIGINT</td>
+                    <td class="BodyD-Column3-Body1">int64_t</td>
+                </tr>
+                <tr class="Body-Body1">
+                    <td class="BodyE-Column1-Body1">SQL_C_UBIGINT</td>
+                    <td class="BodyE-Column2-Body1">SQLUBIGINT</td>
+                    <td class="BodyD-Column3-Body1">uint64_t</td>
+                </tr>
+                <tr class="Body-Body1">
+                    <td class="BodyE-Column1-Body1">SQL_C_BINARY</td>
+                    <td class="BodyE-Column2-Body1">SQLCHAR *</td>
+                    <td class="BodyD-Column3-Body1">unsigned char *</td>
+                </tr>
+                <tr class="Body-Body1">
+                    <td class="BodyE-Column1-Body1">SQL_C_TYPE_DATE</td>
+                    <td class="BodyE-Column2-Body1">SQL_DATE_STRUCT</td>
+                    <td class="BodyD-Column3-Body1">struct tagDATE_STRUCT {<br />&#160;&#160;&#160;&#160;SQLSMALLINT year;<br />&#160;&#160;&#160;&#160;SQLUSMALLINT month;<br />&#160;&#160;&#160;&#160;SQLUSMALLINT day;<br />} DATE_STRUCT;[a]</td>
+                </tr>
+                <tr class="Body-Body1">
+                    <td class="BodyE-Column1-Body1">SQL_C_TYPE_TIME</td>
+                    <td class="BodyE-Column2-Body1">SQL_TIME_STRUCT</td>
+                    <td class="BodyD-Column3-Body1">struct tagTIME_STRUCT {<br />&#160;&#160;&#160;&#160;SQLUSMALLINT hour;<br />&#160;&#160;&#160;&#160;SQLUSMALLINT minute;<br />&#160;&#160;&#160;&#160;SQLUSMALLINT second;<br />} TIME_STRUCT;[a]</td>
+                </tr>
+                <tr class="Body-Body1">
+                    <td class="BodyB-Column1-Body1">SQL_C_TYPE_TIMESTAMP</td>
+                    <td class="BodyB-Column2-Body1">SQL_TIMESTAMP_STRUCT</td>
+                    <td class="BodyA-Column3-Body1">struct tagTIMESTAMP_STRUCT {<br />&#160;&#160;&#160;&#160;SQLSMALLINT year;<br />&#160;&#160;&#160;&#160;SQLUSMALLINT month;<br />&#160;&#160;&#160;&#160;SQLUSMALLINT day;<br />&#160;&#160;&#160;&#160;SQLUSMALLINT hour;<br />&#160;&#160;&#160;&#160;SQLUSMALLINT minute;<br />&#160;&#160;&#160;&#160;SQLUSMALLINT second;<br />&#160;&#160;&#160;&#160;SQLUINTEGER fraction;[b]<br />} TIMESTAMP_STRUCT;[a]</td>
+                </tr>
+            </tbody>
+        </table>
+        <p>[a]   The values of the year, month, day, hour, minute, and second fields in the datetime C data types must conform to the constraints of the Gregorian calendar. (See Constraints of the Gregorian Calendar later in this appendix.)</p>
+        <p>[b]   The value of the fraction field is the number of billionths of a second and ranges from 0 through 999,999,999 (1 less than 1 billion). For example, the value of the fraction field for a half-second is 500,000,000, for a thousandth of a second (one millisecond) is 1,000,000, for a millionth of a second (one microsecond) is 1,000, and for a billionth of a second (one nanosecond) is 1.</p>
+        <hr MadCap:conditions="Default.ScreenOnly" width="100%" size="0" align="center" />
+        <p MadCap:conditions="Default.ScreenOnly" style="font-size: 8pt;"><span class="MyVariablesCopyright">Copyright © 2012, Raima Inc. All rights reserved.</span>
+        </p>
+        <script type="text/javascript" src="../SkinSupport/MadCapBodyEnd.js">
+        </script>
+        <p class="MCWebHelpFramesetLink MCWebHelpFramesetLinkBottom" style="display: none;"><a href="../../Default_CSH.htm#ODBCRM/ODBC-CDataTypes.htm" style="">Open topic with navigation</a>
+        </p>
+    </body>
+</html>

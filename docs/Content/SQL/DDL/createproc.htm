@@ -1,0 +1,80 @@
+<?xml version="1.0" encoding="utf-8"?>
+<!DOCTYPE html PUBLIC "-//W3C//DTD XHTML 1.0 Strict//EN" "http://www.w3.org/TR/xhtml1/DTD/xhtml1-strict.dtd">
+<html xmlns:MadCap="http://www.madcapsoftware.com/Schemas/MadCap.xsd" MadCap:tocPath="SQL API|SQL Language Guide|Reference Guide|SQL Statement Reference" MadCap:InPreviewMode="false" MadCap:PreloadImages="false" MadCap:RuntimeFileType="Topic" MadCap:TargetType="WebHelp" lang="en-us" xml:lang="en-us" MadCap:PathToHelpSystem="../../../" MadCap:HelpSystemFileName="Default.xml" MadCap:SearchType="Stem">
+    <head>
+        <meta http-equiv="Content-Type" content="text/html; charset=utf-8" /><title>create procedure</title>
+        <link rel="icon" type="image/png" href="http://docs.raima.com/favicon.png" />
+        <link href="../../SkinSupport/MadCap.css" rel="stylesheet" />
+        <link href="../../Resources/Stylesheets/raima.css" rel="stylesheet" />
+        <script src="../../SkinSupport/MadCapAll.js" type="text/javascript">
+        </script>
+    </head>
+    <body>
+        <p class="MCWebHelpFramesetLink MCWebHelpFramesetLinkTop" style="display: none;"><a href="../../../Default_CSH.htm#SQL/DDL/createproc.htm" style="">Open topic with navigation</a>
+        </p>
+        <div class="MCBreadcrumbsBox_0"><span class="MCBreadcrumbsPrefix">You are here: </span><a class="MCBreadcrumbsLink" href="../../dbRSQL.htm">SQL API</a><span class="MCBreadcrumbsDivider"> &gt; </span><a class="MCBreadcrumbsLink" href="../dbSQL.htm">SQL Language Guide</a><span class="MCBreadcrumbsDivider"> &gt; </span><a class="MCBreadcrumbsLink" href="../SQLStmtRef.htm">Reference Guide</a><span class="MCBreadcrumbsDivider"> &gt; </span><span class="MCBreadcrumbs">create procedure</span>
+        </div>
+        <h3 class="newpage"><a name="kanchor227"></a>create procedure</h3>
+        <p>Create a stored procedure</p>
+        <p class="Heading">Syntax </p><pre class="Grammar">create_proc_stmt:
+		<b>create</b> {<b>proc</b> | <b>procedure</b>} <i>proc_name</i> [(<i>arg_name</i> arg_type[, <i>arg_name</i> arg_type]...)] <b>as</b>
+ 			{select_stmt... | 
+ 			[start_stmt] {insert_stmt | update_stmt | delete_stmt}... [commit_stmt]}
+		<b>end</b> {<b>proc</b> | <b>procedure</b>}</pre><pre class="Grammar" xml:space="preserve">
+arg_type:
+     		{<b>character</b> | <b>char</b> }
+ 	|	{<b>double</b> [<b>precision</b>] | <b>float</b> | <b>real</b> }
+ 	|	{<b>tinyint</b> |&#160;<b>smallint</b> | <b>int</b> | <b>integer</b>    <![CDATA[ ]]><b>long</b> | <b>bigint</b>}
+ 	|	<b>date</b> | <b>time</b> | <b>timestamp</b>    <![CDATA[
+]]></pre>
+        <p class="Heading">Description </p>
+        <p>Stored procedures that execute one or more basic SQL statements can be created with the <b>create procedure</b> statement.  A stored procedure can either contain one or more <b>select</b> statements (<i>retrieval</i> procedure) or a sequence of <b>insert</b>, <b>update</b>, and/or <b>delete</b> statements (<i>modification</i> procedure) optionally enclosed in a transaction (<i>transactional</i> procedure).  The name of the stored procedure is specified by the identifier <i>procname</i> which can be executed using the <b>execute</b> statement.</p>
+        <p>Any number of arguments can be declared with the stored procedure.  Each <i>arg_name</i> must be an identifier than is not an SQL reserved word or the name of any table or column in the database.   The type of the argument must also be specified as shown in the above syntax. Argument values of type <b>char</b> represent a (null-terminated) character string of any length. Each <i>arg_name</i> can be simply referenced by name in any of the stored procedures SQL statements in any context in which a value of that data type can be specified.</p>
+        <p>The additional result sets from a retrieval procedure that contains more than one <b>select</b> statement are accessed by the application through a call to the <code>rsqlMoreResults</code> function after the last call to <code>rsqlFetch</code> on the prior <b>select</b> statement has returned <code>errNOMOREDATA</code>. Function     <![CDATA[ ]]><code>rsqlMoreResults</code> itself will return <code>errNOMOREDATA</code> after the last row of the last result set has been returned.</p>
+        <p>It is recommended that you use transactional procedures for all of your transactions that involve the execution of more than one <b>insert</b>, <b>update</b>, and/or <b>delete</b> statement involving modifications to more than one table.  Execution of a modification or transactional procedure will issue a single grouped lock request for all of the referenced tables at the start of execution so that either all or none of the locks are granted.  Grouped locking in this way guarantees that the application is deadlock free.  Use of a transactional procedure ensures that either all or none of the changes are committed to the database.</p>
+        <p>Execution of a modification procedure when auto-commit mode is enabled, behaves the same as a transactional procedure.  This provides a way to ensure that the modifications from more than one statement are committed together even in auto-commit mode.</p>
+        <p>An <i>inherited</i> read lock is a read lock that is active at the time a transaction begins (e.g., locks that may be held by an active cursor on another statement handle in the same connection).  In auto-commit mode, all inherited read locks remain in place after the changes are committed (or rolled back, in the event that one of the modification (or transactional) procedure's statements encounter an execution error such as a referential integrity violation).  When auto-commit is not active, all transaction commits (or rollbacks) free all locks.</p>
+        <p>The advantage of using stored procedures is that the cost of compiling the stored procedure statements is incurred only once.   Compiled stored procedures are stored in the referenced database's directory on the TFS in a file named <i>procname</i>.ssp.  An embeddable (through <code>#include</code> directives) C module containing statically initialized tables comprising the compiled form of the procedure is also created.  This file along with a companion header file is named <i>procname</i>_ssp.c (or .h).   It can be compiled with your C application and directly execute through a call to function <code>rsqlExecProc</code>.</p>
+        <p class="Heading">Examples</p><pre xml:space="preserve">create proc authors_books(lastnm char) as
+    select publ_yr, title from book where last_name = lastnm
+end proc;
+    ...
+authors_books("PotterB");
+PUBL_YR TITLE
+   1903 The Tailor of Gloucester
+   1903 The tale of Squirrel Nutkin
+   1904 The tale of Benjamin Bunny
+   1904 The tale of Peter Rabbit; thirty-one illustrations.
+   1905 The pie and the patty-pan.
+   1905 The tale of Mrs. Tiggy-Winkle
+   1906 The tale of Mr. Jeremy Fisher
+   1908 The tale of Jemima Puddle-Duck
+   1907 The tale of Tom Kitten
+   1911 The tale of Timmy Tiptoes
+   1912 The tale of Mr. Tod
+   1913 The tale of Pigling Bland
+   1918 The tale of Johnny Town-mouse
+    ...
+create procedure sold(pid char, bid char, offer double, sale_date char) as
+    start transaction
+    update book set price = offer, date_sold = sale_date where bookid = bid
+    insert into sale values bid, pid
+    commit
+end proc;
+    ...
+execute sold("SMD", "potter08", 750.0, date "2011-04-03");
+    ...</pre>
+        <p class="Heading">See Also</p>
+        <p><a href="../DML/execute.htm">execute</a>
+        </p>
+        <p><a href="../../SQLRM/rsqlExecProc.htm">rsqlExecProc</a>
+        </p>
+        <hr MadCap:conditions="Default.ScreenOnly" width="100%" size="0" align="center" />
+        <p MadCap:conditions="Default.ScreenOnly" style="font-size: 8pt;"><span class="MyVariablesCopyright">Copyright © 2012, Raima Inc. All rights reserved.</span>
+        </p>
+        <script type="text/javascript" src="../../SkinSupport/MadCapBodyEnd.js">
+        </script>
+        <p class="MCWebHelpFramesetLink MCWebHelpFramesetLinkBottom" style="display: none;"><a href="../../../Default_CSH.htm#SQL/DDL/createproc.htm" style="">Open topic with navigation</a>
+        </p>
+    </body>
+</html>

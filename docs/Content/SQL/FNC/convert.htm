@@ -1,0 +1,269 @@
+<?xml version="1.0" encoding="utf-8"?>
+<!DOCTYPE html PUBLIC "-//W3C//DTD XHTML 1.0 Strict//EN" "http://www.w3.org/TR/xhtml1/DTD/xhtml1-strict.dtd">
+<html xmlns:MadCap="http://www.madcapsoftware.com/Schemas/MadCap.xsd" MadCap:tocPath="SQL API|SQL Language Guide|Reference Guide|SQL Built-In Function Reference" MadCap:InPreviewMode="false" MadCap:PreloadImages="false" MadCap:RuntimeFileType="Topic" MadCap:TargetType="WebHelp" lang="en-us" xml:lang="en-us" MadCap:PathToHelpSystem="../../../" MadCap:HelpSystemFileName="Default.xml" MadCap:SearchType="Stem">
+    <head>
+        <meta http-equiv="Content-Type" content="text/html; charset=utf-8" /><title>convert</title>
+        <link rel="icon" type="image/png" href="http://docs.raima.com/favicon.png" />
+        <link href="../../SkinSupport/MadCap.css" rel="stylesheet" />
+        <link href="../../Resources/TableStyles/ArgsTwoCol.css" rel="stylesheet" />
+        <link href="../../Resources/Stylesheets/raima.css" rel="stylesheet" />
+        <script src="../../SkinSupport/MadCapAll.js" type="text/javascript">
+        </script>
+    </head>
+    <body>
+        <p class="MCWebHelpFramesetLink MCWebHelpFramesetLinkTop" style="display: none;"><a href="../../../Default_CSH.htm#SQL/FNC/convert.htm" style="">Open topic with navigation</a>
+        </p>
+        <div class="MCBreadcrumbsBox_0"><span class="MCBreadcrumbsPrefix">You are here: </span><a class="MCBreadcrumbsLink" href="../../dbRSQL.htm">SQL API</a><span class="MCBreadcrumbsDivider"> &gt; </span><a class="MCBreadcrumbsLink" href="../dbSQL.htm">SQL Language Guide</a><span class="MCBreadcrumbsDivider"> &gt; </span><a class="MCBreadcrumbsLink" href="../SQLStmtRef.htm">Reference Guide</a><span class="MCBreadcrumbsDivider"> &gt; </span><span class="MCBreadcrumbs">convert</span>
+        </div>
+        <h3 class="newpage">convert</h3>
+        <p>Convert an expression to a data type or a character string</p>
+        <p class="Heading">Syntax</p><pre class="Grammar" xml:space="preserve"><b>convert</b>(expression, convert_type_type)<br /><br /><b>convert</b>(expression, {<b>char</b> | <b>wchar</b>}, <i>width</i>, format_spec)</pre><pre class="Grammar" xml:space="preserve">convert_type:
+		<b>char</b> |<b>smallint</b> | <b>integer</b> | <b>real</b>
+	|	<b>double</b> | <b>date</b> | <b>time</b> | <b>timestamp</b> |&#160;<b>tinyint</b> |&#160;<b>bigint</b>
+
+convert_format:
+		numeric_format | datetime_format
+
+numeric_format:
+		"[&lt;&lt; | &gt;&gt; | &gt;&lt;]['text' | $][- | (][#,]#[.#[#]...][e | E]['text' | $ | %]"
+
+datetime_format:
+		"[&lt;&lt; | &gt;&gt; | &gt;&lt;]['text' | spchar | date_code | time_code]..."
+
+date_code:
+		<b>m</b> | <b>mm</b> | <b>mmm</b> | <b>mon</b> | <b>mmmm</b> | <b>month</b>
+	|	<b>d</b> | <b>dd</b> | <b>ddd</b> | <b>dddd</b> | <b>day</b>
+	|	<b>yy</b> | <b>yyyy</b>
+
+time_code:
+		<b>h</b> | <b>hh</b> | <b>m</b> | <b>mm</b> | <b>s</b> | <b>ss</b> | .<b>f</b>[<b>f</b>]... | [<b>a/p</b> | <b>am/pm</b> | <b>A/P</b> | <b>AM/PM</b>]
+</pre>
+        <p class="Heading">Parameters</p>
+        <table style="width: 100%;mc-table-style: url('../../Resources/TableStyles/ArgsTwoCol.css');margin-left: 0;margin-right: auto;" class="TableStyle-ArgsTwoCol" cellspacing="0">
+            <col class="Column-Column1" style="width: 200px;" />
+            <col class="Column-Column2" />
+            <tbody>
+                <tr class="Body-Body1">
+                    <td class="BodyE-Column1-Body1">expr</td>
+                    <td class="BodyD-Column2-Body1">The
+expression to be converted.</td>
+                </tr>
+                <tr class="Body-Body1">
+                    <td class="BodyE-Column1-Body1">arg_type</td>
+                    <td class="BodyD-Column2-Body1">Specifies the data type into which the expression is to be converted.</td>
+                </tr>
+                <tr class="Body-Body1">
+                    <td class="BodyE-Column1-Body1">char |&#160;wchar</td>
+                    <td class="BodyD-Column2-Body1">Specifies the character type of the result
+when using the second form of the <b>convert</b> function specified above.</td>
+                </tr>
+                <tr class="Body-Body1">
+                    <td class="BodyE-Column1-Body1">width</td>
+                    <td class="BodyD-Column2-Body1">The maximum width, in characters, of the result
+string.</td>
+                </tr>
+                <tr class="Body-Body1">
+                    <td class="BodyB-Column1-Body1">fmt</td>
+                    <td class="BodyA-Column2-Body1">The specification of the format of the result character string into which the numeric or date/time values will be converted.  The individual elements of the format specifiers are described in the Numeric Format Specifier and Date/Time Format Specifier tables below.</td>
+                </tr>
+            </tbody>
+        </table>
+        <p class="Heading">Description</p>
+        <p>This system function converts an expression to a different type or string representation.&#160;
+There are two forms of this function.</p>
+        <p>The first form of this function, shown above, converts an expression to the 
+specified data type.&#160; The second form converts an expression to a character 
+string in the specified format.&#160; </p>
+        <p class="Heading">Numeric Format Specifier</p>
+        <p>The
+format specifier for numeric values is represented as shown in the box below.&#160;
+The minimum specifier that must be used for a numeric format is "#".&#160;
+If the display field width (width parameter) is too small to contain a numeric
+value, the convert function formats the value in exponential format (for
+example, 1.759263e08).</p>
+        <p>The elements for this specifier are explained in the following table.</p>
+        <table style="caption-side: top;">
+            <caption>Numeric Format Specifier Elements</caption>
+            <col>
+            </col>
+            <col>
+            </col>
+            <tr>
+                <th>Element</th>
+                <th>Description</th>
+            </tr>
+            <tr>
+                <td>[&lt;&lt; | &gt;&gt; | &gt;&lt;]</td>
+                <td>The justification specifier.  You can specify left-justified text (&lt;&lt;), right-justified text (&gt;&gt;), or centered text (&gt;&lt;).  The default for numeric values is right-justified.</td>
+            </tr>
+            <tr>
+                <td>['text' | $]</td>
+                <td>A text character or string to use as a prefix for the result string.  You must enclose the character or text with single quotation marks unless the prefix is one dollar sign.</td>
+            </tr>
+            <tr>
+                <td>[- | (]</td>
+                <td>The display specifier for negative values.  You can show negative values with a minus sign or with parentheses around the value.  If parentheses are used, positive values are shown with an ending space to ensure alignment of the decimal point.</td>
+            </tr>
+            <tr>
+                <td>[#,]#[.#[#]...]</td>
+                <td>The numeric format specifier.  You can specify whether to show commas every third place before the decimal point.  Also, you can specify how many digits (if any) to show after the decimal point.</td>
+            </tr>
+            <tr>
+                <td>[e | E]</td>
+                <td>Whether to use exponential format to show numeric values.  If this option is omitted, exponential format is used only when the value is too large or small to be shown otherwise.  You can specify display of an lowercase or uppercase exponent indicator.</td>
+            </tr>
+            <tr>
+                <td>['text' | $ | %]</td>
+                <td>A text character or string to use as a suffix for the result string.  You must enclose the character or text with single quotation marks unless the suffix is one dollar or percent sign.</td>
+            </tr>
+        </table>
+        <p class="Heading">Formatting Date/Time Values</p>
+        <p>The format specifier for date/time values is given in the above syntax box.  The date/time format specifier can contain any number of text items or special characters that are interspersed with the date or time codes.  You can arrange these items in any order, but a time specifier must adhere to the ordering rules described in the syntax under "time_code".  For the minute codes to be interpreted as minutes (and not months) they must follow the hour codes.  You cannot specify the minutes of a time value without also specifying the hour.  You can specify the hour by itself.  Similarly, you cannot specify the seconds without having specified minutes and you cannot specify fractions of a second without specifying seconds.  Thus, the order "hours, minutes, seconds, fractions" must be preserved.</p>
+        <table style="caption-side: top;">
+            <caption>Date and Time Format Specifier Elements</caption>
+            <col />
+            <col />
+            <tr>
+                <th>&#160;</th>
+                <th>General Formatting Elements</th>
+            </tr>
+            <tr>
+                <th>Element</th>
+                <th>Description</th>
+            </tr>
+            <tr>
+                <td>[&lt;&lt; | &gt;&gt; | &gt;&lt;]</td>
+                <td>The justification specifier.  You can specify left-justified text (&lt;&lt;), right-justified text (&gt;&gt;), or centered text (&gt;&lt;).  The default for numeric values is left-justified.</td>
+            </tr>
+            <tr>
+                <td>'text' | spchar</td>
+                <td>A string or a special character (for example, "-", "/", or ".") to be copied into the result string.  The special character is often useful in separating the entities within a date and time.</td>
+            </tr>
+            <tr>
+                <th>&#160;</th>
+                <th>Date-Specific Formatting Elements</th>
+            </tr>
+            <tr>
+                <th>Element</th>
+                <th>Description</th>
+            </tr>
+            <tr>
+                <td>m</td>
+                <td>Month number (1-12) without a leading zero.</td>
+            </tr>
+            <tr>
+                <td>mm</td>
+                <td>Month number with a leading zero.</td>
+            </tr>
+            <tr>
+                <td>mmm</td>
+                <td>Three-character month abbreviation (e.g., "Jan").</td>
+            </tr>
+            <tr>
+                <td>mon</td>
+                <td>Same as mmm.</td>
+            </tr>
+            <tr>
+                <td>mmmm</td>
+                <td>Fully spelled month name (e.g., "January").</td>
+            </tr>
+            <tr>
+                <td>month</td>
+                <td>Same as mmmm.</td>
+            </tr>
+            <tr>
+                <td>d</td>
+                <td>Day of month (1-31) without leading zero.</td>
+            </tr>
+            <tr>
+                <td>dd</td>
+                <td>Day of month with leading zero.</td>
+            </tr>
+            <tr>
+                <td>ddd</td>
+                <td>Three character day of week abbreviation (e.g., "Wed").</td>
+            </tr>
+            <tr>
+                <td>dddd</td>
+                <td>Fully spelled day of week (e.g., "Wednesday").</td>
+            </tr>
+            <tr>
+                <td>day</td>
+                <td>Same as dddd.</td>
+            </tr>
+            <tr>
+                <td>yy</td>
+                <td>Two-digit year AD with leading zero if year between 1950 and 2049; otherwise same as yyyy.</td>
+            </tr>
+            <tr>
+                <td>yyyy</td>
+                <td>Year AD up to four digits without leading zero.</td>
+            </tr>
+            <tr>
+                <th>&#160;</th>
+                <th>Time-Specific Formatting Elements</th>
+            </tr>
+            <tr>
+                <th>Element</th>
+                <th>Description</th>
+            </tr>
+            <tr>
+                <td>h</td>
+                <td>Hour of day (0-12 or 23) without leading zero.</td>
+            </tr>
+            <tr>
+                <td>hh</td>
+                <td>Hour of day with leading zero.</td>
+            </tr>
+            <tr>
+                <td>m</td>
+                <td>Minute of hour (0-59) without leading zero (only after h or hh).</td>
+            </tr>
+            <tr>
+                <td>mm</td>
+                <td>Minute of hour with leading zero (only after h or hh).</td>
+            </tr>
+            <tr>
+                <td>s</td>
+                <td>Second of minute (0-59) without leading zero (only after m or mm).</td>
+            </tr>
+            <tr>
+                <td>ss</td>
+                <td>Second of minute with leading zero (only after m or mm).</td>
+            </tr>
+            <tr>
+                <td>.f[f]...</td>
+                <td>Fraction of a second: four decimal place accuracy (only after s or ss).</td>
+            </tr>
+            <tr>
+                <td>a/p | am/pm | A/P | AM/PM</td>
+                <td>Hour of day is 0-12;  AM or PM indicator will be output to result string (only after last time code element).</td>
+            </tr>
+        </table>
+        <p class="Heading">Example</p>
+        <p class="BodyIndent4">The
+following examples show numeric format specifiers and their results.</p><pre class="Example" xml:space="preserve"><b>Function                                         Result
+</b>convert(14773.1234, char, 10, "#.#")             "   14773.1"
+convert(736620.3795, char, 12, "#,#.###")        "736,620.380"
+convert(736620.3795, char, 12, "$#,#.##")        "$736,620.38"
+convert(736620.3795, char, 12, "&lt;&lt;#.######e")    "7.366204e05"
+convert(56.75, char, 8, "#.##%")                 "  56.75%"
+convert(56.75, char, 8, "#.##' percent'")        "  56.75 percent"</pre>
+        <p class="BodyIndent4">The
+examples below show date/time format specifiers and corresponding results.&#160;
+These examples show how Tuesday, October 23, 1951 at 4:42:27.1750 a.m.&#160; can be returned.&#160; The format specifier, rather than the entire function, is shown
+here in the left column.</p><pre class="Example" xml:space="preserve"><b>Format Spec.                             Result
+</b>mmm dd, yyyy                             Oct 23, 1951
+hh'hours' on ddd month dd, yyyy          04hours on Tue October 23, 1951
+dd 'of' month 'of the year' yyyy         23 of October of the year 1951
+dddd hh.mm.ss.ffff mm-dd-yyyy            Tuesday 04.42.27.1750 10-23-1951
+'date:'yyyy.mm.dd 'at' hh:mm A/P         date:1951.10.23 at 04:42 AM</pre>
+        <hr MadCap:conditions="Default.ScreenOnly" width="100%" size="0" align="center" />
+        <p MadCap:conditions="Default.ScreenOnly" style="font-size: 8pt;"><span class="MyVariablesCopyright">Copyright © 2012, Raima Inc. All rights reserved.</span>
+        </p>
+        <script type="text/javascript" src="../../SkinSupport/MadCapBodyEnd.js">
+        </script>
+        <p class="MCWebHelpFramesetLink MCWebHelpFramesetLinkBottom" style="display: none;"><a href="../../../Default_CSH.htm#SQL/FNC/convert.htm" style="">Open topic with navigation</a>
+        </p>
+    </body>
+</html>

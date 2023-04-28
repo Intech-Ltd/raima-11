@@ -1,0 +1,663 @@
+<?xml version="1.0" encoding="utf-8"?>
+<!DOCTYPE html PUBLIC "-//W3C//DTD XHTML 1.0 Strict//EN" "http://www.w3.org/TR/xhtml1/DTD/xhtml1-strict.dtd">
+<html xmlns:MadCap="http://www.madcapsoftware.com/Schemas/MadCap.xsd" MadCap:tocPath="SQL API|RSQL User's Guide" MadCap:InPreviewMode="false" MadCap:PreloadImages="false" MadCap:RuntimeFileType="Topic" MadCap:TargetType="WebHelp" lang="en-us" xml:lang="en-us" MadCap:PathToHelpSystem="../../" MadCap:HelpSystemFileName="Default.xml" MadCap:SearchType="Stem">
+    <head>
+        <meta http-equiv="Content-Type" content="text/html; charset=utf-8" /><title>RSQL API Function Reference</title>
+        <link rel="icon" type="image/png" href="http://docs.raima.com/favicon.png" />
+        <link href="../SkinSupport/MadCap.css" rel="stylesheet" />
+        <link href="../Resources/TableStyles/fncSummary.css" rel="stylesheet" />
+        <link href="../Resources/Stylesheets/raima.css" rel="stylesheet" />
+        <script src="../SkinSupport/MadCapAll.js" type="text/javascript">
+        </script>
+    </head>
+    <body>
+        <p class="MCWebHelpFramesetLink MCWebHelpFramesetLinkTop" style="display: none;"><a href="../../Default_CSH.htm#SQLRM/SQLAPIReference.htm" style="">Open topic with navigation</a>
+        </p>
+        <div class="MCBreadcrumbsBox_0"><span class="MCBreadcrumbsPrefix">You are here: </span><a class="MCBreadcrumbsLink" href="../dbRSQL.htm">SQL API</a><span class="MCBreadcrumbsDivider"> &gt; </span><a class="MCBreadcrumbsLink" href="../RSQLUG/dbSQLUG.htm">RSQL User's Guide</a><span class="MCBreadcrumbsDivider"> &gt; </span><span class="MCBreadcrumbs">RSQL API Function Reference</span>
+        </div>
+        <h1><a MadCap:generatedBookmark="TOC" name="RSQL_API_Function_Reference"></a>RSQL API Function Reference</h1>
+        <p class="Quotation">There is no passion like that of a functionary for his function.</p>
+        <p class="QuoteAuthor">- Georges Clemenceau</p>
+        <p>All of the <span class="MyVariablesProductShortName">RDM</span> proprietary SQL C application programming interface functions are described below.   While these functions map closely to related functions found in ODBC, they are non-standard but are used by the <span class="MyVariablesProductShortName">RDM</span> ODBC, ADO.NET and JDBC libraries.</p>
+        <p class="Notes">  Use of this API is only recommended where use of the ODBC functionality is not needed and/or the extra function layer and necessary resources associated with ODBC would have too great a negative impact on the application's target resource requirements.</p>
+        <p>The <span class="MyVariablesRSQLName">RDM SQL</span> API defines its own enumerator types for data type, status codes, and other needed control constants.  These type and constant definitions can be found in files <code>rsqltypes.h</code>, <code>rsqlerrs.h</code> and <code>errtab.h</code> located in the <span class="MyVariablesProductShortName">RDM</span> include directory.  Refer to those files for the up-to-date type definitions and constant values but the names of the constants in the following tables will not change.</p>
+        <table style="caption-side: top;mc-table-style: url('../Resources/TableStyles/fncSummary.css');margin-left: 0;margin-right: auto;" class="TableStyle-fncSummary" cellspacing="0">
+            <caption><a name="SQL_T"></a>Table 24. Data Type Identifier Constants of Type SQL_T</caption>
+            <col style="width: 170px;" class="Column-Column1" />
+            <col class="Column-Column2" />
+            <thead>
+                <tr class="Head-Header1">
+                    <th class="HeadE-Column1-Header1">SQL_T Constant</th>
+                    <th class="HeadD-Column2-Header1">Corresponding SQL Data Type</th>
+                </tr>
+            </thead>
+            <tbody>
+                <tr class="Body-Body1">
+                    <td style="font-family: monospace;" class="BodyE-Column1-Body1">tNOVAL</td>
+                    <td class="BodyD-Column2-Body1">No value has been assigned</td>
+                </tr>
+                <tr class="Body-Body1">
+                    <td style="font-family: monospace;" class="BodyE-Column1-Body1">tCHAR</td>
+                    <td class="BodyD-Column2-Body1">char</td>
+                </tr>
+                <tr class="Body-Body1">
+                    <td style="font-family: monospace;" class="BodyE-Column1-Body1">tVARCHAR</td>
+                    <td class="BodyD-Column2-Body1">varchar</td>
+                </tr>
+                <tr class="Body-Body1">
+                    <td style="font-family: monospace;" class="BodyE-Column1-Body1">tBINARY</td>
+                    <td class="BodyD-Column2-Body1">binary</td>
+                </tr>
+                <tr class="Body-Body1">
+                    <td style="font-family: monospace;" class="BodyE-Column1-Body1">tVARBINARY</td>
+                    <td class="BodyD-Column2-Body1">varbinary</td>
+                </tr>
+                <tr class="Body-Body1">
+                    <td style="font-family: monospace;" class="BodyE-Column1-Body1">tTINYINT</td>
+                    <td class="BodyD-Column2-Body1">tinyint</td>
+                </tr>
+                <tr class="Body-Body1">
+                    <td style="font-family: monospace;" class="BodyE-Column1-Body1">tSMALLINT</td>
+                    <td class="BodyD-Column2-Body1">smallint</td>
+                </tr>
+                <tr class="Body-Body1">
+                    <td style="font-family: monospace;" class="BodyE-Column1-Body1">tINTEGER</td>
+                    <td class="BodyD-Column2-Body1">int | integer</td>
+                </tr>
+                <tr class="Body-Body1">
+                    <td style="font-family: monospace;" class="BodyE-Column1-Body1">tBIGINT</td>
+                    <td class="BodyD-Column2-Body1">bigint</td>
+                </tr>
+                <tr class="Body-Body1">
+                    <td style="font-family: monospace;" class="BodyE-Column1-Body1">tFLOAT</td>
+                    <td class="BodyD-Column2-Body1">real</td>
+                </tr>
+                <tr class="Body-Body1">
+                    <td style="font-family: monospace;" class="BodyE-Column1-Body1">tDOUBLE</td>
+                    <td class="BodyD-Column2-Body1">double [precision] | float</td>
+                </tr>
+                <tr class="Body-Body1">
+                    <td style="font-family: monospace;" class="BodyE-Column1-Body1">tDATE</td>
+                    <td class="BodyD-Column2-Body1">date</td>
+                </tr>
+                <tr class="Body-Body1">
+                    <td style="font-family: monospace;" class="BodyE-Column1-Body1">tTIME</td>
+                    <td class="BodyD-Column2-Body1">time</td>
+                </tr>
+                <tr class="Body-Body1">
+                    <td style="font-family: monospace;" class="BodyE-Column1-Body1">tTIMESTAMP</td>
+                    <td class="BodyD-Column2-Body1">timestamp</td>
+                </tr>
+                <tr class="Body-Body1">
+                    <td style="font-family: monospace;" class="BodyE-Column1-Body1">tROWID</td>
+                    <td class="BodyD-Column2-Body1">rowid</td>
+                </tr>
+                <tr class="Body-Body1">
+                    <td style="font-family: monospace;" class="BodyE-Column1-Body1">tCLOB</td>
+                    <td class="BodyD-Column2-Body1">char large object | long varchar</td>
+                </tr>
+                <tr class="Body-Body1">
+                    <td style="font-family: monospace;" class="BodyE-Column1-Body1">tBLOB</td>
+                    <td class="BodyD-Column2-Body1">binary large object | long varbinary</td>
+                </tr>
+                <tr class="Body-Body1">
+                    <td style="font-family: monospace;" class="BodyB-Column1-Body1">tNULL</td>
+                    <td class="BodyA-Column2-Body1">value is null</td>
+                </tr>
+            </tbody>
+        </table>
+        <p><span class="MyVariablesRSQLName">RDM SQL</span> data values are stored in a general purpose data value container named <code>RSQL_VALUE</code> of type struct as shown in the following typedef's from <code>rsqltypes.h</code>.   SQL data values are passed into or returned by the <span class="MyVariablesRSQLName">RDM SQL</span> API functions use the <code>RSQL_VALUE</code> data type so an understanding of how to use this structure is essential.   For example, function <code>rsqlFetch</code> returns the result set column values for each fetched row in an array of type <code>RSQL_VALUE</code>.</p>
+        <p class="Caption">Table 25. General Purpose SQL Value Container</p><pre xml:space="preserve">/* Date, time, and timestamp definitions */
+typedef uint32_t DATE_VAL;
+typedef uint32_t TIME_VAL;
+
+typedef struct {
+    DATE_VAL date;
+    TIME_VAL time;
+} TIMESTAMP_VAL;
+
+typedef union _value {
+    int8_t        tv;
+    int16_t       sv;
+    int32_t       lv;
+    int64_t       llv;
+    float         fv;
+    double        dv;
+    char         *cv;
+    void         *pv;
+    LONGVAR       lvv;
+    DB_ADDR       dba;
+    TIMESTAMP_VAL ts;
+} VALUE;
+
+typedef enum _val_status {
+    vsOKAY = 0,
+    vsTRUNCATE = 1,     /* string truncation or loss of float significance */
+    vsDIVBY0,           /* divide by zero */
+    vsDOMAIN,           /* argument domain error (e.g., sqrt(-1)) */
+    vsOVERFLOW          /* math overflow */
+} VAL_STATUS;
+
+/* general purpose SQL data value container */
+typedef struct _rsql_value { 
+    SQL_T      type;    /* internal data type code */
+    uint16_t   len;     /* length in bytes of any var-length data or 0 if scalar */
+    VAL_STATUS status;  /* operation status code */
+    VALUE      vt;      /* generic data type container */
+} RSQL_VALUE;</pre>
+        <p>Function <code>rsqlGetStmtType</code> returns a <code>STMT_TYPE</code> argument that identifies the kind of SQL statement that was compiled.   These values are given in the following table.</p>
+        <table style="margin-left: 0;margin-right: auto;caption-side: top;">
+            <caption><a name="STMT_TYPE"></a>Table 26. Statement Type Identification Constants of Type STMT_TYPE</caption>
+            <col style="width: 170px;" />
+            <col />
+            <thead>
+                <tr>
+                    <th>Constant</th>
+                    <th>Corresponding SQL Statement</th>
+                </tr>
+            </thead>
+            <tbody>
+                <tr class="Body-Body1">
+                    <td style="font-family: monospace;" class="BodyE-Column1-Body1">sqlSELECT</td>
+                    <td class="BodyD-Column2-Body1"><b>select</b> …</td>
+                </tr>
+                <tr class="Body-Body1">
+                    <td style="font-family: monospace;" class="BodyE-Column1-Body1">sqlINSERT</td>
+                    <td class="BodyD-Column2-Body1"><b>insert into</b> <![CDATA[ ]]><i>tabname</i> …</td>
+                </tr>
+                <tr class="Body-Body1">
+                    <td style="font-family: monospace;" class="BodyE-Column1-Body1">sqlUPDATE</td>
+                    <td class="BodyD-Column2-Body1"><b>update</b> tabname …</td>
+                </tr>
+                <tr class="Body-Body1">
+                    <td style="font-family: monospace;" class="BodyE-Column1-Body1">sqlOPEN</td>
+                    <td class="BodyD-Column2-Body1"><b>open</b> <![CDATA[ ]]><i>dbname</i></td>
+                </tr>
+                <tr class="Body-Body1">
+                    <td style="font-family: monospace;" class="BodyE-Column1-Body1">sqlDELETE</td>
+                    <td class="BodyD-Column2-Body1"><b>delete from</b> <![CDATA[ ]]><i>tabname</i> …</td>
+                </tr>
+                <tr class="Body-Body1">
+                    <td style="font-family: monospace;" class="BodyE-Column1-Body1">sqlSTART</td>
+                    <td class="BodyD-Column2-Body1"><b>start transaction</b> ...</td>
+                </tr>
+                <tr class="Body-Body1">
+                    <td style="font-family: monospace;" class="BodyE-Column1-Body1">sqlSAVEPOINT</td>
+                    <td class="BodyD-Column2-Body1"><b>savepoint</b> ...</td>
+                </tr>
+                <tr class="Body-Body1">
+                    <td style="font-family: monospace;" class="BodyE-Column1-Body1">sqlRELEASE</td>
+                    <td class="BodyD-Column2-Body1"><b>release savepoint</b> ...</td>
+                </tr>
+                <tr class="Body-Body1">
+                    <td style="font-family: monospace;" class="BodyE-Column1-Body1">sqlCOMMIT</td>
+                    <td class="BodyD-Column2-Body1"><b>commit transaction</b>
+                    </td>
+                </tr>
+                <tr class="Body-Body1">
+                    <td style="font-family: monospace;" class="BodyE-Column1-Body1">sqlROLLBACK</td>
+                    <td class="BodyD-Column2-Body1"><b>rollback transaction</b>
+                    </td>
+                </tr>
+                <tr class="Body-Body1">
+                    <td style="font-family: monospace;" class="BodyE-Column1-Body1">sqlCRPROC</td>
+                    <td class="BodyD-Column2-Body1"><b>create procedure</b> …</td>
+                </tr>
+                <tr class="Body-Body1">
+                    <td style="font-family: monospace;" class="BodyE-Column1-Body1">sqlDRPROC</td>
+                    <td class="BodyD-Column2-Body1"><b>drop procedure</b> …</td>
+                </tr>
+                <tr class="Body-Body1">
+                    <td style="font-family: monospace;" class="BodyE-Column1-Body1">sqlEXECUTE</td>
+                    <td class="BodyD-Column2-Body1"><b>execute</b> <![CDATA[ ]]><i>procname</i> …</td>
+                </tr>
+                <tr class="Body-Body1">
+                    <td style="font-family: monospace;" class="BodyE-Column1-Body1">sqlSET</td>
+                    <td class="BodyD-Column2-Body1"><b>set</b> {<b>auto commit</b> | <b>debug</b> } …</td>
+                </tr>
+                <tr class="Body-Body1">
+                    <td style="font-family: monospace;" class="BodyE-Column1-Body1">sqlSETCOLUMN</td>
+                    <td class="BodyD-Column2-Body1"><b>set column stats</b> …</td>
+                </tr>
+                <tr class="Body-Body1">
+                    <td style="font-family: monospace;" class="BodyE-Column1-Body1">sqlLOCK</td>
+                    <td class="BodyD-Column2-Body1"><b>lock table</b> …</td>
+                </tr>
+                <tr class="Body-Body1">
+                    <td style="font-family: monospace;" class="BodyE-Column1-Body1">sqlUNLOCK</td>
+                    <td class="BodyD-Column2-Body1"><b>unlock table</b> …</td>
+                </tr>
+                <tr class="Body-Body1">
+                    <td style="font-family: monospace;" class="BodyE-Column1-Body1">sqlIMPORT</td>
+                    <td class="BodyD-Column2-Body1"><b>import</b> ...</td>
+                </tr>
+                <tr class="Body-Body1">
+                    <td style="font-family: monospace;" class="BodyE-Column1-Body1">sqlEXPORT</td>
+                    <td class="BodyD-Column2-Body1"><b>export</b> ...</td>
+                </tr>
+                <tr class="Body-Body1">
+                    <td style="font-family: monospace;" class="BodyB-Column1-Body1">sqlDDL</td>
+                    <td class="BodyA-Column2-Body1">SQL DDL statement</td>
+                </tr>
+            </tbody>
+        </table>
+        <h2><a MadCap:generatedBookmark="TOC" name="RDM_SQL&#160;API&#160;Function_List"></a><span class="MyVariablesRSQLName">RDM SQL</span>&#160;API&#160;Function List</h2>
+        <p>All that is needed by an application program to use the <span class="MyVariablesRSQLName">RDM SQL</span> API function is to include header file <code>rsql.h</code> which includes all of the necessary headers and function prototypes.</p>
+        <p>The function description pages that follow give the function's prototype, description of each argument, a detailed description of what the function does, an example code snippet, a list of return codes, and a list of related functions.  The example code snippet shows the necessary elements in bold-faced text.</p>
+        <table style="mc-table-style: url('../Resources/TableStyles/fncSummary.css');margin-left: 0;margin-right: auto;caption-side: top;" class="TableStyle-fncSummary" cellspacing="0">
+            <caption>Table 1. <span class="MyVariablesRSQLName">RDM SQL</span> API Functions</caption>
+            <col class="Column-Column1" />
+            <col class="Column-Column2" />
+            <thead>
+                <tr class="Head-Header1">
+                    <th class="HeadE-Column1-Header1">Function</th>
+                    <th class="HeadD-Column2-Header1">Description</th>
+                </tr>
+            </thead>
+            <tbody>
+                <tr class="Body-Body1">
+                    <td class="BodyE-Column1-Body1"><a href="rsqlAllocConn.htm">rsqlAllocConn</a>
+                    </td>
+                    <td class="BodyD-Column2-Body1">Allocate a new connection handle</td>
+                </tr>
+                <tr class="Body-Body1">
+                    <td class="BodyE-Column1-Body1"><a href="rsqlAllocStmt.htm">rsqlAllocStmt</a>
+                    </td>
+                    <td class="BodyD-Column2-Body1">Allocate a new statement handle</td>
+                </tr>
+                <tr class="Body-Body1">
+                    <td class="BodyE-Column1-Body1"><a href="rsqlBindNamedParam.htm">rsqlBindNamedParam</a>
+                    </td>
+                    <td class="BodyD-Column2-Body1">Bind a data value to a named parameter marker</td>
+                </tr>
+                <tr class="Body-Body1">
+                    <td class="BodyE-Column1-Body1"><a href="rsqlBindParam.htm">rsqlBindParam</a>
+                    </td>
+                    <td class="BodyD-Column2-Body1">Bind a data value to a parameter marker</td>
+                </tr>
+                <tr class="Body-Body1">
+                    <td class="BodyE-Column1-Body1"><a href="rsqlCancelRow.htm">rsqlCancelRow</a>
+                    </td>
+                    <td class="BodyD-Column2-Body1">Cancel (discard) column value changes to current row</td>
+                </tr>
+                <tr class="Body-Body1">
+                    <td class="BodyE-Column1-Body1"><a href="rsqlCloseDB.htm">rsqlCloseDB</a>
+                    </td>
+                    <td class="BodyD-Column2-Body1">Close a database</td>
+                </tr>
+                <tr class="Body-Body1">
+                    <td class="BodyE-Column1-Body1"><a href="rsqlCloseDBAll.htm">rsqlCloseDBAll</a>
+                    </td>
+                    <td class="BodyD-Column2-Body1">Close all databases that are open on a connection</td>
+                </tr>
+                <tr class="Body-Body1">
+                    <td class="BodyE-Column1-Body1"><a href="rsqlCloseStmt.htm">rsqlCloseStmt</a>
+                    </td>
+                    <td class="BodyD-Column2-Body1">Close the open select statement cursor</td>
+                </tr>
+                <tr class="Body-Body1">
+                    <td class="BodyE-Column1-Body1"><a href="rsqlDropDB.htm">rsqlDropDB</a>
+                    </td>
+                    <td class="BodyD-Column2-Body1">Drop (delete) a database</td>
+                </tr>
+                <tr class="Body-Body1">
+                    <td class="BodyE-Column1-Body1"><a href="rsqlExecDirect.htm">rsqlExecDirect</a>
+                    </td>
+                    <td class="BodyD-Column2-Body1">Prepare and execute a SQL statement</td>
+                </tr>
+                <tr class="Body-Body1">
+                    <td class="BodyE-Column1-Body1"><a href="rsqlExecProc.htm">rsqlExecProc</a>
+                    </td>
+                    <td class="BodyD-Column2-Body1">Directly execute a pre-compiled SQL stored procedure</td>
+                </tr>
+                <tr class="Body-Body1">
+                    <td class="BodyE-Column1-Body1"><a href="rsqlExecute.htm">rsqlExecute</a>
+                    </td>
+                    <td class="BodyD-Column2-Body1">Execute a compiled SQL statement</td>
+                </tr>
+                <tr class="Body-Body1">
+                    <td class="BodyE-Column1-Body1"><a href="rsqlFetch.htm">rsqlFetch</a>
+                    </td>
+                    <td class="BodyD-Column2-Body1">Fetch the next row of the select statement result set</td>
+                </tr>
+                <tr class="Body-Body1">
+                    <td class="BodyE-Column1-Body1"><a href="rsqlFreeConn.htm">rsqlFreeConn</a>
+                    </td>
+                    <td class="BodyD-Column2-Body1">Free a connection handle</td>
+                </tr>
+                <tr class="Body-Body1">
+                    <td class="BodyE-Column1-Body1"><a href="rsqlFreeStmt.htm">rsqlFreeStmt</a>
+                    </td>
+                    <td class="BodyD-Column2-Body1">Free a statement handle</td>
+                </tr>
+                <tr class="Body-Body1">
+                    <td class="BodyE-Column1-Body1"><a href="rsqlGetAutoCommit.htm">rsqlGetAutoCommit</a>
+                    </td>
+                    <td class="BodyD-Column2-Body1">Get the connection handle's current auto commit status</td>
+                </tr>
+                <tr class="Body-Body1">
+                    <td class="BodyE-Column1-Body1"><a href="rsqlGetColDescr.htm">rsqlGetColDescr</a>
+                    </td>
+                    <td class="BodyD-Column2-Body1">Get description information for a select statement result column</td>
+                </tr>
+                <tr class="Body-Body1">
+                    <td class="BodyE-Column1-Body1"><a href="rsqlGetConnHandle.htm">rsqlGetConnHandle</a>
+                    </td>
+                    <td class="BodyD-Column2-Body1">Get connection handle associated with specified statement handle</td>
+                </tr>
+                <tr class="Body-Body1">
+                    <td class="BodyE-Column1-Body1"><a href="rsqlGetCursorName.htm">rsqlGetCursorName</a>
+                    </td>
+                    <td class="BodyD-Column2-Body1">Get the cursor name associated for the specified statement handle</td>
+                </tr>
+                <tr class="Body-Body1">
+                    <td class="BodyE-Column1-Body1"><a href="rsqlGetData.htm">rsqlGetData</a>
+                    </td>
+                    <td class="BodyD-Column2-Body1">Get data value for one select statement result column</td>
+                </tr>
+                <tr class="Body-Body1">
+                    <td class="BodyE-Column1-Body1"><a href="rsqlGetDateFormat.htm">rsqlGetDateFormat</a>
+                    </td>
+                    <td class="BodyD-Column2-Body1">Get the current date format setting</td>
+                </tr>
+                <tr class="Body-Body1">
+                    <td class="BodyE-Column1-Body1"><a href="rsqlGetDateSeparator.htm">rsqlGetDateSeparator</a>
+                    </td>
+                    <td class="BodyD-Column2-Body1">Get the current date separator character</td>
+                </tr>
+                <tr class="Body-Body1">
+                    <td class="BodyE-Column1-Body1"><a href="rsqlGetDBNames.htm">rsqlGetDBNames</a>
+                    </td>
+                    <td class="BodyD-Column2-Body1">Get a list of the names of the currently opened databases</td>
+                </tr>
+                <tr class="Body-Body1">
+                    <td class="BodyE-Column1-Body1"><a href="rsqlGetDeferBlobMode.htm">rsqlGetDeferBlobMode</a>
+                    </td>
+                    <td class="BodyD-Column2-Body1">Get the current deferred blob reading mode setting</td>
+                </tr>
+                <tr class="Body-Body1">
+                    <td class="BodyE-Column1-Body1"><a href="rsqlGetErrorInfo.htm">rsqlGetErrorInfo</a>
+                    </td>
+                    <td class="BodyD-Column2-Body1">Get the message associated with the current error code</td>
+                </tr>
+                <tr class="Body-Body1">
+                    <td class="BodyE-Column1-Body1"><a href="rsqlGetErrorMsg.htm">rsqlGetErrorMsg</a>
+                    </td>
+                    <td class="BodyD-Column2-Body1">Get the message associated with a specific error code</td>
+                </tr>
+                <tr class="Body-Body1">
+                    <td class="BodyE-Column1-Body1"><a href="rsqlGetGenCFiles.htm">rsqlGetGenCFiles</a>
+                    </td>
+                    <td class="BodyD-Column2-Body1">Get the connection handle's "generate C files" mode</td>
+                </tr>
+                <tr class="Body-Body1">
+                    <td class="BodyE-Column1-Body1"><a href="rsqlGetNumParams.htm">rsqlGetNumParams</a>
+                    </td>
+                    <td class="BodyD-Column2-Body1">Get the number of parameter markers in the compiled statement</td>
+                </tr>
+                <tr class="Body-Body1">
+                    <td class="BodyE-Column1-Body1"><a href="rsqlGetNumResultCols.htm">rsqlGetNumResultCols</a>
+                    </td>
+                    <td class="BodyD-Column2-Body1">Get the number of result columns in the compiled select statement</td>
+                </tr>
+                <tr class="Body-Body1">
+                    <td class="BodyE-Column1-Body1"><a href="rsqlGetParamDescr.htm">rsqlGetParamDescr</a>
+                    </td>
+                    <td class="BodyD-Column2-Body1">Get description information for a SQL statement parameter marker</td>
+                </tr>
+                <tr class="Body-Body1">
+                    <td class="BodyE-Column1-Body1"><a href="rsqlGetReadOnlyTrmode.htm">rsqlGetReadOnlyTrmode</a>
+                    </td>
+                    <td class="BodyD-Column2-Body1">Get the current read only transaction mode</td>
+                </tr>
+                <tr class="Body-Body1">
+                    <td class="BodyE-Column1-Body1"><a href="rsqlGetRowCount.htm">rsqlGetRowCount</a>
+                    </td>
+                    <td class="BodyD-Column2-Body1">Get the count of the # of rows affected by the executed statement</td>
+                </tr>
+                <tr class="Body-Body1">
+                    <td class="BodyE-Column1-Body1"><a href="rsqlGetSelectType.htm">rsqlGetSelectType</a>
+                    </td>
+                    <td class="BodyD-Column2-Body1">Get the statement handle's select statement type</td>
+                </tr>
+                <tr class="Body-Body1">
+                    <td class="BodyE-Column1-Body1"><a href="rsqlGetStmtState.htm">rsqlGetStmtState</a>
+                    </td>
+                    <td class="BodyD-Column2-Body1">Get the statement handle's statement state</td>
+                </tr>
+                <tr class="Body-Body1">
+                    <td class="BodyE-Column1-Body1"><a href="rsqlGetStmtString.htm">rsqlGetStmtString</a>
+                    </td>
+                    <td class="BodyD-Column2-Body1">Return the SQL statement string for a statement handle</td>
+                </tr>
+                <tr class="Body-Body1">
+                    <td class="BodyE-Column1-Body1"><a href="rsqlGetStmtType.htm">rsqlGetStmtType</a>
+                    </td>
+                    <td class="BodyD-Column2-Body1">Get the statement type of the prepared statement</td>
+                </tr>
+                <tr class="Body-Body1">
+                    <td class="BodyE-Column1-Body1"><a href="rsqlGetTableName.htm">rsqlGetTableName</a>
+                    </td>
+                    <td class="BodyD-Column2-Body1">Get result column's table name</td>
+                </tr>
+                <tr class="Body-Body1">
+                    <td class="BodyE-Column1-Body1"><a href="rsqlGetTimeout.htm">rsqlGetTimeout</a>
+                    </td>
+                    <td class="BodyD-Column2-Body1">Get a connection's lock request timeout value</td>
+                </tr>
+                <tr class="Body-Body1">
+                    <td class="BodyE-Column1-Body1"><a href="rsqlInitDB.htm">rsqlInitDB</a>
+                    </td>
+                    <td class="BodyD-Column2-Body1">Initialize a database</td>
+                </tr>
+                <tr class="Body-Body1">
+                    <td class="BodyE-Column1-Body1"><a href="rsqlLockTables.htm">rsqlLockTables</a>
+                    </td>
+                    <td class="BodyD-Column2-Body1">Issue an explicit lock request for one or more database tables</td>
+                </tr>
+                <tr class="Body-Body1">
+                    <td class="BodyE-Column1-Body1"><a href="rsqlMoreResults.htm">rsqlMoreResults</a>
+                    </td>
+                    <td class="BodyD-Column2-Body1">Execute next statement in the currently executing stored procedure</td>
+                </tr>
+                <tr class="Body-Body1">
+                    <td class="BodyE-Column1-Body1"><a href="rsqlOpenCat.htm">rsqlOpenCat</a>
+                    </td>
+                    <td class="BodyD-Column2-Body1">Open a database through its compiled catalog module</td>
+                </tr>
+                <tr class="Body-Body1">
+                    <td class="BodyE-Column1-Body1"><a href="rsqlOpenDB.htm">rsqlOpenDB</a>
+                    </td>
+                    <td class="BodyD-Column2-Body1">Open a database by name</td>
+                </tr>
+                <tr class="Body-Body1">
+                    <td class="BodyE-Column1-Body1"><a href="rsqlPackDate.htm">rsqlPackDate</a>
+                    </td>
+                    <td class="BodyD-Column2-Body1">Pack a CAL_DATE into a binary DATE_VAL</td>
+                </tr>
+                <tr class="Body-Body1">
+                    <td class="BodyE-Column1-Body1"><a href="rsqlPackTime.htm">rsqlPackTime</a>
+                    </td>
+                    <td class="BodyD-Column2-Body1">Pack a CAL_TIME into a binary TIME_VAL</td>
+                </tr>
+                <tr class="Body-Body1">
+                    <td class="BodyE-Column1-Body1"><a href="rsqlPackTimestamp.htm">rsqlPackTimestamp</a>
+                    </td>
+                    <td class="BodyD-Column2-Body1">Pack a CAL_TIMESTAMP into a binary TIMESTAMP_VAL</td>
+                </tr>
+                <tr class="Body-Body1">
+                    <td class="BodyE-Column1-Body1"><a href="rsqlParamData.htm">rsqlParamData</a>
+                    </td>
+                    <td class="BodyD-Column2-Body1">Check for and initialize rsqlPutData for next data-at-exec parameter</td>
+                </tr>
+                <tr class="Body-Body1">
+                    <td class="BodyE-Column1-Body1"><a href="rsqlPrepare.htm">rsqlPrepare</a>
+                    </td>
+                    <td class="BodyD-Column2-Body1">Compile an SQL statement</td>
+                </tr>
+                <tr class="Body-Body1">
+                    <td class="BodyE-Column1-Body1"><a href="rsqlPutData.htm">rsqlPutData</a>
+                    </td>
+                    <td class="BodyD-Column2-Body1">Put a data value for a data-at-exec blob parameter</td>
+                </tr>
+                <tr class="Body-Body1">
+                    <td class="BodyE-Column1-Body1"><a href="rsqlRegisterProc.htm">rsqlRegisterProc</a>
+                    </td>
+                    <td class="BodyD-Column2-Body1">Register a compiled stored procedure</td>
+                </tr>
+                <tr class="Body-Body1" MadCap:conditions="">
+                    <td class="BodyE-Column1-Body1"><a href="rsqlRegisterUDFs.htm">rsqlRegisterUDFs</a>
+                    </td>
+                    <td class="BodyD-Column2-Body1">Register C-based user-defined functions</td>
+                </tr>
+                <tr class="Body-Body1">
+                    <td class="BodyE-Column1-Body1"><a href="rsqlRegisterVirtualTables.htm">rsqlRegisterVirtualTables</a>
+                    </td>
+                    <td class="BodyD-Column2-Body1">Register C-based virtual tables</td>
+                </tr>
+                <tr class="Body-Body1">
+                    <td class="BodyE-Column1-Body1"><a href="rsqlSetAutoCommit.htm">rsqlSetAutoCommit</a>
+                    </td>
+                    <td class="BodyD-Column2-Body1">Set the auto commit status for the specified connection</td>
+                </tr>
+                <tr class="Body-Body1">
+                    <td class="BodyE-Column1-Body1"><a href="rsqlSetCursorName.htm">rsqlSetCursorName</a>
+                    </td>
+                    <td class="BodyD-Column2-Body1">Set the cursor name for the specified statement handle</td>
+                </tr>
+                <tr class="Body-Body1">
+                    <td class="BodyE-Column1-Body1"><a href="rsqlSetDateFormat.htm">rsqlSetDateFormat</a>
+                    </td>
+                    <td class="BodyD-Column2-Body1">Set the date constant format for the connection</td>
+                </tr>
+                <tr class="Body-Body1">
+                    <td class="BodyE-Column1-Body1"><a href="rsqlSetDateSeparator.htm">rsqlSetDateSeparator</a>
+                    </td>
+                    <td class="BodyD-Column2-Body1">Set the current date constant separator character for the connection</td>
+                </tr>
+                <tr class="Body-Body1">
+                    <td class="BodyE-Column1-Body1"><a href="rsqlSetDeferBlobMode.htm">rsqlSetDeferBlobMode</a>
+                    </td>
+                    <td class="BodyD-Column2-Body1">Set a statement's deferred reading mode for blob data</td>
+                </tr>
+                <tr class="Body-Body1">
+                    <td class="BodyE-Column1-Body1"><a href="rsqlSetErrorCallback.htm">rsqlSetErrorCallback</a>
+                    </td>
+                    <td class="BodyD-Column2-Body1">Set an error callback user function</td>
+                </tr>
+                <tr class="Body-Body1">
+                    <td class="BodyE-Column1-Body1"><a href="rsqlSetGenCFiles.htm">rsqlSetGenCFiles</a>
+                    </td>
+                    <td class="BodyD-Column2-Body1">Set the connection handle's "generate C files" mode</td>
+                </tr>
+                <tr class="Body-Body1">
+                    <td class="BodyE-Column1-Body1"><a href="rsqlSetReadOnlyTrmode.htm">rsqlSetReadOnlyTrmode</a>
+                    </td>
+                    <td class="BodyD-Column2-Body1">Set the current read only transaction mode</td>
+                </tr>
+                <tr class="Body-Body1">
+                    <td class="BodyE-Column1-Body1"><a href="rsqlSetTimeout.htm">rsqlSetTimeout</a>
+                    </td>
+                    <td class="BodyD-Column2-Body1">Set lock wait timeout in seconds for the connection</td>
+                </tr>
+                <tr class="Body-Body1">
+                    <td class="BodyE-Column1-Body1"><a href="rsqlShowPlan.htm">rsqlShowPlan</a>
+                    </td>
+                    <td class="BodyD-Column2-Body1">Show a query's execution plan as a result set</td>
+                </tr>
+                <tr class="Body-Body1">
+                    <td class="BodyE-Column1-Body1"><a href="rsqlTFSInit.htm">rsqlTFSInit</a>
+                    </td>
+                    <td class="BodyD-Column2-Body1">Initialize <span class="MyVariablesRSQLName">RDM SQL</span> TFST or TFSS operation</td>
+                </tr>
+                <tr class="Body-Body1">
+                    <td class="BodyE-Column1-Body1"><a href="rsqlTFSTerm.htm">rsqlTFSTerm</a>
+                    </td>
+                    <td class="BodyD-Column2-Body1">Terminate <span class="MyVariablesRSQLName">RDM SQL</span> TFST or TFSS operation</td>
+                </tr>
+                <tr class="Body-Body1">
+                    <td class="BodyE-Column1-Body1"><a href="rsqlTransCommit.htm">rsqlTransCommit</a>
+                    </td>
+                    <td class="BodyD-Column2-Body1">Commit a transaction</td>
+                </tr>
+                <tr class="Body-Body1">
+                    <td class="BodyE-Column1-Body1"><a href="rsqlTransEndReadOnly.htm">rsqlTransEndReadOnly</a>
+                    </td>
+                    <td class="BodyD-Column2-Body1">End a read only transaction</td>
+                </tr>
+                <tr class="Body-Body1">
+                    <td class="BodyE-Column1-Body1"><a href="rsqlTransRelease.htm">rsqlTransRelease</a>
+                    </td>
+                    <td class="BodyD-Column2-Body1">Release a transaction savepoint</td>
+                </tr>
+                <tr class="Body-Body1">
+                    <td class="BodyE-Column1-Body1"><a href="rsqlTransRollback.htm">rsqlTransRollback</a>
+                    </td>
+                    <td class="BodyD-Column2-Body1">Rollback to transaction savepoint or start</td>
+                </tr>
+                <tr class="Body-Body1">
+                    <td class="BodyE-Column1-Body1"><a href="rsqlTransSavepoint.htm">rsqlTransSavepoint</a>
+                    </td>
+                    <td class="BodyD-Column2-Body1">Mark a transaction savepoint</td>
+                </tr>
+                <tr class="Body-Body1">
+                    <td class="BodyE-Column1-Body1"><a href="rsqlTransStart.htm">rsqlTransStart</a>
+                    </td>
+                    <td class="BodyD-Column2-Body1">Start a transaction</td>
+                </tr>
+                <tr class="Body-Body1">
+                    <td class="BodyE-Column1-Body1"><a href="rsqlTransStartReadOnly.htm">rsqlTransStartReadOnly</a>
+                    </td>
+                    <td class="BodyD-Column2-Body1">Start a read only transaction</td>
+                </tr>
+                <tr class="Body-Body1">
+                    <td class="BodyE-Column1-Body1"><a href="rsqlTransStatus.htm">rsqlTransStatus</a>
+                    </td>
+                    <td class="BodyD-Column2-Body1">Return the current transaction state for the specified connection</td>
+                </tr>
+                <tr class="Body-Body1">
+                    <td class="BodyE-Column1-Body1"><a href="rsqlUnlockTable.htm">rsqlUnlockTable</a>
+                    </td>
+                    <td class="BodyD-Column2-Body1">Free a read lock on a database table</td>
+                </tr>
+                <tr class="Body-Body1">
+                    <td class="BodyE-Column1-Body1"><a href="rsqlUnlockTableAll.htm">rsqlUnlockTableAll</a>
+                    </td>
+                    <td class="BodyD-Column2-Body1">Unlock all read locked  tables</td>
+                </tr>
+                <tr class="Body-Body1">
+                    <td class="BodyE-Column1-Body1"><a href="rsqlUnpackDate.htm">rsqlUnpackDate</a>
+                    </td>
+                    <td class="BodyD-Column2-Body1">Unpack a binary DATE_VAL into a CAL_DATE structure</td>
+                </tr>
+                <tr class="Body-Body1">
+                    <td class="BodyE-Column1-Body1"><a href="rsqlUnpackTime.htm">rsqlUnpackTime</a>
+                    </td>
+                    <td class="BodyD-Column2-Body1">Unpack a binary TIME_VAL into a CAL_TIME structure</td>
+                </tr>
+                <tr class="Body-Body1">
+                    <td class="BodyE-Column1-Body1"><a href="rsqlUnpackTimestamp.htm">rsqlUnpackTimestamp</a>
+                    </td>
+                    <td class="BodyD-Column2-Body1">Unpack a binary TIMESTAMP_VAL into a CAL_TIMESTAMP structure</td>
+                </tr>
+                <tr class="Body-Body1">
+                    <td class="BodyE-Column1-Body1"><a href="rsqlUpdateCol.htm">rsqlUpdateCol</a>
+                    </td>
+                    <td class="BodyD-Column2-Body1">Update a column value of current row</td>
+                </tr>
+                <tr class="Body-Body1">
+                    <td class="BodyB-Column1-Body1"><a href="rsqlUpdateRow.htm">rsqlUpdateRow</a>
+                    </td>
+                    <td class="BodyA-Column2-Body1">Store the updated column values for the current row</td>
+                </tr>
+            </tbody>
+        </table>
+        <hr MadCap:conditions="Default.ScreenOnly" width="100%" size="0" align="center" />
+        <p MadCap:conditions="Default.ScreenOnly" style="font-size: 8pt;"><span class="MyVariablesCopyright">Copyright © 2012, Raima Inc. All rights reserved.</span>
+        </p>
+        <script type="text/javascript" src="../SkinSupport/MadCapBodyEnd.js">
+        </script>
+        <p class="MCWebHelpFramesetLink MCWebHelpFramesetLinkBottom" style="display: none;"><a href="../../Default_CSH.htm#SQLRM/SQLAPIReference.htm" style="">Open topic with navigation</a>
+        </p>
+    </body>
+</html>

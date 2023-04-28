@@ -1,0 +1,253 @@
+<?xml version="1.0" encoding="utf-8"?>
+<!DOCTYPE html PUBLIC "-//W3C//DTD XHTML 1.0 Strict//EN" "http://www.w3.org/TR/xhtml1/DTD/xhtml1-strict.dtd">
+<html xmlns:MadCap="http://www.madcapsoftware.com/Schemas/MadCap.xsd" MadCap:tocPath="Native API|Reference Manual|Core API Function Descriptions" MadCap:InPreviewMode="false" MadCap:PreloadImages="false" MadCap:RuntimeFileType="Topic" MadCap:TargetType="WebHelp" lang="en-us" xml:lang="en-us" MadCap:PathToHelpSystem="../../../" MadCap:HelpSystemFileName="Default.xml" MadCap:SearchType="Stem">
+    <head>
+        <meta http-equiv="Content-Type" content="text/html; charset=utf-8" /><title>d_pkeyprev</title>
+        <link rel="icon" type="image/png" href="http://docs.raima.com/favicon.png" />
+        <link href="../../SkinSupport/MadCap.css" rel="stylesheet" />
+        <link href="../../Resources/TableStyles/FunctionArgs.css" rel="stylesheet" />
+        <link href="../../Resources/TableStyles/CoreErrCodes.css" rel="stylesheet" />
+        <link href="../../Resources/Stylesheets/raima.css" rel="stylesheet" />
+        <script src="../../SkinSupport/MadCapAll.js" type="text/javascript">
+        </script>
+    </head>
+    <body>
+        <p class="MCWebHelpFramesetLink MCWebHelpFramesetLinkTop" style="display: none;"><a href="../../../Default_CSH.htm#RM/api/d_pkeyprev.htm" style="">Open topic with navigation</a>
+        </p>
+        <div class="MCBreadcrumbsBox_0"><span class="MCBreadcrumbsPrefix">You are here: </span><a class="MCBreadcrumbsLink" href="../../dbCore.htm">Native API</a><span class="MCBreadcrumbsDivider"> &gt; </span><a class="MCBreadcrumbsLink" href="../dbRM.htm">Reference Manual</a><span class="MCBreadcrumbsDivider"> &gt; </span><a class="MCBreadcrumbsLink" href="../Chapter33.htm">Core API Function Descriptions</a><span class="MCBreadcrumbsDivider"> &gt; </span><span class="MCBreadcrumbs">d_pkeyprev</span>
+        </div>
+        <h3 class="newpage"><a name="kanchor90"></a>d_pkeyprev</h3>
+        <p>Find the record occurrence associated with the previous key</p>
+        <p class="Heading">Prototype</p><pre xml:space="preserve">int32_t&#160;<b>d_pkeyprev</b>(
+&#160;&#160;&#160;&#160;int32_t&#160;&#160;&#160;&#160;&#160;<i>keyfield</i>,
+&#160;&#160;&#160;&#160;uint16_t&#160;&#160;&#160;&#160;<i>nFields</i>,
+&#160;&#160;&#160;&#160;uint16_t&#160;&#160;&#160;&#160;<i>partialStrLen</i>,
+&#160;&#160;&#160;&#160;const&#160;void&#160;*<i>fldval</i>,
+&#160;&#160;&#160;&#160;DB_TASK&#160;&#160;&#160;&#160;*<i>task</i>,
+&#160;&#160;&#160;&#160;int32_t &#160;&#160;&#160; <i>dbn</i>);</pre>
+        <p class="Heading">Parameters</p>
+        <table style="width: 100%;mc-table-style: url('../../Resources/TableStyles/FunctionArgs.css');margin-left: 0;margin-right: auto;" class="TableStyle-FunctionArgs" cellspacing="0">
+            <col style="width: 140px;" class="Column-Column1" />
+            <col style="width: 80px;" class="Column-Column3" />
+            <col class="Column-Column2" />
+            <tbody>
+                <tr class="Body-Body1">
+                    <td class="BodyE-Column1-Body1">keyfield</td>
+                    <td class="BodyE-Column3-Body1">(input)</td>
+                    <td class="BodyD-Column2-Body1">The field type of the key field for which the previous key will be found.</td>
+                </tr>
+                <tr class="Body-Body1">
+                    <td class="BodyE-Column1-Body1">nFields</td>
+                    <td class="BodyE-Column3-Body1">(input)</td>
+                    <td class="BodyD-Column2-Body1">The number of fields to use in the search.&#160; If this parameter is zero, the function searches all fields.&#160; If this parameter is a non-zero value, the function uses only the number of fields indicated.&#160; This parameter is intended only for compound keys, although specifying '1' for non-compound keys is safe.</td>
+                </tr>
+                <tr class="Body-Body1">
+                    <td class="BodyE-Column1-Body1">partialStrLen</td>
+                    <td class="BodyE-Column3-Body1">(input)</td>
+                    <td class="BodyD-Column2-Body1">The partial string length in characters.&#160; If this parameter is a non-zero value, the function uses only this many characters of the last field being considered (depending on <code>nFields</code> above).</td>
+                </tr>
+                <tr class="Body-Body1">
+                    <td class="BodyB-Column1-Body1">fldval</td>
+                    <td class="BodyB-Column3-Body1">(input)</td>
+                    <td class="BodyA-Column2-Body1">A pointer to the data to be searched.</td>
+                </tr>
+            </tbody>
+        </table>
+        <table style="width: 100%;mc-table-style: url('../../Resources/TableStyles/FunctionArgs.css');margin-left: 0;margin-right: auto;caption-side: top;" class="TableStyle-FunctionArgs" cellspacing="0">
+            <col style="width: 140px;" class="Column-Column1" />
+            <col style="width: 80px;" class="Column-Column3" />
+            <col class="Column-Column2" />
+            <tbody>
+                <tr class="Body-Body1">
+                    <td class="BodyE-Column1-Body1">task</td>
+                    <td class="BodyE-Column3-Body1">(input)</td>
+                    <td class="BodyD-Column2-Body1">A pointer to a <code>DB_TASK</code> structure.</td>
+                </tr>
+                <tr class="Body-Body1">
+                    <td class="BodyB-Column1-Body1">dbn</td>
+                    <td class="BodyB-Column3-Body1">(input)</td>
+                    <td class="BodyA-Column2-Body1">The database number.</td>
+                </tr>
+            </tbody>
+        </table>
+        <p class="Heading">Description</p>
+        <p>This function finds the record occurrence associated with the previous occurrence of the specified key
+(<code>keyfield</code> parameter).&#160; The <b>d_pkeyprev</b> function with <code>nFields</code> equal to zero and <code>partialStrLen</code> equal to zero is equivalent to <b>d_keyprev</b>.&#160;</p>
+        <p>The <b>d_pkeyprev</b> function returns S_NOTFOUND if it finds no more keys, or a key whose value is less than that specified by <code>fldval</code> (as restricted
+by <code>nFields</code> and <code>partialStrLen</code>).&#160; Because <span class="MyVariablesProductShortName">RDM</span> keeps track of the relative position of each key field in a key stack, the application can
+interleave <b>d_pkeyprev</b> and <b>d_keyprev</b> calls for multiple key fields.</p>
+        <p>Note that the data provided to <b>d_pkeyprev</b> does not have to match the data provided to the corresponding <b>d_pkeyfind</b>.  This allows range lookups.  For instance, to find all the keys in the range 199-100 in descending order, you could call <b>d_pkeyfind</b> with the value 199.  If 199 existed in the database it would return S_OKAY, otherwise it would return S_NOTFOUND.  In either case you could then call <b>d_pkeyprev</b> with the value 100 and it would return S_OKAY until all the values up to, and including, 100 were accessed.</p>
+        <p class="Heading">Required Headers</p><pre xml:space="preserve">#include "rdm.h"</pre>
+        <p class="Heading">Libraries</p>
+        <table style="width: 100%; margin-left: 0; margin-right: auto;">
+            <col style="width: 200px;">
+            </col>
+            <col>
+            </col>
+            <thead>
+                <tr>
+                    <th>Library Name</th>
+                    <th>Description</th>
+                </tr>
+            </thead>
+            <tbody>
+                <tr>
+                    <td><code>rdmrdm<span class="MyVariablesLibraryVersion">11</span></code>
+                    </td>
+                    <td><span class="MyVariablesProductShortName">RDM</span> Runtime Library</td>
+                </tr>
+            </tbody>
+        </table>
+        <p>See <a href="../../GS/distrib.htm#Library">Library Naming Conventions</a> section for full library name and a list of library dependencies.</p>
+        <p class="Heading">Return Codes</p>
+        <table class="TableStyle-CoreErrCodes" cellspacing="0" style="mc-table-style: url('../../Resources/TableStyles/CoreErrCodes.css');">
+            <col class="Column-Column1" />
+            <col class="Column-Column2" />
+            <col class="Column-Column3" />
+            <thead>
+                <tr class="Head-Header1">
+                    <th class="HeadE-Column1-Header1">Value</th>
+                    <th class="HeadE-Column2-Header1">Name</th>
+                    <th class="HeadD-Column3-Header1">Description</th>
+                </tr>
+            </thead>
+            <tbody>
+                <tr class="Body-Body1">
+                    <td class="BodyB-Column1-Body1">0</td>
+                    <td class="BodyB-Column2-Body1">S_OKAY</td>
+                    <td class="BodyA-Column3-Body1">normal return, okay</td>
+                </tr>
+            </tbody>
+        </table>
+        <table class="TableStyle-CoreErrCodes" cellspacing="0" style="mc-table-style: url('../../Resources/TableStyles/CoreErrCodes.css');">
+            <col class="Column-Column1" />
+            <col class="Column-Column2" />
+            <col class="Column-Column3" />
+            <tbody>
+                <tr class="Body-Body1">
+                    <td class="BodyB-Column1-Body1">2</td>
+                    <td class="BodyB-Column2-Body1">S_NOTFOUND</td>
+                    <td class="BodyA-Column3-Body1">record not found</td>
+                </tr>
+            </tbody>
+        </table>
+        <table class="TableStyle-CoreErrCodes" cellspacing="0" style="mc-table-style: url('../../Resources/TableStyles/CoreErrCodes.css');">
+            <col class="Column-Column1" />
+            <col class="Column-Column2" />
+            <col class="Column-Column3" />
+            <tbody>
+                <tr class="Body-Body1">
+                    <td class="BodyB-Column1-Body1">-17</td>
+                    <td class="BodyB-Column2-Body1">S_NOTKEY</td>
+                    <td class="BodyA-Column3-Body1">field is not a valid key</td>
+                </tr>
+            </tbody>
+        </table>
+        <table class="TableStyle-CoreErrCodes" cellspacing="0" style="mc-table-style: url('../../Resources/TableStyles/CoreErrCodes.css');">
+            <col class="Column-Column1" />
+            <col class="Column-Column2" />
+            <col class="Column-Column3" />
+            <tbody>
+                <tr class="Body-Body1">
+                    <td class="BodyB-Column1-Body1">-24</td>
+                    <td class="BodyB-Column2-Body1">S_NOTLOCKED</td>
+                    <td class="BodyA-Column3-Body1">attempt to access unlocked set/record</td>
+                </tr>
+            </tbody>
+        </table>
+        <table class="TableStyle-CoreErrCodes" cellspacing="0" style="mc-table-style: url('../../Resources/TableStyles/CoreErrCodes.css');">
+            <col class="Column-Column1" />
+            <col class="Column-Column2" />
+            <col class="Column-Column3" />
+            <tbody>
+                <tr class="Body-Body1">
+                    <td class="BodyB-Column1-Body1">-44</td>
+                    <td class="BodyB-Column2-Body1">S_INVPKEY</td>
+                    <td class="BodyA-Column3-Body1">Invalid partial key specification</td>
+                </tr>
+            </tbody>
+        </table>
+        <table class="TableStyle-CoreErrCodes" cellspacing="0" style="mc-table-style: url('../../Resources/TableStyles/CoreErrCodes.css');">
+            <col class="Column-Column1" />
+            <col class="Column-Column2" />
+            <col class="Column-Column3" />
+            <tbody>
+                <tr class="Body-Body1">
+                    <td class="BodyB-Column1-Body1">-47</td>
+                    <td class="BodyB-Column2-Body1">S_INVINDEX</td>
+                    <td class="BodyA-Column3-Body1">Invalid index type</td>
+                </tr>
+            </tbody>
+        </table>
+        <p class="Heading">Currency Changes</p>
+        <p>curr_rec = record with previous key (or NULL_DBA if S_NOTFOUND)</p>
+        <p class="Heading">Locking Requirements</p>
+        <p>None.&#160; However, if the record is not locked, your application might receive an S_DELETED error code when it later attempts to read the record found by <b>d_pkeyprev</b>.&#160; This code indicates that another application has deleted the record.&#160; Also, another application might change the record so that its key field no longer matches the value specified to <b>d_pkeyprev</b>.</p>
+        <p class="Heading">See Also</p>
+        <p><a href="d_opentask.htm">d_opentask</a>
+        </p>
+        <p><a href="d_open.htm">d_open</a>, <a href="d_open_ptr.htm">d_open_ptr</a>, <a href="d_iopen.htm">d_iopen</a>, <a href="d_iopen_ptr.htm">d_iopen_ptr</a></p>
+        <p><a href="d_keyfind.htm">d_keyfind</a>
+        </p>
+        <p><a href="d_keyprev.htm">d_keyprev</a>
+        </p>
+        <p><a href="d_pkeyfind.htm">d_pkeyfind</a>
+        </p>
+        <p><a href="d_pkeynext.htm">d_pkeynext</a>
+        </p>
+        <p class="Heading">Example</p><pre>#include "rdm.h"
+#include "tims.h"
+
+int32_t printBooksById(
+  const char *pszId,       /* IN:  book id to find */
+  uint16_t    usLen,       /* IN:  length of the id to check */
+  DB_TASK    *task)
+{
+  int32_t  stat;
+  char     szTitle[SIZEOF_INFO_TITLE];
+  char     szId[SIZEOF_ID_CODE];
+
+  if (usLen &gt;= SIZEOF_NAME)
+    usLen = SIZEOF_NAME - 1;
+
+  if ((stat = d_reclock(INFO, "r", task, CURR_DB)) != S_OKAY)
+    return stat;
+    
+  for (stat = d_pkeyfind(ID_CODE, 0, usLen, pszId, task, CURR_DB);
+       stat == S_OKAY;
+       stat = d_pkeynext(ID_CODE, 0, usLen, pszId, task, CURR_DB)) 
+  {
+      if (d_crread(INFO_TITLE, szTitle, task, CURR_DB) == S_OKAY &amp;&amp;
+            d_crread(ID_CODE, szId, task, CURR_DB) == S_OKAY)
+        fprintf(stdout, "[%s] %s\n", szId, szTitle);
+  }
+
+  /* Now reverse the list */
+  while (d_pkeyprev(ID_CODE, 0, usLen, pszId, task, CURR_DB) == S_OKAY)
+  {
+      if (d_crread(INFO_TITLE, szTitle, task, CURR_DB) == S_OKAY &amp;&amp;
+            d_crread(ID_CODE, szId, task, CURR_DB) == S_OKAY)
+        fprintf(stdout, "[%s] %s\n", szId, szTitle);
+  }
+
+  d_recfree(INFO, task, CURR_DB);
+  
+  if (stat == S_NOTFOUND)
+    stat = S_OKAY;
+
+  return stat;
+}
+
+...
+  printBooksById("db", 2, task);
+...
+</pre>
+        <hr MadCap:conditions="Default.ScreenOnly" width="100%" size="0" align="center" />
+        <p MadCap:conditions="Default.ScreenOnly" style="font-size: 8pt;"><span class="MyVariablesCopyright">Copyright © 2012, Raima Inc. All rights reserved.</span>
+        </p>
+        <script type="text/javascript" src="../../SkinSupport/MadCapBodyEnd.js">
+        </script>
+        <p class="MCWebHelpFramesetLink MCWebHelpFramesetLinkBottom" style="display: none;"><a href="../../../Default_CSH.htm#RM/api/d_pkeyprev.htm" style="">Open topic with navigation</a>
+        </p>
+    </body>
+</html>

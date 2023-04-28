@@ -1,0 +1,203 @@
+<?xml version="1.0" encoding="utf-8"?>
+<!DOCTYPE html PUBLIC "-//W3C//DTD XHTML 1.0 Strict//EN" "http://www.w3.org/TR/xhtml1/DTD/xhtml1-strict.dtd">
+<html xmlns:MadCap="http://www.madcapsoftware.com/Schemas/MadCap.xsd" MadCap:tocPath="SQL API|SQL Language Guide|Reference Guide|SQL UDF Reference" MadCap:InPreviewMode="false" MadCap:PreloadImages="false" MadCap:RuntimeFileType="Topic" MadCap:TargetType="WebHelp" lang="en-us" xml:lang="en-us" MadCap:PathToHelpSystem="../../../" MadCap:HelpSystemFileName="Default.xml" MadCap:SearchType="Stem">
+    <head>
+        <meta http-equiv="Content-Type" content="text/html; charset=utf-8" /><title>udfScalarCall</title>
+        <link rel="icon" type="image/png" href="http://docs.raima.com/favicon.png" />
+        <link href="../../SkinSupport/MadCap.css" rel="stylesheet" />
+        <link href="../../Resources/TableStyles/FunctionArgs.css" rel="stylesheet" />
+        <link href="../../Resources/TableStyles/SQLErrorCodes.css" rel="stylesheet" />
+        <link href="../../Resources/Stylesheets/raima.css" rel="stylesheet" />
+        <script src="../../SkinSupport/MadCapAll.js" type="text/javascript">
+        </script>
+    </head>
+    <body>
+        <p class="MCWebHelpFramesetLink MCWebHelpFramesetLinkTop" style="display: none;"><a href="../../../Default_CSH.htm#SQL/UDFREF/udfScalarCall.htm" style="">Open topic with navigation</a>
+        </p>
+        <div class="MCBreadcrumbsBox_0"><span class="MCBreadcrumbsPrefix">You are here: </span><a class="MCBreadcrumbsLink" href="../../dbRSQL.htm">SQL API</a><span class="MCBreadcrumbsDivider"> &gt; </span><a class="MCBreadcrumbsLink" href="../dbSQL.htm">SQL Language Guide</a><span class="MCBreadcrumbsDivider"> &gt; </span><a class="MCBreadcrumbsLink" href="../SQLStmtRef.htm">Reference Guide</a><span class="MCBreadcrumbsDivider"> &gt; </span><span class="MCBreadcrumbs">udfScalarCall</span>
+        </div>
+        <h3 class="newpage">udfScalarCall<a name="kanchor255"></a></h3>
+        <p>Process call to a scalar user-defined function</p>
+        <p class="Heading">Prototype</p><pre xml:space="preserve">RSQL_ERRCODE EXTERNAL_FCN <i>udfScalarCall</i>(
+    HSTMT               hstmt,  
+    void               *pFcnCtx,
+    uint16_t            noargs, 
+    const RSQL_VALUE   *pArgs,  
+    RSQL_VALUE         *pResult)
+</pre>
+        <p class="Heading">Arguments</p>
+        <table style="width: 100%;mc-table-style: url('../../Resources/TableStyles/FunctionArgs.css');margin-left: 0;margin-right: auto;" class="TableStyle-FunctionArgs" cellspacing="0">
+            <col class="Column-Column1" />
+            <col class="Column-Column3" />
+            <col class="Column-Column2" />
+            <tbody>
+                <tr class="Body-Body1">
+                    <td class="BodyE-Column1-Body1">hStmt</td>
+                    <td class="BodyE-Column3-Body1">(input)</td>
+                    <td class="BodyD-Column2-Body1">Statement handle of SQL statement referencing this UDF.</td>
+                </tr>
+                <tr class="Body-Body1">
+                    <td class="BodyE-Column1-Body1">pFcnCtx</td>
+                    <td class="BodyE-Column3-Body1">(input)</td>
+                    <td class="BodyD-Column2-Body1">Pointer to the user program allocated registration context data area.</td>
+                </tr>
+                <tr class="Body-Body1">
+                    <td class="BodyE-Column1-Body1">noargs</td>
+                    <td class="BodyE-Column3-Body1">(input)</td>
+                    <td class="BodyD-Column2-Body1">Number of arguments specified in SQL statement's UDF call.</td>
+                </tr>
+                <tr class="Body-Body1">
+                    <td class="BodyE-Column1-Body1">pArgs</td>
+                    <td class="BodyE-Column3-Body1">(input)</td>
+                    <td class="BodyD-Column2-Body1">Array of <code>noargs</code> argument value entries.</td>
+                </tr>
+                <tr class="Body-Body1">
+                    <td class="BodyB-Column1-Body1">pResult</td>
+                    <td class="BodyB-Column3-Body1">(output)</td>
+                    <td class="BodyA-Column2-Body1">Pointer to the <code>RSQL_VALUE</code> variable to contain the result value.</td>
+                </tr>
+            </tbody>
+        </table>
+        <p class="Heading">Description</p>
+        <p>The <i>udfScalarCall</i> function is called by <span class="MyVariablesRSQLName">RDM SQL</span> (usually) during execution of the SQL statement containing the user-defined function (UDF) reference to perform the desired calculation. It can also be called at compilation time when 1) the function is deterministic (as indicated by the <code>pDeterm</code> output argument from a prior call to the <i>udfCheck</i> function), and 2) when all of the argument values are literal constants.</p>
+        <p>The <code>hStmt</code> argument is the statement handle of the SQL statement that contains a reference to the UDF.   It can be used by any of the UDF implementation functions to discover any needed information about the invoking statement (e.g., <code>rsqlGetStmtType</code>).</p>
+        <p>The <code>pArgs</code> argument is a pointer to an <code>RSQL_VALUE</code> array of <code>noargs</code> elements containing the value for each argument. The first argument value is contained in <code>pArgs[0]</code>.   The result value needs to be returned in the <code>RSQL_VALUE</code> variable pointed to by the <code>pResult</code> output argument.  Note that for <code>tCHAR</code>/<code>tVARCHAR</code> result values the <code>pResult-&gt;vt.cv</code> is assigned to a pointer to a null-terminated <code>char</code> array for a character string result value.  The memory containing the string must not be local to the <i>udfScalarCall</i> function as it will go out of scope as soon as the function returns. The memory needed for results that are dynamic (e.g., character strings, binary arrays, etc.) will normally be contained or managed in the function context data area (<code>pFcnCtx</code>).  Refer to the <a href="../Chapter11.htm#SQL">SQL Data Types and Values</a> section for details on the use of the <code>RSQL_VALUE struct</code>.</p>
+        <p class="Heading">Example</p><pre xml:space="preserve">#include "rsql.h"
+...
+/* ======================================================================
+   Soundex() UDF - return soundex code for specified name
+*/
+static RSQL_ERRCODE EXTERNAL_FCN SndxCall (
+    HSTMT             hStmt,    /* in:  system handle */
+    void             *cxtp,     /* in:  UDF context pointer */
+    uint16_t          noargs,   /* in:  number of arguments to function */
+    const RSQL_VALUE *args,     /* in:  array of arguments */
+    RSQL_VALUE       *result)   /* out: result value */
+{
+    /* Soundex conversion table. See Wikipedia "Soundex" page */
+    static const char *const codes[] = {"bfpv","cgjkqsxz","dt","l","mn","r","hw",NULL};
+    static const char *const sndxerr = "xERR";
+    int32_t                  cpos = 1;
+    int32_t                  cndx;
+    char                     cur_c;
+    char                     last_c = '\0';
+    SNDX_CTX                *scp  = cxtp;
+    char                    *sndx = &amp;scp-&gt;sndx[0];
+    const char              *name = args-&gt;vt.cv;
+    
+    UNREF_PARM(hStmt)
+    UNREF_PARM(noargs)
+
+    result-&gt;type  = tCHAR;
+    result-&gt;len   = 0;
+
+    if ( !name || !isalpha(*name) 
+            || (args-&gt;type != tCHAR &amp;&amp; args-&gt;type != tVARCHAR) ) {
+        result-&gt;vt.cv = sndxerr;
+        return errSUCCESS;
+    }
+    sndx[0] = (char) toupper(*name++);
+    strcpy(&amp;sndx[1], "000");
+
+    for ( ; cpos &lt; 4 &amp;&amp; isalpha(*name); ++name) {
+        for (cndx = 0; codes[cndx] &amp;&amp; cpos &lt; 4; ++cndx) {
+            if ( strchr(codes[cndx], tolower(*name)) ) {
+                if ( cndx &lt; 6 ) { /* "hw" */
+                    cur_c = (char) ('1' + cndx);
+                    if ( cur_c != last_c ) {
+                        sndx[cpos++] = cur_c;
+                        last_c = cur_c;
+                    }
+                }
+                break;
+            }
+        }
+        if ( !codes[cndx] )
+            last_c = 0;
+    }
+    result-&gt;vt.cv = sndx;
+
+    return errSUCCESS;
+}
+</pre>
+        <p class="Heading">Return Codes</p>
+        <table class="TableStyle-SQLErrorCodes" cellspacing="0" style="mc-table-style: url('../../Resources/TableStyles/SQLErrorCodes.css');">
+            <col class="Column-Column1" />
+            <col class="Column-Column2" />
+            <col class="Column-Column3" />
+            <col class="Column-Column4" />
+            <tbody>
+                <tr class="Body-Body1">
+                    <th class="BodyB-Column1-Body1" style="font-weight: bold;">Error Code</th>
+                    <th class="BodyB-Column2-Body1" style="font-weight: bold;">Enum Identifier</th>
+                    <th class="BodyB-Column3-Body1" style="font-weight: bold;">SQL State</th>
+                    <th class="BodyA-Column4-Body1" style="font-weight: bold;">Description</th>
+                </tr>
+            </tbody>
+        </table>
+        <table class="TableStyle-SQLErrorCodes" cellspacing="0" style="mc-table-style: url('../../Resources/TableStyles/SQLErrorCodes.css');">
+            <col class="Column-Column1" />
+            <col class="Column-Column2" />
+            <col class="Column-Column3" />
+            <col class="Column-Column4" />
+            <tbody>
+                <tr class="Body-Body1">
+                    <td class="BodyB-Column1-Body1">0</td>
+                    <td class="BodyB-Column2-Body1">errSUCCESS</td>
+                    <td class="BodyB-Column3-Body1">00000</td>
+                    <td class="BodyA-Column4-Body1">no error was detected</td>
+                </tr>
+            </tbody>
+        </table>
+        <table class="TableStyle-SQLErrorCodes" cellspacing="0" style="mc-table-style: url('../../Resources/TableStyles/SQLErrorCodes.css');">
+            <col class="Column-Column1" />
+            <col class="Column-Column2" />
+            <col class="Column-Column3" />
+            <col class="Column-Column4" />
+            <tbody>
+                <tr class="Body-Body1">
+                    <td class="BodyB-Column1-Body1">83</td>
+                    <td class="BodyB-Column2-Body1">errUDF</td>
+                    <td class="BodyB-Column3-Body1">RX011</td>
+                    <td class="BodyA-Column4-Body1">user-defined function error</td>
+                </tr>
+            </tbody>
+        </table>
+        <table class="TableStyle-SQLErrorCodes" cellspacing="0" style="mc-table-style: url('../../Resources/TableStyles/SQLErrorCodes.css');">
+            <col class="Column-Column1" />
+            <col class="Column-Column2" />
+            <col class="Column-Column3" />
+            <col class="Column-Column4" />
+            <tbody>
+                <tr class="Body-Body1">
+                    <td class="BodyB-Column1-Body1">86</td>
+                    <td class="BodyB-Column2-Body1">errUDFARG</td>
+                    <td class="BodyB-Column3-Body1">21000</td>
+                    <td class="BodyA-Column4-Body1">invalid funtion argument type</td>
+                </tr>
+            </tbody>
+        </table>
+        <p class="Heading">See Also</p>
+        <p><a href="../../SQLRM/rsqlRegisterUDFs.htm">rsqlRegisterUDFs</a>
+        </p>
+        <p><a href="udfCheck.htm">udfCheck</a>
+        </p>
+        <p><a href="udfInit.htm">udfInit</a>
+        </p>
+        <p><a href="udfTerm.htm">udfTerm</a>
+        </p>
+        <p><a href="udfAggCall.htm">udfAggCall</a>
+        </p>
+        <p><a href="udfAggResult.htm">udfAggResult</a>
+        </p>
+        <p><a href="udfAggReset.htm">udfAggReset</a>
+        </p>
+        <hr MadCap:conditions="Default.ScreenOnly" width="100%" size="0" align="center" />
+        <p MadCap:conditions="Default.ScreenOnly" style="font-size: 8pt;"><span class="MyVariablesCopyright">Copyright © 2012, Raima Inc. All rights reserved.</span>
+        </p>
+        <script type="text/javascript" src="../../SkinSupport/MadCapBodyEnd.js">
+        </script>
+        <p class="MCWebHelpFramesetLink MCWebHelpFramesetLinkBottom" style="display: none;"><a href="../../../Default_CSH.htm#SQL/UDFREF/udfScalarCall.htm" style="">Open topic with navigation</a>
+        </p>
+    </body>
+</html>

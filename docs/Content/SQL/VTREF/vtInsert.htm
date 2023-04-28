@@ -1,0 +1,241 @@
+<?xml version="1.0" encoding="utf-8"?>
+<!DOCTYPE html PUBLIC "-//W3C//DTD XHTML 1.0 Strict//EN" "http://www.w3.org/TR/xhtml1/DTD/xhtml1-strict.dtd">
+<html xmlns:MadCap="http://www.madcapsoftware.com/Schemas/MadCap.xsd" MadCap:tocPath="SQL API|SQL Language Guide|Reference Guide|SQL Virtual Table Function Reference" MadCap:InPreviewMode="false" MadCap:PreloadImages="false" MadCap:RuntimeFileType="Topic" MadCap:TargetType="WebHelp" lang="en-us" xml:lang="en-us" MadCap:PathToHelpSystem="../../../" MadCap:HelpSystemFileName="Default.xml" MadCap:SearchType="Stem">
+    <head>
+        <meta http-equiv="Content-Type" content="text/html; charset=utf-8" /><title>vtInsert</title>
+        <link rel="icon" type="image/png" href="http://docs.raima.com/favicon.png" />
+        <link href="../../SkinSupport/MadCap.css" rel="stylesheet" />
+        <link href="../../Resources/TableStyles/FunctionArgs.css" rel="stylesheet" />
+        <link href="../../Resources/TableStyles/ParamStruct.css" rel="stylesheet" />
+        <link href="../../Resources/TableStyles/SQLErrorCodes.css" rel="stylesheet" />
+        <link href="../../Resources/Stylesheets/raima.css" rel="stylesheet" />
+        <script src="../../SkinSupport/MadCapAll.js" type="text/javascript">
+        </script>
+    </head>
+    <body>
+        <p class="MCWebHelpFramesetLink MCWebHelpFramesetLinkTop" style="display: none;"><a href="../../../Default_CSH.htm#SQL/VTREF/vtInsert.htm" style="">Open topic with navigation</a>
+        </p>
+        <div class="MCBreadcrumbsBox_0"><span class="MCBreadcrumbsPrefix">You are here: </span><a class="MCBreadcrumbsLink" href="../../dbRSQL.htm">SQL API</a><span class="MCBreadcrumbsDivider"> &gt; </span><a class="MCBreadcrumbsLink" href="../dbSQL.htm">SQL Language Guide</a><span class="MCBreadcrumbsDivider"> &gt; </span><a class="MCBreadcrumbsLink" href="../SQLStmtRef.htm">Reference Guide</a><span class="MCBreadcrumbsDivider"> &gt; </span><span class="MCBreadcrumbs">vtInsert</span>
+        </div>
+        <h3 class="newpage">vtInsert<a name="kanchor258"></a></h3>
+        <p>Process execution of an <b>insert</b> statement into a virtual table</p>
+        <p class="Heading">Prototype</p><pre xml:space="preserve">RSQL_ERRCODE EXTERNAL_FCN <i>vtInsert</i>( 
+    HSTMT            hstmt,   
+    uint16_t         nocols,  
+    VCOL_INFO       *colsvals,
+    void            *pRegCtx)</pre>
+        <p class="Heading">Arguments</p>
+        <table style="width: 100%;mc-table-style: url('../../Resources/TableStyles/FunctionArgs.css');margin-left: 0;margin-right: auto;" class="TableStyle-FunctionArgs" cellspacing="0">
+            <col class="Column-Column1" />
+            <col class="Column-Column3" />
+            <col class="Column-Column2" />
+            <tbody>
+                <tr class="Body-Body1">
+                    <td class="BodyE-Column1-Body1">hstmt</td>
+                    <td class="BodyE-Column3-Body1">(input)</td>
+                    <td class="BodyD-Column2-Body1">Statement handle of SQL statement containing the virtual table reference.</td>
+                </tr>
+                <tr class="Body-Body1">
+                    <td class="BodyE-Column1-Body1">nocols</td>
+                    <td class="BodyE-Column3-Body1">(input)</td>
+                    <td class="BodyD-Column2-Body1">Number of referenced columns (size of <code>colsvals</code> array).</td>
+                </tr>
+                <tr class="Body-Body1">
+                    <td class="BodyE-Column1-Body1">colsvals</td>
+                    <td class="BodyE-Column3-Body1">(input)</td>
+                    <td class="BodyD-Column2-Body1">Array of referenced column value containers.</td>
+                </tr>
+                <tr class="Body-Body1">
+                    <td class="BodyB-Column1-Body1">pRegCtx</td>
+                    <td class="BodyB-Column3-Body1">(input)</td>
+                    <td class="BodyA-Column2-Body1">Pointer to the user program allocated context data area that was originally passed in through the call to <code>rsqlRegisterVirtualTables</code>.</td>
+                </tr>
+            </tbody>
+        </table>
+        <p class="Heading">Description</p>
+        <p>This is a callback function, implemented by you, that is called by SQL to execute the SQL <b>insert</b> statement that references the virtual table. The name of the function can be anything as the <span class="MyVariablesRSQLName">RDM SQL</span> system only calls this function through a pointer to it contained in the <code>VTFLOADTABLE struct</code> entry for its associated virtual table.</p>
+        <p>Each entry of the <code>colsvals</code> array contains information about a virtual table column that is referenced in the SQL statement.  This information is contained in the <code>VCOL_INFO struct</code> type whose fields are described in the following table.</p>
+        <table style="mc-table-style: url('../../Resources/TableStyles/ParamStruct.css');margin-left: 0;margin-right: auto;" class="TableStyle-ParamStruct" cellspacing="0">
+            <caption>Table 4. VCOL_INFO Description</caption>
+            <col class="Column-Column1" />
+            <col class="Column-Column2" />
+            <col class="Column-Column3" />
+            <thead>
+                <tr class="Head-Header1">
+                    <th class="HeadE-Column1-Header1">Field Name</th>
+                    <th class="HeadE-Column2-Header1">Data Type</th>
+                    <th class="HeadD-Column3-Header1">Description</th>
+                </tr>
+            </thead>
+            <tbody>
+                <tr class="Body-Body1">
+                    <td class="BodyE-Column1-Body1">colno</td>
+                    <td class="BodyE-Column2-Body1">int16_t</td>
+                    <td class="BodyD-Column3-Body1">Ordinal position of column in table declaration: 0 (first column) to # of columns in table – 1 (last column).</td>
+                </tr>
+                <tr class="Body-Body1">
+                    <td class="BodyE-Column1-Body1">len</td>
+                    <td class="BodyE-Column2-Body1">uint32_t</td>
+                    <td class="BodyD-Column3-Body1">Column length in bytes.</td>
+                </tr>
+                <tr class="Body-Body1">
+                    <td class="BodyE-Column1-Body1">is_null</td>
+                    <td class="BodyE-Column2-Body1">int16_t *</td>
+                    <td class="BodyD-Column3-Body1">Pointer to variable containing the null indicator flag: *is_null = 0 =&gt; not null, *is_null = 1 =&gt; is null.</td>
+                </tr>
+                <tr class="Body-Body1">
+                    <td class="BodyB-Column1-Body1">data</td>
+                    <td class="BodyB-Column2-Body1">void *</td>
+                    <td class="BodyA-Column3-Body1">Pointer to the buffer containing the column value.</td>
+                </tr>
+            </tbody>
+        </table>
+        <p>Note that the <code>is_null</code> field is a pointer to the <code>int16_t</code> variable that is used by SQL system to indicate that a column value is null.  By assigning this through the pointer it eliminates the need for the SQL system to perform an extra loop through the <code>colsvals</code> array.</p>
+        <p>All of the information needed to do the insert is provided in the <code>vtInsert</code> arguments. The <code>colsvals</code> array contains the values of the table columns to be inserted.  The <code>nocols</code> argument specifies the number of entries in the <code>colsvals</code> array which could be less than the number of columns declared in the table.</p>
+        <p>If the associated virtual table has a primary key then it is the responsibility of this function to ensure that any specified primary key column value is unique. If a duplicate entry is found then the function needs to return status <code>errDUPLICATE</code>.</p>
+        <p class="Heading">Example</p><pre xml:space="preserve"> 1	/* ========================================================================
+ 2	    Virtual table INSERT execution function 
+ 3	*/
+ 4	static RSQL_ERRCODE EXTERNAL_FCN vtabInsert(  /* vtInsert() */
+ 5	    HSTMT        hstmt,        /* in:  statement handle */
+ 6	    uint16_t     nocols,       /* in:  no. of ref'd columns */
+ 7	    VCOL_INFO   *colsvals,     /* in:  array of ref'd column value containers */
+ 8	    void        *pRegCtx)      /* in:  unused */
+ 9	{
+10	  int32_t      lv;
+11	  uint32_t     rowno;
+12	  int16_t      pkno = -1;
+13	  RSQL_ERRCODE stat = errSUCCESS;
+14
+15	  UNREF_PARM(hstmt)
+16	  UNREF_PARM(pRegCtx)
+17	  
+18	  vtabEnter();
+19	  
+20	  if ( !vtabrows ) {
+21	      /* allocate virtab data area */
+22	      vtabrows = calloc(maxrows, sizeof(struct virtab));
+23	  }
+24	  /* locate specified primary key value, if any */
+25	  for (pkno = 0; pkno &lt; nocols; ++pkno) {
+26	      if ( colsvals[pkno].colno == 0 ) {
+27	          /* locate row with matching primary key */
+28	          memcpy(&amp;lv, colsvals[pkno].data, sizeof(int32_t));
+29	          for ( rowno = 0; rowno &lt; norows; ++rowno ) {
+30	              if ( vtabrows[rowno].pkey == lv ) {
+31	                  vtabExit();
+32	                  return errDUPLICATE;
+33	              }
+34	          }
+35	      }
+36	  }
+37	  stat = vtabStoreRow(norows, nocols, colsvals); 
+38	  if ( stat == errSUCCESS )
+39	      ++norows;
+40	    
+41	    vtabExit();
+42	    
+43	    return stat;
+44	}
+</pre>
+        <p>Since the <code>virtab</code> table has a primary key, the function needs to locate the primary key value in the <code>colsvals</code> array so that its uniqueness can be checked.   This is work is done at lines 24 to 36.   Since the primary key is declared on the first column of the table, its value is located in the <code>colsvals</code> entry that has <code>colno</code> equal to 0 (line 26).   Once found, the value is copied into the local <code>int32_t</code> variable <code>lv</code>.  If a matching row is found the function returns status <code>errDUPLICATE</code> indicate that an attempt was made to insert a row with a duplicate primary key value (lines  30-33).</p><pre xml:space="preserve"> 1	/* ========================================================================
+ 2	    Store column values in specified row (0 = first row)
+ 3	*/
+ 4	static RSQL_ERRCODE vtabStoreRow(
+ 5	    uint32_t         rowno,    /* in: row number into which store col vals */
+ 6	    uint16_t         nocols,   /* in: no. of ref'd columns */
+ 7	    const VCOL_INFO *colsvals) /* in: array of ref'd column value containers 	*/
+ 8	{
+ 9	    uint16_t         cno;
+10	    const VCOL_INFO *pCol;
+11	    struct virtab   *pRow;
+12	    
+13	    if ( rowno &gt;= maxrows )
+14	        return errVTSPACE;
+15	        
+16	    pRow = &amp;vtabrows[rowno];
+17	    
+18	    for (pCol = colsvals, cno = 0; cno &lt; nocols; ++cno, ++pCol ) {
+19	        if ( *pCol-&gt;is_null )
+20	            pRow-&gt;is_null[pCol-&gt;colno] = 1;
+21	        else {
+22	            pRow-&gt;is_null[pCol-&gt;colno] = 0;
+23	            switch (pCol-&gt;colno) {
+24	                case 0: memcpy(&amp;pRow-&gt;pkey, pCol-&gt;data, sizeof(int32_t)); break;
+25	                case 1: strncpy(pRow-&gt;name,  (char *)pCol-&gt;data, 24);     break;
+26	                case 2: strncpy(pRow-&gt;addr,  (char *)pCol-&gt;data, 32);     break;
+27	                case 3: strncpy(pRow-&gt;city,  (char *)pCol-&gt;data, 24);     break;
+28	                case 4: strncpy(pRow-&gt;state, (char *)pCol-&gt;data, 2);      break;
+29	                case 5: strncpy(pRow-&gt;zip,   (char *)pCol-&gt;data, 9);      break;
+30	            } /*lint !e744 */
+31	        }
+32	    }
+33	    return errSUCCESS;
+34	}
+</pre>
+        <p>The <code>rowno</code> argument is index into <code>vtabrows</code> into which the row will be stored. The <code>pRow</code> pointer (assigned at line 16) is simply used to derefence that row in the code which follows.  Lines 18-32 loop through the <code>colsvals</code> array in order to assign the values for each individual column into its field in the <code>vtabrows struct</code> array entry.  It is important to note that the table column number is not <code>cno</code> but <code>pCol-&gt;colno</code> (lines 20, 22, and 23).   Also note that in this example the <code>len</code> field of <code>VCOL_INFO</code> is not used but it could (should!) have been used to, for example, check for a possible truncation (i.e., where <code>pCol-&gt;len</code> is greater than the declared size of the column).</p>
+        <p class="Heading">Return Codes</p>
+        <table class="TableStyle-SQLErrorCodes" cellspacing="0" style="mc-table-style: url('../../Resources/TableStyles/SQLErrorCodes.css');">
+            <col class="Column-Column1" />
+            <col class="Column-Column2" />
+            <col class="Column-Column3" />
+            <col class="Column-Column4" />
+            <tbody>
+                <tr class="Body-Body1">
+                    <th class="BodyB-Column1-Body1" style="font-weight: bold;">Error Code</th>
+                    <th class="BodyB-Column2-Body1" style="font-weight: bold;">Enum Identifier</th>
+                    <th class="BodyB-Column3-Body1" style="font-weight: bold;">SQL State</th>
+                    <th class="BodyA-Column4-Body1" style="font-weight: bold;">Description</th>
+                </tr>
+            </tbody>
+        </table>
+        <table class="TableStyle-SQLErrorCodes" cellspacing="0" style="mc-table-style: url('../../Resources/TableStyles/SQLErrorCodes.css');">
+            <col class="Column-Column1" />
+            <col class="Column-Column2" />
+            <col class="Column-Column3" />
+            <col class="Column-Column4" />
+            <tbody>
+                <tr class="Body-Body1">
+                    <td class="BodyB-Column1-Body1">0</td>
+                    <td class="BodyB-Column2-Body1">errSUCCESS</td>
+                    <td class="BodyB-Column3-Body1">00000</td>
+                    <td class="BodyA-Column4-Body1">no error was detected</td>
+                </tr>
+            </tbody>
+        </table>
+        <table class="TableStyle-SQLErrorCodes" cellspacing="0" style="mc-table-style: url('../../Resources/TableStyles/SQLErrorCodes.css');">
+            <col class="Column-Column1" />
+            <col class="Column-Column2" />
+            <col class="Column-Column3" />
+            <col class="Column-Column4" />
+            <tbody>
+                <tr class="Body-Body1">
+                    <td class="BodyB-Column1-Body1">90</td>
+                    <td class="BodyB-Column2-Body1">errDUPLICATE</td>
+                    <td class="BodyB-Column3-Body1">42000</td>
+                    <td class="BodyA-Column4-Body1">duplicate primary/unique key value</td>
+                </tr>
+            </tbody>
+        </table>
+        <p class="Heading">See Also</p>
+        <p><a href="../../SQLRM/rsqlRegisterVirtualTables.htm">rsqlRegisterVirtualTables</a>
+        </p>
+        <p><a href="vtRowCount.htm">vtRowCount</a>
+        </p>
+        <p><a href="vtSelectCount.htm">vtSelectCount</a>
+        </p>
+        <p><a href="vtSelectOpen.htm">vtSelectOpen</a>
+        </p>
+        <p><a href="vtFetch.htm">vtFetch</a>
+        </p>
+        <p><a href="vtSelectClose.htm">vtSelectClose</a>
+        </p>
+        <hr MadCap:conditions="Default.ScreenOnly" width="100%" size="0" align="center" />
+        <p MadCap:conditions="Default.ScreenOnly" style="font-size: 8pt;"><span class="MyVariablesCopyright">Copyright © 2012, Raima Inc. All rights reserved.</span>
+        </p>
+        <script type="text/javascript" src="../../SkinSupport/MadCapBodyEnd.js">
+        </script>
+        <p class="MCWebHelpFramesetLink MCWebHelpFramesetLinkBottom" style="display: none;"><a href="../../../Default_CSH.htm#SQL/VTREF/vtInsert.htm" style="">Open topic with navigation</a>
+        </p>
+    </body>
+</html>

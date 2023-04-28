@@ -1,0 +1,399 @@
+<?xml version="1.0" encoding="utf-8"?>
+<!DOCTYPE html PUBLIC "-//W3C//DTD XHTML 1.0 Strict//EN" "http://www.w3.org/TR/xhtml1/DTD/xhtml1-strict.dtd">
+<html xmlns:MadCap="http://www.madcapsoftware.com/Schemas/MadCap.xsd" MadCap:tocPath="SQL API|SQL Language Guide|User's Guide" MadCap:InPreviewMode="false" MadCap:PreloadImages="false" MadCap:RuntimeFileType="Topic" MadCap:TargetType="WebHelp" lang="en-us" xml:lang="en-us" MadCap:PathToHelpSystem="../../" MadCap:HelpSystemFileName="Default.xml" MadCap:SearchType="Stem">
+    <head>
+        <meta http-equiv="Content-Type" content="text/html; charset=utf-8" /><title>How Queries are Processed by RDM SQL</title>
+        <link rel="icon" type="image/png" href="http://docs.raima.com/favicon.png" />
+        <link href="../SkinSupport/MadCap.css" rel="stylesheet" />
+        <link href="../Resources/TableStyles/BasicTwoCol.css" rel="stylesheet" />
+        <link href="../Resources/Stylesheets/raima.css" rel="stylesheet" />
+        <script src="../SkinSupport/MadCapAll.js" type="text/javascript">
+        </script>
+    </head>
+    <body>
+        <p class="MCWebHelpFramesetLink MCWebHelpFramesetLinkTop" style="display: none;"><a href="../../Default_CSH.htm#SQL/Chapter10.htm" style="">Open topic with navigation</a>
+        </p>
+        <div class="MCBreadcrumbsBox_0"><span class="MCBreadcrumbsPrefix">You are here: </span><a class="MCBreadcrumbsLink" href="../dbRSQL.htm">SQL API</a><span class="MCBreadcrumbsDivider"> &gt; </span><a class="MCBreadcrumbsLink" href="dbSQL.htm">SQL Language Guide</a><span class="MCBreadcrumbsDivider"> &gt; </span><a class="MCBreadcrumbsLink" href="Chapter1.htm">User's Guide</a><span class="MCBreadcrumbsDivider"> &gt; </span><span class="MCBreadcrumbs">How Queries are Processed by RDM SQL</span>
+        </div>
+        <h1><a MadCap:generatedBookmark="TOC" name="How_Queries_are_Processed_by_RDM_SQL"></a>How Queries are Processed by <span class="MyVariablesRSQLName">RDM SQL</span></h1>
+        <p class="Quotation">Artificial Intelligence is no match for natural stupidity.</p>
+        <p class="QuoteAuthor">- Unknown</p>
+        <p>A query optimizer is the component of an SQL system that attempts to determine the best way to retrieve the data that is needed to produce the results specified by a given <b>select</b> statement.  The problem with the term "query optimizer" is that it makes it sound like it can take a stupidly formulated query and turn it into one that executes at optimal performance.  The fact is, query optimizers are just not that smart.  So, it is important that queries be reasonably formulated and the more you understand how the optimizer goes about its business the better equipped you will be  to do just that.  That is what this section is all about.  Here you will …</p>
+        <ul>
+            <li value="1">learn how the <span class="MyVariablesRSQLName">RDM SQL</span> optimizer works,</li>
+            <li value="2">learn the different ways in which data can be retrieved from a database,</li>
+            <li value="3">be given guidelines on how to construct fast-performing queries, and</li>
+            <li value="4">learn how to retrieve and interpret a query's access plan.</li>
+        </ul>
+        <h2><a MadCap:generatedBookmark="TOC" name="Overview_of_the_Query_Optimization_Process"></a>Overview of the Query Optimization Process</h2>
+        <p>In SQL, queries are specified using the select statement, and many methods (or query execution plans) exist for processing a query. The goal of the optimizer is to discover, among potentially many possible options, which plan will execute in the shortest amount of time.  Of course, the only way to guarantee a specific plan is optimal is to execute every possibility and then choose the fastest one. As this clearly defeats the purpose of optimization, other methods must be devised.</p>
+        <p>The query optimizer must resolve two interrelated issues: how it will access each table referenced in the query, and in what order. To access requested rows in a table, the optimizer can choose from a variety of access methods.  It determines the best execution plan by estimating the cost associated with each access method and by factoring in the constraints on these methods imposed by each possible access ordering. Note that the decisions made by the optimizer are independent of the listed order of the tables in the <b>from</b> clause or the location of the expressions in the <b>where</b> clause.</p>
+        <p>To illustrate consider the declarations for the two tables defined below.</p><pre xml:space="preserve">create table customer(
+    cust_id char(3) primary key,
+    company char(30) not null,
+    street char(30),
+    city char(17),
+    state char(2),
+    key cust_geo(state, city)	
+);
+create table sales_order(
+    cust_id char(3) references customer,
+    ord_num smallint primary key,
+    ord_date date key,
+    amount double
+);</pre>
+        <p><span class="MyVariablesRSQLName">RDM SQL</span> will generate two indexes for each table.  The <code>customer</code> table has an index on <code>cust_id</code> and a compound index for <code>cust_geo</code> on <code>state</code> and <code>city</code>.   The <code>sales_order</code> table has an index on <code>ord_num</code> and another on <code>ord_date</code>.  With this in mind, consider the following query.</p><pre xml:space="preserve">select company, ord_num, ord_date, amount from customer natural join sales_order
+	where state = "CO" and ord_date = date "2010-11-23";</pre>
+        <p>Note that this is functionally identical to the query...</p><pre xml:space="preserve">select company, ord_num, ord_date, amount from customer, sales_order
+	where customer.cust_id = sales_order.cust_id and
+		state = "CO" and ord_date = date "2010-11-23";</pre>
+        <p>In this second form, two tables will be accessed: <code>customer</code> and <code>sales_order</code>. T he first relational expression in the <b>where</b> clause specifies the join predicate, which relates the two tables based on their declared foreign and primary keys.  <span class="MyVariablesRSQLName">RDM SQL</span> implements foreign and primary key relationships using a bi-directional, direct access method.  This means that it is possible to quickly go from 1) the foreign key row to the referenced primary key row and 2) from the primary key row to each row that references it.  Note also that the <code>state</code> column in the <code>customer</code> table is the first column in the <code>cust_geo</code> key, and the <code>ord_date</code> column in the <code>sales_order</code> table is the first column in the <code>order_key</code> key.  Thus the optimizer has choices of which index to use. All possible execution plans considered by the RDM Server query optimizer for this query are listed in the following table.</p>
+        <table style="caption-side: top;mc-table-style: url('../Resources/TableStyles/BasicTwoCol.css');margin-left: 0;margin-right: auto;" class="TableStyle-BasicTwoCol" cellspacing="0">
+            <caption>Table 15. Possible Execution Plans for Example Query</caption>
+            <col style="width: 80px;" class="Column-Column1" />
+            <col class="Column-Column2" />
+            <thead>
+                <tr class="Head-Header1">
+                    <th class="HeadE-Column1-Header1">Plan</th>
+                    <th class="HeadD-Column2-Header1">Description</th>
+                </tr>
+            </thead>
+            <tbody>
+                <tr class="Body-Body1">
+                    <td class="BodyE-Column1-Body1">1</td>
+                    <td class="BodyD-Column2-Body1">Scan <code>customer</code> table (i.e., read all rows) to locate rows where <code>state = "CO"</code>, then for each matching <code>customer</code> row, scan <code>sales_order</code> table to locate rows that match <code>customer</code>'s <code>cust_id</code> and have <code>ord_date = 2010-11-23</code>.</td>
+                </tr>
+                <tr class="Body-Body1">
+                    <td class="BodyE-Column1-Body1">2</td>
+                    <td class="BodyD-Column2-Body1">Scan <code>customer</code> table to locate rows where <code>state = "CO"</code>, then for each <code>customer</code> row, read each <code>sales_order</code> row through the primary to foreign key join, and return only those that have <code>ord_date = 2010-11-23</code>.</td>
+                </tr>
+                <tr class="Body-Body1">
+                    <td class="BodyE-Column1-Body1">3</td>
+                    <td class="BodyD-Column2-Body1">Use the <code>cust_geo</code> index to find the <code>customer</code> rows where <code>state = "CO"</code>, then for each <code>customer</code> row, scan <code>sales_order</code> table to locate rows that match <code>customer</code>'s <code>cust_id</code> and have <code>ord_date = 2010-11-23</code>.</td>
+                </tr>
+                <tr class="Body-Body1">
+                    <td class="BodyE-Column1-Body1">4</td>
+                    <td class="BodyD-Column2-Body1">Use the <code>cust_geo</code> index to find the <code>customer</code> rows where <code>state = "CO"</code>, then for each <code>customer</code> row, read each <code>sales_order</code> row through the primary to foreign key join, and return only those that have <code>ord_date = 2010-11-23</code>.</td>
+                </tr>
+                <tr class="Body-Body1">
+                    <td class="BodyE-Column1-Body1">5</td>
+                    <td class="BodyD-Column2-Body1">Scan <code>sales_order</code> table to locate rows where <code>ord_date = 2010-11-23</code>, then for each <code>sales_order</code> row, scan <code>customer</code> table to locate rows that match <code>sales_order</code>'s <code>cust_id</code> and have <code>state = "CO"</code>.</td>
+                </tr>
+                <tr class="Body-Body1">
+                    <td class="BodyE-Column1-Body1">6</td>
+                    <td class="BodyD-Column2-Body1">Scan <code>sales_order</code> table to locate rows where <code>ord_date = 2010-11-23</code>, then for each <code>sales_order</code> row, read the <code>customer</code> row through the foreign to primary key join, and return only those that have <code>state = "CO"</code>.</td>
+                </tr>
+                <tr class="Body-Body1">
+                    <td class="BodyE-Column1-Body1">7</td>
+                    <td class="BodyD-Column2-Body1">Use the <code>order_ndx</code> index to find the <code>sales_order</code> rows where <code>ord_date = 2010-11-23</code>, then for each <code>sales_order</code> row, scan <code>customer</code> table to locate rows that match <code>sales_order</code>'s <code>cust_id</code> and have <code>state = "CO"</code>.</td>
+                </tr>
+                <tr class="Body-Body1">
+                    <td class="BodyB-Column1-Body1">8</td>
+                    <td class="BodyA-Column2-Body1">Use the <code>order_ndx</code> index to find the <code>sales_order</code> rows where <code>ord_date = 2010-11-23</code>, then for each <code>sales_order</code> row, read the <code>customer</code> row through the foreign to primary key join, and return only those that have <code>state = "CO"</code>.</td>
+                </tr>
+            </tbody>
+        </table>
+        <p>Because the time (based on the number of disk accesses) required to scan an entire table is generally much greater than the time needed to locate a row through an index, plans 4 and 8 seem the best. However, it is unclear which of the two plans is optimal. In fact, both are probably good enough to obtain acceptable performance.</p>
+        <p>Additional information to help you make the best choice includes the number of rows in each table, the number of customers from Colorado, and the number of orders for November 23, 2010.  Let's assume that there are 1000 customers and 20,000 sales orders.  Thus there is an average of 20 sales orders per customer.  Of the 1000 customers, 25 are located in Colorado and 8 sales orders were made on 2010-11-23.</p>
+        <p>Now let's estimate the number of disk accesses for plan 4.  Since all 25 Colorado customers are grouped together in the index for <code>cust_geo</code> (state is the first column in the index) it is likely that no more than 3 index reads are needed to locate them but each of the 25 rows need to be read and then for each customer row its related <code>sales_order</code> rows (average of 20) need to be read and the <code>ord_date</code> checked.  That gives a total number of disk accesses as…</p><pre xml:space="preserve">Plan 4 Cost Estimate = 3 + 25*20 = 503.</pre>
+        <p>To estimate the number of disk accesses for plan 8 all of the 8 sales_order rows with an ord_date of 2010-11-23 can be retrieved in 1 index read plus 8 reads for each row.  Then the associated customer row is found through the foreign to primary key join (1 read) and the state column value is checked.  That gives a total number of disk accesses...</p><pre xml:space="preserve">Plan 8 Cost Estimate = 1 + 8 + 8*1 = 17.</pre>
+        <p>Clearly, plan 8 is the better choice.</p>
+        <p>Note that plans 1 and 5 perform what is called a Cartesian or cross-product—for each row of the first table accessed, all rows of the second table are retrieved.  Thus given that the customer table contained 1000 rows and the sales_order table contained 20,000 rows, the query would need to read a total of 20,000,000 rows!  Cross-products are extremely inefficient and will never be considered by the optimizer except when a <i>necessary join predicate has been omitted</i> from the query. In our example, this would occur if the relational expression, "<code>customer.cust_id = sales_order.cust_id</code>" was not specified. Necessary join predicates are often erroneously omitted when four or more tables are listed in the from clause and/or when multi-column join predicates (for compound foreign and primary keys) are required.  To avoid this, it is best to use explicit join specification in the <b>from</b> clause as was shown in the first <b>select</b> statement in the above example.  It is also important when defining foreign and primary keys that there be no other columns in the two tables that have the same name other than the foreign and primary key columns because the SQL standard defines a <b>natural join</b> as being based not on the declared foreign and primary keys (which is how it <i>should</i> define it) but based on the commonly named columns.</p>
+        <p>The optimization process is depicted below in Figure 9. The green boxes represent internal data structures and the blue boxes represent processes.</p>
+        <p class="Caption" style="text-align: left;">
+            <img src="../Resources/Images/qry-fig9_652x489.jpg" style="width: 652;height: 489;" />
+            <br />Figure 9 - <span class="MyVariablesRSQLName">RDM SQL</span> Query Optimization Process</p>
+        <p>Using the information in the catalog, the <b>select</b> statement is parsed, validated, and represented in a set of easily processed query description tables. These tables include a tree representation of the <b>where</b> clause expressions (called the expression tree) and information about the tables, columns, and keys in the database.</p>
+        <p>The system then analyzes those tables, and constructs both the access rule table and the expression table. For table that is referenced in the <b>from</b> clause, the analysis process uses information in the catalog and other data related statistics such as then number of rows in each table, blocking factors, and user-specified column statistics.  The access rule table contains a rule entry for each possible access method (for example, table scan or index lookup) for each table.  The expression table has one entry for each conditional expression specified in the <b>where</b> clause. These tables drive the actual optimization process.</p>
+        <p>Finally, the optimizer determines the plan with the lowest total cost. An execution plan basically consists of a series of steps (one step for each table listed in the <b>from</b> clause), of how the table in that particular plan step will be accessed. The possible access rules that can be applied at that step are sorted by their cost so that the first candidate rule is the cheapest. The optimizer's goal is to select one access rule for each step that minimizes the total cost of the complete execution plan. As the optimizer iterates through the steps, the cost of the candidate plan is updated. As soon as a candidate plan's cost exceeds the cost of the currently best complete plan, the candidate plan is abandoned at its current step and the next rule for that step is then tested. Conditional expressions that are incorporated into the plan are deleted from the expression tree so that they are not redundantly executed.</p>
+        <h2><a MadCap:generatedBookmark="TOC" name="Cost-Based_Optimization"></a>Cost-Based Optimization</h2>
+        <p>The cost to determine the execution plan is the time it takes the optimizer to find the "optimal" plan. An execution plan consists of <i>n</i> steps where <i>n</i> is the number of tables listed in the <b>from</b> clause. Each step of the plan specifies the table to be accessed and the method to be used to access rows from that table. The cost increases factorially to the number of tables listed in the <b>from</b> clause (<i>n</i>!). Performance impact start to become noticeable for queries that reference more than about 10-12 tables. This is due to the increasing number of combinations of access orderings that must be considered (2 tables have 2 possible orderings, 3 have 6, 4 have 24, etc.). The cost to estimate each candidate plan also includes a linear factor of the number of access methods available at each step in a plan from which the optimizer must choose. More access methods means the optimizer must do more work, but the odds of finding a good plan improve.</p>
+        <p>The cost to carry out an execution plan is the total number of file reads required to access the necessary database information.  Because it is extremely difficult to accurately estimate the effects caused by caching performance and diverse database page sizes, physical disk read estimates are not possible.   Hence, the system estimates the number of logical file read based on an analysis of the number of reads required to read a row for each access method.  There is also a CPU computation component but that it much more difficult to estimate and is controlled by a constant that is somewhat akin to Einstein's infamous cosmological constant.  More on this later.</p>
+        <p>The statistics maintained for use by cost-based optimizers are used to: 1) guide the choice between alternative access methods derived from the relational expressions specified in the <b>where</b> clause, 2) estimate the number of output rows that result from each plan step, and 3) estimate the number of logical reads incurred by each possible access method.</p>
+        <p>The statistics used by the <span class="MyVariablesProductShortName">RDM</span> cost-based optimizer include:</p>
+        <ul>
+            <li value="1">Number of rows in a table</li>
+            <li value="2">Number of rows per page in a table (database I/O is performed a page at a time)</li>
+            <li value="3">Depth of an index's B-tree</li>
+            <li value="4">Number of keys per page in an index</li>
+            <li value="5">The range of possible values in a column</li>
+            <li value="6">The number of distinct values in a column</li>
+        </ul>
+        <p>The last two stats can be specified by the user through <b>distinct values</b> and <b>range</b> clauses of the <b>create domain</b> and <b>create table</b> statements or the <b>set column stats</b> statement.</p>
+        <p>Most SQL implementations adopt a cost-based approach because the quality of the execution plan that is chosen is not all that sensitive to how a particular query is formulated.   Another optimization approach is called <i>rule-based optimization</i> which access the tables in the order in which the tables are specified which places a greater responsibility on the part of the query formulator to understand the best way for the query to be processed.  This is not to suggest that cost-based optimization frees the query developer of having to put any thought into how the query should be constructed (re: opening paragraph of this section).  If that were so then this discussion would not be necessary.  Nevertheless, cost-based optimizers will more reliably produce higher quality query execution plans but no optimization strategy is perfect.</p>
+        <h2><a MadCap:generatedBookmark="TOC" name="Restriction_Factors"></a>Restriction Factors</h2>
+        <p>A <i>restriction factor</i> is associated with each relational expression that is specified in the <b>where</b> clause and is an estimate of the ratio of number of rows for which the expression is true to the total number of candidate rows.   A <i>candidate row</i> is a row of the table being produced by the <b>select</b> statement before the <b>where</b> clause is evaluated.  Restriction factors are used by the optimizer to decide between alternative access methods.  Restriction factors are floating point values between 0 and 1 and are computed based on the kind of relational expression as follows.</p>
+        <table style="caption-side: top;mc-table-style: url('../Resources/TableStyles/BasicTwoCol.css');margin-left: 0;margin-right: auto;" class="TableStyle-BasicTwoCol" cellspacing="0">
+            <caption>Table 16.  Restriction Factor Computations</caption>
+            <col class="Column-Column1" />
+            <col class="Column-Column2" />
+            <thead>
+                <tr class="Head-Header1">
+                    <th class="HeadE-Column1-Header1">Relational Expression</th>
+                    <th class="HeadD-Column2-Header1">Restriction Factor Estimate</th>
+                </tr>
+            </thead>
+            <tbody>
+                <tr class="Body-Body1">
+                    <td style="font-style: normal;" class="BodyE-Column1-Body1"><i>column</i> = <i>value</i></td>
+                    <td class="BodyD-Column2-Body1">1/number of distinct values of <i>column</i></td>
+                </tr>
+                <tr class="Body-Body1">
+                    <td class="BodyE-Column1-Body1"><i>column</i> <![CDATA[ ]]><b>in</b> (<i>value</i>[, <i>value</i>]…)</td>
+                    <td class="BodyD-Column2-Body1">number of values in list * (1/number of distinct values of <i>column</i>)</td>
+                </tr>
+                <tr class="Body-Body1">
+                    <td class="BodyE-Column1-Body1"><i>column</i> &gt;[=] <i>value</i></td>
+                    <td class="BodyD-Column2-Body1">(max(<i>column</i>) – <i>value</i>) / (max(<i>column</i>) – min(<i>column</i>))</td>
+                </tr>
+                <tr class="Body-Body1">
+                    <td class="BodyE-Column1-Body1"><i>column</i> &lt;[=] <i>value</i></td>
+                    <td class="BodyD-Column2-Body1">(<i>value</i> - min(<i>column</i>)) / (max(<i>column</i>) – min(<i>column</i>))</td>
+                </tr>
+                <tr class="Body-Body1">
+                    <td class="BodyB-Column1-Body1"><i>column</i> <![CDATA[ ]]><b>between</b> <![CDATA[ ]]><i>loval</i> <![CDATA[ ]]><b>and</b> <![CDATA[ ]]><i>hival</i></td>
+                    <td class="BodyA-Column2-Body1">(<i>hival</i> – <i>loval</i>) / (max(<i>column</i>) – min(<i>column</i>))</td>
+                </tr>
+            </tbody>
+        </table>
+        <h2><a MadCap:generatedBookmark="TOC" name="Table_Access_Methods"></a>Table Access Methods</h2>
+        <p><span class="MyVariablesRSQLName">RDM SQL</span> provides a variety of methods for retrieving the rows in a table. Each of these access methods is described below, including how cost is estimated for each method. The cost estimate equations use the above statistics as represented by the following parameters.</p>
+        <table style="caption-side: top;mc-table-style: url('../Resources/TableStyles/BasicTwoCol.css');margin-left: 0;margin-right: auto;" class="TableStyle-BasicTwoCol" cellspacing="0">
+            <caption>Table 17. Table Access Method Cost Estimation Parameters</caption>
+            <col class="Column-Column1" style="width: 80px;" />
+            <col class="Column-Column2" />
+            <thead>
+                <tr class="Head-Header1">
+                    <th class="HeadE-Column1-Header1">Parameter</th>
+                    <th class="HeadD-Column2-Header1">Definition</th>
+                </tr>
+            </thead>
+            <tbody>
+                <tr class="Body-Body1">
+                    <td class="BodyE-Column1-Body1">P</td>
+                    <td class="BodyD-Column2-Body1">The number of pages in the file in which the table's rows are stored.</td>
+                </tr>
+                <tr class="Body-Body1">
+                    <td class="BodyE-Column1-Body1">D</td>
+                    <td class="BodyD-Column2-Body1">The depth of the B-tree index.</td>
+                </tr>
+                <tr class="Body-Body1">
+                    <td class="BodyE-Column1-Body1">C</td>
+                    <td class="BodyD-Column2-Body1">The cardinality of the table being accessed (that is, the number of rows in the table).</td>
+                </tr>
+                <tr class="Body-Body1">
+                    <td class="BodyE-Column1-Body1">C<sub>f</sub></td>
+                    <td class="BodyD-Column2-Body1">The cardinality of the table containing the referenced foreign key.</td>
+                </tr>
+                <tr class="Body-Body1">
+                    <td class="BodyE-Column1-Body1">C<sub>p</sub></td>
+                    <td class="BodyD-Column2-Body1">The cardinality of the table containing the referenced primary key.</td>
+                </tr>
+                <tr class="Body-Body1">
+                    <td class="BodyE-Column1-Body1">K</td>
+                    <td class="BodyD-Column2-Body1">The maximum number of key values per index page.</td>
+                </tr>
+                <tr class="Body-Body1">
+                    <td class="BodyB-Column1-Body1">R</td>
+                    <td class="BodyA-Column2-Body1">The <i>restriction factor</i>, an estimate (between 0 and 1) of the percentage of the rows of the table that satisfy the conditional expression.  The restriction factor for a conditional expression is the product of the restriction factors for each relational expression in the conditional expression's boolean product (i.e., rel_expr <b>and</b> rel_expr …)</td>
+                </tr>
+            </tbody>
+        </table>
+        <p>Database access is performed by reading data and index file pages. A data file page contains at least one (usually more) table row so each physical disk read will read that number of rows. An index file page contains many keys per page depending on the size of the page and the size of the index values. <span class="MyVariablesProductShortName">RDM</span> uses a B-tree structure for its indexes, which guarantees that each index page is at least half full. On the average, index pages are about 60-70% full. The depth of a B-tree indicates the number of index pages that must be read to locate a particular key value. Most B-trees have a depth of from 4 to 7 levels.   A hash index can usually locate a key value in 1 to 3 reads depending on the quality of the hash and the number of key values (rows).</p>
+        <h3><a MadCap:generatedBookmark="TOC" name="Sequential_Table_Scan"></a>Sequential Table Scan</h3>
+        <p>Each row of a table is stored as a record in a file. A data file can contain the rows from one or more tables. The most basic access method is to perform a sequential scan of a file where the table's rows are retrieved by sequentially reading through the file. Thus, the cost (measured in logical disk accesses) to perform a sequential scan of a table is equal to the number of pages in the file:</p><pre xml:space="preserve">E<sub>scan</sub> = Cost of sequential file scan = P</pre>
+        <p>A sequential file scan is used in queries where the <b>where</b> clause contains no optimizable conditional expressions that reference foreign key, primary key, or indexed columns.</p>
+        <h3><a MadCap:generatedBookmark="TOC" name="Hashed_Access_Retrieval"></a>Hashed Access Retrieval</h3>
+        <p>Hashed access retrieval accesses an individual row based on the hashed key value.  Typically more than 1 page read is required but usually less than 2 or 3 additional reads.  Hence, the optimizer assumes that the cost of a hashed retrieval is 2.</p><pre xml:space="preserve">E<sub>hash</sub> =Cost of hashed access retrieval = 2</pre>
+        <h3><a MadCap:generatedBookmark="TOC" name="Index_Access_Retrieval"></a>Index Access Retrieval</h3>
+        <p>The cost of an indexed access retrieval depends on the relational expression on which the access is based.  The cost estimate computations for the each of the optimizable relational expressions are as follows.</p>
+        <ul>
+            <li value="1">Equality Conditionals</li>
+        </ul>
+        <p>Indexed access retrieval allows retrieval of an individual row or set of matching rows, based on the value of one or more columns contained in a single index. These values can be specified in the query directly or through a join predicate.</p>
+        <p>For a unique index, the cost to access a single row is equal to the depth of the index's B-tree (seldom more than 4 ) + 1 (to read the row from the data file). For a non-unique index, the cost is based on an estimate of the average number of rows having the same index value derived from number of distinct column values. The percentage of the table's rows that match the specified equality constraint is the restriction factor (R). Thus, the estimate of number of matching rows is equal to the cardinality of the table multiplied by the restriction factor, or:</p><pre xml:space="preserve">number of matching rows = C * R</pre>
+        <p>The cost estimate (in logical page reads) of an indexed access retrieval is equal to the number of index pages that must be accessed plus the number of matching rows (1 logical page read per row), or:</p><pre xml:space="preserve">E<sub>eq</sub> = Cost of index access for column = value<br />&#160;&#160;&#160;&#160;= D + (C * R)/(.7 * K) + (C * R)</pre>
+        <p>This assumes that each index page is an average of 70% full (D = depth of B-tree, K = maximum number of keys per index page). Note that this formula works for both unique and non-unique indexes (for unique indexes, R = 1/C).</p>
+        <ul>
+            <li value="1">In Conditionals</li>
+        </ul>
+        <p>When the in operator is used, the restriction factor is equal to the sum of the equality restriction factors for each of the listed values. Thus, the cost is simply the sum of the costs of the individual values.</p><pre xml:space="preserve">E<sub>list</sub> = Cost of index access for column in (v1, v2, ..., vn)<br />&#160;&#160;&#160;&#160;= SUM(cost(column = vi)) for all i: 1..n</pre>
+        <ul>
+            <li value="1">Inequality Conditionals</li>
+        </ul>
+        <p>Indexed scans use an index to access the rows satisfying an inequality relational expression involving the major column in the index. The estimate of the cost of an index scan is calculated exactly the same as the indexed access method. The restriction factor is calculated as given in Table 15.</p><pre xml:space="preserve">E<sub>ineq</sub> = Cost of index access for inequality relational expressions<br />&#160;&#160;&#160;&#160;= D + (C * R)/(.7 * K) + (C * R)</pre>
+        <ul>
+            <li value="1">Like Conditionals</li>
+        </ul>
+        <p>[TBD]  Need to check the code.</p>
+        <p>E<sub>like</sub> =</p>
+        <h3><a MadCap:generatedBookmark="TOC" name="Joins_Involving_Primary_and_Foreign_Keys"></a>Joins Involving Primary and Foreign Keys</h3>
+        <p>Foreign and primary key relationships are implemented in <span class="MyVariablesProductShortName">RDM</span> by internally maintaining rowid pointers that are used to optimally access the related rows and to easily ensure that referential integrity is enforced.    A one-to-many relationship is created between the referenced primary key table and the referencing foreign key table.   Thus, only 1 read is needed to access the related row in the primary key table from the referencing row in the foreign key table.  This is summarized below.</p>
+        <p>E<sub>fp</sub> = Cost of a foreign key to primary key access = 1</p>
+        <p>The number of reads needed to access the foreign key table rows that reference a particular primary key table row is computed by dividing the cardinality of the primary key table by the cardinality of the foreign key table as follows.</p>
+        <p>E<sub>pf</sub> = Cost of a primary key to foreign key access = C<sub>f</sub> / C<sub>p</sub></p>
+        <p>One additional optimization occurs when a foreign key table contains a <i>foreign_key_column</i> = <i>value</i> condition.   Since the related primary key is indexed and the related foreign key table rows can be directly accessed from the referenced primary key row the foreign key table rows can quickly be found through an index access to the primary key row and then directly accessing each of the referencing foreign key table rows.  The cost for this is summarized below.</p>
+        <p>E<sub>pk</sub> = E<sub>eq</sub> + E<sub>pf</sub></p>
+        <p>All of these formulas are summarized below in Table 17.</p>
+        <table style="caption-side: top;mc-table-style: url('../Resources/TableStyles/BasicTwoCol.css');margin-left: 0;margin-right: auto;" class="TableStyle-BasicTwoCol" cellspacing="0">
+            <caption>Table 18. Table Access Method Cost Estimation Formulas</caption>
+            <col class="Column-Column1" />
+            <col class="Column-Column2" />
+            <thead>
+                <tr class="Head-Header1">
+                    <th class="HeadE-Column1-Header1">Access Method</th>
+                    <th class="HeadD-Column2-Header1">Cost Estimate Computation</th>
+                </tr>
+            </thead>
+            <tbody>
+                <tr class="Body-Body1">
+                    <td class="BodyE-Column1-Body1">sequential file scan</td>
+                    <td class="BodyD-Column2-Body1">E<sub>scan</sub> = P</td>
+                </tr>
+                <tr class="Body-Body1">
+                    <td class="BodyE-Column1-Body1">direct access</td>
+                    <td class="BodyD-Column2-Body1">E<sub>direct</sub> = 1</td>
+                </tr>
+                <tr class="Body-Body1">
+                    <td class="BodyE-Column1-Body1">hashed access</td>
+                    <td class="BodyD-Column2-Body1">E<sub>hash</sub> = 2</td>
+                </tr>
+                <tr class="Body-Body1">
+                    <td class="BodyE-Column1-Body1">index access for column = value</td>
+                    <td class="BodyD-Column2-Body1">E<sub>eq</sub> = D + (C * R)/(.7 * K) + (C * R)</td>
+                </tr>
+                <tr class="Body-Body1">
+                    <td class="BodyE-Column1-Body1">index access for column in (v1, v2, ..., vn)</td>
+                    <td class="BodyD-Column2-Body1">E<sub>list</sub> = SUM(cost(column = v<sub>i</sub>)) for all i: 1..n</td>
+                </tr>
+                <tr class="Body-Body1">
+                    <td class="BodyE-Column1-Body1">index access for inequalities</td>
+                    <td class="BodyD-Column2-Body1">E<sub>ineq</sub> = D + (C * R)/(.7 * K) + (C * R)</td>
+                </tr>
+                <tr class="Body-Body1">
+                    <td class="BodyE-Column1-Body1">index access for like with prefix</td>
+                    <td class="BodyD-Column2-Body1">E<sub>like</sub> = D + ((C * R)/(.7 * K)) + (C * R)</td>
+                </tr>
+                <tr class="Body-Body1">
+                    <td class="BodyE-Column1-Body1">foreign key to primary key</td>
+                    <td class="BodyD-Column2-Body1">E<sub>fp</sub> = 1</td>
+                </tr>
+                <tr class="Body-Body1">
+                    <td class="BodyE-Column1-Body1">primary key to foreign key</td>
+                    <td class="BodyD-Column2-Body1">E<sub>pf</sub> = Cf / Cp</td>
+                </tr>
+                <tr class="Body-Body1">
+                    <td class="BodyB-Column1-Body1">to foreign key through primary key</td>
+                    <td class="BodyA-Column2-Body1">E<sub>pk</sub> = E<sub>eq</sub> + E<sub>pf</sub></td>
+                </tr>
+            </tbody>
+        </table>
+        <h2><a MadCap:generatedBookmark="TOC" name="Optimizable_Expressions"></a>Optimizable Expressions</h2>
+        <p>The <span class="MyVariablesRSQLName">RDM SQL</span> query optimizer is able to optimize a restricted set of relational expressions that are specified in the <b>where</b> clause of a <b>select</b> statement. Simple expressions involving a comparison between a simple column and a literal constant value (or parameter marker or stored procedure argument) can be analyzed by the optimizer to determine if any access methods exist that can retrieve rows satisfying that particular conditional. Expressions for potential use by the optimizer in an execution plan are referred to as optimizable.  Table 18 summarizes the optimizable relational expressions.</p>
+        <table style="caption-side: top;mc-table-style: url('../Resources/TableStyles/BasicTwoCol.css');" class="TableStyle-BasicTwoCol" cellspacing="0">
+            <caption>Table 19.  Optimizable Relational Expressions</caption>
+            <col style="width: 70px;" class="Column-Column1" />
+            <col class="Column-Column2" />
+            <tr class="Body-Body1">
+                <td class="BodyE-Column1-Body1">1</td>
+                <td class="BodyD-Column2-Body1">KeyCol<sub>1</sub> = <i>constant</i> [<b>and</b> KeyCol<sub>2</sub> = <i>constant</i>]...</td>
+            </tr>
+            <tr class="Body-Body1">
+                <td class="BodyE-Column1-Body1">2</td>
+                <td class="BodyD-Column2-Body1">FkCol<sub>1</sub> = <i>constant</i> [<b>and</b> FkCol<sub>2</sub> = <i>constant</i>]...</td>
+            </tr>
+            <tr class="Body-Body1">
+                <td class="BodyE-Column1-Body1">3</td>
+                <td class="BodyD-Column2-Body1">FkCol<sub>1</sub> = PkCol<sub>1</sub> [<b>and</b> FkCol<sub>2</sub> = PkCol<sub>2</sub>]...</td>
+            </tr>
+            <tr class="Body-Body1">
+                <td class="BodyE-Column1-Body1">4</td>
+                <td class="BodyD-Column2-Body1">KeyCol<sub>1</sub> = Col<sub>a</sub> [<b>and</b> KeyCol<sub>2</sub> = Col<sub>b</sub>]...</td>
+            </tr>
+            <tr class="Body-Body1">
+                <td class="BodyE-Column1-Body1">5</td>
+                <td class="BodyD-Column2-Body1">KeyCol<sub>1</sub><b>in</b> (<i>constant</i>[, <i>constant</i>]...)</td>
+            </tr>
+            <tr class="Body-Body1">
+                <td class="BodyE-Column1-Body1">6</td>
+                <td class="BodyD-Column2-Body1">KeyCol<sub>1</sub> {&gt; | &gt;= | &lt; | &lt;=} <i>constant</i></td>
+            </tr>
+            <tr class="Body-Body1">
+                <td class="BodyE-Column1-Body1">7</td>
+                <td class="BodyD-Column2-Body1">KeyCol<sub>1</sub> {&gt; | &gt;=} <i>constant</i> [<b>and</b> KeyCol<sub>1</sub> {&lt; | &lt;=} <i>constant</i>]</td>
+            </tr>
+            <tr class="Body-Body1">
+                <td class="BodyE-Column1-Body1">8</td>
+                <td class="BodyD-Column2-Body1">KeyCol<sub>1</sub><b>between</b> <![CDATA[ ]]><i>constant</i> <![CDATA[ ]]><b>and</b> <![CDATA[ ]]><i>constant</i></td>
+            </tr>
+            <tr class="Body-Body1">
+                <td class="BodyE-Column1-Body1">9</td>
+                <td class="BodyD-Column2-Body1">KeyCol<sub>1</sub><b>like</b> "<i>pattern</i>"</td>
+            </tr>
+        </table>
+        <p>The <i>constant</i> is either a literal, a parameter marker ('?'), or a stored procedure argument (if statement is contained in a stored procedure declaration). The KeyColi's refer to the i'th declared column in a given key. The FkCol i's (PkCol i's) refer to the i'th declared column in a foreign (primary) key. An equality comparison must be provided for all multi-column foreign and primary key columns in order for the optimizer to recognize a join predicate. Col<sub>a</sub>, Col<sub>b</sub>, etc., are columns from the same table that match (in type and length) KeyCol<sub>1</sub> , KeyCol<sub>2</sub>, etc., respectively.</p>
+        <p>These expressions are all written in the following form: <i>ColumnName relop expression</i>. Note that expressions of the form: <i>expression relop ColumnName</i> are recognized and transformed by the optimizer so that the <i>ColumnName</i> is always listed on the left hand side. This transformation may require modification of the relational operator. For example,</p><pre xml:space="preserve">select … from … where 1000 &gt; colname</pre>
+        <p>Is changed to</p><pre xml:space="preserve">select … from … where colname &lt; 1000</pre>
+        <p>Depending on how the <b>where</b> clause is organized, an expression may or may not be optimizable. Conditional expressions composed in <i>conjunctive normal form</i> are optimizable. In conjunctive normal form, the <b>where</b> clause is constructed as follows:</p>
+        <p>C<sub>1</sub> <![CDATA[ ]]><b>and</b> C<sub>2</sub> <![CDATA[ ]]><b>and</b> ... C<sub>n</sub></p>
+        <p>Each Ci is a conditional expression comprised of a single or multiple <b>or</b>'ed relational comparisons. Only those C<sub>i</sub>'s that consist of a single optimizable relational expression are optimizable. In other words, relational expressions that are sub-branches of an <b>or</b>'ed conditional expression are not optimizable. The best possible optimization results are obtained when the desired conditions use <b>and</b>.  The optimizer can recognize a sequence of <b>or</b>'ed equality comparisons referencing the same KeyCol<sub>1</sub> and will convert it into an <b>in</b> comparison.  For example, the optimizer will convert…</p><pre xml:space="preserve">select … from book
+ 	where bookid = "austen02" or bookid = "cbronte01" or bookid = "dickens07";</pre>
+        <p>into…</p><pre xml:space="preserve">
+select … from book
+ 	where bookid in ("austen02", "cbronte01", "dickens07");</pre>
+        <h2><a MadCap:generatedBookmark="TOC" name="Access_Plan_Determination"></a>Access Plan Determination</h2>
+        <h3><a MadCap:generatedBookmark="TOC" name="Selecting_From_Alternative_Access_Methods"></a>Selecting From Alternative Access Methods</h3>
+        <p>Consider the following query from the NSF database.</p>
+        <h3><a MadCap:generatedBookmark="TOC" name="Selecting_the_Access_Order"></a>Selecting the Access Order</h3>
+        <p>When a query references more than one table, the optimization process becomes more complex, because the optimizer must choose between different methods to access each table, and the order in which to access them. Many access methods rely only on the values specified in the conditional expression for the needed data. However, some access methods (those associated with join predicates) require that other tables have already been accessed. This places constraints on the possible orderings. Access methods available at the first step in the plan are those that do not depend on any other tables.</p>
+        <p>For possible access methods at the first plan step, the optimizer chooses the method with the lowest cost from a list of possible methods sorted by cost. The accessed table is then marked as bound. The access methods available at the next step in the plan include the choices from the first step for the other tables, plus those methods that depend on the table bound by the first step. These too are ordered by cost. The optimizer continues in this manner until methods have been chosen for all steps in the plan. It then selects the method with the next highest cost and recursively evaluates a new plan. At any point in the process, if the plan being evaluated exceeds the total cost of the current best complete plan, that plan is abandoned and another is chosen. A flowchart of the optimizer algorithm is given in Figure 10.</p>
+        <p class="Caption" style="text-align: left;">
+            <img src="../Resources/Images/qry-fig10_424x588.png" style="width: 424;height: 588;" />
+            <br />Figure 10 - Optimizer Algorithm Flowchart</p>
+        <h3><a MadCap:generatedBookmark="TOC" name="Sorting_and_Grouping_Operations"></a>Sorting and Grouping Operations</h3>
+        <p>For <b>select</b> statements that include a <b>group by</b> or <b>order by</b> specification, the SQL optimizer performs two separate optimization passes. The first pass restricts the choice of usable access methods to only those that produce or maintain the specified ordering. For example, an index scan retrieves its results in the order specified in the key declaration. If the results match the specified ordering, they are included as a usable access method. This optimization pass is fast because, typically, very few plans produce the desired ordering without performing an external sort of the result set.</p>
+        <p>If a plan is produced by the first pass, it is saved (along with its cost estimate), and a second optimization is performed without the ordering restriction. An estimate of the cost required to sort the result set, based on the optimizer's estimate of the result set's size, is added to the cost of the plan produced by the unrestricted pass.  From the two plans, the optimizer will choose the one with the lowest cost.</p>
+        <p>The estimate of the sort cost is based on the optimizer's cardinality estimate, the length of the sort key, and the sort index page size. The optimizer will calculate the number of I/Os as two times the number of index pages to store the sort index (one pass to create the page and another to read each page in order) and add the number of result rows.</p>
+        <p>Note that if both the <b>group by</b> and <b>order by</b> clauses are specified, only the <b>group by</b> ordering can be satisfied by existing indexes and joins. A separate sort of the result set will always be required for the <b>order by</b> clause. If there is no index to satisfy the specified <b>group by</b>, then two sort passes will be needed.</p>
+        <h3><a MadCap:generatedBookmark="TOC" name="Outer_Join_Processing"></a>Outer Join Processing</h3>
+        <p>The optimizer processes outer joins by forcing all outer joins into left outer joins (right outer joins are converted into left outer joins by simply reversing the order).  It then will disable all access paths that require the right hand table to be accessed before the left hand table. If there is no access path (that is, through an index or declared foreign key) from the left hand table to the right hand table, the optimizer will simply perform an inner join (rather than doing a potentially very expensive cross-product).</p>
+        <h3><a MadCap:generatedBookmark="TOC" name="Returning_the_Number_of_Rows_in_a_Table"></a>Returning the Number of Rows in a Table</h3>
+        <p>The row counts for each table in a database are maintained by the <span class="MyVariablesProductShortName">RDM</span> runtime.  SQL recognizes queries of the following form:</p><pre xml:space="preserve">select count(*) from tablename</pre>
+        <p>and generates a special execution plan that returns the current row count value for the specified table. No table or index scan is needed. However, if the query is specified as shown below, the optimizer performs a scan of the table or index (if <code>colname</code> is indexed) and counts the rows.</p><pre xml:space="preserve">select count(columnname) from tablename</pre>
+        <p>Thus, if you need the row count of the entire table, use the first form and not the second.</p>
+        <h2><a MadCap:generatedBookmark="TOC" name="Query_Construction_Guidelines"></a>Query Construction Guidelines</h2>
+        <p>Some systems perform a great deal of work to convert poorly written queries into well written queries before submitting the query to the optimizer. This is particularly useful in systems where ad hoc querying (such as in enterprise environments) is performed by non-technical people. SQL is less user friendly, so often this work is performed by front-end tools. <span class="MyVariablesProductShortName">RDM</span> SQL does not perform complex query transformation analysis (it will do simple things such as converting expressions like "10 = quantity" into "quantity = 10"). Therefore, a thorough understanding of the information provided here will assist you in formulating queries that can be optimized efficiently by RDM Server SQL. Guidelines for writing efficient RDM Server SQL queries are listed below.</p>
+        <ul>
+            <li value="1">Formulate <b>where</b> clauses in conjunctive normal form. Avoid using <b>or</b>.</li>
+            <li value="2">Formulate conditional expressions according to the forms listed in Table 18.  Use literal constants as often as possible. The compile-time for most queries is insignificant compared to their execution time.  Thus, dynamically constructing and compiling queries containing literal constants (as opposed to parameter markers or stored procedures) will allow the optimizer to make more intelligent access choices.</li>
+            <li value="3">Make sure that the only columns that have the same name in tables that are related through foreign and primary keys are the foreign and primary key columns themselves.  Then use the <b>natural join</b> clause when formulating queries that join the two tables.</li>
+            <li value="4">Include more (not fewer) conditional expressions in the <b>where</b> clause, and include redundant expressions. For example, foreign and primary keys exist between tables A and B, B and C, and A and C. Even though it is not strictly necessary (mathematically) to include a join predicate between A and C, doing so provides the optimizer with additional access path choices. Also, assuming that join predicates exist and a simple conditional is specified for the primary key, you can include the same conditional on the foreign key as well. Look at the following query:</li>
+        </ul>
+        <blockquote>
+            <div><pre xml:space="preserve">select ... from A,B where A.pkey = B.fkey and A.pkey = 1000</pre>
+                <p>You can improve this query by adding the conditional shown in an equivalent version below.</p><pre xml:space="preserve">select ... from A,B where A.pkey = B.fkey and A.pkey = 1000 and B.fkey = 1000</pre>
+            </div>
+        </blockquote>
+        <ul>
+            <li value="1">If you are not using SQL's extended join syntax in the <b>from</b> clause of your <b>select</b> statements, make certain join predicates exist for all pairs of referenced tables that are related through foreign and primary keys.</li>
+            <li value="2">Avoid sorting queries with large result sets in which no index is available to produce the desired ordering. If you have heavy report writing requirements, consider using the replication or mirroring feature to maintain a redundant, read-only copy of the database on a separate TFS and run your reports from there. This will allow the primary system to provide the best response to update requests without blocking or being blocked by a high level of query activity.</li>
+            <li value="3">In defining your DDL, explicitly declare the foreign and primary key relationships.  You can still do joins between tables even when the relationships are not declared but optimum join performance is guaranteed when you declare those relationships in your <b>create table</b> DDL statements.</li>
+            <li value="4">Do not include conditional expressions in the <b>having</b> clause that belong in the <b>where</b> clause. Conditional expressions contained in the <b>having</b> clause should always include an aggregate function reference. Note that expressions in the <b>having</b> clause are not taken into consideration by the optimizer.</li>
+            <li value="5">Use the <b>distinct values</b> and <b>range</b> clauses in either the <b>create table</b> or the <b>set column stats</b> statements to provide more statistical information to the optimizer.   The <b>distinct values</b> clause is particularly important for equality conditions.  Do not declare a key on a column that has only a few distinct values.  For example, never declare a key on a column that contains a person's gender.   If no <b>distinct values</b> clause is specified, the optimizer will use the current number of rows in the table.  The <b>range</b> clause is used with inequality conditions.</li>
+            <li value="6">Only declare keys that you actually need to get the needed performance in your embedded application.   More keys increases the time to insert new rows in a table besides consuming more storage.</li>
+        </ul>
+        <h2><a MadCap:generatedBookmark="TOC" name="Controlling_Optimizer_with_a_User-Specified_Restriction_Factor"></a>Controlling Optimizer with a User-Specified Restriction Factor</h2>
+        <p>The <i>restriction factor</i> is the fraction of a table between 0 and 1 that is returned as a result of the application of a specific <b>where</b> condition. The lower the value, the greater the likelihood that the access method associated with that condition will be chosen by the optimizer. This factor is computed by the optimizer based on the type of relational expression and the <b>range</b> values for the column, if specified.  Note that you can override the optimizer's estimate by using a non-standard <span class="MyVariablesRSQLName">RDM SQL</span> feature.  A relational expression, <i>relexpr</i>, can be written as "(<i>relexpr</i>, <i>factor</i>)", where <i>factor</i> is a decimal fraction between 0 and 1 indicating the percentage of the file restricted by <i>relexpr</i>.</p>
+        <p>For example, in the following query from the NSF database, where the optimizer would normally access the data using the <code>awardno</code> key, the specified restriction factors will actually cause the optimizer to use the <code>award_date</code> key.</p><pre xml:space="preserve">select * from award 
+ 	where (awardno = 70246, 1.0) 
+ 	and   (award_date &gt; date "2002-07-01", 0.00001);</pre>
+        <p>When statistics used by the optimizer are not accurate enough for a given query and the result is unsatisfactory, you can use this feature to override the stats-based restriction factor and substitute your own value. However, your use of this feature renders the query independent of future changes to the data distribution statistics.</p>
+        <hr MadCap:conditions="Default.ScreenOnly" width="100%" size="0" align="center" />
+        <p MadCap:conditions="Default.ScreenOnly" style="font-size: 8pt;"><span class="MyVariablesCopyright">Copyright © 2012, Raima Inc. All rights reserved.</span>
+        </p>
+        <script type="text/javascript" src="../SkinSupport/MadCapBodyEnd.js">
+        </script>
+        <p class="MCWebHelpFramesetLink MCWebHelpFramesetLinkBottom" style="display: none;"><a href="../../Default_CSH.htm#SQL/Chapter10.htm" style="">Open topic with navigation</a>
+        </p>
+    </body>
+</html>

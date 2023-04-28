@@ -1,0 +1,382 @@
+<?xml version="1.0" encoding="utf-8"?>
+<!DOCTYPE html PUBLIC "-//W3C//DTD XHTML 1.0 Strict//EN" "http://www.w3.org/TR/xhtml1/DTD/xhtml1-strict.dtd">
+<html xmlns:MadCap="http://www.madcapsoftware.com/Schemas/MadCap.xsd" MadCap:tocPath="Native API|Reference Manual|Core API Function Descriptions" MadCap:InPreviewMode="false" MadCap:PreloadImages="false" MadCap:RuntimeFileType="Topic" MadCap:TargetType="WebHelp" lang="en-us" xml:lang="en-us" MadCap:PathToHelpSystem="../../../" MadCap:HelpSystemFileName="Default.xml" MadCap:SearchType="Stem">
+    <head>
+        <meta http-equiv="Content-Type" content="text/html; charset=utf-8" /><title>d_internals</title>
+        <link rel="icon" type="image/png" href="http://docs.raima.com/favicon.png" />
+        <link href="../../SkinSupport/MadCap.css" rel="stylesheet" />
+        <link href="../../Resources/TableStyles/BasicTwoCol.css" rel="stylesheet" />
+        <link href="../../Resources/TableStyles/FunctionArgs.css" rel="stylesheet" />
+        <link href="../../Resources/TableStyles/CoreErrCodes.css" rel="stylesheet" />
+        <link href="../../Resources/Stylesheets/raima.css" rel="stylesheet" />
+        <script src="../../SkinSupport/MadCapAll.js" type="text/javascript">
+        </script>
+    </head>
+    <body>
+        <p class="MCWebHelpFramesetLink MCWebHelpFramesetLinkTop" style="display: none;"><a href="../../../Default_CSH.htm#RM/api/d_internals.htm" style="">Open topic with navigation</a>
+        </p>
+        <div class="MCBreadcrumbsBox_0"><span class="MCBreadcrumbsPrefix">You are here: </span><a class="MCBreadcrumbsLink" href="../../dbCore.htm">Native API</a><span class="MCBreadcrumbsDivider"> &gt; </span><a class="MCBreadcrumbsLink" href="../dbRM.htm">Reference Manual</a><span class="MCBreadcrumbsDivider"> &gt; </span><a class="MCBreadcrumbsLink" href="../Chapter33.htm">Core API Function Descriptions</a><span class="MCBreadcrumbsDivider"> &gt; </span><span class="MCBreadcrumbs">d_internals</span>
+        </div>
+        <h3 class="newpage"><a name="kanchor58"></a>d_internals</h3>
+        <p>Access internal <span class="MyVariablesProductShortName">RDM</span> data</p>
+        <p class="Heading">Prototype</p><pre xml:space="preserve">int32_t <b>d_internals</b>(
+    DB_TASK* <i>task</i>, 
+    int32_t  <i>topic</i>, 
+    int32_t  <i>id</i>, 
+    int32_t  <i>elem</i>, 
+    void    *<i>ptr</i>, 
+    uint32_t <i>size</i>);</pre>
+        <p class="Heading">Parameters</p>
+        <table style="width: 100%;mc-table-style: url('../../Resources/TableStyles/FunctionArgs.css');margin-left: 0;margin-right: auto;caption-side: top;" class="TableStyle-FunctionArgs" cellspacing="0">
+            <col style="width: 140px;" class="Column-Column1" />
+            <col style="width: 80px;" class="Column-Column3" />
+            <col class="Column-Column2" />
+            <tbody>
+                <tr class="Body-Body1">
+                    <td class="BodyB-Column1-Body1">task</td>
+                    <td class="BodyB-Column3-Body1">(input)</td>
+                    <td class="BodyA-Column2-Body1">A pointer to a <code>DB_TASK</code> structure.</td>
+                </tr>
+            </tbody>
+        </table>
+        <table style="width: 100%;mc-table-style: url('../../Resources/TableStyles/FunctionArgs.css');" class="TableStyle-FunctionArgs" cellspacing="0">
+            <col style="width: 140px;" class="Column-Column1" />
+            <col style="width: 80px;" class="Column-Column3" />
+            <col class="Column-Column2" />
+            <tbody>
+                <tr class="Body-Body1">
+                    <td class="BodyE-Column1-Body1">topic</td>
+                    <td class="BodyE-Column3-Body1">(input)</td>
+                    <td class="BodyD-Column2-Body1">The topic of data requested.</td>
+                </tr>
+                <tr class="Body-Body1">
+                    <td class="BodyE-Column1-Body1">id</td>
+                    <td class="BodyE-Column3-Body1">(input)</td>
+                    <td class="BodyD-Column2-Body1">The identifier of a selection within the TOPIC_GLOBALS topic.</td>
+                </tr>
+                <tr class="Body-Body1">
+                    <td class="BodyE-Column1-Body1">elem</td>
+                    <td class="BodyE-Column3-Body1">(input)</td>
+                    <td class="BodyD-Column2-Body1">The element of a table, if topic is a table.</td>
+                </tr>
+                <tr class="Body-Body1">
+                    <td class="BodyE-Column1-Body1">ptr</td>
+                    <td class="BodyE-Column3-Body1">(output)</td>
+                    <td class="BodyD-Column2-Body1">A pointer to the area to copy the data.</td>
+                </tr>
+                <tr class="Body-Body1">
+                    <td class="BodyB-Column1-Body1">size</td>
+                    <td class="BodyB-Column3-Body1">(input)</td>
+                    <td class="BodyA-Column2-Body1">The size <code>*ptr</code> in bytes.</td>
+                </tr>
+            </tbody>
+        </table>
+        <p class="Heading">Description</p>
+        <p class="Notes">NOTE:&#160;This function is subject to changes due to implementation changes between versions. Details of the data structures are only available to those who own source code. It is unadvisable to become dependent on information returned by this function.</p>
+        <p>This function copies a data item from the <i>topic</i> (an <span class="MyVariablesProductShortName">RDM</span> internal table), <i>id</i> (a subtopic within the table), and <i>elem</i> (an index into the table), to <i>ptr</i>, the pointer supplied for the <i>size</i> given.</p>
+        <p>The topics (shown below) and IDs are provided in the file <b>internal.h</b>.</p>
+        <table style="width: 100%;border-left-style: solid;border-left-width: 1px;border-left-color: #c0c0c0;border-right-style: solid;border-right-width: 1px;border-right-color: #c0c0c0;border-top-style: solid;border-top-width: 1px;border-top-color: #c0c0c0;border-bottom-style: solid;border-bottom-width: 1px;border-bottom-color: #c0c0c0;border-collapse: collapse;margin-left: 0;margin-right: auto;mc-table-style: url('../../Resources/TableStyles/BasicTwoCol.css');" class="TableStyle-BasicTwoCol" cellspacing="0">
+            <col style="width: 230px;" class="Column-Column1" />
+            <col style="width: 65px;" class="Column-Column2" />
+            <col style="width: 132px;" class="Column-Column1" />
+            <col style="width: 315px;" class="Column-Column2" />
+            <thead>
+                <tr class="Head-Header1">
+                    <th class="HeadE-Column1-Header1">Topic</th>
+                    <th class="HeadE-Column2-Header1">Elem</th>
+                    <th class="HeadE-Column1-Header1">Ptr Type</th>
+                    <th class="HeadD-Column2-Header1">Description</th>
+                </tr>
+            </thead>
+            <tbody>
+                <tr class="Body-Body1">
+                    <td class="BodyE-Column1-Body1">TOPIC_DB_TABLE</td>
+                    <td class="BodyE-Column2-Body1">dB No</td>
+                    <td class="BodyE-Column1-Body1">DB_ENTRY</td>
+                    <td class="BodyD-Column2-Body1">&#160;</td>
+                </tr>
+                <tr class="Body-Body1">
+                    <td class="BodyE-Column1-Body1">TOPIC_FIELD_NAMES</td>
+                    <td class="BodyE-Column2-Body1">Field No</td>
+                    <td class="BodyE-Column1-Body1">char *</td>
+                    <td class="BodyD-Column2-Body1">Returns pointer to field name designated by the Field No provided in elem. The Field No is a global identifier can be derived using the <a href="d_fldnum.htm">d_fldnum</a> function. </td>
+                </tr>
+                <tr class="Body-Body1">
+                    <td class="BodyE-Column1-Body1">TOPIC_FIELD_TABLE</td>
+                    <td class="BodyE-Column2-Body1">Field No</td>
+                    <td class="BodyE-Column1-Body1">FIELD_ENTRY</td>
+                    <td class="BodyD-Column2-Body1">Returns pointer to field information designated by the Field No provided in elem. The Field No is a global identifier can be derived using the <a href="d_fldnum.htm">d_fldnum</a> function.</td>
+                </tr>
+                <tr class="Body-Body1">
+                    <td class="BodyE-Column1-Body1">TOPIC_FILE_TABLE</td>
+                    <td class="BodyE-Column2-Body1">File No</td>
+                    <td class="BodyE-Column1-Body1">FILE_ENTRY</td>
+                    <td class="BodyD-Column2-Body1">Returns pointer to file name designated by the File No provided in elem. The first File No is located at ft_offset (see TOPIC_DB_TABLE).</td>
+                </tr>
+                <tr class="Body-Body1">
+                    <td class="BodyE-Column1-Body1">TOPIC_GLOBALS</td>
+                    <td class="BodyE-Column2-Body1"> <![CDATA[ ]]></td>
+                    <td class="BodyE-Column1-Body1"> <![CDATA[ ]]></td>
+                    <td class="BodyD-Column2-Body1"> <![CDATA[ ]]></td>
+                </tr>
+                <tr class="Body-Body1">
+                    <td class="BodyE-Column1-Body1">TOPIC_KEY_TABLE</td>
+                    <td class="BodyE-Column2-Body1">id</td>
+                    <td class="BodyE-Column1-Body1">KEY_ENTRY</td>
+                    <td class="BodyD-Column2-Body1"> <![CDATA[ ]]></td>
+                </tr>
+                <tr class="Body-Body1">
+                    <td class="BodyE-Column1-Body1">TOPIC_MEMBER_TABLE</td>
+                    <td class="BodyE-Column2-Body1">id</td>
+                    <td class="BodyE-Column1-Body1">
+                        <p>MEMBER_ENTRY</p>
+                    </td>
+                    <td class="BodyD-Column2-Body1"> <![CDATA[ ]]></td>
+                </tr>
+                <tr class="Body-Body1">
+                    <td class="BodyE-Column1-Body1">TOPIC_RECORD_NAMES</td>
+                    <td class="BodyE-Column2-Body1">Rec No</td>
+                    <td class="BodyE-Column1-Body1">char *</td>
+                    <td class="BodyD-Column2-Body1">Returns pointer to field name designated by the Record No provided in elem. The first Record No is located at rt_offset (see TOPIC_DB_TABLE). </td>
+                </tr>
+                <tr class="Body-Body1">
+                    <td class="BodyE-Column1-Body1">TOPIC_RECORD_TABLE</td>
+                    <td class="BodyE-Column2-Body1">Rec No</td>
+                    <td class="BodyE-Column1-Body1">RECORD_ENTRY</td>
+                    <td class="BodyD-Column2-Body1">Returns pointer to record information designated by the Record No provided in elem. The first Record No is located at rt_offset (see TOPIC_DB_TABLE).</td>
+                </tr>
+                <tr class="Body-Body1">
+                    <td class="BodyE-Column1-Body1">TOPIC_SET_NAMES</td>
+                    <td class="BodyE-Column2-Body1">Set No</td>
+                    <td class="BodyE-Column1-Body1">char *</td>
+                    <td class="BodyD-Column2-Body1">Returns pointer to set name designated by the Set No provided in elem. The first set for a database is located at st_offset (see TOPIC_DB_TABLE). </td>
+                </tr>
+                <tr class="Body-Body1">
+                    <td class="BodyE-Column1-Body1">TOPIC_SET_TABLE</td>
+                    <td class="BodyE-Column2-Body1">Set No</td>
+                    <td class="BodyE-Column1-Body1">SET_ENTRY</td>
+                    <td class="BodyD-Column2-Body1">Returns pointer to set information designated by the Set No provided in elem. The first Set No is located at st_offset (see TOPIC_DB_TABLE).</td>
+                </tr>
+                <tr class="Body-Body1">
+                    <td class="BodyE-Column1-Body1">TOPIC_SORT_TABLE</td>
+                    <td class="BodyE-Column2-Body1">id</td>
+                    <td class="BodyE-Column1-Body1">SORT_ENTRY</td>
+                    <td class="BodyD-Column2-Body1"> <![CDATA[ ]]></td>
+                </tr>
+                <tr class="Body-Body1">
+                    <td class="BodyB-Column1-Body1">TOPIC_TASK</td>
+                    <td class="BodyB-Column2-Body1"> <![CDATA[ ]]></td>
+                    <td class="BodyB-Column1-Body1">TASK</td>
+                    <td class="BodyA-Column2-Body1">Copy the current task structure.</td>
+                </tr>
+            </tbody>
+        </table>
+        <p>The table topics do not use an ID, but need an element.</p>
+        <p>The TOPIC_GLOBALS must use one of the following IDs but they do not need an element.</p>
+        <table style="width: 100%;border-left-style: solid;border-left-width: 1px;border-left-color: #c0c0c0;border-right-style: solid;border-right-width: 1px;border-right-color: #c0c0c0;border-top-style: solid;border-top-width: 1px;border-top-color: #c0c0c0;border-bottom-style: solid;border-bottom-width: 1px;border-bottom-color: #c0c0c0;border-collapse: collapse;margin-left: 0;margin-right: auto;mc-table-style: url('../../Resources/TableStyles/BasicTwoCol.css');" class="TableStyle-BasicTwoCol" cellspacing="0">
+            <col style="width: 236px;" class="Column-Column1" />
+            <col style="width: 67px;" class="Column-Column2" />
+            <col style="width: 135px;" class="Column-Column1" />
+            <col class="Column-Column2" />
+            <thead>
+                <tr class="Head-Header1">
+                    <th class="HeadE-Column1-Header1">Sub-Topic ID</th>
+                    <th class="HeadE-Column2-Header1">Elem</th>
+                    <th class="HeadE-Column1-Header1">Ptr Type</th>
+                    <th class="HeadD-Column2-Header1">Description</th>
+                </tr>
+            </thead>
+            <tbody>
+                <tr class="Body-Body1">
+                    <td class="BodyE-Column1-Body1">ID_DB_TIMEOUT</td>
+                    <td class="BodyE-Column2-Body1"> <![CDATA[ ]]></td>
+                    <td class="BodyE-Column1-Body1">uint32_t</td>
+                    <td class="BodyD-Column2-Body1"> <![CDATA[ ]]></td>
+                </tr>
+                <tr class="Body-Body1">
+                    <td class="BodyE-Column1-Body1">ID_DBUSERID</td>
+                    <td class="BodyE-Column2-Body1"> <![CDATA[ ]]></td>
+                    <td class="BodyE-Column1-Body1">char *</td>
+                    <td class="BodyD-Column2-Body1">Unique DBUSERID either set by <a href="d_dbuserid.htm">d_dbuserid</a> or automatically generated.</td>
+                </tr>
+                <tr class="Body-Body1">
+                    <td class="BodyE-Column1-Body1">ID_NO_OF_DBS</td>
+                    <td class="BodyE-Column2-Body1"> <![CDATA[ ]]></td>
+                    <td class="BodyE-Column1-Body1">uint16_t</td>
+                    <td class="BodyD-Column2-Body1">Number of databases open in this task.</td>
+                </tr>
+                <tr class="Body-Body1">
+                    <td class="BodyE-Column1-Body1">ID_READLOCKSECS</td>
+                    <td class="BodyE-Column2-Body1"> <![CDATA[ ]]></td>
+                    <td class="BodyE-Column1-Body1">uint32_t</td>
+                    <td class="BodyD-Column2-Body1">Number of seconds before timeout when requesting a read lock. Set by d_locktimeout.</td>
+                </tr>
+                <tr class="Body-Body1">
+                    <td class="BodyE-Column1-Body1">ID_SIZE_FD</td>
+                    <td class="BodyE-Column2-Body1"> <![CDATA[ ]]></td>
+                    <td class="BodyE-Column1-Body1"> <![CDATA[ ]]></td>
+                    <td class="BodyD-Column2-Body1">Size of the FIELD_TABLE of the current database.</td>
+                </tr>
+                <tr class="Body-Body1">
+                    <td class="BodyE-Column1-Body1">ID_SIZE_FT</td>
+                    <td class="BodyE-Column2-Body1"> <![CDATA[ ]]></td>
+                    <td class="BodyE-Column1-Body1"> <![CDATA[ ]]></td>
+                    <td class="BodyD-Column2-Body1">Size of the FILE_TABLE of the current database.</td>
+                </tr>
+                <tr class="Body-Body1">
+                    <td class="BodyE-Column1-Body1">ID_SIZE_KT</td>
+                    <td class="BodyE-Column2-Body1"> <![CDATA[ ]]></td>
+                    <td class="BodyE-Column1-Body1"> <![CDATA[ ]]></td>
+                    <td class="BodyD-Column2-Body1">Size of the KEY_TABLE of the current database.</td>
+                </tr>
+                <tr class="Body-Body1">
+                    <td class="BodyE-Column1-Body1">ID_SIZE_MT</td>
+                    <td class="BodyE-Column2-Body1"> <![CDATA[ ]]></td>
+                    <td class="BodyE-Column1-Body1"> <![CDATA[ ]]></td>
+                    <td class="BodyD-Column2-Body1">Size of the MEMBER_TABLE of the current database.</td>
+                </tr>
+                <tr class="Body-Body1">
+                    <td class="BodyE-Column1-Body1">ID_SIZE_RT</td>
+                    <td class="BodyE-Column2-Body1"> <![CDATA[ ]]></td>
+                    <td class="BodyE-Column1-Body1"> <![CDATA[ ]]></td>
+                    <td class="BodyD-Column2-Body1">Size of the RECORD_TABLE of the current database.</td>
+                </tr>
+                <tr class="Body-Body1">
+                    <td class="BodyE-Column1-Body1">ID_SIZE_SRT</td>
+                    <td class="BodyE-Column2-Body1"> <![CDATA[ ]]></td>
+                    <td class="BodyE-Column1-Body1"> <![CDATA[ ]]></td>
+                    <td class="BodyD-Column2-Body1">Size of the SORT_TABLE of the current database.</td>
+                </tr>
+                <tr class="Body-Body1">
+                    <td class="BodyE-Column1-Body1">ID_SIZE_ST</td>
+                    <td class="BodyE-Column2-Body1"> <![CDATA[ ]]></td>
+                    <td class="BodyE-Column1-Body1"> <![CDATA[ ]]></td>
+                    <td class="BodyD-Column2-Body1">Size of the SET_TABLE of the current database.</td>
+                </tr>
+                <tr class="Body-Body1">
+                    <td class="BodyE-Column1-Body1">ID_TRANS_ID</td>
+                    <td class="BodyE-Column2-Body1"> <![CDATA[ ]]></td>
+                    <td class="BodyE-Column1-Body1">char *</td>
+                    <td class="BodyD-Column2-Body1">Transaction ID as set by <a href="d_trbegin.htm">d_trbegin</a>.</td>
+                </tr>
+                <tr class="Body-Body1">
+                    <td class="BodyB-Column1-Body1">ID_WRITELOCKSECS</td>
+                    <td class="BodyB-Column2-Body1"> <![CDATA[ ]]></td>
+                    <td class="BodyB-Column1-Body1">int32_t</td>
+                    <td class="BodyA-Column2-Body1">Number of seconds before timeout when requesting a write lock. Set by d_locktimeout.</td>
+                </tr>
+            </tbody>
+        </table>
+        <p>This data is not required by most applications. Its interpretation by the programmer requires knowledge of the <span class="MyVariablesProductShortName">RDM</span> internals. A good source of information (such as structure definitions) can be found in the <b>dbtype.h</b> header file.</p>
+        <p class="Heading">Currency Changes</p>
+        <p>None.</p>
+        <p class="Heading">Locking Requirements</p>
+        <p>None.</p>
+        <p class="Heading">Required Headers</p><pre xml:space="preserve">#include "rdm.h"</pre>
+        <p class="Heading">Libraries</p>
+        <table style="width: 100%; margin-left: 0; margin-right: auto;">
+            <col style="width: 200px;">
+            </col>
+            <col>
+            </col>
+            <thead>
+                <tr>
+                    <th>Library Name</th>
+                    <th>Description</th>
+                </tr>
+            </thead>
+            <tbody>
+                <tr>
+                    <td><code>rdmrdm<span class="MyVariablesLibraryVersion">11</span></code>
+                    </td>
+                    <td><span class="MyVariablesProductShortName">RDM</span> Runtime Library</td>
+                </tr>
+            </tbody>
+        </table>
+        <p>See <a href="../../GS/distrib.htm#Library">Library Naming Conventions</a> section for full library name and a list of library dependencies.</p>
+        <p class="Heading">Return Codes</p>
+        <table class="TableStyle-CoreErrCodes" cellspacing="0" style="mc-table-style: url('../../Resources/TableStyles/CoreErrCodes.css');">
+            <col class="Column-Column1" />
+            <col class="Column-Column2" />
+            <col class="Column-Column3" />
+            <thead>
+                <tr class="Head-Header1">
+                    <th class="HeadE-Column1-Header1">Value</th>
+                    <th class="HeadE-Column2-Header1">Name</th>
+                    <th class="HeadD-Column3-Header1">Description</th>
+                </tr>
+            </thead>
+            <tbody>
+                <tr class="Body-Body1">
+                    <td class="BodyB-Column1-Body1">0</td>
+                    <td class="BodyB-Column2-Body1">S_OKAY</td>
+                    <td class="BodyA-Column3-Body1">normal return, okay</td>
+                </tr>
+            </tbody>
+        </table>
+        <table class="TableStyle-CoreErrCodes" cellspacing="0" style="mc-table-style: url('../../Resources/TableStyles/CoreErrCodes.css');">
+            <col class="Column-Column1" />
+            <col class="Column-Column2" />
+            <col class="Column-Column3" />
+            <tbody>
+                <tr class="Body-Body1">
+                    <td class="BodyB-Column1-Body1">-49</td>
+                    <td class="BodyB-Column2-Body1">S_INVPTR</td>
+                    <td class="BodyA-Column3-Body1">invalid pointer</td>
+                </tr>
+            </tbody>
+        </table>
+        <table class="TableStyle-CoreErrCodes" cellspacing="0" style="mc-table-style: url('../../Resources/TableStyles/CoreErrCodes.css');">
+            <col class="Column-Column1" />
+            <col class="Column-Column2" />
+            <col class="Column-Column3" />
+            <tbody>
+                <tr class="Body-Body1">
+                    <td class="BodyB-Column1-Body1">-50</td>
+                    <td class="BodyB-Column2-Body1">S_INVID</td>
+                    <td class="BodyA-Column3-Body1">invalid internal ID</td>
+                </tr>
+            </tbody>
+        </table>
+        <p class="Heading">See Also</p>
+        <p><a href="d_opentask.htm">d_opentask</a>
+        </p>
+        <p class="Heading">Example</p><pre xml:space="preserve">#include &lt;stdio.h&gt;
+#include "rdm.h"
+#include "internal.h"
+#include "tims.h"
+
+
+main()
+{
+    int32_t no_of_files, i;
+    FILE_ENTRY fEntry;    /* defined in dbtype.h */
+    DB_TASK *task;
+
+    /* Open the tims database in one user mode */
+    d_opentask(&amp;task);
+    d_open("tims", "o", task);
+
+    /* Get the number of files in the file table. */
+    d_internals(task, TOPIC_GLOBALS, ID_SIZE_FT, 0, &amp;no_of_files,
+                sizeof(no_of_files));
+
+    /* Get the file names from the internal file table. ".ft_name" is a member */
+    for (i = 0; i &lt; no_of_files; i++) {
+        d_internals(task, TOPIC_FILE_TABLE, 0, i, &amp;fEntry, sizeof(fEntry));
+        printf("File name is %s\n", fEntry.ft_name);
+    }
+
+    d_close(task);            /* Close the database */
+    d_closetask(task);
+}
+</pre>
+        <hr MadCap:conditions="Default.ScreenOnly" width="100%" size="0" align="center" />
+        <p MadCap:conditions="Default.ScreenOnly" style="font-size: 8pt;"><span class="MyVariablesCopyright">Copyright © 2012, Raima Inc. All rights reserved.</span>
+        </p>
+        <script type="text/javascript" src="../../SkinSupport/MadCapBodyEnd.js">
+        </script>
+        <p class="MCWebHelpFramesetLink MCWebHelpFramesetLinkBottom" style="display: none;"><a href="../../../Default_CSH.htm#RM/api/d_internals.htm" style="">Open topic with navigation</a>
+        </p>
+    </body>
+</html>

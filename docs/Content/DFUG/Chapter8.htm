@@ -1,0 +1,228 @@
+<?xml version="1.0" encoding="utf-8"?>
+<!DOCTYPE html PUBLIC "-//W3C//DTD XHTML 1.0 Strict//EN" "http://www.w3.org/TR/xhtml1/DTD/xhtml1-strict.dtd">
+<html xmlns:MadCap="http://www.madcapsoftware.com/Schemas/MadCap.xsd" MadCap:tocPath="Replication and Mirroring Guide|User's Guide" MadCap:InPreviewMode="false" MadCap:PreloadImages="false" MadCap:RuntimeFileType="Topic" MadCap:TargetType="WebHelp" lang="en-us" xml:lang="en-us" class="" MadCap:PathToHelpSystem="../../" MadCap:HelpSystemFileName="Default.xml" MadCap:SearchType="Stem">
+    <head>
+        <meta http-equiv="Content-Type" content="text/html; charset=utf-8" /><title>Advanced Topics</title>
+        <link rel="icon" type="image/png" href="http://docs.raima.com/favicon.png" />
+        <link href="../SkinSupport/MadCap.css" rel="stylesheet" />
+        <link href="../Resources/Stylesheets/raima.css" rel="stylesheet" />
+        <script src="../SkinSupport/MadCapAll.js" type="text/javascript">
+        </script>
+    </head>
+    <body>
+        <p class="MCWebHelpFramesetLink MCWebHelpFramesetLinkTop" style="display: none;"><a href="../../Default_CSH.htm#DFUG/Chapter8.htm" style="">Open topic with navigation</a>
+        </p>
+        <div class="MCBreadcrumbsBox_0"><span class="MCBreadcrumbsPrefix">You are here: </span><a class="MCBreadcrumbsLink" href="../dbDataFlow.htm">Replication and Mirroring Guide</a><span class="MCBreadcrumbsDivider"> &gt; </span><span class="MCBreadcrumbsSelf">User's Guide</span><span class="MCBreadcrumbsDivider"> &gt; </span><span class="MCBreadcrumbs">Advanced Topics</span>
+        </div>
+        <h1>Advanced Topics</h1>
+        <h2>Differences Between Master and Slave</h2>
+        <p>Rules for creating safe differences between the master and slave databases are discussed in the following sections. All techniques involve creating a database dictionary (DBD) file that is different, but compatible between the master and slave.</p>
+        <p>Frequently, when a slave database is created, its location will be empty, and the DBD from the master will be used. But once a DBD file has been created and placed into the slave database location, the DBD will not be overwritten by future copies of the database. All of the techniques described below depend on the ability to create a slave DBD that will not be overwritten by the master DBD.</p>
+        <h2>In-Memory to On-Disk</h2>
+        <p>A common reason to mirror or replicate is to create a permanent, safe copy of a database while maintaining an in-memory master database for performance reasons.</p>
+        <p>To create a slave database that is on-disk, regardless of the storage media of the master database (either in-memory or on-disk), use the <code>-override_inmem</code> option to <code>dbget</code>. <b>This will take effect for either mirroring or replication</b> (where replication is to an <span class="MyVariablesProductShortName">RDM</span> slave). When this option is specified, the initial copy of the master database to the slave location will also alter the DBD such that the slave database is marked as on-disk. Subsequent copies of the database (because logs get out of range) will not cause this DBD to be overwritten, so the condition is permanent unless the slave database is completely destroyed.</p>
+        <p>Note that if additional changes must be made, the <code>-override_inmem</code> option will not effect this change - it must be made part of the original slave DDL as shown below.</p>
+        <h2>Replication-Only Changes for <span class="MyVariablesProductShortName">RDM</span> Databases</h2>
+        <p>The only change available to mirrored databases is the storage media. Replication offers more flexibility because changes are propagated from master to slave through replaying a series of changes, not through copying page images. It is possible to replay changes into a slave database without disturbing other existing pieces of the database, also allowing some differences in the results of the replayed changes.</p>
+        <p>As an example of a difference in replay results, consider a master database that quickly stores incoming data as records with no keys. The slave database can be defined to have keys that do not exist in the master database. When a <code>d_fillnew</code> is called to create a record in the master database, only the record is stored, but when the same <code>d_fillnew</code> with the same data fields is replayed into the slave database, one or more keys can be created by the call. An example of differences between DDL's is shown below:</p>
+        <table style="width: 100%; margin-left: 0; margin-right: auto;">
+            <caption>Master/Slave DDL snippets</caption>
+            <tbody>
+                <tr>
+                    <td><pre xml:space="preserve" style="font-size: 9pt;">
+
+
+data file "station.d01" contains stationdata;
+ 
+record stationdata {
+    int32_t dayOfYear;
+    int32_t minOfDay;
+    int32_t totalPrecip;
+    int32_t windDir;
+    int32_t windVel;
+    int32_t temp;
+}
+
+
+
+
+</pre>
+                    </td>
+                    <td><pre xml:space="preserve" style="font-size: 9pt;">
+data file "station.d01" contains stationdata;
+key file "station.k01" contains minOfDay;
+key file "station.k02" contains timeKey;
+ 
+record stationdata {
+      int32_t dayOfYear;
+  key int32_t minOfDay;
+      int32_t totalPrecip;
+      int32_t windDir;
+      int32_t windVel;
+      int32_t temp;
+      compound key timeKey {
+          dayOfYear;
+          minOfDay;
+      }
+}</pre>
+                    </td>
+                </tr>
+            </tbody>
+        </table>
+        <p>In this example, simple records are created in the master, but two keys are defined in the slave. This example is correct because the record type will have the same ID (that is, no new record types were defined before it), the record has the same original data fields in the same order, and the files into which the keys will go are also new, leaving the existing file with the same ID. This follows rule 1 for safe changes to DDL:</p>
+        <p class="Heading">Rule 1 - Safe Changes to DDL</p>
+        <p>The slave DDL&#160;must contain <i>all</i> original files, record types and fields <i>in the original order</i>. Any new record types must follow all existing record types. No new fields may be added. Keys may be added. File definitions must be added following all existing file definitions. All new record types and keys must be placed into new files - they cannot be added to existing files.</p>
+        <p class="Heading">Rule 2 - Restrictions on Unique Keys</p>
+        <p>If a unique key exists in the slave DDL, it must also exist in the master DDL. This is because it is necessary to make sure that no duplicate unique keys are created on the slave, which will cause the replication of the record to fail.</p>
+        <p>Non-unique keys may be included in the slave DDL where the master DDL&#160;has no key, a non-unique key, or a unique key.</p>
+        <p class="Heading">Rule 3 - Changing the Storage Media</p>
+        <p>As mentioned above, the <code>-override_inmem</code> option in <code>dbget</code> cannot be used if other changes, shown in this section, are also being made. However, the slave DDL may be modified to change the storage media, especially from in-memory to on-disk, as shown below:</p>
+        <table style="width: 100%; margin-left: 0; margin-right: auto;">
+            <caption>Master/Slave DDL snippets</caption>
+            <col style="width: 381px;" />
+            <col />
+            <tbody>
+                <tr>
+                    <td><pre xml:space="preserve" style="font-size: 9pt;">database weatherdata inmemory {
+
+    ...
+
+}
+</pre>
+                    </td>
+                    <td><pre xml:space="preserve" style="font-size: 9pt;">database weatherdata {
+
+    ...
+
+}</pre>
+                    </td>
+                </tr>
+            </tbody>
+        </table>
+        <p class="Heading">Rule 4 - Circular Tables</p>
+        <p><a href="../UG/Chapter4.htm#4.2.5">Circular tables</a> cannot be replicated.</p>
+        <h2>Replication-Only Changes for SQL&#160;Databases</h2>
+        <p>The first step when replicating to a SQL&#160;database is to generate SQL&#160;DDL to define tables and columns in the SQL&#160;database the correspond to the original <span class="MyVariablesProductShortName">RDM</span> record and field types. While this can be created manually, it is highly recommended that you use the <code><a href="#schemaxlate">schemaxlate</a></code> utility. This will provide a minimal starting point even if you plan to modify the SQL&#160;DDL&#160;produced by the utility.</p>
+        <p>The output of schemaxlate may be used to define a new database, or it may be added to an existing database.</p>
+        <p class="Heading">Rule 1 - All Record and Field Types in Master Must Exist in Slave</p>
+        <p>Whether creating SQL&#160;DDL&#160;manually, or modifying the output of <code>schemaxlate</code>, the replication mechanisms assume that any modifications made in the master can also be made in the slave.</p>
+        <p>The remaining rules assume that Rule 1 is being followed.</p>
+        <p>SQL slave databases allow for more flexibility than <span class="MyVariablesProductShortName">RDM</span> slave databases when changes from the original <span class="MyVariablesProductShortName">RDM</span> master database are desired. All SQL updates are created by converting the replication log files into SQL statements. For example, when <code>d_fillnew</code> is used to create a new record in the master database, a replication log entry is created that identifies the <code>d_fillnew</code> function and the structure containing the field values. When this replication log is interpreted by the <code>dbrepsql</code> utility, it is converted into:</p><pre xml:space="preserve">INSERT INTO&#160;<i>recordtypename</i> (<i>fldname1</i>, <i>fldname2</i>, ...) VALUES (<i>val1</i>, <i>val2</i>, ...)</pre>
+        <p>where the <i>recordtypename</i> and <i>fldname</i>s match those of the original record type.</p>
+        <p>Since SQL&#160;replication is performed by table and column names, there is no need to make sure that record, field and file ID's match up on both master and slave. This leads to rule 2:</p>
+        <p class="Heading">Rule 2 - Safe Changes to SQL&#160;DDL</p>
+        <p>New tables may be added, and it is unimportant whether they precede or follow existing tables. Columns (with NULL&#160;values allowed) may be added to tables, the order is not important. Keys may be added, but they must not be unique or primary keys. Each row will already have a primary key defined.</p>
+        <p class="Heading">Rule 3 - Referential Integrity</p>
+        <p>You may not add foreign keys to any existing tables, to avoid errors that occur if the primary key does not (yet) exist.</p>
+        <p class="Heading">Rule 4 - Circular Tables</p>
+        <p><a href="../UG/Chapter4.htm#4.2.5">Circular tables</a> cannot be replicated.</p>
+        <h2>Slave Database Setup</h2>
+        <p>This section summarizes the steps needed to initiate and maintain mirroring or replication in its various permutations. Locate your intended usage in the table and refer to the setup section indicated.</p>
+        <table style="width: 100%; margin-left: 0; margin-right: auto;">
+            <col style="width: 174px;" />
+            <col style="width: 166px;" />
+            <col style="width: 183px;" />
+            <col style="width: 219px;" />
+            <tbody>
+                <tr>
+                    <td>&#160;</td>
+                    <td style="font-weight: bold;">Mirrored <span class="MyVariablesProductShortName">RDM</span> Slave</td>
+                    <td style="font-weight: bold;">Replicated <span class="MyVariablesProductShortName">RDM</span> Slave</td>
+                    <td style="font-weight: bold;">Replicated ODBC&#160;SQL&#160;Slave</td>
+                </tr>
+                <tr>
+                    <td style="font-weight: bold;">No DDL&#160;Change</td>
+                    <td>1 - Normal Mirroring</td>
+                    <td>2 - Normal Replication</td>
+                    <td>3 - Normal SQL&#160;Replication</td>
+                </tr>
+                <tr>
+                    <td style="font-weight: bold;">Storage Media Change</td>
+                    <td>4 - Override In-memory</td>
+                    <td>5 - Override In-memory</td>
+                    <td>3 - Normal SQL&#160;Replication</td>
+                </tr>
+                <tr>
+                    <td style="font-weight: bold;">DDL&#160;Changes</td>
+                    <td>N/A</td>
+                    <td>6 - Advanced Slave Setup</td>
+                    <td>7 - Advanced SQL&#160;Replication</td>
+                </tr>
+            </tbody>
+        </table>
+        <p class="Heading">Setup 1 - Normal Mirroring, <span class="MyVariablesProductShortName">RDM</span> Slave</p>
+        <p>Assuming that the master TFS&#160;is running on <code>tfs.raima.com:1730</code> and the master Mirroring Utility is referencing the TFS at <code>tfs.raima.com:1730</code>, normal mirroring setup of the <code>mkt</code> database in the slave environment is as follows:</p>
+        <p>1. Start TFS.</p><pre xml:space="preserve">tfserver -d /users/RDM/databases</pre>
+        <p>2. Start Mirroring utility.</p><pre xml:space="preserve">dbmirror -d /users/RDM/databases</pre>
+        <p>3. Initiate Mirroring.</p><pre xml:space="preserve">dbget -b mkt@tfs.raima.com:1730</pre>
+        <p class="Heading">Setup 2 - Normal Replication, <span class="MyVariablesProductShortName">RDM</span> Slave</p>
+        <p>Assuming that the master TFS&#160;is running on <code>tfs.raima.com:1730</code> and the master Mirroring Utility is referencing the TFS&#160;at <code>tfs.raima.com:1730</code>, normal replication setup of the <code>mkt</code> database in the slave environment is as follows:</p>
+        <p>1. Start TFS.</p><pre xml:space="preserve">tfserver -d /users/RDM/databases</pre>
+        <p>2. Start Replication utility.</p><pre xml:space="preserve">dbrep -d /users/RDM/databases</pre>
+        <p>3. Initiate Replication.</p><pre xml:space="preserve">dbget -b mkt@tfs.raima.com:1730</pre>
+        <p class="Heading">Setup 3 - Normal SQL&#160;Replication, ODBC SQL Slave</p>
+        <p>Assuming that the master TFS&#160;is running on <code>tfs.raima.com:1730</code> and the master Mirroring Utility is referencing the TFS&#160;at <code>tfs.raima.com:1730</code>, normal replication setup of the <code>mkt</code> database in the slave environment is as follows:</p>
+        <p>1. Create the SQL&#160;DDL.</p><pre xml:space="preserve">schemaxlate -mysql mkt@tfs.raima.com:1730</pre>
+        <p>2. Start Replication utility. Set the environment variable RDSLOGIN to point to the&#160;ODBC&#160;Data Source, username and password.</p><pre xml:space="preserve">set RDSLOGIN=mysql-dsn;myname;mypw
+dbrepsql -d \users\RDM\databases</pre>
+        <p>3. Initiate Replication.</p><pre xml:space="preserve">dbget -b mkt@tfs.raima.com:1730</pre>
+        <p class="Heading">Setup 4 - Mirroring, Override In-Memory, <span class="MyVariablesProductShortName">RDM</span> Slave</p>
+        <p>Assuming that the master TFS&#160;is running on <code>tfs.raima.com:1730</code>, the master database is in-memory, and the master Mirroring Utility is referencing the TFS&#160;at <code>tfs.raima.com:1730</code>, mirroring setup of the <code>mkt</code> database in the slave environment is as follows:</p>
+        <p>1. Start TFS.</p><pre xml:space="preserve">tfserver -d /users/RDM/databases</pre>
+        <p>2. Start Mirroring utility.</p><pre xml:space="preserve">dbmirror -d /users/RDM/databases</pre>
+        <p>3. Initiate Mirroring. Add the command-line option to make slave store database on disk.</p><pre xml:space="preserve">dbget -override_inmem -b mkt@tfs.raima.com:1730</pre>
+        <p class="Heading">Setup 5 - Replication, Override In-Memory, <span class="MyVariablesProductShortName">RDM</span> Slave</p>
+        <p>Assuming that the master TFS&#160;is running on <code>tfs.raima.com:1730</code>, the master database is in-memory, and the master Mirroring Utility is referencing the TFS at <code>tfs.raima.com:1730</code>, replication setup of the <code>mkt</code> database in the slave environment is as follows:</p>
+        <p>1. Start TFS.</p><pre xml:space="preserve">tfserver -d /users/RDM/databases</pre>
+        <p>2. Start Replication utility.</p><pre xml:space="preserve">dbrep -d /users/RDM/databases</pre>
+        <p>3. Initiate Replication. Add the command-line option to make slave store database on disk.</p><pre xml:space="preserve">dbget -override_inmem -b mkt@tfs.raima.com:1730</pre>
+        <p class="Heading">Setup 6 - Replication, Advanced Slave Setup, <span class="MyVariablesProductShortName">RDM</span> Slave</p>
+        <p>Assuming that the master TFS&#160;is running on <code>tfs.raima.com:1730</code> and the master Mirroring Utility is referencing the TFS&#160;at <code>tfs.raima.com:1730</code>, replication setup of the <code>mkt</code> database in the slave environment is as follows:</p>
+        <p>1. Start TFS.</p><pre xml:space="preserve">tfserver -d /users/RDM/databases</pre>
+        <p>2. Edit the DDL, creating new file, <code>mkt-slave.ddl</code>, following rules outlined <a href="#12.8.3">above</a>.</p>
+        <p>3. Compile the DDL into the slave location. The ddlp utility must know the location of the master's TFS in order to create the correct location for the slave database.</p><pre xml:space="preserve">ddlp -master tfs.raima.com:1730 mkt-slave.ddl</pre>
+        <p>2. Start Replication utility.</p><pre xml:space="preserve">dbrep -d /users/RDM/databases</pre>
+        <p>3. Initiate Replication.</p><pre xml:space="preserve">dbget -b mkt@tfs.raima.com:1730</pre>
+        <p class="Heading">Setup 7 - Advanced SQL&#160;Replication, ODBC SQL Slave</p>
+        <p>Assuming that the master TFS&#160;is running on <code>tfs.raima.com:1730</code> and the master Mirroring Utility is referencing the TFS&#160;at <code>tfs.raima.com:1730</code>, normal replication setup of the <code>mkt</code> database in the slave environment is as follows:</p>
+        <p>1. Create the SQL&#160;DDL.</p><pre xml:space="preserve">schemaxlate -mysql mkt@tfs.raima.com:1730</pre>
+        <p>2. Edit the SQL&#160;DDL&#160;file, mkt_mysql.sql, following rules outlined <a href="#12.8.4">above</a>.</p>
+        <p>3. Start Replication utility. Set the environment variable RDSLOGIN to point to the ODBC&#160;Datasource, username and password.</p><pre xml:space="preserve">set RDSLOGIN=mysql-dsn;myname;mypw
+dbrepsql -d \users\RDM\databases</pre>
+        <p>4. Initiate Replication.</p><pre xml:space="preserve">dbget -b mysql mkt@tfs.raima.com:1730</pre>
+        <h2>Synchronization Issues</h2>
+        <p>The replication utilities will fetch entire databases when the master and slave are not able to synchronize. During the initial creation of a slave database, the database is copied from the master to establish a starting point, followed by the application of log files (page image or replication) to keep the slave current. This section discusses what is going on when the attempts to remain current fail for some reason.</p>
+        <p>All three slave replication utilities keep track of the last log file that they received and applied to the slave database. The operation of the slave utilities is to continuously request the "next" log from the master. If the "next" log is not available, the utility must refresh the database. There are differences in the way this refresh occurs, which will be described below.</p>
+        <p>The master database directory stores all mirroring or replication logs which are available for request by slaves. Because it is not practical to store all log files for all time, there are configurable limits on the age of log files, or the total storage space taken by log files. When they are removed, they are always removed from the oldest forward.</p>
+        <p>There are just a few reasons why slave databases get "out of sync:"</p>
+        <ol>
+            <li value="1">The slave has been disconnected for a period of time such that upon reconnection, the next log in the sequence has already been cleaned up by the master.</li>
+            <li value="2">The slave is unable to keep up with the updates made by the master, so that even though the slave is connected, it is so far behind the master that the master has started deleting logs still needed by the slave.</li>
+            <li value="3">For some reason, the slave's database directory has been "cleaned up" manually, destroying the records of which log is the next log. (Manual maintenance of the database directories is <u>not</u> recommended).</li>
+            <li value="4">Manual cleanup of the logs in the master database can also create an out-of-sync condition.</li>
+        </ol>
+        <p class="Heading">Synchronization and Mirroring</p>
+        <p>The action taken by the slave <code>dbmirror</code> utility whenever it cannot obtain the "next" log file is always the same as the initial copy of the database. It will learn that the log file it is requesting is not available, so it will begin requesting pieces of the database instead. The database that is transferred to the slave is stamped with the ID of the last transaction that was applied to it, so following the successful copy of the database, the slave requests the log for transaction ID+1.</p>
+        <p class="Heading">Synchronization and Replication</p>
+        <p>When replication is used to update an <span class="MyVariablesProductShortName">RDM</span> database (non SQL), the action is identical as mirroring, discussed above, with the exception of circular tables. </p>
+        <p>To synchronize a SQL&#160;database, <code>dbrepsql</code> makes a complete copy of the database in the slave environment, then after some dependency analysis proceeds to DELETE&#160;the out-of-sync tables from the SQL&#160;database (with the exception of circular tables, which will not be deleted from the slave database). After the deletes have been completed, it scans the replication logs for records, each one of which will be turned into an INSERT&#160;statement.</p>
+        <p>Once the SQL&#160;database has been (re)populated, the copy of the <span class="MyVariablesProductShortName">RDM</span> database on the slave is obsolete. Ongoing updates to the SQL&#160;database require only new replication log files.</p>
+        <p class="Heading">Balance</p>
+        <p>Some distributed database applications may be designed to be intermittently synchronized. For example, a corporate contact list may have very few changes to it (perhaps 10 per week). If an employee maintains a slave of this database on their laptop, then it may be necessary to connect to the master every week or two. It will be easy to configure the master database to clean up log files that are two months old.</p>
+        <p>Another example, like the <a href="../TUTORIAL/Examples/MARKETexample.htm">Market</a> example, involves a database that has repeated changes to the same records. Very quickly, the size of the database can be overshadowed by the size of the change logs. At a certain point, it makes more sense to copy the entire database to slaves rather than copy all of the change logs. There is no formula for this, but the controls are the <a href="#12.5">LogFileAge</a> and <a href="#12.5">LogFileSpace</a> parameters.</p>
+        <p>Another balance issue is the relative speed of the master updates vs. the slave consumption of the updates. This system is made to handle bursts of updates on the master with pauses that allow the slave(s) to catch up. If the master perpetually outpaces the slaves, it may also create a cycle of re-copying the entire database, which just makes matters worse. If system testing reveals that the master log files are being produced faster than the slave(s) can consume them, it will be necessary to:</p>
+        <ol>
+            <li value="1">Reduce the number of slaves,</li>
+            <li value="2">Speed up the slave computers, or</li>
+            <li value="3">Speed up the connection between master and slaves.</li>
+        </ol>
+        <p>If one of the slaves is a synchronous mirror, this can also slow down the consumption of log files significantly.</p>
+        <hr MadCap:conditions="Default.ScreenOnly" width="100%" size="0" align="center" />
+        <p MadCap:conditions="Default.ScreenOnly" style="font-size: 8pt;"><span class="MyVariablesCopyright">Copyright © 2012, Raima Inc. All rights reserved.</span>
+        </p>
+        <script type="text/javascript" src="../SkinSupport/MadCapBodyEnd.js">
+        </script>
+        <p class="MCWebHelpFramesetLink MCWebHelpFramesetLinkBottom" style="display: none;"><a href="../../Default_CSH.htm#DFUG/Chapter8.htm" style="">Open topic with navigation</a>
+        </p>
+    </body>
+</html>

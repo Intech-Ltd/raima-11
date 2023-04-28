@@ -1,0 +1,107 @@
+<?xml version="1.0" encoding="utf-8"?>
+<!DOCTYPE html PUBLIC "-//W3C//DTD XHTML 1.0 Strict//EN" "http://www.w3.org/TR/xhtml1/DTD/xhtml1-strict.dtd">
+<html xmlns:MadCap="http://www.madcapsoftware.com/Schemas/MadCap.xsd" MadCap:tocPath="Installation Guide and Release Notes" MadCap:InPreviewMode="false" MadCap:PreloadImages="false" MadCap:RuntimeFileType="Topic" MadCap:TargetType="WebHelp" lang="en-us" xml:lang="en-us" MadCap:PathToHelpSystem="../../" MadCap:HelpSystemFileName="Default.xml" MadCap:SearchType="Stem">
+    <head>
+        <meta http-equiv="Content-Type" content="text/html; charset=utf-8" /><title>Migration Issues</title>
+        <link rel="icon" type="image/png" href="http://docs.raima.com/favicon.png" />
+        <link href="../SkinSupport/MadCap.css" rel="stylesheet" />
+        <link href="../Resources/Stylesheets/raima.css" rel="stylesheet" />
+        <script src="../SkinSupport/MadCapAll.js">
+        </script>
+    </head>
+    <body>
+        <p class="MCWebHelpFramesetLink MCWebHelpFramesetLinkTop" style="display: none;"><a href="../../Default_CSH.htm#GS/Migration.htm" style="">Open topic with navigation</a>
+        </p>
+        <div class="MCBreadcrumbsBox_0"><span class="MCBreadcrumbsPrefix">You are here: </span><span class="MCBreadcrumbsSelf">Installation Guide and Release Notes</span><span class="MCBreadcrumbsDivider"> &gt; </span><span class="MCBreadcrumbs">Migration Issues</span>
+        </div>
+        <h1><a MadCap:generatedBookmark="TOC" name="Migration_Issues"></a>Migration Issues</h1>
+        <p>A new and improved DBMS architecture inevitably calls for various changes in its usage. This section contains many of the issues involved in migrating to <span class="MyVariablesProductShortName">RDM</span> version <span class="MyVariablesProductVersion">11.0</span>.</p>
+        <p>Please note that this document has a limited scope. This discusses migration from the previous version, 9.1 only. Earlier versions may or may not require conversion to be compatible with 9.1 before migrating to 10. Should you have any issues not covered in this section, contact <span class="MyVariablesShortCompanyName">Raima</span> support for the most current information.</p>
+        <h2><a MadCap:generatedBookmark="TOC" name="Software_Code_Changes"></a>Software/Code Changes</h2>
+        <p>Note the defunct functions listed in the <a href="RelNotes.htm">Release Notes</a>. These functions will return <code>S_DEFUNCT</code>. Rather than ignoring this error code, it will be best to examine the functionality in the section using the defunct function(s). They may simply be removed if they are performing configuration work. But some may impact program logic, as in the case of the RLB functions and timestamp functions.</p>
+        <p>Mirroring is now performed by an external process, so the <code>d_mir*</code> functions will have no effect.</p>
+        <p>Since 'x' locks on files have been eliminated, the <code><a href="../RM/api/d_initialize.htm">d_initialize</a></code> and <code><a href="../RM/api/d_initfile.htm">d_initfile</a></code> functions will require the database to be opened exclusively ("x").</p>
+        <p>The function <code><a href="../RM/api/d_dbuserid.htm">d_dbuserid</a></code> still works as before, but is not necessary. Unless there are other dependencies on a specific <code>DBUSERID</code>, this call may be safely removed.</p>
+        <p>The function <code><a href="../RM/api/d_open.htm">d_open</a></code> will not return <code>S_UNAVAIL</code> if it is performing recovery, nor will a retry of the <code>d_open</code> work after a short wait. The recovery mechanism has been changed.</p>
+        <p>Database addresses (data type DB_ADDR) are structures, not scalar values. They are larger in version 10. Therefore assignment of a scalar value to a DB_ADDR, or a test of a DB_ADDR variable requires the use of macros:</p>
+        <blockquote>
+            <p><code>DB_ADDR dba = 0;</code>
+            </p>
+            <blockquote>
+                <p>changes to</p>
+            </blockquote>
+            <p><code>DB_ADDR dba = NULL_DBA;</code>
+            </p>
+            <blockquote>
+                <p>and</p>
+            </blockquote>
+            <p><code>if (!dba)</code>
+            </p>
+            <blockquote>
+                <p>changes to</p>
+            </blockquote>
+            <p><code>if (DBA_ISNULL(dba))</code>
+            </p>
+        </blockquote>
+        <p>The functions <code><a href="../RM/api/d_decode_dba.htm">d_decode_dba</a></code> and <code><a href="../RM/api/d_encode_dba.htm">d_encode_dba</a></code> have different prototypes. If you are using them you may need to change the types of the second and third parameters to these functions.</p>
+        <p>It will be necessary to use a <code>const</code> qualifier on strings containing a database name used with the <code><a href="../RM/api/d_open_ptr.htm">d_open_ptr</a></code> or <code><a href="../RM/api/d_iopen_ptr.htm">d_iopen_ptr</a></code> functions.</p>
+        <p>If you are using <code>DEFAULT_TASK</code> as the task parameter value in the API, please use the preferred practice of creating the task explicitly (<code>DB_TASK *task; d_opentask(&amp;task)</code>) and using that task variable in your API&#160;calls (<code>d_close(DEFAULT_TASK)</code>&#160;becomes <code>d_close(task)</code>).</p>
+        <p>Some of the <a href="../RM/Chapter5.htm">Platform Support Package</a> (functions starting with <code>psp_</code>) have been eliminated. Most of the eliminated functions were wrappers for standard functions, and it will be possible to use the standard C function instead, usually by removing the <code>psp_</code> prefix.</p>
+        <p>If you use UNICODE (<code>wchar_t</code>) strings, you must use the UNICODE variants of the functions that use strings in their arguments. All functions in the <span class="MyVariablesProductShortName">RDM</span> API&#160;that accept a string will have a variant with a '<code>W</code>' suffix (for example, <code>d_open</code> and <code>d_openW</code> use <code>char</code> or <code>wchar_t</code> string parameters, respectively). Other functions have no variant. There are no macros that will convert the function names, so you must do that yourself. See the example quickstart for conventions that permit either UNICODE or non-UNICODE&#160;compilations.</p>
+        <h2><a MadCap:generatedBookmark="TOC" name="DDL_(Database_Definition_Language)_and_Dictionary_Migration"></a>DDL (Database Definition Language) and Dictionary Migration</h2>
+        <p class="Heading">Using the DBD as-is</p>
+        <p><span class="MyVariablesProductPackageName">RDM Workgroup Plus</span> version <span class="MyVariablesProductVersion">11.0</span> can read and update version 9 databases as-is, provided the DBD and database files have been moved into the correct directory. To move them into the correct location, determine the document root directory (for example, <code><span class="MyVariablesInstallHomeW">C:\Raima\RDM\</span></code>), create a directory under the document root to match the database name (for example, create <code><span class="MyVariablesInstallHomeW">C:\Raima\RDM\</span>sales</code> for the database named 'sales'), then move the DBD and database files into the directory. The name of the subdirectory and the database must match. Do not recompile the DDL&#160;file.</p>
+        <p>This database dictionary (DBD) may contain defunct constructs in the DDL&#160;such as <code>timestamps</code>, which the version <span class="MyVariablesProductVersion">11.0</span> runtime will ignore. It will also ignore any paths embedded into the database file names. Since timestamps use space within the database files, it is necessary to use the existing DBD file which contains all of the correct offsets and sizes for records and fields.</p>
+        <p>If the DDL requires no changes, it may never be necessary to actually upgrade the DBD and database files. But as soon as you make a change to the DDL file and use the version <span class="MyVariablesProductVersion">11.0</span> <![CDATA[ ]]><code>ddlp</code> to compile it, you will probably need to upgrade the entire database as well.</p>
+        <p>There is a possibility that the DBD created by v9 and v<span class="MyVariablesMajorVersion">11</span> <![CDATA[ ]]><code>ddlp</code> will contain the same offsets, in which case the current format of the DBD&#160;may be used together with the existing format of the database. This may require the use of the <code>-dba4</code> option in <code>ddlp</code> to keep database addresses as 4-byte values.</p>
+        <p>To check if the v9 and v<span class="MyVariablesMajorVersion">11</span> DBD files are compatible with the unconverted database, you will need the <code>prdbd</code> utility. Version 9 has one that will dump the version 9 contents. Ask Raima for the v<span class="MyVariablesMajorVersion">11</span> <![CDATA[ ]]><code>prdbd</code> if you are interested in verifying that the offsets to fields and sets have not changed between the old and new DBD files. The v<span class="MyVariablesMajorVersion">11</span> <![CDATA[ ]]><code>prdbd</code> will work with both v9 and v<span class="MyVariablesMajorVersion">11</span> DBD files, provided the v9 DBD file is placed into the correct directory structure (as described above).</p>
+        <p class="Heading">Converting the database dictionary</p>
+        <p>Database files may no longer include paths, relative or absolute. They will be stripped out of the file names if present in the DDL and all files for the database will appear in one directory within the TFS <span class="MCTextPopup"><a href="javascript:void(0);" class="MCTextPopupSpot_0" onclick="FMCTextPopup( event, this ); return false;">document root<img style="border: none;margin-left: 5px;" src="../SkinSupport/ExpandingClosed.gif" MadCap:altsrc="../SkinSupport/ExpandingOpen.gif" onload="if ( typeof( FMCPreloadImage ) == 'function' ) { FMCPreloadImage( '../SkinSupport/ExpandingOpen.gif' ); }" class="MCExpandingIcon" /></a><span class="MCTextPopupBody_0" style="display: none; ">The path to the directory under which all files will be stored. Within the domain of one TFS, no files outside of this path may be accessed.</span></span>.</p>
+        <p>Timestamps on records or sets must be removed.</p>
+        <p>By default, <code>ddlp</code> will allocate space for 8-byte database addresses (DB_ADDR) for set structures stored in the database.</p>
+        <p>When you compile your existing, or modified, DDL&#160;file with the version <span class="MyVariablesProductVersion">11.0</span> <![CDATA[ ]]><code>ddlp</code>, it is most likely that the database will require conversion. See comments in the previous section about dictionary compatibility.</p>
+        <p>When you compile your compatible DDL with the v<span class="MyVariablesMajorVersion">11</span> <![CDATA[ ]]><code>ddlp</code>, the resulting DBD file will be placed into the correct location in the document root.</p>
+        <h2><a MadCap:generatedBookmark="TOC" name="Database_Compatibility"></a><a name="Database"></a>Database Compatibility</h2>
+        <p>If, for any reason, you cannot use your DBD and database as-is, then it will be necessary to convert the database. Two main options exist: export and import the data, or use dbRevise (<code>dbrev</code>).</p>
+        <p class="Heading">Using dbexp/dbimp</p>
+        <p>Using the v9 <code>dbexp</code> utility, export the old database into text or XML&#160;files.</p>
+        <p>Study the section on <a href="../UG/Chapter10.htm">Import/Export Support</a> to determine the requirements of the export and the import specification. This will be non-trivial if your database contains sets.</p>
+        <p class="Heading">Using dbrev</p>
+        <p>The basic steps for converting a v9 database to v<span class="MyVariablesMajorVersion">11</span> using dbRevise are as follows:</p>
+        <ol>
+            <li value="1">Move/copy the v9 database into a document root as described above in "<b>Using the DBD as-is</b>".</li>
+            <li value="2">Give the v9 database another name (for example by appending "<code>old</code>" to the name). This is physically done by renaming the DBD file from <code><i>dbname</i>.dbd</code> to <code><i>dbname</i>old.dbd</code>, and the directory from <code style="font-style: italic;">&lt;document root&gt;/dbname</code> to <code><i>&lt;document root&gt;/dbname</i>old</code>.</li>
+            <li value="3">Copy the DDL&#160;file from the v9 version to what will become the v<span class="MyVariablesMajorVersion">11</span> version of the DDL.</li>
+            <li value="4">Edit the DDL file if necessary to remove defunct features.</li>
+            <li value="5">Compile the v<span class="MyVariablesMajorVersion">11</span> DDL file using <code>ddlp</code>.</li>
+            <li value="6">Initialize the new v<span class="MyVariablesMajorVersion">11</span> database:&#160;<code>initdb dbname</code></li>
+            <li value="7">Run dbRevise: <code>dbrev dbnameold dbname</code></li>
+        </ol>
+        <p>Here is an example of the above steps using the TIMS&#160;database. This will be illustrated on a Windows computer where <span class="MyVariablesProductShortNameOld">RDMe</span> 9.1 is installed in <code>c:\RDM9</code> and <span class="MyVariablesProductVersion">11.0</span> is installed in <code><span class="MyVariablesInstallHomeW">C:\Raima\RDM\</span></code>.</p>
+        <ol>
+            <li value="1"><code>mkdir <span class="MyVariablesInstallHomeW">C:\Raima\RDM\</span>databases.win32\timsold</code>
+                <br style="mc-tag-and-class: code;" /><code>copy c:\RDM9\examples\tims\tims.* <span class="MyVariablesInstallHomeW">C:\Raima\RDM\</span>databases.win32\timsold</code>
+            </li>
+            <li value="2"><code>cd <span class="MyVariablesInstallHomeW">C:\Raima\RDM\</span>databases.win32\timsold</code>
+                <br style="mc-tag-and-class: code;" /><code>ren tims.dbd timsold.dbd</code>
+            </li>
+            <li value="3"><code>mkdir <span class="MyVariablesInstallHomeW">C:\Raima\RDM\</span>examples\newtims</code>
+                <br style="mc-tag-and-class: code;" /><code>copy <span class="MyVariablesInstallHomeW">C:\Raima\RDM\</span>databases.win32\timsold\tims.ddl <span class="MyVariablesInstallHomeW">C:\Raima\RDM\</span>examples\newtims</code>
+            </li>
+            <li value="4"><i>With a text editor, remove the two timestamp statements from the DDL&#160;file. Also, be sure the TFS has been started</i>.<br /><code>tfserver -d <span class="MyVariablesInstallHomeW">C:\Raima\RDM\</span>databases.win32</code></li>
+            <li value="5"><code>ddlp <span class="MyVariablesInstallHomeW">C:\Raima\RDM\</span>examples\newtims\tims.ddl</code>
+            </li>
+            <li value="6"><code>initdb tims</code>
+            </li>
+            <li value="7"><code>dbrev timsold tims</code>
+            </li>
+        </ol>
+        <hr MadCap:conditions="Default.ScreenOnly" width="100%" size="0" align="center" />
+        <p MadCap:conditions="Default.ScreenOnly" style="font-size: 8pt;"><span class="MyVariablesCopyright">Copyright © 2012, Raima Inc. All rights reserved.</span>
+        </p>
+        <script type="text/javascript" src="../SkinSupport/MadCapBodyEnd.js">
+        </script>
+        <p class="MCWebHelpFramesetLink MCWebHelpFramesetLinkBottom" style="display: none;"><a href="../../Default_CSH.htm#GS/Migration.htm" style="">Open topic with navigation</a>
+        </p>
+    </body>
+</html>

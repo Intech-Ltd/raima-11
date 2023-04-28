@@ -1,0 +1,181 @@
+<?xml version="1.0" encoding="utf-8"?>
+<!DOCTYPE html PUBLIC "-//W3C//DTD XHTML 1.0 Strict//EN" "http://www.w3.org/TR/xhtml1/DTD/xhtml1-strict.dtd">
+<html xmlns:MadCap="http://www.madcapsoftware.com/Schemas/MadCap.xsd" MadCap:tocPath="SQL API|SQL Language Guide|Reference Guide|SQL Statement Reference" MadCap:InPreviewMode="false" MadCap:PreloadImages="false" MadCap:RuntimeFileType="Topic" MadCap:TargetType="WebHelp" lang="en-us" xml:lang="en-us" MadCap:PathToHelpSystem="../../../" MadCap:HelpSystemFileName="Default.xml" MadCap:SearchType="Stem">
+    <head>
+        <meta http-equiv="Content-Type" content="text/html; charset=utf-8" /><title>create table &#160; </title>
+        <link rel="icon" type="image/png" href="http://docs.raima.com/favicon.png" />
+        <link href="../../SkinSupport/MadCap.css" rel="stylesheet" />
+        <link href="../../Resources/Stylesheets/raima.css" rel="stylesheet" />
+        <script src="../../SkinSupport/MadCapAll.js">
+        </script>
+    </head>
+    <body>
+        <p class="MCWebHelpFramesetLink MCWebHelpFramesetLinkTop" style="display: none;"><a href="../../../Default_CSH.htm#SQL/DDL/createtable.htm" style="">Open topic with navigation</a>
+        </p>
+        <div class="MCBreadcrumbsBox_0"><span class="MCBreadcrumbsPrefix">You are here: </span><a class="MCBreadcrumbsLink" href="../../dbRSQL.htm">SQL API</a><span class="MCBreadcrumbsDivider"> &gt; </span><a class="MCBreadcrumbsLink" href="../dbSQL.htm">SQL Language Guide</a><span class="MCBreadcrumbsDivider"> &gt; </span><a class="MCBreadcrumbsLink" href="../SQLStmtRef.htm">Reference Guide</a><span class="MCBreadcrumbsDivider"> &gt; </span><span class="MCBreadcrumbs">create table</span>
+        </div>
+        <h3 class="newpage"><a name="kanchor228"></a>create table &#160; </h3>
+        <p>Specifies a file to contain blob field data                            <![CDATA[ ]]></p>
+        <p class="Heading">Syntax&#160; </p><pre class="Grammar" xml:space="preserve">standard_table:
+ 		<b>create</b> [<b>circular</b>] <b>table</b>    <![CDATA[  ]]><i>table_name</i> (
+ 			column_def[, column_def]...
+ 			[, key_def[, key_def]...]
+ 		) [<b>pagesize</b> = <i>num</i>] [<b>inmemory</b> [<b>persistent</b> | <b>volatile</b> | <b>read</b>]]
+			[<b>maxpgs</b> = <i>num</i>] [<b>maxrows</b> = <i>num</i>]</pre><pre class="Grammar" xml:space="preserve">column_def:
+ 		<i>column_name</i> {type_spec | <i>domain_name</i>}
+			[<b>distinct values</b> = <i>num</i>] [<b>range</b>    <![CDATA[ ]]><i>constant</i>    <![CDATA[ ]]><b>to</b>    <![CDATA[ ]]><i>constant</i>]
+			[<b>not null</b>] [key_spec] [refs_spec]</pre><pre class="Grammar">type_spec:
+ 		data_type [<b>default</b> {<i>constant</i> | <b>null</b>}]
+</pre><pre class="Grammar" xml:space="preserve">
+data_type:
+		base_type |&#160;blob_type</pre><pre class="Grammar" xml:space="preserve">
+base_type:
+ 	 	{<b>character</b> | <b>char</b> } [(<i>length</i>)]
+ 	|	{{<b>character</b> | <b>char</b>} <b>varying</b> | <b>varchar</b> } (<i>length</i>)
+ 	|	{<b>binary</b> [(<i>length</i>)]
+	|	{<b>double</b> [<b>precision</b>] | <b>float</b> | <b>real</b> }
+ 	|	{ <b>tinyint</b> | <b>smallint</b> | <b>int</b> | <b>integer</b> | <b>long</b> | <b>bigint</b>}
+ 	|	<b>date</b> | <b>time</b> | <b>timestamp</b>    <![CDATA[  
+]]></pre><pre class="Grammar" xml:space="preserve">
+blob_type:
+ 		{{<b>character</b> | <b>char</b>} <b>large object</b> | <b>long varchar</b> | <b>clob</b>} [(<i>length</i>)] file_option
+       |	{<b>binary large object</b> | <b>large varbinary</b> | <b>blob</b>} [(<i>length</i>)] file_option</pre><pre class="Grammar" xml:space="preserve">file_option:
+	[<b>pagesize</b> = <i>num</i>] [<b>inmemory</b> [<b>persistent</b> |&#160;<b>volatile</b> |&#160;<b>read</b>]]</pre><pre class="Grammar" xml:space="preserve">key_spec:
+		[<b>primary</b> | <b>unique</b>] <b>key</b> ['['<i>keysize</i>']']
+	|	{<b>primary</b> |&#160;<b>unique</b>}&#160;<b>key</b> [<b>hash</b> {&#160;<b>(</b><i>num</i><b>)</b> |&#160;<b>of</b>    <![CDATA[ ]]><i>num</i>    <![CDATA[ ]]><b>rows</b>}] ['['<i>keysize</i>']']</pre><pre class="Grammar" xml:space="preserve">
+refs_spec:
+		<b>references</b>     <![CDATA[  ]]><i>table_name</i>[.<i>column_name</i>] [triggered_action]</pre><pre class="Grammar" xml:space="preserve">key_def:
+		[<b>primary</b> | <b>unique</b>] <b>key</b> [<b>hash</b> {<b>(</b><i>num</i><b>)</b> |&#160;<b>of</b>    <![CDATA[   ]]><i>num</i>    <![CDATA[   ]]><b>rows</b>}] ['['<i>keysize</i>']'] [<i>key_name</i>] 
+ 			(<i>column_name</i>[<b>asc</b> |&#160;<b>desc</b>] [, <i>column_name</i>[<b>asc</b> |&#160;<b>desc</b>] ]...)
+			[<b>pagesize</b> = <i>num</i>] [<b>inmemory</b> [<b>persistent</b> |&#160;<b>volatile</b> | <b>read</b>]] [<b>maxpgs</b> = <i>num</i>] 
+ 	|	<b>foreign key</b> [<i>set_name</i>] <b>(</b><i>column_name</i>[, <i>column_name</i>]...
+			<b>references</b>    <![CDATA[ ]]><i>table_name</i>[<b>(</b><i>column_name</i>[, <i>column_name</i>]...<b>)</b>]
+ 			[triggered_action]</pre><pre class="Grammar" xml:space="preserve">
+triggered_action:
+ 		<b>on update</b> action_spec  [<b>on delete</b> action_spec]
+ 	| 	<b>on delete</b> action_spec [<b>on update</b> action_spec]</pre><pre class="Grammar" xml:space="preserve">action_spec:
+               <b>cascade</b> |&#160;<b>restrict</b>&#160;|&#160;<b>set null</b></pre>
+        <p class="Heading">Description&#160; </p>
+        <p>The <b>create table</b> statement is used to define a table to be included in the database.  <b>Create table</b> statements can only be issued after the <b>create database</b> statement and before issuing any other non-DDL statements.  Any domain types that are used in column declarations included in the <b>create table</b> statement must have already been declared through the issuance of a prior <b>create domain</b> statement.</p>
+        <p>The <i>table_name</i> is a user-specified identifier that names the table.  The contents of the table is comprised of the columns that are declared within it.  Columns are declared to be of a specific data type which is either explicitly given or specified through use of a previously declared domain name.  A default value can also optionally be specified unless the column was declared with a domain type.</p>
+        <p>The <b>distinct values</b> clause specifies the number of distinct values that will be stored in this column.  The <b>range</b> clause specifies the minimum and maximum values that will be stored in the column.  These two clauses provide important information that is only used by the <span class="MyVariablesRSQLName">RDM SQL</span> query optimizer to determine the best possible execution plan for a query.   Note that these clauses do not specify column validation checks.  It will still be possible to store values that are outside of the specified range.</p>
+        <p>Columns can be specified with one or more constraints which declare the column to be:</p>
+        <ul>
+            <li value="1"><b>not null</b>—null values are not allowed for the column,</li>
+            <li value="2">a <b>primary</b>/<b>unique</b> or non-unique <b>key</b>—on which an index will be automatically created,</li>
+            <li value="3">a <b>foreign key</b> that <b>references</b> the primary/unique key of the specified table.</li>
+        </ul>
+        <p>Columns declared as <b>not null</b> will cause any <b>insert</b> or <b>update</b> statement that attempts to assign a <b>null</b> value to that column to return an error.</p>
+        <p>Foreign key references are automatically implemented by <span class="MyVariablesRSQLName">RDM SQL</span> for quick access and maintenance of referential integrity<span class="MCTextPopup"><span class="MCTextPopupBody_0" style="display: none; ">Declared foreign and primary key relationships are implemented using RDM core-level sets.</span><a href="javascript:void(0);" class="popupHead_1" onclick="FMCTextPopup( event, this ); return false;" style="font-size: 0.9em; vertical-align: super">1</a></span> .   A triggered_action can be specified with foreign key columns in order to indicate what should happen when the referenced row is updated or deleted.  The default action is <b>restrict</b> meaning that primary key rows that have existing foreign key references cannot be updated/deleted.  If <b>on ... cascade</b> is specified, then all of the referenced rows are updated or deleted when the primary key row is updated (i.e., the primary key column value) or deleted.  Note that the referencing table may itself have a primary key declared that is referenced by foreign keys in other tables that may not have a <b>cascade</b> triggered action specified.  Thus, a delete of the referenced row of a cascade-delete-allowed table may be denied due to a restrict foreign key on a row of a referencing table. If <b>on ... set null</b> is specified, then all of the referencing foreign key columns will be set to <b>null</b>.  This option is not allowed when the foreign key column has been declared as <b>not null</b>.</p>
+        <p>A key_def on a table is used to declare primary/unique/non-unique keys and foreign keys on one or more columns. The [<b>primary</b> | <b>unique</b>] <b>key</b> clause is used to identify the columns from the table on which a key is to be formed.  A table can have only one <b>primary key</b>. Keys that include the <i>keysize</i> clause will index a maximum of only <i>keysize</i> number of bytes of the column values.   By default keys are maintained in a B-tree index file which maintains the keys in sorted order based on the data type of the columns comprising the key.  You can also specify that a key be stored in a <b>hash</b> index which is designed for very fast lookups of specific keys but cannot be used for sorting or range searches.   The <b>hash</b> specification must include an estimate of the number of rows on which the hash is to be based.</p>
+        <p>The contents (rows) of each table is contained in a separate <span class="MyVariablesProductShortName">RDM</span> data file.  Each key  is contained in a separate <span class="MyVariablesProductShortName">RDM</span> key file.  The values for each blob type column is stored in a separate <span class="MyVariablesProductShortName">RDM</span> blob file.</p>
+        <p>A <b>pagesize</b> value that differs from the default <i>pagesize</i> (see create database) can be specified.  You can also specify that the table's file is <b>inmemory</b>.  The <b>read</b>, <b>persistent</b>, and <b>volatile</b> options control whether the table is read from disk when the database is opened (<b>read</b>, <b>persistent</b>), and whether changes to the table are written to the disk when the database is closed (<b>persistent</b>).   The default is <b>volatile</b> meaning that the table is created empty each time it is opened.  The <b>read</b> option means that the entire table is read from the file when the database is opened, changes to the table are allowed but are not written back to the file on closing.   The <b>persistent</b> option means that the entire table is read on opening and all changes that were made while the database was open are written back to the table's file when the database is closed.</p>
+        <p>A <b>circular</b> table is one which has a fixed number of rows as specified by the <b>maxrows</b> clause (which is required when <b>circular</b> is specified).  An <b>insert</b> into a circular table inserts the specified row into the next row position in the table.  When <b>maxrows</b> have been inserted the next row will be written to the first row in the table overwriting the original row value.  Circular tables are useful for storing time-dependent information such as log entries, operational status records, and so on.  Note that foreign key references to a circular table are not allowed.</p>
+        <p class="Notes">The data type 'date' assumes the Gregorian calendar even for dates prior to the introduction of the Gregorian calendar. This means that databases that store historical dates prior to the introduction of the Gregorian calendar may not compute <b>select</b> with date ranges, <b>dayofweek</b>, and <b>week</b> correctly.</p>
+        <p class="Heading">Example </p><pre xml:space="preserve">create database sales;
+
+create domain money as double;
+
+create table product 
+(
+    prod_id smallint primary key,
+    prod_desc char(39) not null,
+    price money range 11.95 to 12495.00,
+    cost money range 5.5 to 8800.00,
+    key prod_pricing(price, prod_id)
+);
+create table outlet 
+(
+    loc_id char(3) primary key,
+    city char(17) not null,
+    state char(2) distinct values = 11 range "AZ" to "WA" not null,
+    region smallint distinct values = 4 range 0 to 3 not null,
+    key loc_geo(state, city)
+);
+create table on_hand 
+(
+    loc_id char(3) not null 
+        references outlet(loc_id),
+    prod_id smallint not null 
+        references product,
+    quantity smallint not null,
+    primary key(loc_id, prod_id)
+);
+create table salesperson
+(
+    sale_id char(3) primary key,
+    sale_name char(30) not null,
+    dob date,
+    commission double,
+    region smallint distinct values = 4 range 0 to 3 not null,
+    sales_tot money,
+    office char(3) distinct values = 12,
+    mgr_id char(3) 
+        references salesperson on delete set null on update cascade,
+    key sales_region (region, office)
+);
+create table customer 
+(
+    cust_id char(3) primary key,
+    company char(30) not null,
+    contact char(30),
+    street char(30),
+    city char(17),
+    state char(2) distinct values = 50,
+    zip char(5),
+    orders_tot money,
+    sale_id char(3) 
+        references salesperson on delete set null on update cascade
+);
+create table sales_order
+(
+    cust_id char(3) 
+        references customer on delete set null on update cascade,
+    ord_num smallint primary key,
+    ord_date date,
+    ord_time time,
+    amount money,
+    tax double default 0.0,
+    key order_ndx(ord_date, amount, ord_time)
+);
+create table item 
+(
+    ord_num smallint not null 
+        references sales_order on delete cascade on update cascade,
+    prod_id smallint not null 
+        references product on update cascade,
+    loc_id char(3) distinct values = 12 not null 
+        references outlet on update cascade,
+    quantity smallint not null
+);
+create table note 
+(
+    note_id char(12) not null,
+    note_date date not null,
+    sale_id char(3) distinct values = 14 not null,
+    cust_id char(3) 
+        references customer on delete cascade on update cascade,
+    unique key(sale_id, note_id, note_date)
+);
+create table note_line
+( 
+    note_id char(12) not null,
+    note_date date not null,
+    sale_id char(3) distinct values = 14 not null,
+    txtln char(81) not null,
+    foreign key(sale_id, note_id, note_date) 
+        references note(sale_id, note_id, note_date) 
+        on delete cascade on update cascade
+);</pre>
+        <p class="Heading">See Also</p>
+        <p><a href="createdatabase.htm">create database</a>
+        </p>
+        <hr MadCap:conditions="Default.ScreenOnly" width="100%" size="0" align="center" />
+        <p MadCap:conditions="Default.ScreenOnly" style="font-size: 8pt;"><span class="MyVariablesCopyright">Copyright © 2012, Raima Inc. All rights reserved.</span>
+        </p>
+        <script type="text/javascript" src="../../SkinSupport/MadCapBodyEnd.js">
+        </script>
+        <p class="MCWebHelpFramesetLink MCWebHelpFramesetLinkBottom" style="display: none;"><a href="../../../Default_CSH.htm#SQL/DDL/createtable.htm" style="">Open topic with navigation</a>
+        </p>
+    </body>
+</html>

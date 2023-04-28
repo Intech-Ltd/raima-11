@@ -1,0 +1,218 @@
+<?xml version="1.0" encoding="utf-8"?>
+<!DOCTYPE html PUBLIC "-//W3C//DTD XHTML 1.0 Strict//EN" "http://www.w3.org/TR/xhtml1/DTD/xhtml1-strict.dtd">
+<html xmlns:MadCap="http://www.madcapsoftware.com/Schemas/MadCap.xsd" MadCap:tocPath="SQL API|SQL Language Guide|User's Guide" MadCap:InPreviewMode="false" MadCap:PreloadImages="false" MadCap:RuntimeFileType="Topic" MadCap:TargetType="WebHelp" lang="en-us" xml:lang="en-us" MadCap:PathToHelpSystem="../../" MadCap:HelpSystemFileName="Default.xml" MadCap:SearchType="Stem">
+    <head>
+        <meta http-equiv="Content-Type" content="text/html; charset=utf-8" /><title>Concurrent Database Access</title>
+        <link rel="icon" type="image/png" href="http://docs.raima.com/favicon.png" />
+        <link href="../SkinSupport/MadCap.css" rel="stylesheet" />
+        <link href="../Resources/TableStyles/Col3DataType.css" rel="stylesheet" />
+        <link href="../Resources/TableStyles/BasicTwoCol.css" rel="stylesheet" />
+        <link href="../Resources/Stylesheets/raima.css" rel="stylesheet" />
+        <script src="../SkinSupport/MadCapAll.js" type="text/javascript">
+        </script>
+    </head>
+    <body>
+        <p class="MCWebHelpFramesetLink MCWebHelpFramesetLinkTop" style="display: none;"><a href="../../Default_CSH.htm#SQL/Chapter9.htm" style="">Open topic with navigation</a>
+        </p>
+        <div class="MCBreadcrumbsBox_0"><span class="MCBreadcrumbsPrefix">You are here: </span><a class="MCBreadcrumbsLink" href="../dbRSQL.htm">SQL API</a><span class="MCBreadcrumbsDivider"> &gt; </span><a class="MCBreadcrumbsLink" href="dbSQL.htm">SQL Language Guide</a><span class="MCBreadcrumbsDivider"> &gt; </span><a class="MCBreadcrumbsLink" href="Chapter1.htm">User's Guide</a><span class="MCBreadcrumbsDivider"> &gt; </span><span class="MCBreadcrumbs">Concurrent Database Access</span>
+        </div>
+        <h1><a MadCap:generatedBookmark="TOC" name="Concurrent_Database_Access"></a>Concurrent Database Access</h1>
+        <p class="Quotation">The test of a first-rate intelligence is the ability</p>
+        <p class="Quotation">to hold two opposed ideas in the mind at the</p>
+        <p class="Quotation">same time, and still retain the ability to function.</p>
+        <p class="QuoteAuthor">- F. Scott Fitzgerald , "The Crack-Up" (1936)</p>
+        <p>Concurrent database access refers to the situation where the database is being accessed from more than one connection (user) at a time.  Without the database system exerting some control over what gets updated by who and when, all kinds of data integrity and consistency problems can arise.  This can be illustrated with the simple example given below in Table 12 which shows what can happen when the database system does not provide some kind of concurrent access protection.</p>
+        <table style="caption-side: top;mc-table-style: url('../Resources/TableStyles/Col3DataType.css');margin-left: 0;margin-right: auto;" class="TableStyle-Col3DataType" cellspacing="0">
+            <caption>Table 12. Concurrent Update Problem</caption>
+            <col style="width: 80px;" class="Column-Column1" />
+            <col class="Column-Column2" />
+            <col class="Column-Column3" />
+            <thead>
+                <tr class="Head-Header1">
+                    <th class="HeadE-Column1-Header1">Time</th>
+                    <th class="HeadE-Column2-Header1">Connection 1</th>
+                    <th class="HeadD-Column3-Header1">Connection 2</th>
+                </tr>
+            </thead>
+            <tbody>
+                <tr class="Body-Body1">
+                    <td style="font-family: monospace;" class="BodyE-Column1-Body1">T1</td>
+                    <td style="font-family: monospace;" class="BodyE-Column2-Body1">select price from book where bookid = "cbronte03";<br />PRICE<br />12500.00</td>
+                    <td style="font-family: monospace;" class="BodyD-Column3-Body1">&#160;</td>
+                </tr>
+                <tr class="Body-Body1">
+                    <td style="font-family: monospace;" class="BodyE-Column1-Body1">T2</td>
+                    <td style="font-family: monospace;" class="BodyE-Column2-Body1">&#160;</td>
+                    <td style="font-family: monospace;" class="BodyD-Column3-Body1">select price from book where bookid = "cbronte03";<br />PRICE<br />12500.00</td>
+                </tr>
+                <tr class="Body-Body1">
+                    <td style="font-family: monospace;" class="BodyE-Column1-Body1">T3</td>
+                    <td style="font-family: monospace;" class="BodyE-Column2-Body1">&#160;</td>
+                    <td style="font-family: monospace;" class="BodyD-Column3-Body1">update book set price=14500.00 where bookid "cbronte03";</td>
+                </tr>
+                <tr class="Body-Body1">
+                    <td style="font-family: monospace;" class="BodyE-Column1-Body1">T4</td>
+                    <td style="font-family: monospace;" class="BodyE-Column2-Body1">update book set price=10500.00 where bookid "cbronte03";</td>
+                    <td style="font-family: monospace;" class="BodyD-Column3-Body1">&#160;</td>
+                </tr>
+                <tr class="Body-Body1">
+                    <td style="font-family: monospace;" class="BodyB-Column1-Body1">T5</td>
+                    <td style="font-family: monospace;" class="BodyB-Column2-Body1">select price from book where bookid = "cbronte03";<br />PRICE<br />10500.00</td>
+                    <td style="font-family: monospace;" class="BodyA-Column3-Body1">select price from book where bookid = "cbronte03";<br />PRICE<br />10500.00</td>
+                </tr>
+            </tbody>
+        </table>
+        <p>At time T1 connection 1 executes a <b>select</b> that returns the price of the books as 12,500.  At time T2 connection 2 executes the same <b>select</b> and gets the same result.  Then at time T3 connection 2 issues an <b>update</b> changing the price to 14,500 while at time T4 connection one changes the price to 10,500 overwriting the change just made by connection 2.  At time T5 both connections issue the same <b>select</b> with connection 1 getting the expected result while the user on connection 2 wonders if there is something wrong with her keyboard!</p>
+        <p>One of the most common ways for a DBMS to prevent these kinds of problems is to use locking in order to prevent other connections from accessing the data being updated.  So, in the above example, if at time T1 connection 1 places a lock on the book table then the lock request  issued by connection 2 at T2 will wait until connection 1 releases the lock which will occur when the update completes and the lock is freed.  Then connection 2's lock request will be granted and the <b>select</b> statement will now return the value of price as 10,500 and connection 2's update can proceed with no anomalies.</p>
+        <table style="caption-side: top;mc-table-style: url('../Resources/TableStyles/Col3DataType.css');margin-left: 0;margin-right: auto;" class="TableStyle-Col3DataType" cellspacing="0">
+            <caption>Table 13. Locking Solution to Concurrent Update Problem</caption>
+            <col class="Column-Column1" style="width: 80px;" />
+            <col class="Column-Column2" />
+            <col class="Column-Column3" />
+            <thead>
+                <tr class="Head-Header1">
+                    <th class="HeadE-Column1-Header1">Time</th>
+                    <th class="HeadE-Column2-Header1">Connection 1</th>
+                    <th class="HeadD-Column3-Header1">Connection 2</th>
+                </tr>
+            </thead>
+            <tbody>
+                <tr class="Body-Body1">
+                    <td style="font-family: monospace;" class="BodyE-Column1-Body1">T1</td>
+                    <td style="font-family: monospace;" class="BodyE-Column2-Body1">Request book table lock</td>
+                    <td style="font-family: monospace;" class="BodyD-Column3-Body1">&#160;</td>
+                </tr>
+                <tr class="Body-Body1">
+                    <td style="font-family: monospace;" class="BodyE-Column1-Body1">T2</td>
+                    <td style="font-family: monospace;" class="BodyE-Column2-Body1">Lock granted</td>
+                    <td style="font-family: monospace;" class="BodyD-Column3-Body1">Request book table lock</td>
+                </tr>
+                <tr class="Body-Body1">
+                    <td style="font-family: monospace;" class="BodyE-Column1-Body1">T3</td>
+                    <td style="font-family: monospace;" class="BodyE-Column2-Body1">select price from book where bookid = "cbronte03";<br />PRICE<br />12500.00</td>
+                    <td style="font-family: monospace;" class="BodyD-Column3-Body1">&#160;</td>
+                </tr>
+                <tr class="Body-Body1">
+                    <td style="font-family: monospace;" class="BodyE-Column1-Body1">T4</td>
+                    <td style="font-family: monospace;" class="BodyE-Column2-Body1">update book set price=10500.00 where bookid "cbronte03";</td>
+                    <td style="font-family: monospace;" class="BodyD-Column3-Body1">&#160;</td>
+                </tr>
+                <tr class="Body-Body1">
+                    <td style="font-family: monospace;" class="BodyE-Column1-Body1">T5</td>
+                    <td style="font-family: monospace;" class="BodyE-Column2-Body1">Free book table lock</td>
+                    <td style="font-family: monospace;" class="BodyD-Column3-Body1">Lock granted</td>
+                </tr>
+                <tr class="Body-Body1">
+                    <td style="font-family: monospace;" class="BodyE-Column1-Body1">T6</td>
+                    <td style="font-family: monospace;" class="BodyE-Column2-Body1">&#160;</td>
+                    <td style="font-family: monospace;" class="BodyD-Column3-Body1">select price from book where bookid = "cbronte03";<br />PRICE<br />10500.00</td>
+                </tr>
+                <tr class="Body-Body1">
+                    <td style="font-family: monospace;" class="BodyE-Column1-Body1">T7</td>
+                    <td style="font-family: monospace;" class="BodyE-Column2-Body1">&#160;</td>
+                    <td style="font-family: monospace;" class="BodyD-Column3-Body1">update book set price=14500.00 where bookid "cbronte03";</td>
+                </tr>
+                <tr class="Body-Body1">
+                    <td style="font-family: monospace;" class="BodyB-Column1-Body1">T8</td>
+                    <td style="font-family: monospace;" class="BodyB-Column2-Body1">&#160;</td>
+                    <td style="font-family: monospace;" class="BodyA-Column3-Body1">Free book table lock;</td>
+                </tr>
+            </tbody>
+        </table>
+        <h2><a MadCap:generatedBookmark="TOC" name="Locking_In_RDM_SQL"></a><a name="Locking"></a>Locking In <span class="MyVariablesRSQLName">RDM SQL</span></h2>
+        <p><span class="MyVariablesRSQLName">RDM SQL</span> provides two types of locks.  A <i>read</i> (<i>share</i>) lock locks a table for read-only access.  Any number of different connections can have a read lock on a table.  During the time that a table is read locked, no modifications can occur on the table.  A <i>write</i> (<i>exclusive</i>) lock locks a table for exclusive access by the connection which was granted the write lock.  When one connection has been granted a write lock on a table, lock requests from other connections are queued and granted on a first-come, first-served basis.</p>
+        <p>Queued lock requests do not wait forever.  When a lock request has waited for 10 seconds, it will be deleted from the queue and a timeout status code (<code>errTIMEOUT</code>) will be returned.   The timeout value for a connection can be changed using the <b>set timeout</b> statement as shown below or through a call to function <code>rsqlSetTimeout</code>.</p><pre class="Grammar" xml:space="preserve">set_timeout_stmt:
+	<b>set timeout</b> {<b>to</b> | =} <i>integer</i></pre>
+        <p>A timeout value equal to -1 disables timeout checking so that lock calls will wait indefinitely.   Timeouts should only be disabled when you are certain that there is no possibility of a deadlock situation arising (see deadlock discussion below).   Any non-negative value specifies the number of seconds to wait for the requested table lock(s) to be granted.  Setting the timeout to zero means that a lock request will return immediately if the lock cannot be granted.</p>
+        <p>Only table-level locking is provided in <span class="MyVariablesRSQLName">RDM SQL</span>.  Table locking is simple and is therefore very efficient but because an entire table is locked at a time, it works best in applications where there are a limited number of concurrent connections.  If, however, you keep the duration of your transactions as short as possible good throughput is achievable for most embedded systems applications.</p>
+        <p>Lock requests are automatically issued by <span class="MyVariablesRSQLName">RDM SQL</span> when needed (<i>implicit locking</i>).  For example, read locks are requested for each table that is accessed by a <b>select</b> statement.  When the locks on all of the needed tables have been granted then statement execution will proceed.  If the <b>select</b> statement was executed outside a transaction, the locks are held until the statement handle on which the <b>select</b> is associated (i.e., the <i>cursor</i>) is closed which occurs automatically after the last row has been fetched.    If the <b>select</b> was executed after a transaction has started then the locks will be held until the transaction is either committed or rolled back.</p>
+        <p>A write-lock is requested by <span class="MyVariablesRSQLName">RDM SQL</span> for the tables that are being modified by an <b>insert</b>, <b>update</b>, or <b>delete</b> statement.   Write-locks are not freed until either a <b>commit</b> or <b>rollback</b> operation is executed.</p>
+        <p>Table locks can be explicitly requested by either executing a <b>lock table</b> statement or through a call to the <span class="MyVariablesRSQLName">RDM SQL</span> API function <code>rsqlLockTables</code>.  The syntax for the <b>lock table</b> statement is shown below.</p><pre class="Grammar" xml:space="preserve">lock_stmt:
+ 	<b>lock table</b> [<b>in</b>   <![CDATA[ ]]><i>db_name</i>]  table_lock[, table_lock]...</pre><pre class="Grammar" xml:space="preserve">table_lock:
+		table_name [<b>read</b> | <b>write</b>&#160;|&#160;<b>default</b>]</pre>
+        <p>If neither <b>read</b> nor <b>write</b> is specified, then <b>read</b> is the default outside of a transaction and <b>write</b> is the default inside a transaction.  If a read only transaction (see below) is active then the lock request will return an error.   Either all lock requests will succeed or none will.  I.e,  this is an either all or none request which can be used to prevent a deadlock situation in which one process holds a lock on table A while requesting a lock on table B while a second process is holding a lock on table B while requesting a lock on table A.</p>
+        <p>The system will switch into <i>explicit locking</i> mode on execution of the first <b>lock table</b> statement (<code>rsqlLockTables</code> call).  In this mode, all tables that are accessed by any subsequent SQL statements must be explicitly locked.  If not, SQL will return an <code>errNOTLOCKED</code> status. Note that the values of foreign key columns are retrieved from the referenced row in the primary key table (<span class="MyVariablesRSQLName">RDM SQL</span> does not actually store them in the foreign key table).  Hence, <i>both</i> the foreign and primary key tables must be explicitly locked when accessing foreign key column values.</p><pre class="Grammar" xml:space="preserve">unlock _stmt:
+ 	<b>unlock table</b> {[<i>db_name</i>.]<i>table_name</i> | <b>all</b>}</pre>
+        <p>This statement will free the <b>read</b> lock on table <i>tabname</i> or will free all read locks.  This can only be executed outside of a transaction.  The locks held within a transaction can only be freed through a transaction <b>commit</b> or <b>rollback</b>.</p>
+        <p>The SQL system automatically reverts to implicit locking mode when all table locks have been freed.</p>
+        <h2><a MadCap:generatedBookmark="TOC" name="Read_Only_Transactions"></a><a name="Read"></a>Read Only Transactions</h2>
+        <p>A <i>read only transaction</i> allows a transaction consistent snapshot of the database to be queried without the need to place locks on the accessed tables.  A read only transaction can be explicitly started by executing the following statement.</p><pre class="Grammar" xml:space="preserve">start_stmt:
+		{<b>start trans</b>[<b>action</b>] |&#160;<b>begin</b> [<b>work</b>] [<b>trans</b>[<b>action</b>]]} [<b>read only</b>]</pre>
+        <p>Once a read only transaction has started, database modifications that have been committed by other connections will not be visible.   Read only transactions are terminated by executing either a <b>commit</b> or a <b>rollback</b> statement.    If a read only transaction is active when a <b>select</b> statement executes, no lock requests will be issued.</p>
+        <p>By default, <span class="MyVariablesRSQLName">RDM SQL</span> automatically requests read locks on the tables that are accessed by a <b>select</b> statement.    However, an option is available that will cause SQL to automatically initiate a read only transaction instead of requesting locks.   The read only transaction will be terminated when the <b>select</b> statement completes (i.e., cursor is closed).  The mode is controlled using the statement given in the following syntax.</p><pre class="Grammar" xml:space="preserve">read_only_trmode_stmt:
+ 		<b>set read only trans</b>[<b>action</b>] <b>mode</b> [<b>to</b> | =] {<b>auto</b> | <b>manual</b>}</pre>
+        <p>When this mode is set to <b>manual</b> (default), SQL will issue lock requests on the tables to be accessed by a <b>select</b> statement.   When this mode is set to <b>auto</b>, SQL will executed each <b>select</b> statement within its own read only transaction.</p>
+        <p>You can also explicitly indicate that a <b>select</b> is to use a read only transaction instead of locks by adding the <b>for read only</b> clause to the end of your <b>select</b> statement.</p>
+        <p>Read only transactions are very useful in concurrent database access applications because they do not block access to the database from other connections.  However, these do not come free.  Long running read only transactions will eventually seriously degrade system performance.  Therefore, it is best that read only transactions be kept as short as possible.</p>
+        <h2><a MadCap:generatedBookmark="TOC" name="Modification_Stored_Procedures"></a>Modification Stored Procedures</h2>
+        <p><span class="MyVariablesRSQLName">RDM SQL</span> automatically places write locks on the tables that are being modified in an <b>insert</b>, <b>update</b>, or <b>delete</b> statement.  If you encapsulate all of your database modifications in stored procedures that includes an opening <b>start transaction</b> and a closing <b>commit</b> statement—a <i>transactional stored procedure</i>—then the system will issue a grouped lock request at the start of execution of the stored procedure to acquire all of the locks on all of the tables involved in the modification.  The <b>execute</b> statement (or call to <code>rsqlExecProc</code>) will return status <code>errTIMEOUT</code> when one or more of the requested locks could not be acquired within the timeout window.</p>
+        <p>Transactional stored procedures can modify only one database at a time.  If you use more than one database at a time, then the modifications for each must be made in separate transactions.</p>
+        <h2><a MadCap:generatedBookmark="TOC" name="Avoiding_Deadlock"></a>Avoiding Deadlock</h2>
+        <p>A deadlock (also known as <i>deadly embrace</i>) is an egregious situation that can arise in any system that involves concurrent access to shared data from multiple processes.  In its simplest form, process 1 holds an exclusive lock on data item A and is requesting a lock on data item B while at the same time process 2 holds an exclusive lock on data item B while requesting a lock on data item A.  As you can easily see, both processes will wait forever unless one or the other releases the lock it holds.   Of course, much more complex deadlock scenarios exist that involve multiple processes.</p>
+        <p>The primary application programming technique available in <span class="MyVariablesProductShortName">RDM</span> that can be used to avoid deadlock is the timeout.   A lock request will fail if the lock is not granted within the time duration specified by the connection's timeout value.  The default timeout is set to 10 seconds.  As noted above, this value can be changed using either the <b>set timeout</b> statement or through a call to the <code>rsqlSetTimeout</code> function.</p>
+        <p>While timeouts can be used to avoid deadlock, a related condition known as a <i>livelock</i> can still occur in which, in the example above both of process 1's and process 2's lock requests timeout at the same time, causing each to free the other lock as well and then restart their respective transactions with the timing of the operations such that the same situation continues to repeat itself.</p>
+        <p>Both livelock and deadlock can be avoided by including in a single request locks on all of the tables (i.e., a <i>grouped lock</i> request) that will potentially be modified by a transaction.   As noted in the last section, a transactional stored procedure performs a grouped lock request for all needed locks at the beginning of the transaction, before any modification statements have executed.   The table locks included in grouped lock requests made by <span class="MyVariablesRSQLName">RDM SQL</span> are always specified in the same order.  While a timeout can still certainly occur, neither a deadlock nor livelock situation will occur.</p>
+        <p>However, if you are issuing dynamic SQL transactions that include multiple database modification statements, you need to explicitly lock all tables that can be modified in the transaction immediately following the <b>start transasction</b> statement.   While not strictly necessary, it is also best to specify the tables in the <b>lock table</b> statement in the order in which they are declared in your DDL specification (this is the order in which SQL automatically issues the grouped lock request when a transactional stored procedure is executed).    If you do not explicitly lock the tables in a dynamic SQL transaction, SQL will automatically make the lock requests for each statement.   If a timeout occurs during execution of a database modification statement, the correct response is to roll back the transaction and then restart it.</p>
+        <p>It is highly recommended that you encapsulate all of your transactions in transactional stored procedures in order to ensure that deadlock and livelock situations are avoided.  It is also recommended that you use read only transactions as much as possible as these will not block other updating processes.   Both regular and read only transactions should execute in as short a time frame as possible.</p>
+        <h2><a MadCap:generatedBookmark="TOC" name="Concurrent_Database_Access_Use_in_Static_SQL_Applications"></a>Concurrent Database Access Use in Static SQL Applications</h2>
+        <p>These statements are only available through dynamic SQL—they cannot be included in stored procedures.  Explicit locking within a static SQL application that uses only pre-compiled stored procedures must be done through calls to the <span class="MyVariablesRSQLName">RDM SQL</span> API locking functions as shown in the table below.   The <a href="Chapter11.htm">Using SQL in an Application Program</a> section will describe in detail the use of these functions in an <span class="MyVariablesRSQLName">RDM SQL</span> C application program.</p>
+        <table style="caption-side: top;mc-table-style: url('../Resources/TableStyles/BasicTwoCol.css');margin-left: 0;margin-right: auto;" class="TableStyle-BasicTwoCol" cellspacing="0">
+            <caption>Table 14. <span class="MyVariablesRSQLName">RDM SQL</span> API Functions that Correspond to SQL Locking Statements</caption>
+            <col style="width: 365px;" class="Column-Column1" />
+            <col class="Column-Column2" />
+            <thead>
+                <tr class="Head-Header1">
+                    <th class="HeadE-Column1-Header1">SQL&#160;Statement</th>
+                    <th class="HeadD-Column2-Header1"><span class="MyVariablesRSQLName">RDM SQL</span>&#160;API&#160;Function</th>
+                </tr>
+            </thead>
+            <tbody>
+                <tr class="Body-Body1">
+                    <td class="BodyE-Column1-Body1">lock table</td>
+                    <td class="BodyD-Column2-Body1">rsqlLockTables</td>
+                </tr>
+                <tr class="Body-Body1">
+                    <td class="BodyE-Column1-Body1">unlock table</td>
+                    <td class="BodyD-Column2-Body1">rsqlUnlockTable</td>
+                </tr>
+                <tr class="Body-Body1">
+                    <td class="BodyE-Column1-Body1">set timeout</td>
+                    <td class="BodyD-Column2-Body1">rsqlSetTimeout</td>
+                </tr>
+                <tr class="Body-Body1">
+                    <td class="BodyE-Column1-Body1">set read only transaction mode</td>
+                    <td class="BodyD-Column2-Body1">rsqlSetReadOnlyTrmode</td>
+                </tr>
+                <tr class="Body-Body1">
+                    <td class="BodyE-Column1-Body1">start transaction [ read only ]</td>
+                    <td class="BodyD-Column2-Body1">rsqlTransStart or rsqlTransStartReadOnly</td>
+                </tr>
+                <tr class="Body-Body1">
+                    <td class="BodyE-Column1-Body1">savepoint</td>
+                    <td class="BodyD-Column2-Body1">rsqlTransSavepoint</td>
+                </tr>
+                <tr class="Body-Body1">
+                    <td class="BodyE-Column1-Body1">release savepoint</td>
+                    <td class="BodyD-Column2-Body1">rsqlTransRelease</td>
+                </tr>
+                <tr class="Body-Body1">
+                    <td class="BodyE-Column1-Body1">rollback</td>
+                    <td class="BodyD-Column2-Body1">rsqlTransRollback or rsqlTransEndReadOnly</td>
+                </tr>
+                <tr class="Body-Body1">
+                    <td class="BodyB-Column1-Body1">commit</td>
+                    <td class="BodyA-Column2-Body1">rsqlTransCommit or rsqlTransEndReadOnly</td>
+                </tr>
+            </tbody>
+        </table>
+        <p class="Heading">Examples</p>
+        <p>If a timeout occurs at any time during the execution of a statement within a transaction, the transaction should be rolled back and restarted.</p>
+        <hr MadCap:conditions="Default.ScreenOnly" width="100%" size="0" align="center" />
+        <p MadCap:conditions="Default.ScreenOnly" style="font-size: 8pt;"><span class="MyVariablesCopyright">Copyright © 2012, Raima Inc. All rights reserved.</span>
+        </p>
+        <script type="text/javascript" src="../SkinSupport/MadCapBodyEnd.js">
+        </script>
+        <p class="MCWebHelpFramesetLink MCWebHelpFramesetLinkBottom" style="display: none;"><a href="../../Default_CSH.htm#SQL/Chapter9.htm" style="">Open topic with navigation</a>
+        </p>
+    </body>
+</html>

@@ -1,0 +1,209 @@
+<?xml version="1.0" encoding="utf-8"?>
+<!DOCTYPE html PUBLIC "-//W3C//DTD XHTML 1.0 Strict//EN" "http://www.w3.org/TR/xhtml1/DTD/xhtml1-strict.dtd">
+<html xmlns:MadCap="http://www.madcapsoftware.com/Schemas/MadCap.xsd" MadCap:tocPath="Replication and Mirroring Guide|API Functions" MadCap:InPreviewMode="false" MadCap:PreloadImages="false" MadCap:RuntimeFileType="Topic" MadCap:TargetType="WebHelp" lang="en-us" xml:lang="en-us" MadCap:PathToHelpSystem="../../../" MadCap:HelpSystemFileName="Default.xml" MadCap:SearchType="Stem">
+    <head>
+        <meta http-equiv="Content-Type" content="text/html; charset=utf-8" /><title>d_dbmir_init</title>
+        <link rel="icon" type="image/png" href="http://docs.raima.com/favicon.png" />
+        <link href="../../SkinSupport/MadCap.css" rel="stylesheet" />
+        <link href="../../Resources/TableStyles/FunctionArgs.css" rel="stylesheet" />
+        <link href="../../Resources/TableStyles/ParamStruct.css" rel="stylesheet" />
+        <link href="../../Resources/TableStyles/CoreErrCodes.css" rel="stylesheet" />
+        <link href="../../Resources/Stylesheets/raima.css" rel="stylesheet" />
+        <script src="../../SkinSupport/MadCapAll.js" type="text/javascript">
+        </script>
+    </head>
+    <body>
+        <p class="MCWebHelpFramesetLink MCWebHelpFramesetLinkTop" style="display: none;"><a href="../../../Default_CSH.htm#RM/api/d_dbmir_init.htm" style="">Open topic with navigation</a>
+        </p>
+        <div class="MCBreadcrumbsBox_0"><span class="MCBreadcrumbsPrefix">You are here: </span><a class="MCBreadcrumbsLink" href="../../dbDataFlow.htm">Replication and Mirroring Guide</a><span class="MCBreadcrumbsDivider"> &gt; </span><a class="MCBreadcrumbsLink" href="../../DFUG/DFAPIReference.htm">API Functions</a><span class="MCBreadcrumbsDivider"> &gt; </span><span class="MCBreadcrumbs">d_dbmir_init</span>
+        </div>
+        <h3 class="newpage"><a name="kanchor430"></a>d_dbmir_init</h3>
+        <p>Provide the mirroring utility with parameters to start up as a server</p>
+        <p class="Heading">Prototype</p><pre xml:space="preserve">int32_t <b>d_dbmir_init</b>(
+    const DBREP_INIT_PARAMS *rparams,
+    REP_HANDLE              *hREP);</pre><pre xml:space="preserve">int32_t <b>d_dbmir_initW</b>(
+    const DBREP_INIT_PARAMSW *rparamsW,  /* structure with UNICODE string */
+    REP_HANDLE               *hREP);</pre>
+        <p class="Heading">Parameters</p>
+        <table style="width: 100%;mc-table-style: url('../../Resources/TableStyles/FunctionArgs.css');margin-left: 0;margin-right: auto;" class="TableStyle-FunctionArgs" cellspacing="0">
+            <col style="width: 140px;" class="Column-Column1" />
+            <col style="width: 80px;" class="Column-Column3" />
+            <col class="Column-Column2" />
+            <tbody>
+                <tr class="Body-Body1">
+                    <td class="BodyE-Column1-Body1">rparams</td>
+                    <td class="BodyE-Column3-Body1">(input)</td>
+                    <td class="BodyD-Column2-Body1">Parameters required for dbmirror operation. </td>
+                </tr>
+                <tr class="Body-Body1">
+                    <td class="BodyB-Column1-Body1">hREP</td>
+                    <td class="BodyB-Column3-Body1">(output)</td>
+                    <td class="BodyA-Column2-Body1">Handle used for running, stopping or terminating this server.</td>
+                </tr>
+            </tbody>
+        </table>
+        <p class="Heading">Description</p>
+        <p>This function initializes the functionality of the mirroring utility so that it can operate as a server, and provides a handle to control the utility.</p>
+        <p>When <code>d_dbmir_init</code> has been called, then <code>d_dbrep_term</code> should be called prior to termination of the application program.</p>
+        <p>Once this function has been called, the mirroring utility can be controlled through the functions <code><a href="d_dbrep_start.htm">d_dbrep_start</a></code>, <code><a href="d_dbrep_stop.htm">d_dbrep_stop</a></code>, and <code><a href="d_dbrep_term.htm">d_dbrep_term</a></code>.</p>
+        <table style="width: 100%;border-collapse: collapse;border-left-style: solid;border-left-width: 1px;border-left-color: #c0c0c0;border-right-style: solid;border-right-width: 1px;border-right-color: #c0c0c0;border-top-style: solid;border-top-width: 1px;border-top-color: #c0c0c0;border-bottom-style: solid;border-bottom-width: 1px;border-bottom-color: #c0c0c0;margin-left: 0;margin-right: auto;mc-table-style: url('../../Resources/TableStyles/ParamStruct.css');" class="TableStyle-ParamStruct" cellspacing="0">
+            <caption>DBREP_INIT_PARAMS structure definition</caption>
+            <col style="width: 117px;" class="Column-Column1" />
+            <col style="width: 140px;" class="Column-Column2" />
+            <col class="Column-Column3" />
+            <thead>
+                <tr class="Head-Header1">
+                    <th class="HeadE-Column1-Header1">Element</th>
+                    <th class="HeadE-Column2-Header1">Declaration</th>
+                    <th class="HeadD-Column3-Header1">Description</th>
+                </tr>
+            </thead>
+            <tbody>
+                <tr class="Body-Body1">
+                    <td class="BodyE-Column1-Body1">docroot</td>
+                    <td style="font-family: monospace;" class="BodyE-Column2-Body1">char/wchar_t</td>
+                    <td class="BodyD-Column3-Body1">Document root - should match that of the corresponding TFS.</td>
+                </tr>
+                <tr class="Body-Body1">
+                    <td class="BodyE-Column1-Body1">port</td>
+                    <td style="font-family: monospace;" class="BodyE-Column2-Body1">uint16_t</td>
+                    <td class="BodyD-Column3-Body1">TFS&#160;anchor port. Should match TFS <code>-p port</code> number (use <span class="MyVariablesDefaultPort">21553</span> if default).</td>
+                </tr>
+                <tr class="Body-Body1">
+                    <td class="BodyE-Column1-Body1">verbose</td>
+                    <td style="font-family: monospace;" class="BodyE-Column2-Body1">uint16_t</td>
+                    <td class="BodyD-Column3-Body1">Verbose, true or false.</td>
+                </tr>
+                <tr class="Body-Body1">
+                    <td class="BodyE-Column1-Body1">diskless</td>
+                    <td style="font-family: monospace;" class="BodyE-Column2-Body1">uint16_t</td>
+                    <td class="BodyD-Column3-Body1">Diskless, true or false.</td>
+                </tr>
+                <tr class="Body-Body1">
+                    <td class="BodyB-Column1-Body1">stdout_file</td>
+                    <td style="font-family: monospace;" class="BodyB-Column2-Body1">const char *</td>
+                    <td class="BodyA-Column3-Body1">File name if stdout is to be redirected to a file, else set to PSP_STDOUT</td>
+                </tr>
+            </tbody>
+        </table>
+        <p class="Heading">TFS&#160;User's Guide</p>
+        <p><a href="../../TFS/Chapter2.htm#2.3">Direct-Link Configuration</a>
+        </p>
+        <p class="Heading">Required Headers</p><pre xml:space="preserve">
+#include "mirutils.h"</pre>
+        <p class="Heading">Libraries</p>
+        <table style="width: 100%; margin-left: 0; margin-right: auto;">
+            <col style="width: 200px;">
+            </col>
+            <col>
+            </col>
+            <thead>
+                <tr>
+                    <th>Library Name</th>
+                    <th>Description</th>
+                </tr>
+            </thead>
+            <tbody>
+                <tr>
+                    <td><code>rdmmirroring<span class="MyVariablesLibraryVersion">11</span></code>
+                    </td>
+                    <td>Mirroring Control Functions Library</td>
+                </tr>
+            </tbody>
+        </table>
+        <p>See <a href="../../GS/distrib.htm#Library">Library Naming Conventions</a> section for full library name and a list of library dependencies.</p>
+        <p class="Heading">Return Codes</p>
+        <table class="TableStyle-CoreErrCodes" cellspacing="0" style="mc-table-style: url('../../Resources/TableStyles/CoreErrCodes.css');">
+            <col class="Column-Column1" />
+            <col class="Column-Column2" />
+            <col class="Column-Column3" />
+            <thead>
+                <tr class="Head-Header1">
+                    <th class="HeadE-Column1-Header1">Value</th>
+                    <th class="HeadE-Column2-Header1">Name</th>
+                    <th class="HeadD-Column3-Header1">Description</th>
+                </tr>
+            </thead>
+            <tbody>
+                <tr class="Body-Body1">
+                    <td class="BodyB-Column1-Body1">0</td>
+                    <td class="BodyB-Column2-Body1">S_OKAY</td>
+                    <td class="BodyA-Column3-Body1">normal return, okay</td>
+                </tr>
+            </tbody>
+        </table>
+        <table class="TableStyle-CoreErrCodes" cellspacing="0" style="mc-table-style: url('../../Resources/TableStyles/CoreErrCodes.css');">
+            <col class="Column-Column1" />
+            <col class="Column-Column2" />
+            <col class="Column-Column3" />
+            <tbody>
+                <tr class="Body-Body1">
+                    <td class="BodyB-Column1-Body1">-904</td>
+                    <td class="BodyB-Column2-Body1">S_NOMEMORY</td>
+                    <td class="BodyA-Column3-Body1">out of memory</td>
+                </tr>
+            </tbody>
+        </table>
+        <table class="TableStyle-CoreErrCodes" cellspacing="0" style="mc-table-style: url('../../Resources/TableStyles/CoreErrCodes.css');">
+            <col class="Column-Column1" />
+            <col class="Column-Column2" />
+            <col class="Column-Column3" />
+            <tbody>
+                <tr class="Body-Body1">
+                    <td class="BodyB-Column1-Body1">-924</td>
+                    <td class="BodyB-Column2-Body1">S_INVNULL</td>
+                    <td class="BodyA-Column3-Body1">invalid NULL parameter</td>
+                </tr>
+            </tbody>
+        </table>
+        <p class="Heading">See Also</p>
+        <p><a href="d_dbrep_init.htm">d_dbrep_init</a>
+        </p>
+        <p><a href="d_dbrepsql_init.htm">d_dbrepsql_init</a>
+        </p>
+        <p><a href="d_dbrep_start.htm">d_dbrep_start</a>
+        </p>
+        <p><a href="d_dbrep_stop.htm">d_dbrep_stop</a>
+        </p>
+        <p><a href="d_dbrep_term.htm">d_dbrep_term</a>
+        </p>
+        <p class="Heading">Example</p><pre xml:space="preserve">int main(int argc, char *argv[])
+{
+    DBREP_INIT_PARAMS  rparams;
+    REP_HANDLE         hREP;
+    uint16_t           rep_done;
+    int32_t            rc;
+
+    memset(&amp;rparams, 0, sizeof(DBREP_PARAMS));
+
+    rparams.docroot      = "c:\\RDM\\databases";
+    rparams.port         = <span class="MyVariablesDefaultPort">21553</span>;
+    rparams.stdout_file  = PSP_STDOUT;
+ 
+    rc = d_dbmir_init(&amp;rparams, &amp;hREP);
+    
+    if (rc == S_OKAY)
+    {
+        /* Starts mirroring server code to process requests */
+        d_dbrep_start(hREP, TRUE, &amp;rep_done);
+        
+        /* wait for termination conditions */
+&#160;&#160;&#160;&#160;&#160;&#160;&#160;&#160;while(&#160;!rep_done&#160;)
+&#160;&#160;&#160;&#160;&#160;&#160;&#160;&#160;{
+&#160;&#160;&#160;&#160;&#160;&#160;&#160;&#160;&#160;&#160;&#160;&#160;psp_sleep(200);
+            ...
+&#160;&#160;&#160;&#160;&#160;&#160;&#160;&#160;}
+
+        d_dbrep_stop(hREP);
+        d_dbrep_term(hREP);
+    }
+}</pre>
+        <hr MadCap:conditions="Default.ScreenOnly" width="100%" size="0" align="center" />
+        <p MadCap:conditions="Default.ScreenOnly" style="font-size: 8pt;"><span class="MyVariablesCopyright">Copyright © 2012, Raima Inc. All rights reserved.</span>
+        </p>
+        <script type="text/javascript" src="../../SkinSupport/MadCapBodyEnd.js">
+        </script>
+        <p class="MCWebHelpFramesetLink MCWebHelpFramesetLinkBottom" style="display: none;"><a href="../../../Default_CSH.htm#RM/api/d_dbmir_init.htm" style="">Open topic with navigation</a>
+        </p>
+    </body>
+</html>

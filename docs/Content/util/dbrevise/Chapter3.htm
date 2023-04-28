@@ -1,0 +1,743 @@
+<?xml version="1.0" encoding="utf-8"?>
+<!DOCTYPE html PUBLIC "-//W3C//DTD XHTML 1.0 Strict//EN" "http://www.w3.org/TR/xhtml1/DTD/xhtml1-strict.dtd">
+<html xmlns:MadCap="http://www.madcapsoftware.com/Schemas/MadCap.xsd" MadCap:tocPath="Utility Programs|DBRevise Utility" MadCap:InPreviewMode="false" MadCap:PreloadImages="false" MadCap:RuntimeFileType="Topic" MadCap:TargetType="WebHelp" lang="en-us" xml:lang="en-us" MadCap:PathToHelpSystem="../../../" MadCap:HelpSystemFileName="Default.xml" MadCap:SearchType="Stem">
+    <head>
+        <meta http-equiv="Content-Type" content="text/html; charset=utf-8" /><title>Chapter 3 The Three Classes of Revision</title>
+        <link rel="icon" type="image/png" href="http://docs.raima.com/favicon.png" />
+        <link href="../../SkinSupport/MadCap.css" rel="stylesheet" />
+        <link href="../../Resources/TableStyles/ArgsTwoCol.css" rel="stylesheet" />
+        <link href="../../Resources/Stylesheets/raima.css" rel="stylesheet" />
+        <script src="../../SkinSupport/MadCapAll.js">
+        </script>
+    </head>
+    <body>
+        <p class="MCWebHelpFramesetLink MCWebHelpFramesetLinkTop" style="display: none;"><a href="../../../Default_CSH.htm#util/dbrevise/Chapter3.htm" style="">Open topic with navigation</a>
+        </p>
+        <div class="MCBreadcrumbsBox_0"><span class="MCBreadcrumbsPrefix">You are here: </span><a class="MCBreadcrumbsLink" href="../../dbUTIL.htm">Utility Programs</a><span class="MCBreadcrumbsDivider"> &gt; </span><span class="MCBreadcrumbsSelf">DBRevise Utility</span><span class="MCBreadcrumbsDivider"> &gt; </span><span class="MCBreadcrumbs">The Three Classes of Revision</span>
+        </div>
+        <h1 class="firstHeading"><a MadCap:generatedBookmark="TOC" name="The_Three_Classes_of_Revision"></a>The Three Classes of Revision</h1>
+        <h2 class="Heading2"><a MadCap:generatedBookmark="TOC" name="3.1_Introduction"></a>3.1 Introduction </h2>
+        <p>In this section you will learn about all possible database revision operations.  </p>
+        <p>These include the following: </p>
+        <ul>
+            <li style="font-size: 11pt;font-family: Arial;" value="1">The names of record types, fields, set types, and files may be changed. </li>
+            <li style="font-size: 11pt;font-family: Arial;" value="2">File identifiers (path names) may be changed. </li>
+            <li style="font-size: 11pt;font-family: Arial;" value="3">Record and key field distribution in files may be changed. </li>
+            <li style="font-size: 11pt;font-family: Arial;" value="4">Files may be added, deleted, combined, or divided, and have page sizes changed. </li>
+            <li style="font-size: 11pt;font-family: Arial;" value="5">The database page size may be changed. </li>
+            <li style="font-size: 11pt;font-family: Arial;" value="6">The unique and optional attributes of key fields may be changed. </li>
+            <li style="font-size: 11pt;font-family: Arial;" value="7">Record types, fields, set types, keys, and timestamps may be added or deleted. </li>
+            <li style="font-size: 11pt;font-family: Arial;" value="8">Fields may be changed in type and size. </li>
+            <li style="font-size: 11pt;font-family: Arial;" value="9">Record types may be divided or combined. </li>
+            <li style="font-size: 11pt;font-family: Arial;" value="10">The static attribute of record types may be added or deleted. </li>
+            <li style="font-size: 11pt;font-family: Arial;" value="11">New record types and fields may be filled or initialized. </li>
+            <li style="font-size: 11pt;font-family: Arial;" value="12">New records may be automatically connected to new or existing sets. </li>
+            <li style="font-size: 11pt;font-family: Arial;" value="13">Set types may have members added or deleted. </li>
+            <li style="font-size: 11pt;font-family: Arial;" value="14">Set types may be duplicated, split, combined, normalized, or initialized. </li>
+            <li style="font-size: 11pt;font-family: Arial;" value="15">The set type ordering may be changed under certain conditions. </li>
+            <li style="font-size: 11pt;font-family: Arial;" value="16">New set types may be initialized or have records automatically connected.                      <![CDATA[ ]]></li>
+        </ul>
+        <p>We have divided database revision into three classes, each of which has a different method of operation.  The first class of revision, <span class="MCTextPopup"><a href="javascript:void(0);" class="MCTextPopupSpot_0" onclick="FMCTextPopup( event, this ); return false;">static revision<img style="border: none;margin-left: 5px;" src="../../SkinSupport/ExpandingClosed.gif" MadCap:altsrc="../../SkinSupport/ExpandingOpen.gif" onload="if ( typeof( FMCPreloadImage ) == 'function' ) { FMCPreloadImage( '../../SkinSupport/ExpandingOpen.gif' ); }" class="MCExpandingIcon" /></a><span class="MCTextPopupBody_0" style="display: none; ">A revision that can be performed without changing the existing database content or structure.</span></span>, requires only the use of the <span class="MyVariablesProductShortName">RDM</span> Database Definition Language Processor (ddlp).  This type of revision can be performed without db_REVISE.  Static revisions are discussed in detail in this section because a full revision of a database by db_REVISE may also require performing static revisions.  There may also be occasions when only static revisions are necessary. </p>
+        <p>The second class of revision, <span class="MCTextPopup"><a href="javascript:void(0);" class="MCTextPopupSpot_0" onclick="FMCTextPopup( event, this ); return false;">derived revision<img style="border: none;margin-left: 5px;" src="../../SkinSupport/ExpandingClosed.gif" MadCap:altsrc="../../SkinSupport/ExpandingOpen.gif" onload="if ( typeof( FMCPreloadImage ) == 'function' ) { FMCPreloadImage( '../../SkinSupport/ExpandingOpen.gif' ); }" class="MCExpandingIcon" /></a><span class="MCTextPopupBody_0" style="display: none; ">A revision that can be derived from a comparison of the source and destination database dictionary files.</span></span>, is so named because all such revisions are derivable by comparing the source and destination database dictionary files (dbname.dbd).  For example, if the destination dictionary contains an extra field type in a record type where all other fields are unchanged, db_REVISE knows how to expand the records to leave room for the new field.  No other information is required in order to fully perform the revision. </p>
+        <p>The third class of revision, <span class="MCTextPopup"><a href="javascript:void(0);" class="MCTextPopupSpot_0" onclick="FMCTextPopup( event, this ); return false;">specified revision<img style="border: none;margin-left: 5px;" src="../../SkinSupport/ExpandingClosed.gif" MadCap:altsrc="../../SkinSupport/ExpandingOpen.gif" onload="if ( typeof( FMCPreloadImage ) == 'function' ) { FMCPreloadImage( '../../SkinSupport/ExpandingOpen.gif' ); }" class="MCExpandingIcon" /></a><span class="MCTextPopupBody_0" style="display: none; ">A revision requiring specification by an RDL statement.</span></span>, refers to all revisions that cannot be performed, unless the user supplies extra information.  For example, adding a new field type is a derived revision, but if the new field is to have a certain initial value, it must be specified by the user.  This and many other revision types may be specified by the <span class="MCTextPopup"><a href="javascript:void(0);" class="MCTextPopupSpot_0" onclick="FMCTextPopup( event, this ); return false;">Revision Definition Language<img style="border: none;margin-left: 5px;" src="../../SkinSupport/ExpandingClosed.gif" MadCap:altsrc="../../SkinSupport/ExpandingOpen.gif" onload="if ( typeof( FMCPreloadImage ) == 'function' ) { FMCPreloadImage( '../../SkinSupport/ExpandingOpen.gif' ); }" class="MCExpandingIcon" /></a><span class="MCTextPopupBody_0" style="display: none; ">The RDL supplies information to db_REVISE that cannot be derived from a comparison of the source and destination dictionary files.</span></span> (RDL), statements that are normally contained in a text file named on the dbrev command line.  Normally, a database revision requiring the use of an RDL file will use derived revisions as well. </p>
+        <h2 class="Heading2"><a MadCap:generatedBookmark="TOC" name="3.2_Static_Revisions"></a><a name="3.2"></a>3.2 Static Revisions </h2>
+        <p>The dictionary file created by ddlp completely defines the "view" that the <span class="MyVariablesProductShortName">RDM</span> runtime library has of a database.  It is possible to alter the view without altering the contents of an existing database.  With the <span class="MyVariablesProductShortName">RDM</span> system, you can edit your schema, recompile it, and use the resulting .dbd with your existing database.  This is both a plus and a minus, and as such must never be done without thoroughly understanding what you are doing. </p>
+        <p>Each record and set in a <span class="MyVariablesProductShortName">RDM</span> database is created to conform to your defined schema.  If you attempt to read a database with a schema other than the one used to create it, the record contents will most likely be nonsense.  If you attempt to update a database while using the wrong schema, you may destroy the database.  With this in mind, we will look at schema changes that may safely be made so that subsequent reading and writing to the database will make sense. </p>
+        <h3 class="Heading3"><a MadCap:generatedBookmark="TOC" name="3.2.1_Changing_Names"></a><a name="3.2.1"></a>3.2.1 Changing Names </h3>
+        <p>The names of records, fields, and sets may be freely changed without fear of changing the structure of the dictionary.  For example, if you have a record named cust, and want to rename it customer, you can edit your schema file, then run ddlp.  The resulting dictionary file will contain identical tables.  The header file (dbname.h) that ddlp creates contains a record name constant called customer instead of cust.  Any references to cust in your application code must be changed before you recompile it, but because the value of the record name constant has not changed, the application software will still operate before it is recompiled. </p>
+        <p class="Notes">This is the only method for changing the names of records, fields, or sets.  db_REVISE uses matching names to derive changes, as you will see in  <a href="#3.3">Derived Revisions</a>.</p>
+        <p>File names may be changed in two ways.  First, if a full path is included with a file name in the schema and you don't want to use the full path any more, the path name may be removed.  This assumes that the file will be found through the DBFPATH environment variable or it is in the current directory.  Second, the name of a file may be changed in the schema to any legal file name.  If you do this, the physical file must be renamed through the operating system.  db_REVISE will not rename files.  Running <a href="../ddlp.htm">ddlp</a> on your changed schema will implement the change. </p>
+        <h3 class="Heading3"><a MadCap:generatedBookmark="TOC" name="3.2.2_Adding_Objects"></a>3.2.2 Adding Objects </h3>
+        <p>New definitions of records, fields, and sets can be added to an existing schema if certain restrictions are observed.  If the restrictions cannot be followed in your case, you may still add the objects, but you will need to use db_REVISE to accomplish the addition. </p>
+        <p>The general restriction that must be observed is this: the sizes and relative order of records may not be changed.  If <a href="../ddlp.htm">ddlp</a> is run on your schema using the -r (report) option, you will get a summary of the file and record type sizes and offsets. </p>
+        <p class="Notes">Any change that you make to your schema through static revision may not change any size or offset in any existing file or record type. </p>
+        <p>New objects that are disjoint from the existing ones may be added to your database.  For example, if a new record type is to be added to the schema, its definition must be placed below the last existing record definition.  The record may be placed into a new file (which must be defined below the last existing file definition, whether data or key), or into an existing file if the new record's size is less than the existing file's slot size.  If a new record type is placed into a file with a smaller slot size, <a href="../ddlp.htm">ddlp</a> will increase the slot size of the file, making the existing records in the file unreadable. </p>
+        <p>New set type definitions may be added below the last existing set type definition.  The owner and member record types must also be new definitions. </p>
+        <p>Field types in new record type definitions may be keys.  Field types in existing record types may not be changed to keyed fields, with the exception of being able to change a unique key field to a key field.  The key fields in new record type definitions must be placed into new key files, following existing file definitions.  A key field may be placed into an existing key file if the key field does not change its slot size. </p>
+        <p>New field types may be added at the bottom of existing record types if they do not change the size of the slot in the data file containing the record type.  This is only possible if more than one record type is included in one file and the new field(s) are added to a record type which is not the largest record type.  This will make every existing instance of the affected record type appear to have new fields, although the field values have never been filled with any meaningful data.  Although we do not recommend this option, we include it for completeness. </p>
+        <p>When new data or key files are added to a schema, the empty initialized files must be created and placed together with the existing files.  To create these files, you should run <a href="../initdb.htm">initdb</a> on your dictionary file in an empty directory.  Otherwise, you could destroy the existing data.  Once the initialized files are created, the new ones should be moved or copied into the directory containing the existing database. </p>
+        <h3 class="Heading3"><a MadCap:generatedBookmark="TOC" name="3.2.3_Changing_Field_Types"></a>3.2.3 Changing Field Types </h3>
+        <p>The data type or dimension of a field type may be changed provided that the resulting length is exactly the same as before.  If, for example, an array of 6 short integers (12 bytes) is changed to an array of 3 long integers (still 12 bytes), <span class="MyVariablesProductShortName">RDM</span> may never know the difference.  Obviously, this kind of change must be made very deliberately with careful thought.  Also, if the field is keyed, redefining the field type may change the sorting order of the keys.  This will have severe consequences since <span class="MyVariablesProductShortName">RDM</span> compares fields according to their types.  It is a good rule to never change the type of a keyed field. </p>
+        <p>Some examples follow. </p><pre xml:space="preserve">
+<b>SOURCE    </b>            <b>DESTINATION </b>
+char first[20];       char name[60]; 
+char last[20]; 
+char middle[20];  
+
+
+char name[30];        char n_first[14];         
+                      char n_last[14];         
+                      char n_mi[2];  
+
+
+char bytes[60][1];    int bytes[30];  
+
+
+long v_tab[12][20];   long v_tab[24][10]; </pre>
+        <p class="Notes">The name examples do not correctly reformat the names into or out of proper null-terminated strings.  This capability requires db_REVISE and your own convert function.  (See  "<a href="Chapter4.htm#4.3.5">Field Conversion</a>.") </p>
+        <h3 class="Heading3"><a MadCap:generatedBookmark="TOC" name="3.2.4_Changing_Attributes"></a><a name="3.2.4"></a>3.2.4 Changing Attributes </h3>
+        <p>There are two attributes in the <span class="MyVariablesProductShortName">RDM</span> DDL that affect only the contents of the dictionary file and not the structure of the data or key files, static record types, and file identifiers. </p>
+        <p>If the record type definition below: </p><pre>record specimen {  
+    long test_date;  
+    int test_type; 
+} </pre>
+        <p>is edited such that it is defined as static: </p><pre>static record specimen {  
+    long test_date;  
+    int test_type; 
+} </pre>
+        <p>then the DDL specification may be recompiled and the record type specimen will be treated as a static type by <span class="MyVariablesProductShortName">RDM</span>.  This attribute may be removed in the same way. </p>
+        <p>The file identifiers are optionally placed in front of file names in the schema.  They may be added, removed, or have their names changed.  The difference will be whether the identifiers are defined as constants in the header file generated by <a href="../ddlp.htm">ddlp</a>. </p>
+        <h3 class="Heading3"><a MadCap:generatedBookmark="TOC" name="3.2.5_Changing_Set_Ordering"></a><a name="3.2.5"></a>3.2.5 Changing Set Ordering </h3>
+        <p>The order clause in a set may be changed without changing the structure of the database.  The new order will affect future connections to that set type.  Note that this will not change the current ordering of the set members.  Hence if a set is changed from next to ascending, errors will occur during set connections, because the members are assumed to be in order when the set is ordered as ascending. </p>
+        <p class="Notes">To avoid ordering errors, never change the order to ascending or descending.  You can, however, change from any ordering to first, last, or next. </p>
+        <h3 class="Heading3"><a MadCap:generatedBookmark="TOC" name="3.2.6_Changing_Key_Uniqueness"></a><a name="3.2.6"></a>3.2.6 Changing Key Uniqueness </h3>
+        <p>Unique key fields may be changed to non-unique key fields, but the opposite
+           is not true.  By removing the "unique" keyword from in front of the "key"
+           keyword, after the DDL is recompiled, you will be allowed to insert records
+           into the database that have duplicated key values.  Existing key values will
+           not be overwritten when new records with the same key values are inserted.
+           All records with the same keys will be found grouped together when key
+           scanning is performed (d_keyfrst, d_keynext...).</p>
+        <h2 class="Heading2"><a MadCap:generatedBookmark="TOC" name="3.3_Derived_Revisions"></a><a name="3.3"></a>3.3 Derived Revisions </h2>
+        <p>db_REVISE will be able to derive most normal database revisions by comparing the dictionary files from the source and destination databases. </p>
+        <p>All revisions described in this section require the execution of db_REVISE to create a new database containing the revisions.  See  <a href="Chapter2.htm#2.5">Running db_REVISE</a> for a detailed discussion. </p>
+        <p>Derivation of revisions is driven by matching names.  db_REVISE assumes that a field type with identical names in both source and destination schemas is the same field type, and will attempt to copy existing data from the source fields into the destination fields with the same names.  Since field names are a basic unit for revision derivation, the names can only be changed statically, as discussed in <a href="#3.2.1">Changing Names</a>.</p>
+        <p>Records are identified by their fields.  If a set of fields appears in the destination schema within a record type with a different name, db_REVISE will assume that the record name has changed.  The new record type names will be considered to be derived from the original record type name.  As you will see in <a href="#3.3.5">Record Changes</a>, more than one record type may be derived from the same source record type. </p>
+        <p>Sets must be identified by identical names in both the source and destination databases.  db_REVISE will verify its ability to copy a set from the source to destination databases by making sure that the destination owner and member record types are derived from the source owner and member record types.  Like field type names, set type names can only be changed statically. </p>
+        <p>Other database attributes, such as page size, can be changed in the destination schema.  Since db_REVISE uses the normal <span class="MyVariablesProductShortName">RDM</span> functions to create records (<code>d_fillnew</code>), these attributes are revised without any special recognition by db_REVISE. </p>
+        <h3 class="Heading3"><a MadCap:generatedBookmark="TOC" name="3.3.1_Record_and_Key_Field_Locations"></a><a name="3.3.1"></a>3.3.1 Record and Key Field Locations </h3>
+        <p>The files in which <span class="MyVariablesProductShortName">RDM</span> records and keys are stored are specified in the data file and key file statements in the schema. </p>
+        <p>When db_REVISE creates a record with the <span class="MyVariablesProductShortName">RDM</span> <![CDATA[ ]]><code>d_fillnew</code> function, <span class="MyVariablesProductShortName">RDM</span> handles the placement of the record and keys.  db_REVISE does not need to determine that a change has been made, because the change happens automatically. </p>
+        <p>A common need is to redistribute records of different sizes into files in which all records are nearly the same size.  Figure 3-1 shows a database where three record types of different sizes are stored in the same file in the source database.  Keys of different sizes from the records are also stored in a common file.  This figure illustrates how the record types and keys can be moved into separate files. </p>
+        <p class="Caption">
+            <img src="../../Resources/Images/db_revise/02000009.jpg" class="img_1" />
+            <br />Figure 3-1.  Redistributing Record Types and Keys </p>
+        <p>db_REVISE can also be used to combine record types into common files. </p>
+        <p class="Notes">The redistribution of record types will cause record addresses to change.  This will impact the speed with which db_REVISE can perform the full revision.  (See  "<a href="Chapter2.htm#2.5">Running db_REVISE</a>.") </p>
+        <h3 class="Heading3"><a MadCap:generatedBookmark="TOC" name="3.3.2_Changing_Database_Attributes"></a>3.3.2 Changing Database Attributes </h3>
+        <p>There are three record and file attributes that must be changed by running db_REVISE (as opposed to the static changes mentioned in <a href="#3.2.4">Adding Objects</a>.  These are timestamping, database page size, and file page size.  Each of these attributes causes a difference in the data and/or key files in the database.  </p>
+        <p>The following schema fragment shows an example of all three: </p><pre>database rivers[2048] {  
+    data file "river.dat" contains river, state;  
+    data file[512] "flow.dat" contains flow;  
+    key file[4096] "name.key" contains name;   
+
+    timestamp records 
+    state;  timestamp sets thru;   
+
+    record river {   
+        key char name[20];   
+        int volume;   
+        char destination[20];   
+        ...  
+    }  
+    record state {
+        ...  
+    }  
+    record flow {   
+        ...  
+    }  
+    set thru {   
+        order last;   
+        owner river;   
+        member flow;  
+    }  
+    ... 
+} </pre>
+        <p>If you want to change the default database page size to 1024, the page size specification can be removed from the database statement so that the default is used.  If the value of 512 is too small for optimum use of flow.dat, it can be changed to 2048, and by removing the size specification from name.key, its page size will default to 1024.  Timestamping may be removed, as it is for the thru set in the following edited schema: </p><pre>database rivers {  
+    data file "river.dat" contains river, state;  
+    data file[2028] "flow.dat" contains flow;  
+    key file "name.key" contains name;   
+
+    timestamp records state;   
+    
+    record river {  
+    ...  
+    } 
+} </pre>
+        <h3 class="Heading3"><a MadCap:generatedBookmark="TOC" name="3.3.3_Adding_Objects"></a><a name="3.3.3"></a>3.3.3 Adding Objects </h3>
+        <p>Databases often require new objects, such as record types, field types, set types, or keys.  Sometimes new files are added for the redistribution of records (see  <a href="#3.3.1">Record and Key Field Locations</a>) or to contain new record and key types. </p>
+        <p>New field types can be added by inserting them into the record definitions where they are desired. </p><pre xml:space="preserve">
+<b>SOURCE    </b>                 <b>DESTINATION</b>
+record sit_com {           record sit_com {  
+    char title [20];           char title [20];  
+    long start_date;           long start_date;  
+    int time_of_day;           long cancel_date; 
+}                              int time_of_day;         
+                           }</pre>
+        <p>After db_REVISE is run, room for the new field cancel_date will exist, but will be initialized to zero unless initialized specifically.  (See  <a href="#3.4.2">Field Changes</a>.) </p>
+        <p>New record types can be added to the schema.  No records of the new types will actually exist in the destination database following the use of db_REVISE, but <span class="MyVariablesProductShortName">RDM</span> applications will be able to create them. </p>
+        <p>New set types can be added to the schema between existing and/or new record types.  In Figure 3-2, a new record type, customer, is added, along with a new set type, buys. </p>
+        <p class="Caption">
+            <img src="../../Resources/Images/db_revise/0200000A.jpg" class="img_1" />
+            <br />Figure 3-2.  Adding Record and Set Types </p>
+        <p>New record types must contain totally new field types. </p>
+        <p>New key types can be added to fields or combinations of fields.  It is even possible to create keys on structure fields where one of the fields is a new field.  This new field would be filled with an initial value (zeros by default) and the key would be created (provided it is non-optional) based on the new field's initial value. </p>
+        <p>A frequent (and fatal) error results when a unique key type is created from a field type that does not contain unique values.  As soon as one duplicate value is created in the key file, the <span class="MyVariablesProductShortName">RDM</span> runtime will return the <code>S_DUPLICATE</code> status, and db_REVISE will terminate. </p>
+        <p>It is possible to add structured, unique, non-unique, optional, and compound keys.  Following are four different ways of revising the same source record type: </p><pre xml:space="preserve">
+<b>SOURCE</b>                          <b>DESTINATION</b>         
+                         <u>Option 1:</u> 
+record parishioner {            record parishioner {  
+    char first[20];                 char first[20];  
+    char last[20];                  key char last[20];  
+    char middle[20];                char middle[20];  
+    long mem_date;                  key long mem_date; 
+}                               }            
+                         <u>Option 2:</u>           
+                                record parishioner {                
+                                    unique key struct {             
+                                        char first[20];
+                                        char last[20];             
+                                        char middle[20];
+                                    } name; 
+                                    long mem_date;
+                                }            
+
+                         <u>Option 3:</u>           
+                                record parishioner {
+                                    char first[20];
+                                    char last[20];
+                                    char middle[20];
+                                    long mem_date;            
+                                    compound unique key name {
+                                        last;             
+                                        first;
+                                    }           
+                                }            
+                         <u>Option 4:</u>           
+                                record parishioner {
+                                    char first[20];
+                                    optional unique
+                                    key char last[20];
+                                    char middle[20];    
+                                    long mem_date;
+                                    compound optional  
+                                    unique key
+                                    name {
+                                        last;
+                                        first;
+                                    }           
+                                } </pre>
+        <h3 class="Heading3"><a MadCap:generatedBookmark="TOC" name="3.3.4_Deleting_Objects"></a>3.3.4 Deleting Objects </h3>
+        <p>Any database object in a schema may be eliminated by removing its definition from the schema and running db_REVISE. </p>
+        <p>Field types can be removed from records.  See below: </p><pre xml:space="preserve">
+            <b>SOURCE</b>                        <b>DESTINATION</b>
+record official {             record official {  
+    char name[20];                char name[20];  
+    char position[20];            char position[20];  
+    int popularity;               int term;  
+    int term;                 }
+}</pre>
+        <p><i>Record types </i>can be removed from the database.  All data contained in these records in the source database will not be copied into the destination database. </p>
+        <p><i>Set types</i> can be removed from the database.  If the record types that were related by the deleted set are not deleted, the size of the destination record types will be reduced by the length of the set pointers. </p>
+        <p>When record types are removed from a schema, there will be other DDL statements affected (see Figure 3-3).  The record type name needs to be removed from the data file statement.  If the record type contained key fields, the field type names must be removed from the key file statements containing them.  If the record is timestamped, its name should be removed from the timestamp statement.  If the record is referenced in any sets, it must be eliminated from the appropriate set statements.  If it is the owner or only member of a set, the set must be deleted as well.  If it is one of multiple set members, the set does not have to be deleted. </p><pre>database payroll {  
+    data file "pay.d02" contains employee, incentives; 
+    ...  
+    key file "pay.k01" contains inc_type;  
+    ...  
+    timestamp salary, incentives;  
+    ...   
+
+    record incentives {   
+        unique key inc_type;   
+        ...  
+    }  
+    ...  
+    set earns {   
+        order next;   
+        owner employee;   
+        member incentives;  
+    }      
+    ... 
+} </pre>
+        <p class="Caption">Figure 3-3.  DDL Statements Affected When Deleting a Record Type </p>
+        <h3 class="Heading3"><a MadCap:generatedBookmark="TOC" name="3.3.5_Record_Changes"></a><a name="3.3.5"></a>3.3.5 Record Changes </h3>
+        <p>This section deals with the concept of record projection.  The term project is borrowed from the relational algebra operation where a selected subset of fields (columns) is to be viewed or copied into a new record type.  In db_REVISE, projection is the ability to divide a record type into one or more component record types.  For each instance of a record, one or more instances of component records may be created in the destination database.  The component record types are said to be derived from the source record type. </p>
+        <p>Figure 3-4 shows a simple example of a record projection.  This is a case where optional information is contained in a main record type, but we wish to create a separate record type for the optional information. </p>
+        <p class="Caption">
+            <img src="../../Resources/Images/db_revise/0200000B.jpg" class="img_1" />
+            <br />Figure 3-4.  Projection into Two Record Types </p>
+        <p class="Notes">Fields that were contained in the same record type are now contained in more than one record type.  db_REVISE uses this situation to derive a project operation.  If any field types other than those contained in the source record type occur in the newly derived record types, they must be new field types.  It is an error condition when one destination record type contains field types from more than one source record type (with the exception of the join operation, discussed under the join record statement, in section  "<a href="#3.4.1%20Re">Record Changes</a>"). </p>
+        <p>db_REVISE will create one set of component records for each source record that is being projected, as shown in Figure 3-5. </p>
+        <p class="Caption">
+            <img src="../../Resources/Images/db_revise/0200000C.jpg" class="img_1" />
+            <br />Figure 3-5.  Projected Record Instances </p>
+        <p>If a new set type exists between component record types, the default action of db_REVISE is to connect them with the set.  If you do not want a connection, the initialize set statement can be used (described in  "<a href="#3.4.3">Set Changes</a>").  Figure 3-6 illustrates the default action. </p>
+        <p class="Caption">
+            <img src="../../Resources/Images/db_revise/0200000D.jpg" class="img_1" />
+            <br />Figure 3-6.  Automatic Set Connections </p>
+        <p>Record projection along with automatic set connection is a fully general capability, where any number of component record types may be connected with any number of new set types.  The designation of component record types as owner or member is determined by the new set definition.  Immediately following the use of db_REVISE, exactly one owner and one member will exist for each instance, and the structure will exist for more members to be added.  Figure 3-7 illustrates a possible network of connections between component record types of one source record type. </p>
+        <p class="Caption">
+            <img src="../../Resources/Images/db_revise/0200000E.jpg" class="img_1" />
+            <br />Figure 3-7.  Set Connection Network </p>
+        <p>Usually a record type to be projected is already involved in one or more set types.  db_REVISE is able to copy existing set connections to the destination database in a very general way.  The record types listed in the set definitions in the destination schema must be types that are derived from the types listed in the source set definition.  Even when both the owner and member record types are projected, the set connections may be copied into the destination database between any owner component record and any member component record.  This point is shown graphically in Figure 3-8 and is also illustrated in the schemas which immediately follow Figure 3-8. </p>
+        <p class="Caption">
+            <img src="../../Resources/Images/db_revise/0200000F.jpg" class="img_1" />
+            <br />Figure 3-8.  Record Projection and Existing Sets </p><pre><b>SOURCE                    DESTINATION
+</b>record customer {         record customer { 
+    char name[20];            char name[20]; 
+    char address[40];         char address[40]; 
+    char ship_to[40];     } 
+} 
+                          record ship_to { 
+                              char ship_to[40]; 
+                          } 
+
+record order {            record order {     
+    int inv_code;             int inv_code; 
+    int quantity;             int quantity; 
+    long ship_date;       }
+}
+
+                          record ship_rec { 
+                              long ship_date; 
+                          } 
+
+set orders {              set orders { 
+    order last;               order last; 
+    owner customer;           owner ship_to; 
+    member order;             member ship_rec; 
+}                         } 
+
+                          set ship_to { 
+                              order last; 
+                              owner customer; 
+                              member ship_to; 
+                          } 
+
+                          set shipment { 
+                              order last; 
+                              owner orders; 
+                              member ship_rec;
+                          }</pre>
+        <p>A particularly useful effect of the ability to project records is the creation of a many-to-many relationship where there currently exists a one-to-many relationship.  Since the <span class="MyVariablesProductShortName">RDM</span> implementation of sets is strictly one-to-many, two set types plus an intersection record type are required.  By projecting the member of a set into two record types and making one of the component record types a member of two sets (one already existing, one new and automatically connected), the many-to-many relationship can be created.  Figures 3-9 and 3-10 illustrate this transformation. </p>
+        <p class="Caption">
+            <img src="../../Resources/Images/db_revise/02000010.jpg" class="img_1" />
+            <br />Figure 3-9.  Transformation to Many-to-Many </p>
+        <p class="Caption">
+            <img src="../../Resources/Images/db_revise/02000011.jpg" class="img_1" />
+            <br />Figure 3-10.  Instance of Many-to-Many Transformation </p>
+        <p>In some cases you may wish to create a many-to-many relationship where no fields will be needed in the intersection record.  Since db_REVISE determines the need for record projection by the placement of existing fields, this cannot be derived.  In <a href="#3.4.1">Record Changes</a>, you will see how this can still be accomplished with the project record RDL statement. </p>
+        <h3 class="Heading3"><a MadCap:generatedBookmark="TOC" name="3.3.6_Field_Changes"></a><a name="3.3.6"></a>3.3.6 Field Changes </h3>
+        <p>Whenever db_REVISE finds the same field type name in both source and destination databases, it assumes that data is to be copied from the source field into the destination field.  If the data types are different, db_REVISE will, by default, perform conversions from the source to the destination type. </p>
+        <p>When conversions other than the defaults are desired, additional information is supplied in the convert field using statement described in <a href="#3.4.2">Field Changes</a>. </p>
+        <p>Fields that have the same type in both source and destination schemas are copied directly from the source to destination without any interpretation or translation. </p>
+        <p>The following source and destination combinations are copied from the source into a longer field in the destination.  No data can be lost in these instances. </p><pre xml:space="preserve">
+            <b>SOURCE          DESTINATION</b>
+char            short 
+char            int 
+char            long 
+char            db_addr 
+short           int 
+short           long 
+short           db_addr 
+int             long 
+int             db_addr 
+long            db_addr 
+float           double </pre>
+        <p>The following source and destination combinations cause a type conversion to be performed as the value is placed into the destination field.  These will not cause data loss warnings. </p><pre xml:space="preserve">
+            <b>SOURCE          DESTINATION</b>
+char            float 
+char            double 
+short           float 
+short           double 
+int             float 
+int             double 
+long            float 
+long            double </pre>
+        <p>The following source and destination combinations cause a type conversion to be performed as the value is placed into the destination field.  These will produce a data loss warning during the execution phase of db_REVISE if significant digits are lost in the conversion (these warnings may be suppressed with the -x option as stated in  "<a href="Chapter2.htm#2.6.2">Command Line Options</a>").  </p>
+        <p>For example, a floating point value of 98334.667 will not convert into a char or int type field but will convert into a long type.  Note that the conversion of a floating point format will lose insignificant digits.  For example, a double value of 34.225 will convert into an int type with a value of 34, but no data loss warning will be printed: </p><pre xml:space="preserve">
+            <b>SOURCE          DESTINATION</b>
+float           char 
+float           short 
+float           int 
+float           long 
+float           db_addr 
+double          char 
+double          short 
+double          int
+double          long 
+double          db_addr </pre>
+        <p>The following source and destination combinations cause the same, unconverted value to be placed into a shorter field.  If significant digits are lost in the copy, db_REVISE will produce a data loss warning during the execution phase (these warnings may be suppressed with the -x option as stated in <a href="Chapter2.htm#2.5">Running db_REVISE</a>). </p><pre xml:space="preserve">
+            <b>SOURCE          DESTINATION</b>
+short           char
+int             char 
+int             short 
+long            char 
+long            short 
+long            int 
+double          float 
+db_addr         char 
+db_addr         short 
+db_addr         int 
+db_addr         long </pre>
+        <p>The following shows a conversion that may take place for each element in an arrayed or non-arrayed field:                               <![CDATA[ ]]></p><pre><b>SOURCE                      DESTINATION</b>
+int prod_code;              long prod_code; 
+float state_amt[50];        int state_amt[50] 
+char vol_tab[12][20];       short vol_tab[12][20]; </pre>
+        <p>It is also possible to change the dimensions of an array.  Any or all of the three dimension limits may be increased or decreased.  However, the number of dimensions may not be changed, except in the conversion of ASCII character strings, as described later in this section.  The following are legal field conversions: </p><pre><b>SOURCE                      DESTINATION</b>
+int tx_parms[12][12][4];    char tx_parms[24][24][8]; 
+float factor[256];          float factor[128]; </pre>
+        <p>The following are illegal field conversions: </p><pre><b>SOURCE                      DESTINATION</b>
+int tx_parms[12][12][4];    int tx_parms[576]; 
+float factor[256];          float factor[64][2]; </pre>
+        <p class="Notes">The above illegal example for tx_parms could be performed statically since the total number of integers (hence the total field length) is the same. </p>
+        <p>db_REVISE will copy elements from the source of an arrayed field to destination elements with the same indices.  If the destination field has no matching indices, the field is not copied.  If the destination field has larger dimensions, the new portions of the arrays will be initialized to zeros.  For example, suppose that the following conversion is performed: </p><pre><b>SOURCE                DESTINATION</b>
+int matrix[4][3];     int matrix[3][5]; </pre>
+        <p>The destination elements will be filled as follows: </p><pre><b>SOURCE                DESTINATION </b>
+
+matrix[0][0]     --&gt;  matrix[0][0] 
+matrix[0][1]     --&gt;  matrix[0][1] 
+matrix[0][2]     --&gt;  matrix[0][2]
+                      matrix[0][3] 
+                      matrix[0][4] 
+matrix[1][0]     --&gt;  matrix[1][0] 
+matrix[1][1]     --&gt;  matrix[1][1]
+matrix[1][2]     --&gt;  matrix[1][2]
+                      matrix[1][3]
+                      matrix[1][4]
+matrix[2][0]     --&gt;  matrix[2][0] 
+matrix[2][1]     --&gt;  matrix[2][1] 
+matrix[2][2]     --&gt;  matrix[2][2] 
+                      matrix[2][3] 
+                      matrix[2][4] 
+matrix[3][0] 
+matrix[3][1] 
+matrix[3][2]                              <![CDATA[ ]]></pre>
+        <p>db_REVISE will convert ASCII strings to numeric values, or numeric values to ASCII strings when: </p>
+        <ul>
+            <li value="1">The source is numeric and the destination is character or when the source is character and the destination is numeric. </li>
+            <li value="2">The character type has one more array dimension than the numeric. </li>
+        </ul>
+        <p>For example: </p><pre><b>SOURCE                DESTINATION </b>
+int cat_id;           char cat_id[6]; </pre>
+        <p>In the above conversion, cat_id would be converted to an ASCII string using the C standard library function sprintf, with a format of '%d'.  When the ASCII string is in the source database, as in the example below, db_REVISE will use the sscanf function. </p><pre><b>SOURCE                DESTINATION </b>
+char tape_label[20];  long tape_label; </pre>
+        <p>When additional dimensions exist, the same rule for element match-up applies to ASCII conversions. </p><pre><b>SOURCE                    DESTINATION </b>
+char cvtypes[10][12][6];  int cvtypes[10][12];</pre>
+        <p>When converting a field used in the order by clause in a set, be careful not to change the sorting sequence of the field.  The set ordering will not automatically change because of a field value change. </p>
+        <p>Some field conversions may result in duplicate keys, which would be an error that would terminate db_REVISE.  For example, if a unique key field is composed of a character string that is converted to an integer, and two values, such as 0101 and 101 exist, they will both be converted into the same integer value.  Duplicate keys may also result from shortening key field values. </p>
+        <h3 class="Heading3"><a MadCap:generatedBookmark="TOC" name="3.3.7_Set_Changes"></a>3.3.7 Set Changes </h3>
+        <p>The only derivable change that can be made to a set type is to add or remove member types.  If member types are added to a set type, they may be either existing or new record types.  Figure 3-11 shows a set definition that has one member removed and two new members: one previously existing, and one new. </p>
+        <p class="Caption">
+            <img src="../../Resources/Images/db_revise/02000012.jpg" class="img_1" />
+            <br />Figure 3-11.  Adding and Removing Set Types </p>
+        <p>At least one member in the destination set definition must be derivable from at least one member in the source set definition. </p>
+        <h3 class="Heading3"><a MadCap:generatedBookmark="TOC" name="3.3.8_Key_Changes"></a>3.3.8 Key Changes </h3>
+        <p>Any change to a key type can be viewed as a deletion and then an addition of the key type.  Key deletion is never a problem but addition may be.  See <a href="#3.3.3">Adding Objects</a>, for a discussion of the addition of keys. </p>
+        <h2 class="Heading2"><a MadCap:generatedBookmark="TOC" name="3.4_Specified_Revisions"></a><a name="3.4"></a>3.4 Specified Revisions </h2>
+        <p>This section discusses all supported revisions that cannot be performed statically or derived from a comparison of the schemas.  The Revision Definition Language (RDL) is fully described. </p>
+        <p>The RDL supplies extra information to db_REVISE.  All RDL-supplied information must be consistent with any derived changes detected in the schemas.  A typical revision will contain mainly derived revisions, with only a few RDL statements.  However, an RDL file may contain any number of non-conflicting statements. </p>
+        <p>The RDL statements are stored in a text file and are created using any ASCII text editor.  Input is free form with C style comments.  There is no concept of blocks in the language; each statement is independent and must be terminated with a semicolon. </p>
+        <p>Identifiers within the language are used to name record, field, and set types.  All record, field, or set names must match an actual name from the source or destination schema.  The context of the statement indicates whether the identifier refers to a source or a destination object. </p>
+        <p>All RDL statements are classified according to whether they affect records, fields, or sets.  Records are affected by the initialize record, project record, and join record statements.  Fields are affected by the initialize field and convert field statements.  Sets are affected by the initialize set, split set, combine set, and normalize set statements. </p>
+        <p>In the following subsections, each classification of RDL statements will be described, along with full syntax definitions, descriptions, and examples. </p>
+        <h3><a MadCap:generatedBookmark="TOC" name="3.4.1_Record_Changes"></a><a name="3.4.1 Re"></a>3.4.1 Record Changes </h3>
+        <h4 class="Heading4"><a MadCap:generatedBookmark="TOC" name="3.4.1.1_The_initialize_record_Statement"></a>3.4.1.1 The initialize record Statement </h4>
+        <p class="Heading">Syntax: </p><pre class="Grammar"><b>initialize record</b> recname [, <i>recname</i>...]; </pre>
+        <p class="Heading">Description: </p>
+        <p>This statement lists one or more record types to be initialized.  The listed record types refer to the source database.  Any instances of listed records will not be copied into the destination database, even though the destination database will contain those record types.   </p>
+        <p>Record initialization is different from record deletion.  When a record type is deleted, db_REVISE derives that fact from the non-existence of the record type in the destination schema.  Initialization is only necessary when the destination schema contains a record type (or types) derived from the source record type. </p>
+        <p>A record type cannot be initialized if it may potentially leave holes in existing set connections.  For example, if the owner record type of a set were initialized, then the member records would contain pointers to a non-existent record.  In order to prevent situations where the set connections become inconsistent, db_REVISE enforces a rule that states that all sets associated with an initialized record type must be either initialized or deleted.  Only one initialize record statement is needed in an RDL file, although more than one could be used. </p>
+        <p class="Heading">Example: </p><pre><b>initialize record</b> job_log, proj_log; </pre>
+        <p>This statement will initialize two record types.  (See a schema representation in Figure 3-12.)  If they are involved in any sets, those sets must be initialized also, or deleted.  If part of the schema showed these two record types in both source and destination databases, no instances of those record types would exist in the destination.  See Figure 3-13. </p>
+        <p class="Caption">
+            <img src="../../Resources/Images/db_revise/02000013.jpg" class="img_1" />
+            <br />Figure 3-12.  Record Initialization Schema </p>
+        <p class="Caption">
+            <img src="../../Resources/Images/db_revise/02000014.jpg" class="img_1" />
+            <br />Figure 3-13.  Record Initialization Instances </p>
+        <h4 class="Heading4"><a MadCap:generatedBookmark="TOC" name="3.4.1.2_The_project_record_Statement"></a>3.4.1.2 The project record Statement </h4>
+        <p class="Heading">Syntax: </p><pre class="Grammar"><b>project record</b> <![CDATA[ ]]><i>recname </i>into <i>recname </i>[, <i>recname</i>...]; </pre>
+        <p class="Heading">Description: </p>
+        <p>The first <i>recname</i> refers to a source database record type.  The list of record types following the into key word refers to destination database record types.  The ordering of the list of destination record types is insignificant. </p>
+        <p>The projection defined by the project record statement must be consistent with the projection that is derived.  When a record projection is fully derivable, the project record statement is optional. </p>
+        <p>There is only one type of projection that cannot be derived: when a record type is projected into a record type containing no fields from the source record type.  There may be conditions, such as with a many-to-many transformation (see example below), where one or more component records contain no fields or only new fields. </p>
+        <p class="Heading">Example: </p>
+        <p>Figure 3-14 shows an example of a many-to-many transformation where one component record contains no fields. </p>
+        <p class="Caption">
+            <img src="../../Resources/Images/db_revise/02000015.jpg" class="img_1" />
+            <br />Figure 3-14.  Projection into Empty Record </p>
+        <p>In the case shown in Figure 3-14, the cl_st record type contains no fields.  It is intended to be used as an intersection record for a many-to-many relationship (see Figures 3-10 and 3-11 also).  One instance of the cl_st record type is to be created for each instance of student.  The following statement would be required: </p><pre><b>project record</b> student into student, cl_st; </pre>
+        <p>If no project record statement were given to db_REVISE, no instances of the cl_st record type would be created. </p>
+        <h4 class="Heading4"><a MadCap:generatedBookmark="TOC" name="3.4.1.3_The_join_record_Statement"></a>3.4.1.3 The join record Statement </h4>
+        <p class="Heading">Syntax: </p><pre class="Grammar"><b>join record </b><i>recname </i>from <i>recname </i>to <i>recname </i>thru <i>setname</i> [from <i>recname </i>to <i>recname </i>thru <i>setname</i>...]; </pre>
+        <p class="Heading">Description: </p>
+        <p>The first recname refers to a destination record type.  The repeating from...to...thru phrase denotes a path from an owner record type to a member record type thru a set type.  The path may travel through any number of sets, always from owner to member. </p>
+        <p>The term join is borrowed from the relational algebra operation where two record types are joined based on equal values of a common field.  In the network model, a set connection serves as the basis for joining two record types, instead of common field values. </p>
+        <p>The destination record type created as a result of a join will contain fields from one or more of the source record types.  A generalized example of a join statement is shown below. </p><pre>join record R  
+    from R1 to R2 thru S1  
+    from R2 to R3 thru S2  
+    ...  
+    from R[N-1] to RN thru S[N-1]; </pre>
+        <p>This statement operates schemas defined on the following page: </p><pre><b>SOURCE            DESTINATION</b>
+record R1 {       record R {  
+    int F11;          int F11;  
+    int F12;          int F12;  
+    ...               ... 
+}                     int F21; 
+record R2 {           int F22;  
+    int F21;          ...
+    int F22;          int FN1;
+    ...               int FN2; 
+}                     ... 
+...               }  
+
+record RN {  
+    int FN1;  
+    int FN2;
+    ... 
+} 
+set S1 {
+    owner R1;   
+    member R2;
+} 
+... 
+
+set S[N-1] {
+    owner R[N-1];   
+    member RN;
+} </pre>
+        <p>In the absence of a join statement, the above destination schema would cause an error condition.  A join statement is not derivable. </p>
+        <p>The last record type listed in the join statement is called the tail record type.  When db_REVISE performs a join, it creates one instance of the destination record type for each tail record in the source database.  If the path from the tail backwards through the path is incomplete, the record is still created; fields from records that cannot be located are filled with zeros.  The head record type appears first in the join statement, and appear in between the head and tail.  One instance of a head or intermediate record may be replicated one or more times in the destination database because the records along a path will actually form a tree of records, as shown in Figure 3-15. </p>
+        <p class="Caption">
+            <img src="../../Resources/Images/db_revise/02000016.jpg" class="img_1" />
+            <br />Figure 3-15.  Typical Hierarchical Structure </p>
+        <p>If the following join statement is used with the database shown in Figure 3-15, the results will appear as shown in Figure 3-16. </p><pre>join record city from state to county thru st_co   
+    from county to city thru co_city; </pre>
+        <p class="Caption">
+            <img src="../../Resources/Images/db_revise/02000017.jpg" class="img_1" />
+            <br />Figure 3-16.  Results of a Record Join </p>
+        <p>In  <a href="#3.4.3">Set Changes</a>, under the normalize set statement, you will see how the normalize statement can invert the join operation. </p>
+        <p>Notice that in the example join shown in Figure 3-16, the state value of "Washington" is replicated six times.  This has two effects that are discussed below. </p>
+        <p>The first effect of field replication is that any field in a non-tail join record cannot be a unique key in the destination database.  Even if it is unique in the source, the replication will cause duplicates and will force db_REVISE to terminate.  If the field must be keyed, it must be made non-unique in the destination.  Another technique might involve building, in the destination record, a compound key that includes all unique keys in the path.  This compound key is, in turn, unique.  In the above example, if the name fields in all three record types are unique keys, the destination record contains a unique compound key listing all three name fields (which are not keyed individually). </p>
+        <p>The second effect of field replication of non-tail records is that of implied set expansion of sets that own non-tail records.  For example, if a path is defined from Record Type A to Record Type B, and another set owns A, the join operation may cause the number of A records to increase.  Therefore the number of members of the set which owns A would also increase.  Currently, the records are joined correctly, but the expansion of sets that own non-tail record types is not performed correctly.  This problem will occur when: </p>
+        <ol>
+            <li value="1">Source sets which own non-tail record types used in a join are copied to the destination database, and </li>
+            <li value="2">The join is between record types in which there is more than one instance of the member records. </li>
+        </ol>
+        <p>If the joined records are one-to-one, the sets will be copied to the destination database correctly. </p>
+        <p>As discussed above, a set that owns a non-tail record type in an expanded join operation may be automatically expanded.  The record replication that causes set expansion also causes an error condition if a non-tail record owns sets which are not a part of the join path.  Figure 3-17 shows a schema diagram which could generate this error.  Assume that the following join statement is used: </p><pre>join record department from division to department thru div_dept; </pre>
+        <p class="Caption">
+            <img src="../../Resources/Images/db_revise/02000018.jpg" class="img_1" />
+            <br />Figure 3-17.  Illegal Join </p>
+        <p>Because multiple replications of the department record are possible, each owner of a div_site set instance becomes a multiple owner.  It is not possible to resolve this situation because <span class="MyVariablesProductShortName">RDM</span> does not directly support many-to-many set types.  This condition will be detected during the compilation of db_REVISE, and no revision will occur.  This revision could be done legally if the div_site set were deleted or initialized. </p>
+        <h3 class="Heading3"><a MadCap:generatedBookmark="TOC" name="3.4.2_Field_Changes"></a><a name="3.4.2"></a>3.4.2 Field Changes </h3>
+        <h4 class="Heading4"><a MadCap:generatedBookmark="TOC" name="3.4.2.1_The_initialize_field_Statement"></a>3.4.2.1 The initialize field Statement </h4>
+        <p class="Heading">Syntax: </p><pre class="Grammar"><b>initialize field</b> <![CDATA[ ]]><i>fldname </i>= "<i>scalar value</i>"; </pre>
+        <p>or </p><pre class="Grammar"><b>initialize field</b> <![CDATA[ ]]><i>fldname </i>= {<i>scalar value</i>}; </pre>
+        <p>or </p><pre class="Grammar"><b>initialize field </b><i>fldname </i>= {<i>aggregate</i>}; </pre>
+        <p class="Heading">Description: </p>
+        <p>The initialize field statement allows you to give an initial value to each occurrence of a field, fldname, in the destination database.  The field may be old or new.  The field should not be a unique key because this will cause a duplicate key error. </p>
+        <p>The first form of the statement is used for a non-structured, non-arrayed field.  The field value must be enclosed in quotation marks or braces even if it is a numeric value. </p>
+        <p>The aggregate notation allows the multiple elements of an array or the multiple fields of a structured field to be initialized as a group.  Within the braces, a list of comma-separated values may be listed.  Character strings must be enclosed in quotation marks and numeric values should not be.  The following are examples of a repetition factor preceding a value: </p><pre>10*"On Vacation" </pre>
+        <p>or </p><pre>30*144 </pre>
+        <p class="Heading">Example: </p>
+        <p>The record contents may be initialized as shown in the following example: </p>
+        <p>DEFINITION   INITIALIZATION </p><pre><b>DEFINITION                   INITIALIZATION</b>
+record employee {            initialize field e_ssn = "XXX-XX-XXXX";  
+    char e_first[20];        initialize field e_address = {
+    char e_last[20];             "UNKNOWN",          
+    char e_ssn[12];              "UNKNOWN",  
+    struct {                     "UNKNOWN",   
+        char adr1[20];           "XX",   
+        char adr2[20];           99999   
+        char city[20];        }   
+        char state[3];        initialize field sal_hist = {   
+        long zip;                 10*9999.99  
+    } e_address;              }  
+    float sal_hist[10]; 
+} </pre>
+        <h4 class="Heading4"><a MadCap:generatedBookmark="TOC" name="3.4.2.2_The_convert_field_Statement"></a>3.4.2.2 The convert field Statement </h4>
+        <p class="Heading">Syntax: </p><pre class="Grammar"><b>convert field </b><i>fname </i>using <i>spec</i>; </pre>
+        <p class="Heading">Description: </p>
+        <p>This statement will convert source field, fname, to the destination field with the same name using conversion specification spec to perform the conversion.  Default conversions apply (see  <a href="#3.3.6">Field Changes</a>) to all fields that do not have a convert field statement specified. </p>
+        <p>The field conversion specification spec comes in the following forms: </p>
+        <table style="width: 100%;mc-table-style: url('../../Resources/TableStyles/ArgsTwoCol.css');margin-left: 0;margin-right: auto;" class="TableStyle-ArgsTwoCol" cellspacing="0">
+            <col class="Column-Column1" />
+            <col class="Column-Column2" />
+            <tbody>
+                <tr class="Body-Body1">
+                    <td class="BodyE-Column1-Body1">fmt</td>
+                    <td class="BodyD-Column2-Body1">This form supplies a printf type format specification (the "%" must be included) to db_REVISE, which will be supplied to the sprintf function if the source field is numeric and the destination field is a character string.  The format string will be supplied to the sscanf function if the source field is a character string and the destination field is numeric.</td>
+                </tr>
+                <tr class="Body-Body1">
+                    <td class="BodyE-Column1-Body1">left</td>
+                    <td class="BodyD-Column2-Body1">This specifies that the destination string will be left-justified (preceding spaces and tabs removed), and blank-filled on the right (leaving room for and including the null string terminator).  Both the source and destination fields must be character strings. </td>
+                </tr>
+                <tr class="Body-Body1">
+                    <td class="BodyE-Column1-Body1">left0</td>
+                    <td class="BodyD-Column2-Body1">This specifies that the destination string will be left-justified (preceding spaces and tabs removed), and zero-filled on the right (following the last non-space, non-tab character). Both the source and destination fields must be character strings.</td>
+                </tr>
+                <tr class="Body-Body1">
+                    <td class="BodyE-Column1-Body1">right</td>
+                    <td class="BodyD-Column2-Body1">This specifies that the destination string will be right-justified, with spaces filled in on the left.  The last non-space, non-tab character will be placed into the next-to-last position in the string (a null terminator will be placed in the last position). </td>
+                </tr>
+                <tr class="Body-Body1">
+                    <td class="BodyE-Column1-Body1">center</td>
+                    <td class="BodyD-Column2-Body1">This specifies that the destination string will be centered, with spaces filled in on the right and left of the non-space, non-tab characters. </td>
+                </tr>
+                <tr class="Body-Body1">
+                    <td class="BodyE-Column1-Body1">center0</td>
+                    <td class="BodyD-Column2-Body1">This specifies that the destination string will be centered, with spaces filled in on the left of the non-space, non-tab characters and zeros filled in on the right.</td>
+                </tr>
+                <tr class="Body-Body1">
+                    <td class="BodyB-Column1-Body1" style="font-style: italic;">NN</td>
+                    <td class="BodyA-Column2-Body1">
+                        <p>This is a positive integer.  It is used to select a conversion case in the user-supplied function convert.  An example convert function is supplied on the db_REVISE delivery diskettes in a file named convert.c.  This function may be modified by the user, compiled, and linked in with db_REVISE.  The value of NN is sent as a parameter to this function whenever field fname is copied from the source to destination database. </p>
+                        <p>The function is defined as follows: </p><pre xml:space="preserve">
+void convert(
+    int32_t            conversion,
+    void              *src_fld,
+    const FIELD_ENTRY *src_dfn,
+    void              *dest_fld,
+    const FIELD_ENTRY *dest_dfn)
+{  
+    ...  
+    switch ( conversion ) {   
+        case 0:     
+            ...     
+            break;   
+        case 1:     
+            ...     
+            break;   
+        ...  
+    } 
+} </pre>
+                        <p>Within each case, a conversion is performed that takes the value pointed to by src_fld, converts it, and copies it onto the area pointed to by dest_fld.  The src_dfn and dest_dfn parameters are pointers to the field table definitions that <span class="MyVariablesProductShortName">RDM</span> uses internally.  These contain full information about each field definition.  To use them it is necessary to have knowledge of the internal operation of <span class="MyVariablesProductShortName">RDM</span>.  For example, the same conversion case could be used to invert different instances of a matrix of integers where the dimensions of the matrix are in the field definition.  The conversion case could read the dimensions from the field table definitions.  Many conversions will not require field table information because the sizes will be known and fixed.  For example, a conversion case might divide a source integer by 10 and copy it into a destination integer.  Since both types are known and fixed, the field table is not required. </p>
+                        <p>Special care must be taken when coding conversion cases.  If the destination field value is changed beyond its bounds, db_REVISE may behave unpredictably. </p>
+                        <p>For example, assume that the field title is defined in both source and destination databases as char title[16]. </p><pre>convert field title using center0; 
+     "num_sales" converted to "   num_sales" 
+
+
+
+convert field title using center; 
+     "num_sales" converted to "   num_sales   " 
+
+convert field title using right; 
+     "num_sales" converted to "      num_sales"                   </pre>
+                        <p>Now assume that you have an integer field, pct_goal, which you want to convert into a character string (length 10) which will be used as a bar graph.  This is obviously a special case and will need to be coded into the convert function.  The convert statement might look like the following: </p><pre>convert field pct_goal using 4; </pre>
+                        <p>The code in convert may look like the following: </p><pre>int ival, i; 
+... 
+switch ( conversion ) { 
+...  
+    case 4:   
+        bytecpy( &amp;ival, src_fld, sizeof(int) );   
+        ival = ival / 10;   
+        for ( i=0; i&lt;ival; i++ ) dest_fld[i] = '.';   
+        break; 
+} </pre>
+                    </td>
+                </tr>
+            </tbody>
+        </table>
+        <h3 class="Heading3"><a MadCap:generatedBookmark="TOC" name="3.4.3_Set_Changes"></a><a name="3.4.3"></a>3.4.3 Set Changes </h3>
+        <h4 class="Heading4"><a MadCap:generatedBookmark="TOC" name="3.4.3.1_The_initialize_set_Statement"></a>3.4.3.1 The initialize set Statement </h4>
+        <p class="Heading">Syntax: </p><pre class="Grammar"><b>initialize set </b><i>setname </i>[, <i>setname</i>...]; </pre>
+        <p class="Heading">Description: </p>
+        <p>This statement lists one or more set types to be initialized.  The listed set types refer to the source database.  Any instances of listed sets will not be copied into the destination database, even though the destination database will contain those set types and the records that were formerly connected to them.  The effect will be as if a <a href="../../RM/api/d_discon.htm">d_discon</a> function had been called for all members of these set types in the entire database. </p>
+        <p>Set initialization is different than set deletion.  When a set type is deleted, db_REVISE derives that fact from the non-existence of the set type in the destination schema.  Initialization is only necessary when the destination schema contains a set type (or types) contained also in the source schema. </p>
+        <p>Set initialization may be required because of record initialization.  (See the initialize set statement in <a href="#3.4.1%20Re">Record Changes</a>.) </p>
+        <p>As shown in the following example, only one initialize set statement is needed in an RDL file, although more than one could be used. </p>
+        <p class="Heading">Example: </p><pre>initialize set job_hist, proj_hist; </pre>
+        <p>This statement will initialize two set types: job_hist and proj_hist. </p>
+        <h4 class="Heading4"><a MadCap:generatedBookmark="TOC" name="3.4.3.2_The_split_set_Statement"></a>3.4.3.2 The split set Statement </h4>
+        <p class="Heading">Syntax: </p><pre class="Grammar"><b>split set</b> <![CDATA[ ]]><i>setname </i>into <i>setname</i>, <i>setname </i>[, <i>setname</i>...]; </pre>
+        <p class="Heading">Description: </p>
+        <p>The first setname refers to a source database set type.  The list of set types following the into key word refers to destination database set types.  The ordering of the list of destination set types is insignificant. </p>
+        <p>The split set statement will cause a set with multiple member record types to be separated into two or more sets, each resulting set consisting of a subset of the original member types.  One of the destination set types may have the same name as the source set type, but this is not required. </p>
+        <p>Without the split set statement, db_REVISE will match set types by name only.  Set ownership and membership cannot be used to derive a split set.  However, all owner and member record types must be derivable from their source counterparts. </p>
+        <p>The order of the split set members will remain the same.  If one or more of the resulting set types is ordered (ascending or descending), the member records will not be ordered unless they were correctly ordered in the source database. </p>
+        <p>For example, Figure 3-18 shows a schema change that may be made. </p>
+        <p class="Caption">
+            <img src="../../Resources/Images/db_revise/02000019.jpg" class="img_1" />
+            <br />Figure 3-18.  Set Split Schema </p>
+        <p>This kind of change could be made in a schema without an RDL statement and db_REVISE would not indicate an error condition.  But the new set name, dest, would not be connected during the revision and information would be lost.  To inform db_REVISE that we want to re-group the member records into two sets, the following statement would be issued in the following RDL: </p><pre>split set contents into contents, dest; </pre>
+        <p>A possible result is shown in Figure 3-19. </p>
+        <p class="Caption">
+            <img src="../../Resources/Images/db_revise/0200001A.jpg" class="img_1" />
+            <br />Figure 3-19.  Split Set Instance </p>
+        <h4 class="Heading4"><a MadCap:generatedBookmark="TOC" name="3.4.3.3_The_duplicate_set_Statement"></a>3.4.3.3 The duplicate set Statement </h4>
+        <p class="Heading">Syntax: </p><pre class="Grammar"><b>duplicate set</b> <![CDATA[ ]]><i>setname </i>into <i>setname </i>[, <i>setname</i>...]; </pre>
+        <p class="Heading">Description: </p>
+        <p>The first setname refers to a source database set type.  The list of set types following the into key word refers to destination database set types.  The ordering of the list of destination set types is insignificant. </p>
+        <p>The duplicate set statement will cause one or more new set types to be filled in with the existing connections of an existing set type.  The destination set types must be defined in the schema between the same owner and member types.  Following the revision, both the original and new sets will have the same membership. </p>
+        <p>Without the duplicate set statement, new set definitions between existing record types are legal, but they will not be filled during the revision. </p>
+        <p>The order of the members in the new sets will be identical to the original set ordering. </p>
+        <p class="Notes"> Do not attempt to duplicate an unordered set into an ordered set; it will not work. </p>
+        <p>For example, Figure 3-20 shows the schema changes required to perform a duplicate set operation. </p>
+        <p class="Caption">
+            <img src="../../Resources/Images/db_revise/0200001B.jpg" class="img_1" />
+            <br />Figure 3-20.  Duplicate Set Schema </p>
+        <p>To fill the new set, old_clients, the following statement should be included in the following RDL file: </p><pre>duplicate set clients into clients, old_clients; </pre>
+        <p>The result is shown in Figure 3-21. </p>
+        <p class="Caption">
+            <img src="../../Resources/Images/db_revise/0200001C.jpg" class="img_1" />
+            <br />Figure 3-21.  Duplicate Set Instance </p>
+        <h4 class="Heading4"><a MadCap:generatedBookmark="TOC" name="3.4.3.4_The_combine_set_Statement"></a>3.4.3.4 The combine set Statement </h4>
+        <p class="Heading">Syntax: </p><pre class="Grammar"><b>combine </b>set <i>setname </i>from <i>setname</i>, <i>setname </i>[, <i>setname</i>...]; </pre>
+        <p class="Heading">Description: </p>
+        <p>The first <i>setname</i> refers to a destination database set type.  The list of <i>setnames</i> following the from key word refers to source database set types.  The ordering of the list of source set types is significant. </p>
+        <p>The <b>combine set</b> statement will create one set from several sets, each currently owned by the same record type.  The members in the new destination set will retain their ordering except that the last member of the first source set will point to the first member of the second source set, and so on through the last source set.  Thus, the new set members appear to be a concatenation of the original set members. </p>
+        <p>The destination set type should not be ordered. </p>
+        <p>For example, Figure 3-22 shows a schema change where two sets are combined into one. </p>
+        <p class="Caption">
+            <img src="../../Resources/Images/db_revise/0200001D.jpg" class="img_1" />
+            <br />Figure 3-22.  Combine Set Schema </p>
+        <p>The following statement is required in the RDL file of a combine set statement to ensure that the existing set connections are copied and combined in the destination database: </p><pre>combine set lines from short_line, long_long; </pre>
+        <p>The result is shown in Figure 3-23. </p>
+        <p class="Caption">
+            <img src="../../Resources/Images/db_revise/0200001E.jpg" class="img_1" />
+            <br />Figure 3-23.  Combine Set Instance </p>
+        <h4 class="Heading4"><a MadCap:generatedBookmark="TOC" name="3.4.3.5_The_normalize_set_Statement"></a>3.4.3.5 The normalize set Statement </h4>
+        <p class="Heading">Syntax: </p><pre class="Grammar"><b>normalize </b>set <i>setname </i>[, <i>setname</i>...]; </pre>
+        <p class="Heading">Description: </p>
+        <p>Each <i>setname</i> refers to a destination database set type.  Each must be a new set type connecting two record types which are the components of a record project operation. </p>
+        <p>The normalize set statement eliminates redundant records that may result from a record project.  If a record type is projected in such a way that one of the component record types has identical record instances, you may wish to "combine" all of the identical record instances into one record that is in turn made the owner of multiple member records. </p>
+        <p>When a new destination set is normalized, db_REVISE will search for identical owner records that may have already been created in the destination database.  If it finds a matching owner record, the member record will be connected (through setname) to the owner record that already existed.  (See <a href="#3.3.5">Record Changes</a>, for a discussion of automatic set connection.)  The owner record, in this case, will not be created in the destination database. </p>
+        <p>The owner record type of setname may not remain the owner of an old set type which is copied from the source database.  Since a record projection is occurring, the old set connections may be retained with the member record type of setname.  This is required because the number of owner record types may be reduced during the revision, and the member records of the old set type would become orphans.  See the following example for further clarification. </p>
+        <p>For example, assume that your database contains the following record type: </p><pre>record grades {  
+    char class[30];  
+    char student[20];  
+    char grade[2]; 
+} </pre>
+        <p>Assume also that you currently have five grade records with the following contents: </p><pre>"History", "Joe K.", "B" 
+"History", "Susan C.", "A" 
+"History", "Harvey G.", 
+"C" "Math", "Joe K.", "A" 
+"Math", "Mary R.", "B" </pre>
+        <p>As you can see, there is redundant data in the class and student fields.  The following schema is preferred to eliminate the redundancy: </p><pre>record classes { 
+     char class[30]; } 
+record students { 
+     char student[20]; 
+} 
+record grades { 
+     char grade[2]; 
+} 
+set enrolled { 
+     order next; 
+     owner classes; 
+     member grades; 
+} 
+set taking { 
+     order next; 
+     owner students; 
+     member grades; 
+}                              <![CDATA[ ]]></pre>
+        <p>If no normalize set statement were used, the revision would create the results that appear in Figure 3-24.  Notice that there are still three History record instances, when the goal is to create just one. </p>
+        <p class="Caption">
+            <img src="../../Resources/Images/db_revise/0200001F.jpg" class="img_1" />
+            <br />Figure 3-24.  Projection of Record </p>
+        <p>The following normalize set statement can be used to create the results shown in Figure 3-25: </p><pre>normalize set enrolled, taking; </pre>
+        <p class="Caption">
+            <img src="../../Resources/Images/db_revise/02000020.jpg" class="img_1" />
+            <br />Figure 3-25.  Normalized Projection of Record </p>
+        <p>If the source schema also contained a set definition between the grades record type and another record type, such as test_results, the test_results set in the destination database would need to be connected to the grades record type.  The source schema would not be allowed to be connected to either the classes or students record type. </p>
+        <hr MadCap:conditions="Default.ScreenOnly" width="100%" size="0" align="center" />
+        <p MadCap:conditions="Default.ScreenOnly" style="font-size: 8pt;"><span class="MyVariablesCopyright">Copyright © 2012, Raima Inc. All rights reserved.</span>
+        </p>
+        <script type="text/javascript" src="../../SkinSupport/MadCapBodyEnd.js">
+        </script>
+        <p class="MCWebHelpFramesetLink MCWebHelpFramesetLinkBottom" style="display: none;"><a href="../../../Default_CSH.htm#util/dbrevise/Chapter3.htm" style="">Open topic with navigation</a>
+        </p>
+    </body>
+</html>

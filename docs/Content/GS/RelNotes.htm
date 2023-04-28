@@ -1,0 +1,392 @@
+<?xml version="1.0" encoding="utf-8"?>
+<!DOCTYPE html PUBLIC "-//W3C//DTD XHTML 1.0 Strict//EN" "http://www.w3.org/TR/xhtml1/DTD/xhtml1-strict.dtd">
+<html xmlns:MadCap="http://www.madcapsoftware.com/Schemas/MadCap.xsd" MadCap:tocPath="Installation Guide and Release Notes" MadCap:InPreviewMode="false" MadCap:PreloadImages="false" MadCap:RuntimeFileType="Topic" MadCap:TargetType="WebHelp" lang="en-us" xml:lang="en-us" MadCap:PathToHelpSystem="../../" MadCap:HelpSystemFileName="Default.xml" MadCap:SearchType="Stem">
+    <head>
+        <meta http-equiv="Content-Type" content="text/html; charset=utf-8" /><title>Release Notes</title>
+        <link rel="icon" type="image/png" href="http://docs.raima.com/favicon.png" />
+        <link href="../SkinSupport/MadCap.css" rel="stylesheet" />
+        <link href="../Resources/TableStyles/IssueList.css" rel="stylesheet" />
+        <link href="../Resources/Stylesheets/raima.css" rel="stylesheet" />
+        <script src="../SkinSupport/MadCapAll.js" type="text/javascript">
+        </script>
+    </head>
+    <body>
+        <p class="MCWebHelpFramesetLink MCWebHelpFramesetLinkTop" style="display: none;"><a href="../../Default_CSH.htm#GS/RelNotes.htm" style="">Open topic with navigation</a>
+        </p>
+        <div class="MCBreadcrumbsBox_0"><span class="MCBreadcrumbsPrefix">You are here: </span><span class="MCBreadcrumbsSelf">Installation Guide and Release Notes</span><span class="MCBreadcrumbsDivider"> &gt; </span><span class="MCBreadcrumbs">Release Notes</span>
+        </div>
+        <h1><a MadCap:generatedBookmark="TOC" name="Release_Notes"></a>Release Notes</h1>
+        <h2><a MadCap:generatedBookmark="TOC" name="Platform_Notes"></a>Platform Notes</h2>
+        <div class="MCMiniTocBox_0">
+            <p class="MiniTOC1_0"><a class="MiniTOC1" href="RelNotes-Windows.htm">Microsoft Windows Platform</a>
+            </p>
+            <p class="MiniTOC1_0"><a class="MiniTOC1" href="RelNotes-UNIX.htm">UNIX/Linux/OSX Platforms</a>
+            </p>
+            <p class="MiniTOC1_0"><a class="MiniTOC1" href="RelNotes-vxworks.htm">Wind River VxWorks Platform Release Notes</a>
+            </p>
+            <p class="MiniTOC1_0"><a class="MiniTOC1" href="RelNotes-neutrino.htm">QNX Neutrino Platform Release Notes</a>
+            </p>
+            <p class="MiniTOC1_0"><a class="MiniTOC1" href="RelNotes-ghs.htm">Green Hills INTEGRITY 10.0.x Platform Release Notes</a>
+            </p>
+            <p class="MiniTOC1_0"><a class="MiniTOC1" href="C99StdLib.htm">C99 Standard Integer Types</a>
+            </p>
+        </div>
+        <h2><a MadCap:generatedBookmark="TOC" name="New_Features_In_Version_11.0"></a>New Features In Version 11.0</h2>
+        <ul>
+            <li value="1">Objective-C / Cocoa API for Mac OS X and iOS</li>
+            <li value="2">Ability to access Core databases from SQL</li>
+            <li value="3">UDF Support in SQL</li>
+            <li value="4">Ability to change TFS types at runtime</li>
+            <li value="5">Ability to embed the rdmsqlserver in an application</li>
+            <li value="6">Performance improvements and bug fixes</li>
+        </ul>
+        <h2><a MadCap:generatedBookmark="TOC" name="Known_Issues"></a>Known Issues</h2>
+        <h3><a MadCap:generatedBookmark="TOC" name="TFS"></a>TFS</h3>
+        <table style="width: 100%;mc-table-style: url('../Resources/TableStyles/IssueList.css');" class="TableStyle-IssueList" cellspacing="0">
+            <col class="Column-Column1" />
+            <col class="Column-Column4" />
+            <thead>
+                <tr class="Head-Header1">
+                    <th class="HeadE-Column1-Header1">Issue #</th>
+                    <th class="HeadD-Column4-Header1">Description (and workaround if applicable)</th>
+                </tr>
+            </thead>
+            <tbody>
+                <tr class="Body-Body1">
+                    <td class="BodyE-Column1-Body1">4618</td>
+                    <td class="BodyD-Column4-Body1">A database should only be managed by one tfs<p style="font-style: normal;"><i>Workaround</i>: Ensure that a tfs is not running in the subdirectory of another tfs.</p></td>
+                </tr>
+                <tr class="Body-Body1">
+                    <td class="BodyB-Column1-Body1">4626</td>
+                    <td class="BodyA-Column4-Body1"><code>d_tfsIterateConnectedUsers</code> callback function is not reentrant.</td>
+                </tr>
+            </tbody>
+        </table>
+        <h3><a MadCap:generatedBookmark="TOC" name="Runtime"></a>Runtime</h3>
+        <table style="width: 100%;mc-table-style: url('../Resources/TableStyles/IssueList.css');" class="TableStyle-IssueList" cellspacing="0">
+            <col class="Column-Column1" />
+            <col class="Column-Column4" />
+            <thead>
+                <tr class="Head-Header1">
+                    <th class="HeadE-Column1-Header1">Issue #</th>
+                    <th class="HeadD-Column4-Header1">Description (and workaround if applicable)</th>
+                </tr>
+            </thead>
+            <tbody>
+                <tr class="Body-Body1">
+                    <td class="BodyE-Column1-Body1">2638</td>
+                    <td class="BodyD-Column4-Body1">On Unix, the directory is not synced. In rare circumstances, transaction log files may be lost after a crash.<p><i>Workaround</i>: If available, mount your file system with the option to always sync. Note that this will have an impact on performance, but will give better data safety in the event of a crash.</p></td>
+                </tr>
+                <tr class="Body-Body1">
+                    <td class="BodyE-Column1-Body1">3663</td>
+                    <td class="BodyD-Column4-Body1">The function <code>d_initialize()</code> must be used by itself in a transaction.</td>
+                </tr>
+                <tr class="Body-Body1">
+                    <td class="BodyB-Column1-Body1">3664</td>
+                    <td class="BodyA-Column4-Body1">The function <code>d_lmstat()</code> cannot determine which tfs to query.<p><i>Workaround</i>: Ensure that the task passed into d_lmstat only has one tfserver connected with it.</p></td>
+                </tr>
+            </tbody>
+        </table>
+        <h3><a MadCap:generatedBookmark="TOC" name="SQL"></a>SQL</h3>
+        <table style="width: 100%;mc-table-style: url('../Resources/TableStyles/IssueList.css');" class="TableStyle-IssueList" cellspacing="0">
+            <col class="Column-Column1" />
+            <col class="Column-Column4" />
+            <thead>
+                <tr class="Head-Header1">
+                    <th class="HeadE-Column1-Header1">Issue #</th>
+                    <th class="HeadD-Column4-Header1">Description (and workaround if applicable)</th>
+                </tr>
+            </thead>
+            <tbody>
+                <tr class="Body-Body1">
+                    <td class="BodyE-Column1-Body1">3424</td>
+                    <td class="BodyD-Column4-Body1">Right or left joins where without an index or references are not supported.</td>
+                </tr>
+                <tr class="Body-Body1">
+                    <td class="BodyE-Column1-Body1">3539</td>
+                    <td class="BodyD-Column4-Body1">A select with one left join and one inner join where with the last join before the first one is missing the null values in the result set.</td>
+                </tr>
+                <tr class="Body-Body1">
+                    <td class="BodyE-Column1-Body1">4452</td>
+                    <td class="BodyD-Column4-Body1">Equi-join support for native databases with unsigned data types with a non unique key are not supported.</td>
+                </tr>
+                <tr class="Body-Body1">
+                    <td class="BodyE-Column1-Body1">4597</td>
+                    <td class="BodyD-Column4-Body1">Executing a select statement when the database is not open returns "table not found" error instead of "database not open".</td>
+                </tr>
+                <tr class="Body-Body1">
+                    <td class="BodyB-Column1-Body1">4679</td>
+                    <td class="BodyA-Column4-Body1">The # of affected rows reported by "DELETE FROM table" may include cascade-deleted rows, which is not clear from the tool output.</td>
+                </tr>
+            </tbody>
+        </table>
+        <h3><a MadCap:generatedBookmark="TOC" name="ODBC"></a>ODBC</h3>
+        <table style="width: 100%;mc-table-style: url('../Resources/TableStyles/IssueList.css');" class="TableStyle-IssueList" cellspacing="0">
+            <col class="Column-Column1" />
+            <col class="Column-Column4" />
+            <thead>
+                <tr class="Head-Header1">
+                    <th class="HeadE-Column1-Header1">Issue #</th>
+                    <th class="HeadD-Column4-Header1">Description (and workaround if applicable)</th>
+                </tr>
+            </thead>
+            <tbody>
+                <tr class="Body-Body1">
+                    <td class="BodyB-Column1-Body1">4421</td>
+                    <td class="BodyA-Column4-Body1">When retrieving rows from a table with no indexed columns, Microsoft Access does not necessarily display the retrieved rows in the order of any of the included columns.<p><i>Workaround</i>: Click on the header of the column they wish to sort the result rows by and choose "Sort Smallest to Largest" or "Sort Largest to Smallest."</p></td>
+                </tr>
+            </tbody>
+        </table>
+        <h3><a MadCap:generatedBookmark="TOC" name="Objective_C"></a>Objective C</h3>
+        <table style="width: 100%;mc-table-style: url('../Resources/TableStyles/IssueList.css');" class="TableStyle-IssueList" cellspacing="0">
+            <col class="Column-Column1" />
+            <col class="Column-Column4" />
+            <thead>
+                <tr class="Head-Header1">
+                    <th class="HeadE-Column1-Header1">Issue #</th>
+                    <th class="HeadD-Column4-Header1">Description (and workaround if applicable)</th>
+                </tr>
+            </thead>
+            <tbody>
+                <tr class="Body-Body1">
+                    <td class="BodyB-Column1-Body1">4732</td>
+                    <td class="BodyA-Column4-Body1">Using multidimensional <code>uint8_t</code> arrays to store binary data is not supported.</td>
+                </tr>
+            </tbody>
+        </table>
+        <h3><a MadCap:generatedBookmark="TOC" name="Replication"></a>Replication</h3>
+        <table style="width: 100%;mc-table-style: url('../Resources/TableStyles/IssueList.css');" class="TableStyle-IssueList" cellspacing="0">
+            <col class="Column-Column1" />
+            <col class="Column-Column4" />
+            <thead>
+                <tr class="Head-Header1">
+                    <th class="HeadE-Column1-Header1">Issue #</th>
+                    <th class="HeadD-Column4-Header1">Description (and workaround if applicable)</th>
+                </tr>
+            </thead>
+            <tbody>
+                <tr class="Body-Body1">
+                    <td class="BodyE-Column1-Body1">4246</td>
+                    <td class="BodyD-Column4-Body1">Replication to 3rd party database systems and RDM Server does not support recursive sets.</td>
+                </tr>
+                <tr class="Body-Body1">
+                    <td class="BodyE-Column1-Body1">4249</td>
+                    <td class="BodyD-Column4-Body1">Replication to 3rd party database systems and RDM Server does not support sets where record A owns B and B owns A through a different set.</td>
+                </tr>
+                <tr class="Body-Body1">
+                    <td class="BodyE-Column1-Body1">4514</td>
+                    <td class="BodyD-Column4-Body1">Replication and mirroring will not work properly unless "@[hostname/IP Address]" is specified after the master database name when calling dbget.</td>
+                </tr>
+                <tr class="Body-Body1">
+                    <td class="BodyB-Column1-Body1">4637</td>
+                    <td class="BodyA-Column4-Body1">Circular tables are currently not supported with replication.</td>
+                </tr>
+            </tbody>
+        </table>
+        <h3><a MadCap:generatedBookmark="TOC" name="Utilities"></a>Utilities</h3>
+        <table style="width: 100%;mc-table-style: url('../Resources/TableStyles/IssueList.css');" class="TableStyle-IssueList" cellspacing="0">
+            <col class="Column-Column1" />
+            <col class="Column-Column4" />
+            <thead>
+                <tr class="Head-Header1">
+                    <th class="HeadE-Column1-Header1">Issue #</th>
+                    <th class="HeadD-Column4-Header1">Description (and workaround if applicable)</th>
+                </tr>
+            </thead>
+            <tbody>
+                <tr class="Body-Body1">
+                    <td class="BodyE-Column1-Body1">2929</td>
+                    <td class="BodyD-Column4-Body1">The utility dbimp and it's associated _main function are not re-entrant.</td>
+                </tr>
+                <tr class="Body-Body1">
+                    <td class="BodyE-Column1-Body1">3060</td>
+                    <td class="BodyD-Column4-Body1">The utility dbrev and it's associated _main function are not re-entrant.</td>
+                </tr>
+                <tr class="Body-Body1">
+                    <td class="BodyE-Column1-Body1">4683</td>
+                    <td class="BodyD-Column4-Body1">On Linux, servers will not shut down unless all active connections are disconnected first.<p><i>Workaround</i>: Ensure that all connections are disconnected from the server after sending a ctrl-c to the process.</p></td>
+                </tr>
+                <tr class="Body-Body1">
+                    <td class="BodyB-Column1-Body1">4750</td>
+                    <td class="BodyA-Column4-Body1">The utility dbrev will not correctly set the docroot.</td>
+                </tr>
+            </tbody>
+        </table>
+        <h3><a MadCap:generatedBookmark="TOC" name="Examples_Tutorials"></a>Examples/Tutorials</h3>
+        <table style="width: 100%;mc-table-style: url('../Resources/TableStyles/IssueList.css');" class="TableStyle-IssueList" cellspacing="0">
+            <col class="Column-Column1" />
+            <col class="Column-Column4" />
+            <thead>
+                <tr class="Head-Header1">
+                    <th class="HeadE-Column1-Header1">Issue #</th>
+                    <th class="HeadD-Column4-Header1">Description (and workaround if applicable)</th>
+                </tr>
+            </thead>
+            <tbody>
+                <tr class="Body-Body1">
+                    <td class="BodyE-Column1-Body1">4777</td>
+                    <td class="BodyD-Column4-Body1">The poi example does not work on VxWorks</td>
+                </tr>
+                <tr class="Body-Body1">
+                    <td class="BodyE-Column1-Body1">4779</td>
+                    <td class="BodyD-Column4-Body1">The market example does not work on VxWorks</td>
+                </tr>
+                <tr class="Body-Body1">
+                    <td class="BodyB-Column1-Body1">4783</td>
+                    <td class="BodyA-Column4-Body1">XML&#160;import DBL_MAX on X86 INTEGRITY fails.
+
+Inf instead of the actual value is being stored in the database.</td>
+                </tr>
+            </tbody>
+        </table>
+        <h2><a MadCap:generatedBookmark="TOC" name="Other_Notes_and_Changes"></a>Other Notes and Changes</h2>
+        <ul>
+            <li value="1">The '-daemon' option when starting RDM Servers on Unix has been replaced with '-start'.</li>
+            <li value="2">The TFS type can now be selected at runtime, see <a href="../TFS/Chapter2.htm">TFS Configurations</a> for details. In addition, the multiple TFS libraries have been consolidated into a single library.</li>
+            <li value="3">Significant changes have been made to the SQL Virtual Tables API. Please carefully read through the "Using Virtual Tables to Access Any Data" chapter in the SQL User's Guide for details.</li>
+        </ul>
+        <h2><a MadCap:generatedBookmark="TOC" name="Database_Compatibility_..28"></a>Database Compatibility</h2>
+        <p>Databases created with earlier versions of RDM are compatible with
+the current RDM <span class="MyVariablesProductVersion">11.0</span>. Although a new Database Dictionary (DBD)
+format has been introduced, the current RDM still recognizes the old format, 
+and can still generate DBD files in the old format.
+
+A new Database Dictionary (DBD) format was necessary to support long filenames
+and Unicode, since the names of all data and key files in a database are held 
+in the DBD file.
+The current RDM
+version supports the following DBD formats:
+</p>
+        <table style="width: 100%;margin-left: 0;margin-right: auto;mc-table-style: url('../Resources/TableStyles/IssueList.css');" class="TableStyle-IssueList" cellspacing="0">
+            <thead>
+                <tr class="Head-Header1">
+                    <th class="HeadE-Column1-Header1">Database <br />Version</th>
+                    <th class="HeadD-Column4-Header1">Description</th>
+                </tr>
+            </thead>
+            <tbody>
+                <tr class="Body-Body1">
+                    <td class="BodyE-Column1-Body1">V3.00</td>
+                    <td class="BodyD-Column4-Body1">Used by all versions of RDM from 3.0 to 4.5, with
+            ANSI data and key filenames up 48 characters long</td>
+                </tr>
+                <tr class="Body-Body1">
+                    <td class="BodyE-Column1-Body1">V3.01</td>
+                    <td class="BodyD-Column4-Body1">Previously only recognized in RDM/Vx 4.9.3, with
+            VxWorks-specific DDL extensions</td>
+                </tr>
+                <tr class="Body-Body1">
+                    <td class="BodyE-Column1-Body1">V5.00</td>
+                    <td class="BodyD-Column4-Body1">ANSI filenames up to 256 characters long, and v3.01
+            extensions</td>
+                </tr>
+                <tr class="Body-Body1">
+                    <td class="BodyE-Column1-Body1">U5.00</td>
+                    <td class="BodyD-Column4-Body1">Unicode filenames up to 256 characters long, and v3.01
+            extensions</td>
+                </tr>
+                <tr MadCap:conditions="" class="Body-Body1">
+                    <td class="BodyE-Column1-Body1">V6.00</td>
+                    <td class="BodyD-Column4-Body1">V5.00 database extended with varchar support</td>
+                </tr>
+                <tr MadCap:conditions="" class="Body-Body1">
+                    <td class="BodyB-Column1-Body1">U6.00</td>
+                    <td class="BodyA-Column4-Body1">U5.00 database extended with varchar support</td>
+                </tr>
+            </tbody>
+        </table>
+        <p>These DBD versions are supported by the RDM versions shown in the
+table below:
+
+              </p>
+        <table style="width: 100%;margin-left: 0;margin-right: auto;" class="errcode_table">
+            <col />
+            <col />
+            <col />
+            <col />
+            <col />
+            <col />
+            <col />
+            <thead>
+                <tr>
+                    <th>Database <br />Version</th>
+                    <th>RDM&#160;3.0<br />to RDM&#160;4.5.3</th>
+                    <th>RDM<br />4.9.3</th>
+                    <th>RDM 5.0<br />to <span class="MyVariablesProductShortNameOld">RDMe</span>&#160;7.x<br />ANSI</th>
+                    <th>RDM&#160;5.0<br />to <span class="MyVariablesProductShortNameOld">RDMe</span> 7.x<br />Unicode</th>
+                    <th><span class="MyVariablesProductShortNameOld">RDMe</span> 8.x <br />ANSI</th>
+                    <th><span class="MyVariablesProductShortNameOld">RDMe</span> 8.x <br />Unicode</th>
+                </tr>
+            </thead>
+            <tbody>
+                <tr>
+                    <td>V3.00</td>
+                    <td>yes</td>
+                    <td>yes</td>
+                    <td>yes</td>
+                    <td>yes</td>
+                    <td>yes</td>
+                    <td>yes</td>
+                </tr>
+                <tr>
+                    <td>V3.01</td>
+                    <td>no</td>
+                    <td>yes</td>
+                    <td>yes</td>
+                    <td>yes</td>
+                    <td>yes</td>
+                    <td>yes</td>
+                </tr>
+                <tr>
+                    <td>V5.00</td>
+                    <td>no</td>
+                    <td>no</td>
+                    <td>yes</td>
+                    <td>yes</td>
+                    <td>yes</td>
+                    <td>yes</td>
+                </tr>
+                <tr>
+                    <td>U5.00</td>
+                    <td>no</td>
+                    <td>no</td>
+                    <td>no</td>
+                    <td>yes</td>
+                    <td>yes</td>
+                    <td>yes</td>
+                </tr>
+                <tr MadCap:conditions="">
+                    <td>V6.00</td>
+                    <td>no</td>
+                    <td>no</td>
+                    <td>no</td>
+                    <td>no</td>
+                    <td>yes</td>
+                    <td>yes</td>
+                </tr>
+                <tr MadCap:conditions="">
+                    <td>U6.00</td>
+                    <td>no</td>
+                    <td>no</td>
+                    <td>no</td>
+                    <td>no</td>
+                    <td>no</td>
+                    <td>yes</td>
+                </tr>
+            </tbody>
+        </table>
+        <p>If you do not use any of the more recent features, the <a href="../util/ddlp.htm">ddlp</a> program
+supplied in the current RDM will generate DBD files in the old V3.00 format.
+
+</p>
+        <p class="Notes">If you have written any programs that read the RDM database
+dictionary (DBD file) directly, be sure you are using the correct <code>FILE_ENTRY</code> structure in the <code>dbtype.h</code> file to interpret the DBD file.</p>
+        <hr MadCap:conditions="Default.ScreenOnly" width="100%" size="0" align="center" />
+        <p MadCap:conditions="Default.ScreenOnly" style="font-size: 8pt;"><span class="MyVariablesCopyright">Copyright © 2012, Raima Inc. All rights reserved.</span>
+        </p>
+        <script type="text/javascript" src="../SkinSupport/MadCapBodyEnd.js">
+        </script>
+        <p class="MCWebHelpFramesetLink MCWebHelpFramesetLinkBottom" style="display: none;"><a href="../../Default_CSH.htm#GS/RelNotes.htm" style="">Open topic with navigation</a>
+        </p>
+    </body>
+</html>

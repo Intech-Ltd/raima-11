@@ -1,0 +1,233 @@
+<?xml version="1.0" encoding="utf-8"?>
+<!DOCTYPE html PUBLIC "-//W3C//DTD XHTML 1.0 Strict//EN" "http://www.w3.org/TR/xhtml1/DTD/xhtml1-strict.dtd">
+<html xmlns:MadCap="http://www.madcapsoftware.com/Schemas/MadCap.xsd" MadCap:tocPath="Examples and Tutorials" MadCap:InPreviewMode="false" MadCap:PreloadImages="false" MadCap:RuntimeFileType="Topic" MadCap:TargetType="WebHelp" lang="en-us" xml:lang="en-us" class="" MadCap:PathToHelpSystem="../../../" MadCap:HelpSystemFileName="Default.xml" MadCap:SearchType="Stem">
+    <head>
+        <meta http-equiv="Content-Type" content="text/html; charset=utf-8" /><title>Bill of Materials Benchmark (rbom)</title>
+        <link rel="icon" type="image/png" href="http://docs.raima.com/favicon.png" />
+        <link href="../../SkinSupport/MadCap.css" rel="stylesheet" />
+        <link href="../../Resources/TableStyles/ArgsTwoCol.css" rel="stylesheet" />
+        <link href="../../Resources/Stylesheets/raima.css" rel="stylesheet" />
+        <script src="../../SkinSupport/MadCapAll.js" type="text/javascript">
+        </script>
+    </head>
+    <body>
+        <p class="MCWebHelpFramesetLink MCWebHelpFramesetLinkTop" style="display: none;"><a href="../../../Default_CSH.htm#TUTORIAL/Examples/RBOMexample.htm" style="">Open topic with navigation</a>
+        </p>
+        <div class="MCBreadcrumbsBox_0"><span class="MCBreadcrumbsPrefix">You are here: </span><a class="MCBreadcrumbsLink" href="../Examples.htm">Examples and Tutorials</a><span class="MCBreadcrumbsDivider"> &gt; </span><span class="MCBreadcrumbs">Bill of Materials Benchmark (rbom)</span>
+        </div>
+        <h2 MadCap:conditions="" class="newpage">Bill of Materials Benchmark (rbom)</h2>
+        <p>The bill-of-materials example class demonstrates the differences between 
+relational and network model databases as well as API&#160;differences in implementing a solution to the same problem. </p>
+        <p>The RBOM program takes advantage of 
+<span class="MyVariablesProductShortName">RDM</span>'s relational model capabilities. The RBOM&#160;program use the Core (d_)&#160;API.</p>
+        <h3>Execution</h3><pre xml:space="preserve">rbomExample [-h] [-l #] [-m #]</pre>
+        <p class="Heading">Options</p>
+        <table style="width: 100%;mc-table-style: url('../../Resources/TableStyles/ArgsTwoCol.css');margin-left: 0;margin-right: auto;" class="TableStyle-ArgsTwoCol" cellspacing="0">
+            <col class="Column-Column1" />
+            <col class="Column-Column2" />
+            <tbody>
+                <tr class="Body-Body1">
+                    <td class="BodyE-Column1-Body1">-h</td>
+                    <td class="BodyD-Column2-Body1">Display usage information</td>
+                </tr>
+                <tr class="Body-Body1">
+                    <td class="BodyE-Column1-Body1">-l #</td>
+                    <td class="BodyD-Column2-Body1">Set number of levels of parts matrix to #. If not specified, the program will prompt for the information.</td>
+                </tr>
+                <tr class="Body-Body1">
+                    <td class="BodyB-Column1-Body1">-m #</td>
+                    <td class="BodyA-Column2-Body1">Set number of members (components)&#160;per level for the parts matrix to #. If not specified, the program will prompt for the information.</td>
+                </tr>
+            </tbody>
+        </table>
+        <p class="Heading">Example</p><pre xml:space="preserve">C:\Raima\RDM\10.1\GettingStarted\examples\rbom&gt;<b>rbomExample -l 5 -m 6</b>
+
+Relational Model BOM Benchmark Example
+<span class="MyVariablesProductName">Raima Database Manager</span>  <![CDATA[ ]]><span class="MyVariablesReleaseVersion">11.0.0</span> Build <span class="MyVariablesBuild">412</span>  <![CDATA[ ]]><span class="MyVariablesVersionDate">[2-15-2012]</span>  <![CDATA[ ]]><span class="MyVariablesURLHome">http://www.raima.com</span><br />Copyright (c) <span class="MyVariablesCopyrightYear">2012</span>  <![CDATA[ ]]><span class="MyVariablesCompanyName">Raima Inc.</span>, All rights reserved.
+
+Create BOM with 5 levels and 6 members per level
+Document Root: C:\Raima\RDM\10.1\GettingStarted\examples\rbom\
+
+   building bill file
+        millisecs: 580
+   rolling up cost
+      total rolled up cost =    7776.00
+        millisecs: 120
+Press RETURN to exit.</pre>
+        <h3>Summary</h3>
+        <p>The <span class="MyVariablesProductShortName">RDM</span> API offers a rich set of choices to application developers. It supports all three major data models: hierarchical, network, and relational. The choice of data model can be mixed to satisfy the requirements of virtually any application.
+</p>
+        <p>The bill-of-materials application was developed to compare the relative performance between pointer-based network and relational data model implementations in a common business application. The graphs in this report depict the tradeoffs between performance and database size.
+
+</p>
+        <p>The database definitions (schema) for the BOM application using different data models are provided in appendixes to this report. C source code for the applications is provided.
+</p>
+        <h4>Problem</h4>
+        <p>Many manufacturing firms build products assembled from components and subassemblies. These products range from something as simple as a ball-point pen with half a dozen parts to a Boeing 747 aircraft with over four million parts. To be competitive, modern manufacturers must rely on computer systems to accurately control parts inventories. These systems supply the production management staff with accurate, finished-product cost information and can regulate component purchases and manufacturing schedules to guarantee a predictable flow of finished product with minimum parts inventory. Material Requirements Planning (MRP II) is the ultimate realization of a production control system. The MRP II system automatically issues purchase orders and production orders in response to customer orders and sales forecasts.
+
+</p>
+        <p>The <span class="MyVariablesProductShortName">RDM</span> benchmark builds a bill-of-materials database on disk, simulating an actual manufacturer's specification of the multi-level parts interrelationship for a product such as a power lawnmower. The benchmark then executes a Cost Roll-up in order to calculate the cost of the finished lawnmower, from the current costs of all the component parts.
+</p>
+        <h4>Bill of Materials Structure</h4>
+        <p><a href="#Figure1">Figure 1</a> shows a diagram of the component structure for a power lawnmower. Note that there are many levels corresponding to assemblies and subassemblies, with discrete components at the bottom. Sometimes there are multiple instances of a component item (wheels, for example) connected to a parent item. Also, the same component (a screw, for example) could be used in several subassemblies, and there could be several finished-good items (different lawnmower models) using common subassemblies.
+</p>
+        <p class="Caption"><a name="Figure1"></a>
+            <img src="../../Resources/Images/bom_1.gif" />
+            <br />Figure 1: Lawnmower Component Structure (Partial illustration)</p>
+        <h4>Different Approaches: Relational and Pointer-based Network Database Models</h4>
+        <p>How can we model the bill of materials with a database structure? Consider first the relational approach. We need two tables, one for item records and the other for the connection records we call bill records. One item record exists for each unique part, between a parent item and component item. We need an item-ID index for the item table and a parent-ID/sequence-number index for the bill table. Given the item ID, we can find the item record and all the bill records that have the specified item as a parent. For each bill record we can get the component ID, and so on. <a href="#Figure2">Figure 2</a> shows these tables.
+</p>
+        <p class="Caption"><a name="Figure2"></a>
+            <img src="../../Resources/Images/bom_2.gif" />
+            <br />Figure 2. Tables for the relational model database</p>
+        <p>The pointer-based network model approach is illustrated by the logical schema diagram in <a href="#Figure3">Figure 3</a>. The item and bill records are connected by two sets, called bill-of-materials (BOM) and where-used. <a href="#Figure4">Figure 4</a> shows an instance diagram for the lawnmower, where each rectangle represents an instance of a physical database record. Note that a parent item owns several bill records (BOM set), each of which is owned by one component item (where-used set). The components can be parents also, each owning more bills, etc. Thus you can see that the simple structure from <a href="#Figure3">Figure 3</a> can represent a very complex problem.
+</p>
+        <p class="Caption"><a name="Figure3"></a>
+            <img src="../../Resources/Images/bom_3.gif" />
+            <br />Figure 3: Schema Diagram for Network Database Model
+</p>
+        <p class="Caption"><a name="Figure4"></a>
+            <img src="../../Resources/Images/bom_4.gif" />
+            <br />Figure 4: Instance Diagram for Network Database Model (Partial Illustration)</p>
+        <h5>Benchmark Assumptions</h5>
+        <p>The data dictionaries illustrated in <a href="#Appendix">Appendix 1</a> and <a href="#Appendix2">Appendix 2</a> show the similarities and differences between the relational and network bill-of-material data structures using <span class="MyVariablesProductShortName">RDM</span>'s database definition language. The essential fields are <code>id_code</code>, <code>cost</code> and <code>quantity</code>. Description and cost are there to pad the records and make the example slightly more realistic. <code>Sequence</code> and <code>component_count</code> are required by the relational benchmark only, as are the parent and component IDs in the <code>bill</code> record.
+
+</p>
+        <p>The number of levels, the number of components per level, and the part ID of the finished product are specified on the command line when the benchmark program is run. Item records are generated with random 15-character alpha IDs. For time comparison purposes, the number of components was held constant at 5, and the number of levels was held constant at 6. A build involves a roll-up of approximately 9330 records.
+
+</p>
+        <p>In this benchmark, we assume that cost is associated only with the lowest level component records and that a particular component is used only once in the bill of materials, although both data structures will support a component's multiple use. The where-used index is included in the relational example to replicate the network example's ability to produce a listing of parents owning a specified component.
+</p>
+        <h4>The Relational Benchmark Program</h4>
+        <p>The two principal functions in the relational benchmark C program are <b>rbuild_bill()</b> and <b>rget_cost()</b>, each of which is recursive (self-calling) to allow easy multi-level processing. The <b>rbuild_build()</b> function is straightforward. With a single call, <b>rbuild_bill()</b> builds one level of the bill (component item and bill records) and calls itself to build the lower levels. </p>
+        <p class="Notes">Note that each item record contains a count of its components and each bill record contains a sequence number.
+
+</p>
+        <p>The <b>rget_cost()</b> function returns the rolled-up cost for those parts of the bill below the designated item. <b>rget_cost()</b> reads the component count from the item record and cycles through the "attached" bill records, finding the component items. Many index keyfind and keynext operations are performed. 
+
+</p>
+        <p><b>Component_count</b> is an important bill record field because the program uses it to detect the bottom of the tree, saving the time otherwise required to do an unsuccessful keyfind for non-existent lower levels.
+</p>
+        <h4>The Network Benchmark Program</h4>
+        <p>In the network model C program for the benchmark, the two principal (recursive) functions are <b>build_bill()</b> and <b>get_cost()</b>. A single call to <b>build_bill()</b> builds one level of the bill (component item and bill records) and calls itself to build the lower levels. Note that the bill record does not need parent and component item IDs because it is linked directly to those item records through the sets that determine the component sequence. The parent item record does not need a component count field because that information is built into the set structure also.
+
+As with the relational benchmark, the <b>get_cost()</b> function reads the component count from the item record and cycles through the "attached" bill records, to find the component items. It returns the rolled-up cost.
+</p>
+        <h4><span class="MyVariablesProductShortName">RDM</span> Benchmark Results</h4>
+        <p>Our engineering department compiled and ran the programs described above to compare the performance of <span class="MyVariablesProductShortName">RDM</span> when different features were used. We stress that these results are valuable as a relative comparison of <span class="MyVariablesProductShortName">RDM</span> features. Your absolute results will vary depending on computing platform, processor speed vs. disk speed, etc. However, the relative performance gain produced by using one <span class="MyVariablesProductShortName">RDM</span> data model instead of another - network model vs. relational model - should carry over into all computing environments.
+
+</p>
+        <p>Three important sets of numbers result from the benchmarks:
+
+       </p>
+        <ol>
+            <li value="1">Disk space consumed by a database
+       </li>
+            <li value="2">Time to build the database (Creation time)
+       </li>
+            <li value="3">Time to roll up the cost (Retrieval time)
+
+</li>
+        </ol>
+        <h5>Database Size</h5>
+        <p>The size of a relational database is greater due to the requirement to store redundant foreign keys to implement the relationships. (These relationships are maintained through pointers in the network model implementation.) In addition, the relational implementation adds a sequence field to one record to maintain the equivalent of network model set FIFO (first-in-first-out) ordering, and a field to store the component count for run-time optimization (to know the bottom of the bill-of-materials hierarchy has been reached and that another key lookup is unnecessary). In the network model, member counts are maintained automatically by the database. <a href="#Table1">Table 1</a> shows the total database sizes, which are the sums of the file sizes in each database after 44 runs. The Bytes per Item includes both an <b>item</b> and <b>bill</b> record, plus the storage overhead. Storage overhead for the network model includes set linkage, while overhead for the relational model includes indexing.
+</p><pre><a name="Table1"></a>Database Model 	Total Database Size 	Bytes per Item
+Network Model&#160;&#160;&#160;&#160;&#160;&#160;&#160;&#160;&#160;&#160;&#160;&#160;86,071,296 &#160;&#160;&#160;&#160;&#160;&#160;&#160;&#160;&#160;&#160;210
+Relational Model&#160;&#160;&#160;&#160;&#160;&#160;&#160;&#160;120,422,400 &#160;&#160;&#160;&#160;&#160;&#160;&#160;&#160;&#160;&#160;293
+
+</pre>
+        <p>Table 1: Database Size Comparison
+</p>
+        <h5>Creation Time (Database Population)</h5>
+        <p><a href="#Figure5">Figure 5</a> shows the performance of <span class="MyVariablesProductShortName">RDM</span> in building the database (writing to the database) using the two implementations. The time required to write to the database (represented by clock ticks, as returned by the <b>times()</b> function) is graphed against the total number of finished items in the database, with each item consisting of about 18,660 records each (9,330 item records, 9,330 bill records). For example, with the relational model, it would take approximately 366 ticks to add the ninth lawnmower to the database. The network model shows 258 ticks, a 42 percent improvement, and this advantage is more pronounced as the size of the database increases.
+
+</p>
+        <p>The network model is faster for database population because the time required to establish the relationships between the <b>item</b> and <b>bill</b> records is constant regardless of the size of the database. This is in contrast to the relational model where the time to update the B-tree indexes increases in some proportion to the number of values stored in the B-tree.
+</p>
+        <p class="Caption"><a name="Figure5"></a>
+            <img src="../../Resources/Images/bom_5.gif" />
+            <br />Figure 5: Database Population Performance</p>
+        <p>It becomes apparent from <a href="#Figure5">Figure 5</a> that performance slows in relational model database population due to the overhead of maintaining B-tree indexes. This becomes even more apparent as the size of the database grows and the cost of updating the B-tree becomes proportionately greater.
+</p>
+        <h5>Database Retrieval (Querying)</h5>
+        <p><a href="#Figure6">Figure 6</a> shows <span class="MyVariablesProductShortName">RDM</span>'s performance in performing a cost roll-up on the bill-of-materials database, that is, determining the cost of the nth item stored in the database, by summing its component parts' costs. Again, performance is most impressive using the network model.
+</p>
+        <p class="Caption"><a name="Figure6"></a>
+            <img src="../../Resources/Images/bom_6.gif" />
+            <br />Figure 6: Database Navigation Performance</p>
+        <h4>Analysis</h4>
+        <p>Why is the network model program so much faster? It's faster because it avoids index processing. In a six-level benchmark, for example, about 18,000 keyfind and 7,800 keynext operations are required to roll up the cost. The network model program requires only one keyfind. The network-model set connections afford direct connections between items and bills. The relational benchmark time-per-record increases with file size because the depth of the index nodes increases, while the network performance plot remains flat.
+</p>
+        <h4>Conclusions</h4>
+        <p><span class="MyVariablesProductShortName">RDM</span> performance becomes truly outstanding when a developer implements certain unique features. As the graphs above clearly indicate, disk storage space can be saved by designing a database under the network model (a 40 percent reduction in storage requirements over the relational database in the example above).
+</p>
+        <p>Programming simplicity can be observed in the sample code. Navigational position information is more naturally represented by set currency. The relational code must reestablish index positions when moving between levels in the hierarchy. Although this benchmark code did not take advantage of the "where-used" relationship (allowing the same sub-tree of parts to be placed under more than one item), the DDL illustrates how naturally the relationship can be represented.
+</p>
+        <h4><a name="Appendix"></a>Appendix A1, network model</h4><pre>/* BOM.DDL bill-of-materials network model benchmark schema */
+
+database bom { 
+    data file "bom.d01" contains item;
+    data file "bom.d02" contains bill;
+    key file  "bom.k01" contains id_code;
+    
+    record item {
+        unique key char id_code[16];
+        char description[58];
+        double cost;
+    }
+    record bill {
+        double quantity;
+        long level;
+    }
+    
+    set bom {
+        order last;
+        owner item;
+        member bill;
+    }
+    set where_used {
+        order last;
+        owner item;
+        member bill;
+    }   
+}</pre>
+        <h4><a name="Appendix2"></a>Appendix B1, relational model</h4><pre>/* RBOM.DDL bill-of-materials relational model benchmark schema */
+
+database rbom {
+    data file "rbom.d01" contains ritem;
+    data file "rbom.d02" contains rbill;
+    key file  "rbom.k01" contains rid_code;
+    key file  "rbom.k02" contains rbom, rwhere_used;
+    
+    record ritem { 
+        unique key char rid_code[16];
+        char rdescription[58];
+        double rcost;
+        long rcomponent_count;
+    }   
+    record rbill {
+        char rparent[16];
+        char rcomponent[16];
+        long rsequence;
+        double rquantity;
+        long rlevel;
+        
+        compound key rbom {
+            rparent;
+            rsequence;
+        }
+        compound key rwhere_used {
+            rcomponent;
+            rsequence;
+        }
+    }
+}</pre>
+        <hr MadCap:conditions="Default.ScreenOnly" width="100%" size="0" align="center" />
+        <p MadCap:conditions="Default.ScreenOnly" style="font-size: 8pt;"><span class="MyVariablesCopyright">Copyright © 2012, Raima Inc. All rights reserved.</span>
+        </p>
+        <script type="text/javascript" src="../../SkinSupport/MadCapBodyEnd.js">
+        </script>
+        <p class="MCWebHelpFramesetLink MCWebHelpFramesetLinkBottom" style="display: none;"><a href="../../../Default_CSH.htm#TUTORIAL/Examples/RBOMexample.htm" style="">Open topic with navigation</a>
+        </p>
+    </body>
+</html>

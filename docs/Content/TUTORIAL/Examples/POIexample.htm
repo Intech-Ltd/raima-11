@@ -1,0 +1,253 @@
+<?xml version="1.0" encoding="utf-8"?>
+<!DOCTYPE html PUBLIC "-//W3C//DTD XHTML 1.0 Strict//EN" "http://www.w3.org/TR/xhtml1/DTD/xhtml1-strict.dtd">
+<html xmlns:MadCap="http://www.madcapsoftware.com/Schemas/MadCap.xsd" MadCap:tocPath="Examples and Tutorials" MadCap:InPreviewMode="false" MadCap:PreloadImages="false" MadCap:RuntimeFileType="Topic" MadCap:TargetType="WebHelp" lang="en-us" xml:lang="en-us" MadCap:PathToHelpSystem="../../../" MadCap:HelpSystemFileName="Default.xml" MadCap:SearchType="Stem">
+    <head>
+        <meta http-equiv="Content-Type" content="text/html; charset=utf-8" /><title>Points of Interest Example (POI)</title>
+        <link rel="icon" type="image/png" href="http://docs.raima.com/favicon.png" />
+        <link href="../../SkinSupport/MadCap.css" rel="stylesheet" />
+        <link href="../../Resources/Stylesheets/raima.css" rel="stylesheet" />
+        <script src="../../SkinSupport/MadCapAll.js" type="text/javascript">
+        </script>
+    </head>
+    <body>
+        <p class="MCWebHelpFramesetLink MCWebHelpFramesetLinkTop" style="display: none;"><a href="../../../Default_CSH.htm#TUTORIAL/Examples/POIexample.htm" style="">Open topic with navigation</a>
+        </p>
+        <div class="MCBreadcrumbsBox_0"><span class="MCBreadcrumbsPrefix">You are here: </span><a class="MCBreadcrumbsLink" href="../Examples.htm">Examples and Tutorials</a><span class="MCBreadcrumbsDivider"> &gt; </span><span class="MCBreadcrumbs">Points of Interest Example (POI)</span>
+        </div>
+        <h2 MadCap:conditions="" class="newpage">Points of Interest Example (POI)</h2>
+        <p>This example shows how one can efficiently manage two dimensional data in <span class="MyVariablesProductShortName">RDM</span> which implements a 1 dimensional indexing system. The data we'll be looking at is Points Of Interest (POI) that's commonly found in handheld and in-car navigation systems. Because of the availability of U.S. post office data, the points of interest used in this example are all of the U.S. zip codes. This example will show how you efficiently can do region queries to extract information like a nearest neighbor query.</p>
+        <h3>Execution</h3><pre xml:space="preserve">poiExample</pre>
+        <p>
+            <img src="../../Resources/Images/poi-01.jpg" />
+        </p>
+        <p class="Notes">The initialize database function must be selected the first time the program has been run to create and populate the database.</p>
+        <p>The print cities function will ask for a region extent, and do a dump of all cities within the region. Note that the minimum latitude in the database is 17.7, and the maximum is 71.3. The minimum longitude is -176.7 and the maximum is -64.7. Any queries outside this rectangle will have no results. The efficiency aspect of the query routine is described below in the problem section.</p>
+        <p>
+            <img src="../../Resources/Images/poi-02.jpg" />
+        </p>
+        <p>The nearest city query will do the same range query as in the map rectangle query, but now it will filter and calculate the POI nearest to a given position.</p>
+        <p>
+            <img src="../../Resources/Images/poi-03.jpg" />
+        </p>
+        <p>Here's something you can answer. What town is nearest the very center of our quadrant of the earth (45 degrees North, 90 degrees West, or (45,-90))? Use option 4 in <span style="font-family: monospace;">poi</span> to find out.</p>
+        <p>To compute a distance between two zip codes, select 5 and enter two zip codes:</p>
+        <p>
+            <img src="../../Resources/Images/poi-16.JPG" />
+        </p>
+        <p>Finally, if you know a city but not it's location, use option 6 to get suggestions:</p>
+        <p>
+            <img src="../../Resources/Images/poi-17.JPG" />
+        </p>
+        <h3>Summary</h3>
+        <h4>Problem</h4>
+        <p>The problem with today's commercial of-the-shelf (COTS) databases and two dimensional data is that the indexing systems are built on a one dimensional algorithm such as B-Trees. Think of a point of interest record in a database, it will have a longitude value, a latitude value, a name, and other fields attributes associated with it. The types of queries one would like to ask the database engine on such data sets are regional based, like give me all points of interest in Seattle. For a database engine to be efficient on such queries one would think that adding a data index on the pair of fields, latitude and longitude, would do the trick, but this is not true.
+
+</p>
+        <p>Look at the figure below and consider this as the map of points. The data type used in both dimensions is 4 bits. In real world this would be a 32 bit data type such as in our example, but simplified here for illustration.
+</p>
+        <p>
+            <img src="../../Resources/Images/poi-04.jpg" />
+        </p>
+        <p>If you add a index for fast lookup on the pair of values (Latitude, Longitude) the one dimensional B-Tree index will group first on the Longitude value then sub-sequentially on Latitude value, in other words the Longitude value is more significant than the Latitude value. The drawback with this is that for any query that is region based like in the next figure where we want all the yellow points. This will result in a B-Tree index scan from the value (5,5) to the value (8,9).</p>
+        <p>
+            <img src="../../Resources/Images/poi-05.jpg" />
+        </p>
+        <p>The problem with this query is all the false results shown in gray. An alternative would be to split the single B-Tree query into multiple queries and glue the result together, in this picture we'd have to run a B-Tree scan from (5,5) to (8,5), than one from (5,6) to 8,6) and so one which is extremely inefficient. </p>
+        <p>If you translate the (Latitude, Longitude) values into what's seen by the index system, an 8 bit value combined by the two 4 bit types, the above figure will be  look like this:</p>
+        <p>
+            <img src="../../Resources/Images/poi-06.jpg" />
+        </p>
+        <p>So in essence there is very little locality in the index and without replacing the B-Tree index or finding another way of representing the data, a one dimensional index can only be efficient in one of the two dimensions needed by the map query. </p>
+        <h4>The Solution</h4>
+        <p>If you take a closer look at the previous figure you'll see that the reason for the lack of locality is due to the fact that the bits of the Longitude is always evaluated before the bits of the Latitude since Longitude is the most significant defined index segment. </p>
+        <p>If you take the same picture and interleave the Longitude and Latitude bits you'll create a piece of information that mixes the most significant bits of the two dimensions. By doing this you'll find a solution to your problem and this is exactly what the POI example is doing.
+
+</p>
+        <p>Throughout this example and description the interleaved value of the Longitude and Latitude values will be called a Z-Value and is calculated like this:
+</p><pre>Latitude  = y<span style="vertical-align: sub;font-size: 6pt;">4</span> y<span style="vertical-align: sub;font-size: 6pt;">3</span> y<span style="vertical-align: sub;font-size: 6pt;">2</span> y<span style="vertical-align: sub;font-size: 6pt;">1</span>	
+Longitude = x<span style="vertical-align: sub;font-size: 6pt;">4</span> x<span style="vertical-align: sub;font-size: 6pt;">3</span> x<span style="vertical-align: sub;font-size: 6pt;">2</span> x<span style="vertical-align: sub;font-size: 6pt;">1</span>	
+Z-Value   = y<span style="vertical-align: sub;font-size: 6pt;">4</span> x<span style="vertical-align: sub;font-size: 6pt;">4</span> y<span style="vertical-align: sub;font-size: 6pt;">3</span> x<span style="vertical-align: sub;font-size: 6pt;">3</span> y<span style="vertical-align: sub;font-size: 6pt;">2</span> x<span style="vertical-align: sub;font-size: 6pt;">2</span> y<span style="vertical-align: sub;font-size: 6pt;">1</span> x<span style="vertical-align: sub;font-size: 6pt;">1</span></pre>
+        <p>If you index the Z-Value instead of the compound value of Longitude, Latitude, (x<span style="vertical-align: sub;font-size: 6pt;">4</span> x<span style="vertical-align: sub;font-size: 6pt;">3</span> x<span style="vertical-align: sub;font-size: 6pt;">2</span> x<span style="vertical-align: sub;font-size: 6pt;">1</span> y<span style="vertical-align: sub;font-size: 6pt;">4</span> y<span style="vertical-align: sub;font-size: 6pt;">3</span> y<span style="vertical-align: sub;font-size: 6pt;">2</span> y<span style="vertical-align: sub;font-size: 6pt;">1</span>) illustrated in the above picture your map will look like this instead.</p>
+        <p>
+            <img src="../../Resources/Images/poi-07.jpg" />
+        </p>
+        <p>For convenience the above figure contains both the decimal and binary representation of the Z-Value for all the points in our map. If you compare this picture with the picture where we where indexing the Longitude, Latitude the main difference is that values of our indexes are nicely ordered in squares rather than long lines. The fact that our query pattern is rectangular, you'll see that organizing the indexed data in squares makes perfect sense. To digress a bit the reason for naming our interleaved value a Z-Value, is that this algorithm is commonly known as a Z-Curve. Think of putting a pen at position (0,0)  in our map and draw a contiguous line through all our points in increasing order. The pattern will look something like this:</p>
+        <p>
+            <img src="../../Resources/Images/poi-08.jpg" />
+        </p>
+        <p>At this point you may ask yourself, what makes this more efficient than the one dimensional index scan? After I do the same rectangle scan as illustrated in one of the first figures I'll still be visiting unnecessary points in my map.</p>
+        <p>The following figure shows the point that will be reported if scanning the index from (5,5) to (9,8) with the Z-Values indexed.</p>
+        <p>
+            <img src="../../Resources/Images/poi-09.jpg" />
+        </p>
+        <p>It may even seem worse, but the fact of the matter is since our Z-Values end up being organized in squares we can optimize out most of the falsely reported points by dividing the query rectangle into a number of smaller squares that match our Z patterns. The rest of this explanation will be around this query and division algorithm in which is the basis for the POI application.</p>
+        <p>All the functionality that handles the region query is found in the <i>rectangle.c</i> source file, and there are four functions to pay attention to:
+</p>
+        <ul>
+            <li value="1"><a href="#rectangl">rectangle_query</a>
+            </li>
+            <li value="2"><a href="#some_poi">some_points_in_rectangle</a>
+            </li>
+            <li value="3"><a href="#points_i">points_in_rectangle</a>
+            </li>
+            <li value="4"><a href="#zdivide">zdivide</a>
+            </li>
+        </ul>
+        <p>These four functions play together to run a efficient set of index lookup to answer the region query so I'll explain the functionality in brief below.
+</p>
+        <h5><a name="rectangl"></a>rectangle_query</h5>
+        <p>This is the entry point for the query. It sets up internal variables and calls the <b>some_points_in_rectangle</b> function. If the call to <b>some_points_in_rectangle</b> does not report all points back to the application, in other words we're starting to report gray points in the figure above, it will continue to call the <b>points_in_rectangle</b> function.
+
+</p>
+        <h5><a name="some_poi"></a>some_points_in_rectangle</h5>
+        <p>This function receives the current rectangle to scan, initially this will be the full set of yellow points in the figure above but may also be a smaller rectangle if the <b>points_in_rectangle</b> function needs to divide the area. It also received the last reported point to the application which it need in it's calculation. You'll also see that this function accepts to report up to three&#160;(3)&#160;points outside it's rectangle before it gives up. This is an optimization to avoid to many rectangle divisions.
+
+</p>
+        <h5><a name="points_i"></a>points_in_rectangle</h5>
+        <p>This functions is responsible for splitting a region in two (low rectangle (lit)  and high rectangle (big), with help of the <b>zdivide</b> function, and either recursively call itself or continue with a new index scan by calling <b>some_points_in_rectangle</b>. If the last reported point is lower than the maximum value in the low rectangle this function recursively calls itself with the low rectangle as input since we may need to divide again, if not a regular scan of the high rectangle takes place. </p>
+        <h5><a name="zdivide"></a>zdivide</h5>
+        <p>Takes a rectangle that we know is not contiguous and calculates the max value of the low rectangle that will be called <b>LitMax</b>, and the min value of the high rectangle that will be called <b>BigMin</b>. We'll explain how this function calculates it's <b>LitMax</b> and <b>BigMin</b> in this section, and run through how the query in our figures above will be executed by this set of functions in the next section. To help the <b>zdivide</b> we've added the following figure:
+</p>
+        <p>
+            <img src="../../Resources/Images/poi-10.jpg" />
+        </p>
+        <p>In fact this will be the first division in our next section.</p>
+        <p>The two rectangles represent the same thing, but one holds the values in the index, the other the logical latitude,longitude values. </p>
+        <p>By passing in the minimum and maximum values for the rectangle (51 and 193) to this <b>zdivide</b> function we want it to return us the <b>LitMax</b> value of 107 and <b>BigMax</b> of 145 basically dividing the rectangle by the red line. So here is what the function does:</p>
+        <h6>Step 1</h6>
+        <p style="font-weight: normal;">Find the most significant bit of the provided min and max values that differ.</p>
+        <p>In our picture that translates to 00110011 and 11000001, where bit 8 counting from right is the first bit that differs.</p>
+        <h6>Step 2</h6>
+        <p style="font-weight: normal;">If the first bit that differs belongs to the Longitude we know our division is vertical, if it belongs to the latitude value its horizontal.</p>
+        <p>Since our interleaving is done y<span style="vertical-align: sub;font-size: 6pt;">4</span> x<span style="vertical-align: sub;font-size: 6pt;">4</span> y<span style="vertical-align: sub;font-size: 6pt;">3</span> x<span style="vertical-align: sub;font-size: 6pt;">3</span> … and in fact y<span style="vertical-align: sub;font-size: 6pt;">4</span> is the most significant bit that sets the min and max apart we know this is a horizontal division, hence the horizontal red line.
+
+</p>
+        <h6>Step 3</h6>
+        <p style="font-weight: normal;">If it's a horizontal division we know the following:
+
+</p><pre>LitMax.Longitude = Max.Longitude
+BigMin.Longitude = Min.Longitude</pre>
+        <p>If this was a vertical division we'd know that:
+</p><pre>LitMax.Latitude = Max.Latitude
+BigMin.Latitude = Min.Latitude
+</pre>
+        <p>In our example out <i>LitMax.Longitude</i> = 9, and <i>BigMin.Longitude</i> = 5 taken directly from the provided min and max values.</p>
+        <h6>Step 4</h6>
+        <p>A horizontal division we know we need to calculate the Latitude value closest to the division line of y<span style="vertical-align: sub;font-size: 6pt;">n</span>.  Take the most significant bit's of both min and max up to where they first differ, y<span style="vertical-align: sub;font-size: 6pt;">n</span>, and call it y<span style="vertical-align: sub;font-size: 6pt;">[1..m]</span> we know that the Latitude value just above the division line will be binary coded y<span style="vertical-align: sub;font-size: 6pt;">[1..m]</span> 0111..., and y<span style="vertical-align: sub;font-size: 6pt;">[1..m]</span> 1000... which translates to our Latitude value for <b>LitMax</b>, and <b>BigMin</b>.</p>
+        <p>Since the most significant bit that differed in our example was y<sub style="font-size: 6pt;">4</sub>, our <b>LitMax</b> and <b>BigMin</b> Latitude values equals 0111 and 1000.</p>
+        <p>In a vertical division we just reverse this to the x bits and Longitude.</p>
+        <h6>Step 5</h6>
+        <p>With both a <b>LitMax</b> (latitude,longitude) value and <b>BigMin</b> (latitude,longitude) values it's just a matter of interleaving them to generate the two numbers. 
+</p>
+        <h5>A illustrated example: outlining the rectangle query from (5,5) to (8,9) using the above 4 functions.</h5><pre xml:space="preserve">Enter rectangle_query with (5,5) and (8,9) as input.
+Interleve Min Point (51) and Max Point (193)
+   Enter some_points_in_rectangle with 51 and 193 as input.
+   Do a index scan from value 51.
+   For Each Point Check if it's in the given rectangle or not.
+
+   Report Point 51 (5,5) as a valid point to the application.
+   Point 52 is outside, up the missed counter by 1
+   Point 53 is outside, up the missed counter by 1
+   Report Point 54 (5,6) as a valid point to the application.
+   Report Point 55 (5,7) as a valid point to the application.
+   Point 56 is outside, up the missed counter by 1
+   Report Point 57 (6,5) as a valid point to the application.
+   Point 58 is outside, up the missed counter by 1
+   Report Point 59 (7,5) as a valid point to the application.
+   Report Point 60 (6,6) as a valid point to the application.
+   Report Point 61 (6,7) as a valid point to the application.
+   Report Point 62 (7,6) as a valid point to the application.
+   Report Point 63 (7,7) as a valid point to the application.
+   Point 64 is outside, up the missed counter by 1
+   Point 65 is outside, up the missed counter by 1
+   Point 66 is outside, up the missed counter by 1 (misses ==3)
+      Enter points_in_rectangle with 51 and 193 as rectangle, last == 66
+         Enter zdivide with 51 and 193
+</pre>
+        <p>
+            <img src="../../Resources/Images/poi-11.jpg" />
+        </p><pre>         51  (00110011) (1010,0101)
+         193 (11000001) (1001,1000)
+         Horisontal Division
+         LitMax = 107 (01101011) (1001,0111) 
+         BigMin = 145 (10010001) (0101,1000) 
+
+      66 (last reported) &lt; LitMax (107) call points_in_rectangle
+
+        Enter points_in_rectangle with 51 and 107 as rectangle, last == 66
+            Enter zdivide with 51 and 107
+</pre>
+        <p>
+            <img src="../../Resources/Images/poi-12.jpg" />
+        </p><pre>            51  (00110011) (1010,0101)
+            107 (01101011) (1001,0111)
+            Vertical Division
+            LitMax = 63(00111111) (0111,0111) 
+            BigMin = 98(01100010) (1000,0101) 
+         66 (last reported) &gt; LitMax (63) call some_points_in_rectangle
+            Enter some_points_in_rectangle with 98 and 107 as rectangle, last == 66
+               Report Point 98 (8,5) as a valid point to the application.
+               Report Point 99 (9,5) as a valid point to the application.
+               Point 100 is outside, up the missed counter by 1
+               Point 101 is outside, up the missed counter by 1
+               Point 102 is outside, up the missed counter by 1 (misses ==3)
+                  Enter points_in_rectangle with 98 and 107 as rectangle, last == 102
+                     Enter zdivide with 98 and 107
+</pre>
+        <p>
+            <img src="../../Resources/Images/poi-13.jpg" />
+        </p><pre>                     98  (01100010) (1000,0101)
+                     107 (01101011) (1001,0111)
+                     Horisontal Division
+                     LitMax = 99 (01100011) (1001,0101) 
+                     BigMin = 104(01101000) (1000,0110) 
+
+                  102 (last reported) &gt; LitMax (99) call some_points_in_rectangle
+                         
+                  Enter points_in_rectangle with 104 and 107 as rectangle, last == 104
+                     Report Point 104 (8,6) as a valid point to the application.
+                     Report Point 105 (9,6) as a valid point to the application.
+                     Report Point 106 (8,7) as a valid point to the application.
+                     Report Point 107 (9,7) as a valid point to the application.
+           
+      (Return back to points_in_rectangle that was called with 51 and 193 as rectangle)
+      104 (last reported) &lt; BigMin (145) call some_points_in_rectangle
+         Enter some_points_in_rectangle with 145 and 193 as rectangle, last == 104
+            Report Point 145 (5,8) as a valid point to the application.
+            Point 146 is outside, up the missed counter by 1
+            Point 147 is outside, up the missed counter by 1
+            Report Point 148 (6,8) as a valid point to the application.
+            Report Point 149 (7,8) as a valid point to the application.
+            Point 150 is outside, up the missed counter by 1
+            Point 151 is outside, up the missed counter by 1
+            Point 152 is outside, up the missed counter by 1 (misses ==3)
+               Enter points_in_rectangle with 145 and 193 as rectangle, last == 152
+                  Enter zdivide with 145 and 193
+</pre>
+        <p>
+            <img src="../../Resources/Images/poi-14.jpg" />
+        </p><pre>                  145 (10010001) (0101,1000)
+                  193 (11000001) (1001,1000)
+                  Vertical Division
+                  LitMax = 149 (10010101) (0111,1000) 
+                  BigMin = 192 (11000000) (1000,1000) 
+
+               152 (last reported) &gt; LitMax (192) call some_points_in_rectangle
+
+               Enter some_points_in_rectangle with 129 and 193 as rectangle, last == 152
+                  Report Point 192 (8,8) as a valid point to the application.
+                  Report Point 193 (9,8) as a valid point to the application.
+</pre>
+        <p>Conclusion is that with the given region we ended up with 4 division and 5 index lookups to complete the query.</p>
+        <p>
+            <img src="../../Resources/Images/poi-15.jpg" />
+        </p>
+        <hr MadCap:conditions="Default.ScreenOnly" width="100%" size="0" align="center" />
+        <p MadCap:conditions="Default.ScreenOnly" style="font-size: 8pt;"><span class="MyVariablesCopyright">Copyright © 2012, Raima Inc. All rights reserved.</span>
+        </p>
+        <script type="text/javascript" src="../../SkinSupport/MadCapBodyEnd.js">
+        </script>
+        <p class="MCWebHelpFramesetLink MCWebHelpFramesetLinkBottom" style="display: none;"><a href="../../../Default_CSH.htm#TUTORIAL/Examples/POIexample.htm" style="">Open topic with navigation</a>
+        </p>
+    </body>
+</html>

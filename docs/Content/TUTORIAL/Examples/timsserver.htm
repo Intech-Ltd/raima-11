@@ -1,0 +1,110 @@
+<?xml version="1.0" encoding="utf-8"?>
+<!DOCTYPE html PUBLIC "-//W3C//DTD XHTML 1.0 Strict//EN" "http://www.w3.org/TR/xhtml1/DTD/xhtml1-strict.dtd">
+<html xmlns:MadCap="http://www.madcapsoftware.com/Schemas/MadCap.xsd" MadCap:tocPath="Examples and Tutorials" MadCap:InPreviewMode="false" MadCap:PreloadImages="false" MadCap:RuntimeFileType="Topic" MadCap:TargetType="WebHelp" lang="en-us" xml:lang="en-us" MadCap:PathToHelpSystem="../../../" MadCap:HelpSystemFileName="Default.xml" MadCap:SearchType="Stem">
+    <head>
+        <meta http-equiv="Content-Type" content="text/html; charset=utf-8" /><title>TIMS&#160;Example HTTP&#160;Application</title>
+        <link rel="icon" type="image/png" href="http://docs.raima.com/favicon.png" />
+        <link href="../../SkinSupport/MadCap.css" rel="stylesheet" />
+        <link href="../../Resources/TableStyles/ArgsTwoCol.css" rel="stylesheet" />
+        <link href="../../Resources/Stylesheets/raima.css" rel="stylesheet" />
+        <script src="../../SkinSupport/MadCapAll.js" type="text/javascript">
+        </script>
+    </head>
+    <body>
+        <p class="MCWebHelpFramesetLink MCWebHelpFramesetLinkTop" style="display: none;"><a href="../../../Default_CSH.htm#TUTORIAL/Examples/timsserver.htm" style="">Open topic with navigation</a>
+        </p>
+        <div class="MCBreadcrumbsBox_0"><span class="MCBreadcrumbsPrefix">You are here: </span><a class="MCBreadcrumbsLink" href="../Examples.htm">Examples and Tutorials</a><span class="MCBreadcrumbsDivider"> &gt; </span><span class="MCBreadcrumbs">TIMS&#160;Example HTTP&#160;Application</span>
+        </div>
+        <h2 class="newpage">TIMS&#160;Example HTTP&#160;Application</h2>
+        <p>This document describes how to create your own browser based application, one that will use a browser to display the database data.  This document uses the <code>timserver</code> example database.  The <code>timserverExample.exe</code> traverses the contents of the database, one record at a time.</p>
+        <p><code>timserverExample.exe</code> is an HTTP server that responds to HTTP requests from a browser to display record instances of a database.  This example displays the 'info' table from the timserver database.</p>
+        <p>The display code is written in JavaScript.  HTML pages are dynamically generated to allow for updates of small portions of a page without refreshing the whole page (AJAX).  The server code only returns name/value pairs.  This puts less strain on the server as the server won’t have to worry about building HTML, it just sends name=value pairs to the browser and the JavaScript builds the HTML.</p>
+        <p>The browser makes a request of the server via a URL.  This URL will look like:</p><pre xml:space="preserve">/navigate.rdm?dbname=timserver&amp;action=d_recfrst&amp;field=info&amp;index=0&amp;</pre>
+        <p>'<code>navigate.rdm</code>' is parsed by the server to indicate which handler code to execute.  The name=value pairs after the '?' are parsed by the navigate handler to perform an action.  The arguments are:</p>
+        <table style="width: 100%;mc-table-style: url('../../Resources/TableStyles/ArgsTwoCol.css');margin-left: 0;margin-right: auto;" class="TableStyle-ArgsTwoCol" cellspacing="0">
+            <col class="Column-Column1" />
+            <col class="Column-Column2" />
+            <tbody>
+                <tr class="Body-Body1">
+                    <td class="BodyE-Column1-Body1">dbname</td>
+                    <td class="BodyD-Column2-Body1">Name of database (<code>timserver</code>)</td>
+                </tr>
+                <tr class="Body-Body1">
+                    <td class="BodyE-Column1-Body1">action</td>
+                    <td class="BodyD-Column2-Body1">Action to take (<code>d_recfrst</code>, <code>d_recnext</code>, <code>d_recprev</code>)</td>
+                </tr>
+                <tr class="Body-Body1">
+                    <td class="BodyE-Column1-Body1">field</td>
+                    <td class="BodyD-Column2-Body1">Name of database table to display</td>
+                </tr>
+                <tr class="Body-Body1">
+                    <td class="BodyB-Column1-Body1">index</td>
+                    <td class="BodyA-Column2-Body1">Allows server to find the next or previous record instance</td>
+                </tr>
+            </tbody>
+        </table>
+        <h3>Quick Start</h3>
+        <p>Build the example by changing to the <code>GettingStarted\examples\timserver</code> directory.</p>
+        <p>Setup the environment to be TFSR:</p><pre xml:space="preserve">set RDM_TFS=tfsr</pre>
+        <p>Start a tfserver:</p><pre xml:space="preserve">tfserver –d [DOCROOT] –start</pre>
+        <p>Build the example (the make file will run ddlp, initdb, and dbimp to fill timserver db):</p><pre xml:space="preserve">k</pre>
+        <p>Stop the <code>tfserver</code>:</p><pre xml:space="preserve">tfserver –stop</pre>
+        <p>Copy the <code>httpdocs</code> directory: 	<code>[RDM_HOME]\GettingStarted\examples\timserver\httpdocs\timserver\*</code> to the docroot directory:</p><pre xml:space="preserve">[DOCROOT]\httpdocs\timserver</pre>
+        <p>Run the <code>timserver</code> example:</p><pre xml:space="preserve">timserverExample –d [DOCROOT]</pre>
+        <p>Open a browser and go to the following URL:</p><pre xml:space="preserve">http://127.0.0.1:<span class="MyVariablesDefaultPort">21553</span></pre>
+        <p>In the browser you will see the contents of the first record displayed.  To see the next record, click on '<code>d_recnext</code>'.  Click on '<code>d_recprev</code>' to display the previous record.  This functionality will loop, so when the end/beginning of the database is reached, 'no data' will be displayed.  Clicking next/prev again will continue through the database records in the order they appear in the database.</p>
+        <h3>Files</h3>
+        <h4>index.html</h4>
+        <p>This file is returned by the web server when a browser does a GET request of '/' or '<code>/index.html</code>'.  This file contains HTML that loads the JavaScript file and the style sheet.  It calls <code>DisplayContent</code> to begin generating the HTML.  The <code>DisplayContent</code> function writes directly to the browser.  No other HTML content is displayed by this page.  All HTML content is generated dynamically at runtime by the JavaScript.</p>
+        <h4>rdm.css</h4>
+        <p>This is the style sheet.  It contains definitions of all fonts and colors used on the pages.  It also contains a layer definition for the <code>contentContainer</code> that holds the HTML.  This layer can be positioned at runtime.</p>
+        <h4>display.js</h4>
+        <p>This is the main JavaScript file to display HTML.</p>
+        <blockquote>
+            <p><b>DisplayContent</b>: Builds and executes an AJAX request to the server.  Sets up an AJAX response handler that will process the result from the server.</p>
+            <p><b>ajaxInfoResponseHandler</b>: Parses the response from the server (which is in the form of name=value pairs), then calls the function to generate the HTML for display.  The response will be in the form:</p><pre xml:space="preserve">id_code=%s&amp;info_title=%s&amp;publisher=%s&amp;pub_date=%s&amp;info_type=%d&amp;index=%d&amp;</pre>
+            <p><b>displayRecordNavigation</b>:  Builds the HTML that controls navigation to the next or previous record instance.</p>
+            <p><b>buildRecordHTML</b>:  Builds the HTML that contains the record instance information.</p>
+        </blockquote>
+        <p>The generated HTML is written directly to the browser by:</p><pre xml:space="preserve">document.getElementById('contentContainer').innerHTML = infohtml;</pre>
+        <h4>timserverExample_main.c</h4>
+        <p>Main HTTP server code.  In addition to initializing a TFS (see other documentation), this main function sets the TFS_XAPI_PARAMS for the TFS to tell it what to do with HTTP requests from a browser.</p>
+        <p>To enable HTTP handling in a TFS, you must set up a handler function for a specific SCRIPT_NAME.  A SCRIPT_NAME is the portion of a URL after the domain name.  For example, the URL <code>www.mysite.com/navigate.rdm</code> contains a SCRIPT_NAME of '<code>navigate.rdm</code>'.  The TFS code will parse the URL and look up '<code>navigate.rdm</code>' in the TFS_XAPI_FCNMAP.  If a handler function is defined, that handler function is called by the TFS.  The handler function <code>navigate_handler</code> is in <code>timsnav.c</code>.</p>
+        <p>In <code>timserverExample_main.c</code>, you will see that TFS_XAPI_FCNSMAP is:</p><pre xml:space="preserve">static const TFS_XAPI_FCNMAP timsfcnmap[] = {
+    /* name                     function                 */
+    { "/navigate.rdm",    (TFS_XAPI_FCN *)navigate_handler  },
+};
+</pre>
+        <p>The TFS will call <code>navigate_handler</code> any time a URL is received with a SCRIPT_NAME of <code>navigate.rdm</code>.</p>
+        <p>To set the function map in the TFS, you must call <code>d_tfsxapiparams</code>.  First, you initialize a TFS_XAPI_PARAMS variable:</p><pre xml:space="preserve">xapi_params.xapifcnmap      = timsfcnmap;
+xapi_params.fcnmapsize      = MAX_TFSFCNS;
+xapi_params.subdocroot      = "/timserver";
+</pre>
+        <p>The subdocroot is set to "<code>/timserver</code>".  This means files will only be served under <code>[docroot]/httpdocs/timserver</code>.</p>
+        <p>The TFS is initialized as TFST with the <code>d_tfsinitEx</code> call.  This means that the <code>timserverExamples.exe</code> will act as a TFS and an HTTP server.  Then <code>d_tfsxapiparams</code> is called to set the function map and subdocroot.</p>
+        <h4>timsnav.c</h4>
+        <p>This file contains functions that generate responses to HTTP requests for 'navigate.rdm'.</p>
+        <p>The main function is <code>navigate_handler</code>.  It is called when a browser sends a GET request with the URL containing '<code>/navigate.rdm</code>', as defined in <code>timserverExample_main.c</code>.  The <code>navigate_handler</code> function parses the URL using the supplied <code>http_initURLArgs</code> and <code>http_getURLArgValue</code> functions.  The function will look for an arguments in the URL of '<code>action</code>' and '<code>dbname</code>'.  The function will open the database and call another function to generate a response based on the action.</p>
+        <p>The actions are named to match the <span class="MyVariablesProductShortName">RDM</span> <![CDATA[ ]]><code>d_</code> functions (<code>d_recfrst</code>, <code>d_recnext</code>, <code>d_recprev</code>).  These actions will call <code>recfrst_handler</code>, <code>recnext_handler</code>, or <code>recprev_handler</code>.  Those functions will read the '<code>field</code>' and '<code>index</code>' arguments from the URL and find the first, next or previous record in the database.  In this example, we are only handling one database record/table, '<code>info</code>'.  This is specified in the <code>httpFields</code> array and the action handlers will call <code>display_info</code>.</p>
+        <p>The display_info function will generate the actual response.  A <code>sprintf</code> like function (<code>http_printf</code>) is used to fill a buffer with a string like:</p><pre xml:space="preserve">outputfmt = "id_code=%s&amp;info_title=%s&amp;publisher=%s&amp;pub_date=%s&amp;info_type=%d&amp;index=%d&amp;";</pre>
+        <p>The result is written by <code>http_printf</code> to the outbuf (PSP_OUTPUTBUFF) that was passed in to the <code>navigate_handler</code> function.  The <code>http_printf</code> writes directly to outbuf, causing the results to be sent to the browser.  The JavaScript for the AJAX response handler in the <code>display.js</code> file will then parse the results and build HTML to be displayed.  See <code>ajaxInfoResponseHandler</code> in <code>display.js</code>.</p>
+        <h3>Flow</h3>
+        <ul>
+            <li value="1">Browser requests <code>index.html</code></li>
+            <li value="2">Browser gets index.html and JavaScript files</li>
+            <li value="3">JavaScript code executes and writes HTML to browser</li>
+        </ul>
+        <h3>Initialization</h3>
+        <p>When the browser is pointed to <code>http://www.mysite.com:<span class="MyVariablesDefaultPort">21553</span></code>, the <code>index.html</code> page is returned by <code>timserverExample.exe</code>.  The TFS code has the path <code>/httpdocs</code> hard coded to prevent access to sensitive files outside of the docroot.  In the case of the <code>timserverExample</code>, we append <code>/timserver</code> on to <code>/httpdocs</code>, so all files for this server must be in <code>[docroot]/httpdocs/timserver</code>.</p>
+        <p>When the browser parses <code>index.html</code>, script and style tags are found, so the browser requests all the JavaScript files and style sheets.  In <code>index.html</code>, the script <code>DisplayContent</code> is run.  <code>DisplayContent</code> will display the body of the page.</p>
+        <h3>AJAX</h3>
+        <p>AJAX calls make a request to a server without reloading the whole page.  <code>getAjaxObject</code> generates a JavaScript object into <code>xmlhttp</code>, and <code>xmlhttp.send</code> makes the call to <code>timserverExample</code>.  AJAX calls do not wait for a response.  A callback function is used to process the server responses.  The callback function is defined in <code>xmlhttp.onreadystatechange</code> and is set to <code>ajaxInfoResponseHandler</code>.  The callback makes sure the response is in the correct state and then builds and updates the portion of HTML that needs updating.</p>
+        <hr MadCap:conditions="Default.ScreenOnly" width="100%" size="0" align="center" />
+        <p MadCap:conditions="Default.ScreenOnly" style="font-size: 8pt;"><span class="MyVariablesCopyright">Copyright © 2012, Raima Inc. All rights reserved.</span>
+        </p>
+        <script type="text/javascript" src="../../SkinSupport/MadCapBodyEnd.js">
+        </script>
+        <p class="MCWebHelpFramesetLink MCWebHelpFramesetLinkBottom" style="display: none;"><a href="../../../Default_CSH.htm#TUTORIAL/Examples/timsserver.htm" style="">Open topic with navigation</a>
+        </p>
+    </body>
+</html>

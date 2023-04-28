@@ -1,0 +1,71 @@
+<?xml version="1.0" encoding="utf-8"?>
+<!DOCTYPE html PUBLIC "-//W3C//DTD XHTML 1.0 Strict//EN" "http://www.w3.org/TR/xhtml1/DTD/xhtml1-strict.dtd">
+<html xmlns:MadCap="http://www.madcapsoftware.com/Schemas/MadCap.xsd" MadCap:tocPath="" MadCap:InPreviewMode="false" MadCap:PreloadImages="false" MadCap:RuntimeFileType="Topic" MadCap:TargetType="WebHelp" lang="en-us" xml:lang="en-us" MadCap:PathToHelpSystem="../../" MadCap:HelpSystemFileName="Default.xml" MadCap:SearchType="Stem">
+    <head>
+        <meta http-equiv="Content-Type" content="text/html; charset=utf-8" /><title>Installing RDM on Mac OS X </title>
+        <link rel="icon" type="image/png" href="http://docs.raima.com/favicon.png" />
+        <link href="../SkinSupport/MadCap.css" rel="stylesheet" />
+        <link href="../Resources/Stylesheets/raima.css" rel="stylesheet" />
+        <script src="../SkinSupport/MadCapAll.js" type="text/javascript">
+        </script>
+    </head>
+    <body>
+        <p class="MCWebHelpFramesetLink MCWebHelpFramesetLinkTop" style="display: none;"><a href="../../Default_CSH.htm#IG/osx.htm" style="">Open topic with navigation</a>
+        </p>
+        <h1 class="firstHeading">Installing <span class="MyVariablesProductShortName">RDM</span> on Mac OS X </h1>
+        <p>This section covers the installation of <span class="MyVariablesProductShortName">RDM</span> binary distributions that are provided for Mac OS X 10.5 and above, as well as RDM Mobile packages for iOS 4.0 and above. For <strong>source package</strong> installations, please refer to the <a href="UNIX.htm">Unix/Linux Installation Guide</a>.</p>
+        <p>In this section:</p>
+        <ul>
+            <li value="1"><a href="#Installa">Installation</a>
+            </li>
+            <li value="2"><a href="#Upgrade">Upgrade</a>
+            </li>
+            <li value="3"><a href="#Uninstal">Uninstall</a>
+            </li>
+        </ul>
+        <h2><a name="Installa"></a>Installation</h2>
+        <p>The installer is a standard Mac OS installer, with the extension <span class="code">.pkg</span>. All installations will install into the directory <span class="code">/opt/Raima</span>.</p>
+        <ol>
+            <li value="1">To begin, open the installer package file (.pkg), labeled with <span class="code">rdm-workgroup-obj-osx</span> or <span class="code">rdm-workgroup+-obj-osx</span> for RDM Workgroup, and <span class="code">rdm-mobile-ios</span> or <span class="code">rdm-mobile+-ios</span> for RDM Mobile.</li>
+        </ol>
+        <p>
+            <img src="../Resources/Images/osxinst1.png" />
+        </p>
+        <ol>
+            <li value="2">Follow the instructions given by the installer, and accept the license agreement.</li>
+        </ol>
+        <p style="text-align: center;">
+            <img src="../Resources/Images/osxinst3.png" />
+        </p>
+        <ol>
+            <li value="3">Select the components you wish to install. At a minimum, the base SDK must be installed.</li>
+        </ol>
+        <p style="text-align: center;">
+            <img src="../Resources/Images/osxinst4.png" />
+        </p>
+        <ol>
+            <li value="4">The completed installation is located at <code>/opt<span style="mc-tag-and-class: code;" class="MyVariablesInstallHome">/Raima/RDM/</span></code></li>
+        </ol>
+        <p style="text-align: center;">
+            <img src="../Resources/Images/osxinst6.png" />
+        </p>
+        <p class="Notes"><strong>Next Steps: </strong>See how to <a href="../GS/CMake.htm">generate an XCode Project with CMake</a> to build and run the examples.</p>
+        <h2><a name="Upgrade"></a>Upgrade</h2>
+        <p>An existing installation may be upgraded by simply running the new installer, an uninstall is not necessary. Note that this is only valid for new patch versions, where only the patch number is incremented. New major version updates will be installed in addition to the previous version. For example, 10.1.0 will be upgraded to 10.1.1, while 10.2 would be a new installation. The patch upgrade will simply update files in the same installation directory, <span class="code">/opt/Raima/RDM_10.1/</span>, while the major update will create a new directory alongside the existing, in <span class="code">/opt/Raima/RDM_10.2/</span>.</p>
+        <p>To upgrade an existing version, simply run the installer of the new version, following the same procedure as "Installation" above. Please make sure to read the "Important Information" section in the installer, to see all changes and fixes for the version.</p>
+        <p class="wrong">When upgrading, make sure that the Engine installer is run first, followed by all additional components.</p>
+        <h2><a name="Uninstal"></a>Uninstall</h2>
+        <p>To remove <span class="MyVariablesProductShortName">RDM</span> from your system, simply run the "Uninstall.pkg" located in the installation directory.</p>
+        <p>
+            <img src="../Resources/Images/osxuninst1.png" />
+        </p>
+        <p class="wrong">WARNING: This will remove all contents of the install directory at <span class="code">/opt/Raima/<span class="MyVariablesProductShortName">RDM</span>_</span><span style="mc-tag-and-class: span;" class="MyVariablesProductVersion">11.0</span><span class="code">/</span>. If you have any data you wish to save, please move or copy it out of the installation PRIOR to running the uninstall. Note that if you have other versions of <span class="MyVariablesProductShortName">RDM</span> installed alongside, they will be left untouched.</p>
+        <hr MadCap:conditions="Default.ScreenOnly" width="100%" size="0" align="center" />
+        <p MadCap:conditions="Default.ScreenOnly" style="font-size: 8pt;"><span class="MyVariablesCopyright">Copyright © 2012, Raima Inc. All rights reserved.</span>
+        </p>
+        <script type="text/javascript" src="../SkinSupport/MadCapBodyEnd.js">
+        </script>
+        <p class="MCWebHelpFramesetLink MCWebHelpFramesetLinkBottom" style="display: none;"><a href="../../Default_CSH.htm#IG/osx.htm" style="">Open topic with navigation</a>
+        </p>
+    </body>
+</html>

@@ -1,0 +1,204 @@
+<?xml version="1.0" encoding="utf-8"?>
+<!DOCTYPE html PUBLIC "-//W3C//DTD XHTML 1.0 Strict//EN" "http://www.w3.org/TR/xhtml1/DTD/xhtml1-strict.dtd">
+<html xmlns:MadCap="http://www.madcapsoftware.com/Schemas/MadCap.xsd" MadCap:tocPath="SQL API|RSQL User's Guide|RSQL API Function Reference" MadCap:InPreviewMode="false" MadCap:PreloadImages="false" MadCap:RuntimeFileType="Topic" MadCap:TargetType="WebHelp" lang="en-us" xml:lang="en-us" MadCap:PathToHelpSystem="../../" MadCap:HelpSystemFileName="Default.xml" MadCap:SearchType="Stem">
+    <head>
+        <meta http-equiv="Content-Type" content="text/html; charset=utf-8" /><title>rsqlTFSInit, rsqlTFSInitEx</title>
+        <link rel="icon" type="image/png" href="http://docs.raima.com/favicon.png" />
+        <link href="../SkinSupport/MadCap.css" rel="stylesheet" />
+        <link href="../Resources/TableStyles/ParamStruct.css" rel="stylesheet" />
+        <link href="../Resources/TableStyles/FunctionArgs.css" rel="stylesheet" />
+        <link href="../Resources/TableStyles/TwoColNoLines.css" rel="stylesheet" />
+        <link href="../Resources/TableStyles/SQLErrorCodes.css" rel="stylesheet" />
+        <link href="../Resources/Stylesheets/raima.css" rel="stylesheet" />
+        <script src="../SkinSupport/MadCapAll.js" type="text/javascript">
+        </script>
+    </head>
+    <body>
+        <p class="MCWebHelpFramesetLink MCWebHelpFramesetLinkTop" style="display: none;"><a href="../../Default_CSH.htm#SQLRM/rsqlTFSInit.htm" style="">Open topic with navigation</a>
+        </p>
+        <div class="MCBreadcrumbsBox_0"><span class="MCBreadcrumbsPrefix">You are here: </span><a class="MCBreadcrumbsLink" href="../dbRSQL.htm">SQL API</a><span class="MCBreadcrumbsDivider"> &gt; </span><a class="MCBreadcrumbsLink" href="../RSQLUG/dbSQLUG.htm">RSQL User's Guide</a><span class="MCBreadcrumbsDivider"> &gt; </span><a class="MCBreadcrumbsLink" href="SQLAPIReference.htm">RSQL API Function Reference</a><span class="MCBreadcrumbsDivider"> &gt; </span><span class="MCBreadcrumbs">rsqlTFSInit, rsqlTFSInitEx</span>
+        </div>
+        <h3 class="newpage"><a name="kanchor326"></a>rsqlTFSInit, rsqlTFSInitEx</h3>
+        <p>Initialize <span class="MyVariablesRSQLName">RDM SQL</span> Transactional File Server interaction.</p>
+        <p class="Heading">Prototype</p><pre xml:space="preserve">RSQL_ERRCODE EXTERNAL_FCN rsqlTFSInit(
+ 	const char       *docroot,
+	const TFS_PARAMS *tparams)
+</pre><pre xml:space="preserve">RSQL_ERRCODE EXTERNAL_FCN rsqlTFSInitEx(
+ 	const char       *docroot,
+	const TFS_PARAMS *tparams,
+       TFS_TYPE         tfsType)
+</pre>
+        <p class="Heading">Arguments</p>
+        <table style="width: 100%;mc-table-style: url('../Resources/TableStyles/FunctionArgs.css');margin-left: 0;margin-right: auto;" class="TableStyle-FunctionArgs" cellspacing="0">
+            <col class="Column-Column1" />
+            <col class="Column-Column3" />
+            <col class="Column-Column2" />
+            <tbody>
+                <tr class="Body-Body1">
+                    <td class="BodyE-Column1-Body1">docroot</td>
+                    <td class="BodyE-Column3-Body1">(input)</td>
+                    <td class="BodyD-Column2-Body1">The path specification for the directory under which all databases controlled by the TFS are stored.   If <code>docroot</code> is NULL, "", or "." then the current directory will be used as the document root. </td>
+                </tr>
+                <tr class="Body-Body1">
+                    <td class="BodyE-Column1-Body1">tparams</td>
+                    <td class="BodyE-Column3-Body1">(input)</td>
+                    <td class="BodyD-Column2-Body1">Pointer to the TFS operational parameters descriptor packet.  If <code>tparams</code> is NULL then system defaults will be used. </td>
+                </tr>
+                <tr class="Body-Body1">
+                    <td class="BodyB-Column1-Body1">tfsType</td>
+                    <td class="BodyB-Column3-Body1">(input)</td>
+                    <td class="BodyA-Column2-Body1">Type of the Transaction File Server to use. (See TFS&#160;Configuration Types below)</td>
+                </tr>
+            </tbody>
+        </table>
+        <p class="Heading">Description</p>
+        <p>Call this function before any calls to <code>rsqlAllocConn</code> to set up a document root other than the default, with other parameters than the default, or where all connections need to use the same TFS instance.  You will need to call <code>rsqlTFSTerm</code> after the last connection have disconnected.</p>
+        <p class="Notes">This function does not have any effect if the remote TFS is used (TFSR).</p>
+        <p>The <code>docroot</code> string provides the path specification for the directory under which all databases that are to be controlled by this TFS are stored.   If <code>docroot</code> is <code>NULL</code>, "", or "." then the current directory will be assumed to be the document root directory.</p>
+        <p>The <code>TFS_PARAMS</code> struct has several fields but the fields in the following table should be assigned the values specific to your particular application requirements.</p>
+        <table style="mc-table-style: url('../Resources/TableStyles/ParamStruct.css');margin-left: 0;margin-right: auto;caption-side: top;" class="TableStyle-ParamStruct" cellspacing="0">
+            <caption>TFS_PARAMS Structure Definition</caption>
+            <col class="Column-Column1" />
+            <col class="Column-Column2" />
+            <col class="Column-Column3" />
+            <thead>
+                <tr class="Head-Header1">
+                    <th class="HeadE-Column1-Header1">Field</th>
+                    <th class="HeadE-Column2-Header1">Type</th>
+                    <th class="HeadD-Column3-Header1">Description</th>
+                </tr>
+            </thead>
+            <tbody>
+                <tr class="Body-Body1">
+                    <td class="BodyE-Column1-Body1">no_disk</td>
+                    <td class="BodyE-Column2-Body1">uint32_t</td>
+                    <td class="BodyD-Column3-Body1">Set to 1 if diskless, otherwise (normal) set to 0 (default)</td>
+                </tr>
+                <tr class="Body-Body1">
+                    <td class="BodyB-Column1-Body1">rd_only</td>
+                    <td class="BodyB-Column2-Body1">uint32_t</td>
+                    <td class="BodyA-Column3-Body1">Set to 1 if on a read only device, otherwise (normal) set to 0 (default)</td>
+                </tr>
+            </tbody>
+        </table>
+        <p>Do not assign these fields using a struct initialization but explicitly use an assignment statement to assign the values for each field as in the example below.  It is also a good idea to first zero out the <code>TFS_PARAMS</code> struct variable to clear the unused or internal use fields.  Note that if you are not running diskless nor on a read-only device, simply pass <code>NULL</code> for the <code>tparams</code> argument.</p>
+        <p>The <code>rsqlTFSInitEx</code> function is used to specify the type of TFS to load. This allows an application to specify the type of TFS dynamically. </p>
+        <table style="width: 100%;mc-table-style: url('../Resources/TableStyles/TwoColNoLines.css');margin-left: 0;margin-right: auto;caption-side: top;" class="TableStyle-TwoColNoLines" cellspacing="0">
+            <caption>TFS&#160;Configuration Types</caption>
+            <col class="Column-Column1" style="width: 225px;" />
+            <col class="Column-Column2" />
+            <tbody>
+                <tr class="Body-Body1">
+                    <td class="BodyE-Column1-Body1"><code>TFS_TYPE_DEFAULT</code> <![CDATA[ ]]></td>
+                    <td class="BodyD-Column2-Body1">Factory default TFS type is <code>TFS_TYPE_TFS</code>.</td>
+                </tr>
+                <tr class="Body-Body1">
+                    <td class="BodyE-Column1-Body1"><code>TFS_TYPE_TFS</code> <![CDATA[ ]]></td>
+                    <td class="BodyD-Column2-Body1">See <a href="#2.3">Direct-Link Configuration</a></td>
+                </tr>
+                <tr class="Body-Body1">
+                    <td class="BodyE-Column1-Body1"><code>TFS_TYPE_RPC</code> <![CDATA[ ]]></td>
+                    <td class="BodyD-Column2-Body1">See <a href="#2.2">Standard Client/Server Configuration</a></td>
+                </tr>
+                <tr class="Body-Body1">
+                    <td class="BodyB-Column1-Body1"><code>TFS_TYPE_STANDALONE</code> <![CDATA[ ]]></td>
+                    <td class="BodyA-Column2-Body1">See <a href="#2.4">Standalone Configuration</a></td>
+                </tr>
+            </tbody>
+        </table>
+        <p class="Notes">If the third parameter specifies <code>TFS_TYPE_RPC</code> (TFSR), the values of the <code>docroot</code> and <code>tparams</code> parameters will be ignored. </p>
+        <p class="Heading">Example</p><pre xml:space="preserve"><b>#include "rsql.h"</b>
+    ...
+<b>RSQL_ERRCODE stat; 
+const char *docroot = "c:\rdm_dbs"; 
+const TFS_PARAMS tfspars;</b>
+HCONN hdbc;
+    ...
+    <b>memset(&amp;tfspars, 0, sizeof(TFS_PARAMS));
+    tfspars.no_disk = 1;  /* running diskless */
+    tfspars.rd_only = 0;  /* updates are allowed */</b>
+
+    stat = rsqlTFSInit(docroot, &amp;tfspars);
+    if ( stat == errSUCCESS ) {
+        rsqlAllocConn(&amp;hdbc);
+        ...
+        rsqlTFSTerm();
+    }
+</pre>
+        <p class="Heading">Required Headers</p><pre xml:space="preserve">#include "rsql.h"</pre>
+        <p class="Heading">Libraries</p>
+        <table style="width: 100%; margin-left: 0; margin-right: auto;">
+            <col style="width: 200px;">
+            </col>
+            <col>
+            </col>
+            <thead>
+                <tr>
+                    <th>Library Name</th>
+                    <th>Description</th>
+                </tr>
+            </thead>
+            <tbody>
+                <tr>
+                    <td><code>rdmrsql<span class="MyVariablesLibraryVersion">11</span></code>
+                    </td>
+                    <td>RSQL&#160;API Library</td>
+                </tr>
+            </tbody>
+        </table>
+        <p>See <a href="../GS/distrib.htm#Library">Library Naming Conventions</a> section for full library name and a list of library dependencies.</p>
+        <p class="Heading">Return Codes</p>
+        <table class="TableStyle-SQLErrorCodes" cellspacing="0" style="mc-table-style: url('../Resources/TableStyles/SQLErrorCodes.css');">
+            <col class="Column-Column1" />
+            <col class="Column-Column2" />
+            <col class="Column-Column3" />
+            <col class="Column-Column4" />
+            <tbody>
+                <tr class="Body-Body1">
+                    <th class="BodyB-Column1-Body1" style="font-weight: bold;">Error Code</th>
+                    <th class="BodyB-Column2-Body1" style="font-weight: bold;">Enum Identifier</th>
+                    <th class="BodyB-Column3-Body1" style="font-weight: bold;">SQL State</th>
+                    <th class="BodyA-Column4-Body1" style="font-weight: bold;">Description</th>
+                </tr>
+            </tbody>
+        </table>
+        <table class="TableStyle-SQLErrorCodes" cellspacing="0" style="mc-table-style: url('../Resources/TableStyles/SQLErrorCodes.css');">
+            <col class="Column-Column1" />
+            <col class="Column-Column2" />
+            <col class="Column-Column3" />
+            <col class="Column-Column4" />
+            <tbody>
+                <tr class="Body-Body1">
+                    <td class="BodyB-Column1-Body1">0</td>
+                    <td class="BodyB-Column2-Body1">errSUCCESS</td>
+                    <td class="BodyB-Column3-Body1">00000</td>
+                    <td class="BodyA-Column4-Body1">no error was detected</td>
+                </tr>
+            </tbody>
+        </table>
+        <table class="TableStyle-SQLErrorCodes" cellspacing="0" style="mc-table-style: url('../Resources/TableStyles/SQLErrorCodes.css');">
+            <col class="Column-Column1" />
+            <col class="Column-Column2" />
+            <col class="Column-Column3" />
+            <col class="Column-Column4" />
+            <tbody>
+                <tr class="Body-Body1">
+                    <td class="BodyB-Column1-Body1">154</td>
+                    <td class="BodyB-Column2-Body1">errTFSFAILURE</td>
+                    <td class="BodyB-Column3-Body1">RX024</td>
+                    <td class="BodyA-Column4-Body1">unable to connect to TFS</td>
+                </tr>
+            </tbody>
+        </table>
+        <p class="Heading">See Also</p>
+        <p><a href="rsqlTFSTerm.htm">rsqlTFSTerm</a>
+        </p>
+        <hr MadCap:conditions="Default.ScreenOnly" width="100%" size="0" align="center" />
+        <p MadCap:conditions="Default.ScreenOnly" style="font-size: 8pt;"><span class="MyVariablesCopyright">Copyright © 2012, Raima Inc. All rights reserved.</span>
+        </p>
+        <script type="text/javascript" src="../SkinSupport/MadCapBodyEnd.js">
+        </script>
+        <p class="MCWebHelpFramesetLink MCWebHelpFramesetLinkBottom" style="display: none;"><a href="../../Default_CSH.htm#SQLRM/rsqlTFSInit.htm" style="">Open topic with navigation</a>
+        </p>
+    </body>
+</html>

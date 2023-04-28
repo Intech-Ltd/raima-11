@@ -1,0 +1,208 @@
+<?xml version="1.0" encoding="utf-8"?>
+<!DOCTYPE html PUBLIC "-//W3C//DTD XHTML 1.0 Strict//EN" "http://www.w3.org/TR/xhtml1/DTD/xhtml1-strict.dtd">
+<html xmlns:MadCap="http://www.madcapsoftware.com/Schemas/MadCap.xsd" MadCap:tocPath="Utility Programs|DBRevise Utility" MadCap:InPreviewMode="false" MadCap:PreloadImages="false" MadCap:RuntimeFileType="Topic" MadCap:TargetType="WebHelp" lang="en-us" xml:lang="en-us" MadCap:PathToHelpSystem="../../../" MadCap:HelpSystemFileName="Default.xml" MadCap:SearchType="Stem">
+    <head>
+        <meta http-equiv="Content-Type" content="text/html; charset=utf-8" /><title>Chapter 2 The Basics of Database Revision</title>
+        <link rel="icon" type="image/png" href="http://docs.raima.com/favicon.png" />
+        <link href="../../SkinSupport/MadCap.css" rel="stylesheet" />
+        <link href="../../Resources/TableStyles/BasicTwoCol.css" rel="stylesheet" />
+        <link href="../../Resources/TableStyles/ArgsTwoCol.css" rel="stylesheet" />
+        <link href="../../Resources/Stylesheets/raima.css" rel="stylesheet" />
+        <script src="../../SkinSupport/MadCapAll.js">
+        </script>
+    </head>
+    <body>
+        <p class="MCWebHelpFramesetLink MCWebHelpFramesetLinkTop" style="display: none;"><a href="../../../Default_CSH.htm#util/dbrevise/Chapter2.htm" style="">Open topic with navigation</a>
+        </p>
+        <div class="MCBreadcrumbsBox_0"><span class="MCBreadcrumbsPrefix">You are here: </span><a class="MCBreadcrumbsLink" href="../../dbUTIL.htm">Utility Programs</a><span class="MCBreadcrumbsDivider"> &gt; </span><span class="MCBreadcrumbsSelf">DBRevise Utility</span><span class="MCBreadcrumbsDivider"> &gt; </span><span class="MCBreadcrumbs">The Basics of Database Revision</span>
+        </div>
+        <h1 class="firstHeading"><a MadCap:generatedBookmark="TOC" name="The_Basics_of_Database_Revision"></a>The Basics of Database Revision</h1>
+        <h2 class="Heading2"><a MadCap:generatedBookmark="TOC" name="2.1_Introduction"></a>2.1 Introduction </h2>
+        <p>This section introduces the concepts and general framework of database revision.  In this section you will learn: </p>
+        <ul>
+            <li style="font-size: 11pt;font-family: Arial;" value="1">What database revision is </li>
+            <li style="font-size: 11pt;font-family: Arial;" value="2">Some basic database revision terminology </li>
+            <li style="font-size: 11pt;font-family: Arial;" value="3">When a database revision may be beneficial </li>
+            <li style="font-size: 11pt;font-family: Arial;" value="4">Some elementary but useful examples of the basic usage of db_REVISE </li>
+            <li style="font-size: 11pt;font-family: Arial;" value="5">How db_REVISE carries out a database revision </li>
+            <li style="font-size: 11pt;font-family: Arial;" value="6">The db_REVISE command line options                            <![CDATA[ ]]></li>
+        </ul>
+        <h2 class="Heading2"><a MadCap:generatedBookmark="TOC" name="2.2_Revising_Versus_Updating"></a>2.2 Revising Versus Updating </h2>
+        <p>The revision of database structure may affect each record contained in the database.  For example, if a field type is to be inserted into a record type, db_REVISE will change all records of that type in the database, creating room for the new field in each one.  However, database updating will only affect certain record, field, and set instances.  Updating is done by an application program, which uses the <span class="MyVariablesProductShortName">RDM</span> runtime library, to add, change, or delete data. </p>
+        <p class="Notes">The <span class="MyVariablesProductShortName">RDM</span> runtime library cannot revise the structure of a database.  db_REVISE cannot update individual instances of items contained in a database.  To change anything involving the schema, or data structure, of a database, db_REVISE must be used to apply the schema changes to the whole database. </p>
+        <h2 class="Heading2"><a MadCap:generatedBookmark="TOC" name="2.3_When_to_Revise"></a>2.3 When to Revise </h2>
+        <p>db_REVISE generates a database revision in the same way that an application revision is generated.  The previous software operates on the old database structure and the new software operates on the new database structure.  As such, database revision will not be a daily procedure.  The frequency will be determined by the dynamics and requirements of your application. </p>
+        <p>For example, if you have built a database that is used mainly in-house by the db_QUERY language system, you may want to change the database structure frequently, knowing that db_QUERY will be able to read any database without being rewritten.  If, on the other hand, you have a special purpose application that you distribute to hundreds of sites, you may generate updates on a yearly basis.  If you need to revise each database before running the updated software, db_REVISE can be distributed, royalty-free, to each of your sites to revise the databases within procedures you have defined. </p>
+        <p>db_REVISE may also be used to rearrange records within files and alter page sizes to minimize database size.  (See <a href="Chapter4.htm">Examples of Common Operations</a>). </p>
+        <h2 class="Heading2"><a MadCap:generatedBookmark="TOC" name="2.4_Running_db_REVISE"></a><a name="2.5"></a>2.4 Running db_REVISE </h2>
+        <p>In its simplest usage, db_REVISE only needs to know the names of a source database (your existing database) and a destination database (the one to be created).  The program name for db_REVISE is <code>dbrev</code>.  The complete command line syntax will be covered later in this section.  The following is an example of a simple db_REVISE command line. </p><pre>dbrev cust_r3 cust_r4 </pre>
+        <p>In this example the source database is named <code>cust_r3</code> and the destination database is named <code>cust_r4</code>.  db_REVISE will respond with output that will look like the following: </p><pre xml:space="preserve">dbrev Database Restructure Utility
+<span class="MyVariablesProductName">Raima Database Manager</span>   <![CDATA[ ]]><span class="MyVariablesReleaseVersion">11.0.0</span> Build <span class="MyVariablesBuild">412</span>   <![CDATA[ ]]><span class="MyVariablesVersionDate">[2-15-2012]</span>   <![CDATA[ ]]><span class="MyVariablesURLHome">http://www.raima.com</span><br />Copyright (c) <span class="MyVariablesCopyrightYear">2012</span>   <![CDATA[ ]]><span class="MyVariablesCompanyName">Raima Inc.</span>, All rights reserved.     <![CDATA[
+]]><span class="MyVariablesCopyright">Copyright © 2012, Raima Inc. All rights reserved.</span>
+ 
+
+dbrev compilation complete  
+
+Processing file cust_r3.d01 containing 342 records  
+
+dbrev completed, successful restructure </pre>
+        <p>Now we will examine exactly what happened by exploring  an example revision.  First, let's look at the schema of the original database, cust_r3. </p><pre>database cust_r3 {  
+    data file "cust_r3.d01" contains cust;  
+    key file "cust_r3.k01" contains name;   
+    
+    record cust {   
+        key char name[30];   
+        long date;   
+        char item[10];  
+    } 
+} </pre>
+        <p>This schema worked fine when you kept track of your hardware store customers.  You sold items such as "Saw", "Hammer", and "2x4", and were very pleased by the sorted listings you could produce.  You were pleased until you noticed an item called "tape meas".  You were sure you entered the full item name, "tape measure."  Then you noticed that your schema is the problem; you left room for only nine characters of item name (one is reserved for the terminating null byte).  You have now discovered the industry-wide problem of failing to anticipate all possible usages of your application. </p>
+        <p>If you have been adventurous, you may have made the mistake of editing your original schema file, compiling it with <a href="../ddlp.htm">ddlp</a>, and looking at your data again.  No doubt it was "garbage."  You were relieved to find that restoring the schema to its original form allowed you to read the data again. The reason for this is that altering the schema file (and hence the dictionary file) changes only the way the <span class="MyVariablesProductShortName">RDM</span> runtime functions view the  data on the file.  It does not change the size of the records on the file.  If <span class="MyVariablesProductShortName">RDM</span> thinks that the records are 54 bytes long when they are actually only 44 bytes long, <span class="MyVariablesProductShortName">RDM</span> will read records from the wrong places in the file. </p>
+        <p>The following is the correct procedure for revising your database with db_REVISE. </p>
+        <blockquote>1. Copy your old DDL schema file, cust_r3.sch, into a new file, such as cust_r4.sch. </blockquote>
+        <blockquote>2. Edit cust_r4.sch to change the database name to cust_r4 and the file names to cust_r4.d01 and cust_r4.k01, then increase the length of the item field to 20.  The new DDL schema file should appear as follows: </blockquote><pre>database cust_r4 {  
+    data file "cust_r4.d01" contains cust;  
+    key file "cust_r4.k01" contains name;   
+
+    record cust {   
+        key char name[30];   
+        long date;   
+        char item[20];  
+    } 
+} </pre>
+        <blockquote>3. With the <span class="MyVariablesProductShortName">RDM</span> utilities, process the new DDL schema file and initialize the new database as shown in the following example. </blockquote><pre xml:space="preserve">ddlp cust_r4.sch
+initdb cust_r4 </pre>
+        <blockquote>4. Run db_REVISE. </blockquote><pre>dbrev cust_r3 cust_r4 </pre>
+        <p>What did db_REVISE just do?  First of all, it did not destroy your existing database.  db_REVISE will not alter the source database.  If you make a mistake in the revision, you can repeat the revision without being concerned about restoring the original data.  Second, db_REVISE created a new database, containing one record for each record in the old database with the same data and the same keys, but with one field ten characters longer.  Because the existing 10-character field can fit within the new 20-character field, no information is lost (as would be the case if the new field were shorter).  Two databases will exist until you are satisfied that the old one is no longer required, at which time you may remove it. </p>
+        <p>Now if you run your report generator (possibly db_QUERY) using the new database name, you will notice that the data is no longer garbage, but that "tape meas" has still not increased in length.  This is because the full name, "tape measure," was never stored in the database.  db_REVISE has created room for the longer name to fit, and you can now enter the new name.  The item field will now store up to 19 characters. </p>
+        <p>Suppose you have a new requirement for your database: a repeat customer.  You could enter the customer's name twice, but you could have done that with one of those flat file type data handlers.  You are using <span class="MyVariablesProductShortName">RDM</span> because its network model allows you to eliminate redundant data, such as multiple occurrences of the name of a repeat customer.  The solution is to create two record types: one containing the customer's name and the other containing the date and the name of the item purchased.  You will define a set between the customer's name and multiple instances of item purchases.  Also, because you are getting more and more detailed, you will be adding room for the customer's address. </p>
+        <p>db_REVISE can do all of these things.  It is simply a matter of creating the right schema file, which in this case will be cust_r5.sch. </p><pre>database cust_r5 {  
+    data file "cust_r5.d01" contains cust;  
+    data file "cust_r5.d02" contains purchases;  
+    key file "cust_r5.k01" contains name;   
+
+    record cust {   
+        unique key char name[30];   
+        char address1[20];   
+        char address2[20];  
+    }  
+    record item {   
+        long date;   
+        char item[20];  
+    }  
+    set purchases {   
+        order last;   
+        owner cust;   
+        member item;  
+    } 
+}</pre>
+        <p>Figure 2-1 illustrates the changes you want to make. </p>
+        <p class="Caption">
+            <img src="../../Resources/Images/db_revise/02000004.jpg" class="img_1" />
+            <br />Figure 2-1.  Source and Destination Schemas </p>
+        <p>If you follow the same procedure as you did for the first revision, you will find that the following has occurred (see Figure 2-2). </p>
+        <ul>
+            <li value="1">For each former cust record, there is now a pair of new records, cust and item.</li>
+            <li value="2">Each pair of records is connected by one instance of the purchases set.</li>
+            <li value="3">The cust record contains room for the address1 and address2 fields, although they are empty.</li>
+            <li value="4">The name field is now a unique key.  Note that this will cause problems if you had two identical names in your database.  We will assume that you did not.  (You will learn how to make db_REVISE handle duplicate names later.) </li>
+        </ul>
+        <p>You have created a more sophisticated database from the simple one you had earlier.  Your data entry software will need to change so that it searches for the customer name first and creates a new customer record only if the name is new.  Each item purchase will consist of an item record connected to a cust record.  It will also need to read the customer address to store in each new cust record. </p>
+        <p>Your reporting software must be changed to print a list of item purchases for each customer name.  You may also want to create a mailing list application to use your new information. </p>
+        <p class="Caption">
+            <img src="../../Resources/Images/db_revise/02000005.jpg" class="img_1" />
+            <br />Figure 2-2.  Source and Destination Database Contents </p>
+        <p>In the following sections and sections, you will see that these revisions, as well as many more types and combinations of revisions, are possible.  You can increase the complexity of your database as your requirements dictate. </p>
+        <h2 class="Heading2"><a MadCap:generatedBookmark="TOC" name="2.5_Operational_Overview"></a>2.5 Operational Overview </h2>
+        <p>Figure 2-3 shows the basic elements involved in the use of db_REVISE.  The program sequentially reads records from files in the source database, using information from an RDL file if it is supplied, storing temporary information in a working database, which is itself an <span class="MyVariablesProductShortName">RDM</span> database, and storing the revised records in a destination database. </p>
+        <p class="Caption">
+            <img src="../../Resources/Images/db_revise/02000006.jpg" class="img_1" />
+            <br />Figure 2-3.  Operational Overview of db_REVISE </p>
+        <h3 class="Heading3"><a MadCap:generatedBookmark="TOC" name="2.5.1_Program_Phases"></a>2.5.1 Program Phases </h3>
+        <p>db_REVISE passes through two very distinct phases when performing a revision.  The first phase is called the compilation phase; the second is called the execution phase. </p>
+        <p>The compilation phase compares the source and destination dictionary files to determine if the revision is legal and to note all differences in the schemas (you can print a report of these differences).  All error and/or warning messages that are printed during this phase refer to elements of the schemas.  If any error messages are printed, the execution phase is not performed. </p>
+        <p>Also, if any RDL (<span class="MCTextPopup"><a href="javascript:void(0);" class="MCTextPopupSpot_0" onclick="FMCTextPopup( event, this ); return false;">Revision Definition Language<img style="border: none;margin-left: 5px;" src="../../SkinSupport/ExpandingClosed.gif" MadCap:altsrc="../../SkinSupport/ExpandingOpen.gif" onload="if ( typeof( FMCPreloadImage ) == 'function' ) { FMCPreloadImage( '../../SkinSupport/ExpandingOpen.gif' ); }" class="MCExpandingIcon" /></a><span class="MCTextPopupBody_0" style="display: none; ">The RDL supplies information to db_REVISE that cannot be derived from a comparison of the source and destination dictionary files.</span></span>) statements are used (see <a href="#2.6.2">Command Line Options</a> and  <a href="Chapter3.htm#3.4">Specified Revisions</a>), they are processed during the compilation phase (see Figure 2-4).  If the statements contain any syntax errors or any illegal operations, error messages will be printed and the execution phase will be skipped. </p>
+        <p class="Caption">
+            <img src="../../Resources/Images/db_revise/02000007.jpg" class="img_1" />
+            <br />Figure 2-4.  Compilation Phase </p>
+        <p>When the compilation phase is complete, db_REVISE will print the following message: </p><pre>dbrev compilation complete </pre>
+        <p>If there have been warnings, db_REVISE will print: </p><pre>dbrev compilation complete, NN warnings </pre>
+        <p>where NN is the number of warning messages that were printed. </p>
+        <p>In the execution phase, the destination database is filled with revisions from the contents of the source database (see Figure 2-5).  During this phase, db_REVISE will print a status line for each source database file from which it is reading records.  The status line appears as follows: </p><pre>Processing file datafile containing NNN records </pre>
+        <p>where datafile is one of the data files from your database and NNN is the approximate number of records in that file.  Although they are not processed, deleted records are included in the count. </p>
+        <p class="Caption">
+            <img src="../../Resources/Images/db_revise/02000008.jpg" class="img_1" />
+            <br />Figure 2-5.  Execution Phase </p>
+        <p>All records from each source database data file are read and processed before proceeding to the next data file. </p>
+        <p>Execution phase errors and warnings are printed.  Errors will cause db_REVISE to abort immediately, after closing the databases.  Warnings will not cause db_REVISE to abort, unless specifically requested.  (See  <a href="#2.6.2">Command Line Options</a>).  Most warnings consist of data loss messages, where character strings must be shortened or four-byte integers are changed to two. </p>
+        <p><a href="AppendixA.htm">Warnings and Errors</a> contains a summary of all compilation and execution phase error and warning messages. </p>
+        <h3 class="Heading3"><a MadCap:generatedBookmark="TOC" name="2.5.2_Command_Line_Options"></a><a name="2.6.2"></a>2.5.2 Command Line Options </h3>
+        <p>The complete syntax of the db_REVISE command line is as follows: </p><pre><b><a name="kanchor417"></a>dbrev </b><i>[-r] [-d] [-i] [-q] [-cL] [-aL] [-xL] [-s rdl_file] 
+    [-e "RDL_statements"] source_db_path dest_db_path</i> <![CDATA[ ]]></pre>
+        <p>where: </p>
+        <table style="width: 100%;mc-table-style: url('../../Resources/TableStyles/ArgsTwoCol.css');margin-left: 0;margin-right: auto;" class="TableStyle-ArgsTwoCol" cellspacing="0">
+            <col class="Column-Column1" />
+            <col class="Column-Column2" />
+            <tbody>
+                <tr class="Body-Body1">
+                    <td class="BodyE-Column1-Body1">-r</td>
+                    <td class="BodyD-Column2-Body1">requests a report, which will be written to a file named source_db_path.rep.  The default is to produce no report.  The report will contain a copy of any RDL statements used and a summary of the differences between the source and destination schemas.</td>
+                </tr>
+                <tr class="Body-Body1">
+                    <td class="BodyE-Column1-Body1">-d</td>
+                    <td class="BodyD-Column2-Body1">is the debug option, which will cause db_REVISE to perform the compilation phase only.  The destination database will not be affected.  If the -r option is used, the report will also be generated. </td>
+                </tr>
+                <tr class="Body-Body1">
+                    <td class="BodyE-Column1-Body1">-i</td>
+                    <td class="BodyD-Column2-Body1">is the option that enables keyboard interrupts.  By default, keyboard interrupts will be disabled.</td>
+                </tr>
+                <tr class="Body-Body1">
+                    <td class="BodyE-Column1-Body1">-q</td>
+                    <td class="BodyD-Column2-Body1">is the quick revision option.  This will cause db_REVISE to speed up its processing of the revision by retaining deleted records in the destination database.  By retaining deleted records, db_REVISE can, in most cases, guarantee that the record addresses will remain the same between databases.  This eliminates the need to translate each old record address to the new address.  (See  <a href="#2.7">Performance Considerations</a>). </td>
+                </tr>
+                <tr class="Body-Body1">
+                    <td class="BodyE-Column1-Body1">-cL</td>
+                    <td class="BodyD-Column2-Body1">is the compilation phase error level, where L is 0 or 1.  Level 0 suppresses all warnings and non-fatal errors.  Level 1 allows all compilation phase errors to be printed.  Default is Level 1.</td>
+                </tr>
+                <tr class="Body-Body1">
+                    <td class="BodyE-Column1-Body1">-aL</td>
+                    <td class="BodyD-Column2-Body1">is the abort level, where L is 0 or 1.  When set to level 0, db_REVISE will abort only because of fatal errors.  Level 1 will cause it to abort when a warning occurs during the execution phase.  Default is Level 0.</td>
+                </tr>
+                <tr class="Body-Body1">
+                    <td class="BodyE-Column1-Body1">-xL</td>
+                    <td class="BodyD-Column2-Body1">is the execution phase error level, where L is 0 or 1.  Level 0 suppresses all warnings and non-fatal errors.  Level 1 allows all execution phase error messages to be printed.  Default is Level 1. </td>
+                </tr>
+                <tr class="Body-Body1">
+                    <td class="BodyE-Column1-Body1">-s</td>
+                    <td class="BodyD-Column2-Body1">supplies the name of an RDL file, if required.</td>
+                </tr>
+                <tr class="Body-Body1">
+                    <td class="BodyE-Column1-Body1">-e</td>
+                    <td class="BodyD-Column2-Body1">specifies that the string that follows contains one or more RDL statements (terminated by semi-colons).  This eliminates the need for an RDL file when the RDL statements are short. </td>
+                </tr>
+                <tr class="Body-Body1">
+                    <td class="BodyE-Column1-Body1">source_db_path</td>
+                    <td class="BodyD-Column2-Body1">is the full path required to locate the database dictionary file of the source database.  The tail of the path must be the name of the database. </td>
+                </tr>
+                <tr class="Body-Body1">
+                    <td class="BodyB-Column1-Body1">dest_db_path</td>
+                    <td class="BodyA-Column2-Body1">is the full path required to locate the database dictionary file of the destination database.  The tail of the path must be the name of the database.</td>
+                </tr>
+            </tbody>
+        </table>
+        <p class="Heading">Notes: </p>
+        <ul>
+            <li value="1">The initialized destination database files must exist before db_REVISE is executed.  That is, <a href="../ddlp.htm">ddlp</a> and <a href="../initdb.htm">initdb</a> must already have been run on the destination schema.</li>
+            <li value="2">db_REVISE will print an error message and terminate if any of the dictionary files for the source, destination, or working databases do not exist.</li>
+        </ul> <![CDATA[ ]]><h3 class="Heading3"><a MadCap:generatedBookmark="TOC" name="2.5.3_Exit_Status_Codes"></a>2.5.3 Exit Status Codes </h3><p>db_REVISE returns meaningful exit status codes to the operating system.  Generally, an exit status value of zero indicates successful completion of a revision and a non-zero value indicates an error. </p><p>If you are an MS-DOS user, you may check the exit status of db_REVISE in a batch file with the if error level statement.  </p><p>For example: </p><pre>dbrev -rs ... 
+if errorlevel 1 
+goto fail 
+del tims.* 
+copy dest\tims.* 
+del dest\tims.* 
+rmdir dest 
+goto end 
+:fail echo Database upgrade failure! 
+echo Please contact Technical Support at ... 
+:end </pre><p>A non-zero exit status may indicate one of a number of errors.  Six different error types are enumerated below. </p><table style="width: 100%;border-left-style: solid;border-left-width: 1px;border-left-color: #c0c0c0;border-right-style: solid;border-right-width: 1px;border-right-color: #c0c0c0;border-top-style: solid;border-top-width: 1px;border-top-color: #c0c0c0;border-bottom-style: solid;border-bottom-width: 1px;border-bottom-color: #c0c0c0;border-collapse: collapse;margin-left: 0;margin-right: auto;mc-table-style: url('../../Resources/TableStyles/BasicTwoCol.css');" class="TableStyle-BasicTwoCol" cellspacing="0"><col class="Column-Column1" /><col class="Column-Column2" /><thead><tr class="Head-Header1"><th class="HeadE-Column1-Header1">Exit</th><th class="HeadD-Column2-Header1">Status Condition</th></tr></thead><tbody><tr class="Body-Body1"><td class="BodyE-Column1-Body1">0</td><td class="BodyD-Column2-Body1">Successful completion</td></tr><tr class="Body-Body1"><td class="BodyE-Column1-Body1">1</td><td class="BodyD-Column2-Body1">Command line error</td></tr><tr class="Body-Body1"><td class="BodyE-Column1-Body1">2</td><td class="BodyD-Column2-Body1">Failure of d_open call</td></tr><tr class="Body-Body1"><td class="BodyE-Column1-Body1">3</td><td class="BodyD-Column2-Body1">Fatal compilation error</td></tr><tr class="Body-Body1"><td class="BodyE-Column1-Body1">4</td><td class="BodyD-Column2-Body1">Fatal execution error</td></tr><tr class="Body-Body1"><td class="BodyE-Column1-Body1">5</td><td class="BodyD-Column2-Body1">Execution warning (with -a1 option set)</td></tr><tr class="Body-Body1"><td class="BodyB-Column1-Body1">6</td><td class="BodyA-Column2-Body1">Duplicate key detected</td></tr></tbody></table><h2 class="Heading2"><a MadCap:generatedBookmark="TOC" name="2.6_Performance_Considerations"></a><a name="2.7"></a>2.6 Performance Considerations </h2><p>During the execution phase of db_REVISE, each source record is read, revised, then written as a destination record.  The speed at which db_REVISE can process each source record depends mainly on the number of set connections in which the record is involved.  Set connections are implemented through the use of record addresses.  Because the record addresses may change during the revision, db_REVISE must build a translation table so that it can locate the new address of a record when a set connection refers to it. </p><p>Two implications of translation tables are listed below: </p><ol><li value="1">Each set of member pointers in a record will require three table look-ups to obtain the new pointer values.  Each set of set pointers will require two table look-ups.</li><li value="2">The translation table is maintained as a third <span class="MyVariablesProductShortName">RDM</span> database (called the db_REVISE working database).  The space on the disk required for the table may be significant.  A source database with many set connections may require a working database that approaches the same size.</li></ol><p>Under certain conditions, db_REVISE knows that record addresses will remain unchanged between the source and destination databases.  This eliminates the need to translate addresses, and no translation table entry for that record is created.  These conditions would be present on an individual data file basis (i.e., some data files may require translation, others may not). </p><p>Most simple database revisions will not require translation tables.  However, when record projection (see  <a href="Chapter3.htm#3.3">Derived Revision</a>) or record type initialization (see  <a href="Chapter3.htm#3.4">Specified Revisions</a>) operations are performed, translation tables are needed and db_REVISE will run more slowly. </p><hr MadCap:conditions="Default.ScreenOnly" width="100%" size="0" align="center" /><p MadCap:conditions="Default.ScreenOnly" style="font-size: 8pt;"><span class="MyVariablesCopyright">Copyright © 2012, Raima Inc. All rights reserved.</span></p><script type="text/javascript" src="../../SkinSupport/MadCapBodyEnd.js"></script><p class="MCWebHelpFramesetLink MCWebHelpFramesetLinkBottom" style="display: none;"><a href="../../../Default_CSH.htm#util/dbrevise/Chapter2.htm" style="">Open topic with navigation</a></p></body>
+</html>

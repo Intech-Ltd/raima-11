@@ -1,0 +1,301 @@
+<?xml version="1.0" encoding="utf-8"?>
+<!DOCTYPE html PUBLIC "-//W3C//DTD XHTML 1.0 Strict//EN" "http://www.w3.org/TR/xhtml1/DTD/xhtml1-strict.dtd">
+<html xmlns:MadCap="http://www.madcapsoftware.com/Schemas/MadCap.xsd" MadCap:tocPath="Utility Programs|Utility Function Descriptions" MadCap:InPreviewMode="false" MadCap:PreloadImages="false" MadCap:RuntimeFileType="Topic" MadCap:TargetType="WebHelp" lang="en-us" xml:lang="en-us" class="" MadCap:PathToHelpSystem="../../../" MadCap:HelpSystemFileName="Default.xml" MadCap:SearchType="Stem">
+    <head>
+        <meta http-equiv="Content-Type" content="text/html; charset=utf-8" /><title>d_dbexpcsv</title>
+        <link rel="icon" type="image/png" href="http://docs.raima.com/favicon.png" />
+        <link href="../../SkinSupport/MadCap.css" rel="stylesheet" />
+        <link href="../../Resources/TableStyles/ParamStruct.css" rel="stylesheet" />
+        <link href="../../Resources/TableStyles/FunctionArgs.css" rel="stylesheet" />
+        <link href="../../Resources/TableStyles/CoreErrCodes.css" rel="stylesheet" />
+        <link href="../../Resources/Stylesheets/raima.css" rel="stylesheet" />
+        <script src="../../SkinSupport/MadCapAll.js" type="text/javascript">
+        </script>
+    </head>
+    <body>
+        <p class="MCWebHelpFramesetLink MCWebHelpFramesetLinkTop" style="display: none;"><a href="../../../Default_CSH.htm#RM/utilapi/d_dbexpcsv.htm" style="">Open topic with navigation</a>
+        </p>
+        <div class="MCBreadcrumbsBox_0"><span class="MCBreadcrumbsPrefix">You are here: </span><a class="MCBreadcrumbsLink" href="../../dbUTIL.htm">Utility Programs</a><span class="MCBreadcrumbsDivider"> &gt; </span><a class="MCBreadcrumbsLink" href="../Chapter39.htm">Utility Function Descriptions</a><span class="MCBreadcrumbsDivider"> &gt; </span><span class="MCBreadcrumbs">d_dbexpcsv</span>
+        </div>
+        <h3 class="newpage"><a name="kanchor422"></a>d_dbexpcsv</h3>
+        <p>Database ASCII export utility API.</p>
+        <p class="Heading">Prototype</p><pre xml:space="preserve">int32_t <b>d_dbexpcsv</b>(
+    const DBEXPCSV_PARAMS *<i>params</i>,
+    DB_TASK               *<i>task</i>,
+    int32_t                <i>dbn</i>);</pre><pre xml:space="preserve">int32_t <b>d_dbexpcsvW</b>(
+    const DBEXPCSV_PARAMSW *<i>params</i>,
+    DB_TASK                *<i>task</i>,
+    int32_t                 <i>dbn</i>);
+</pre>
+        <p class="Heading">Parameters</p>
+        <table style="width: 100%;mc-table-style: url('../../Resources/TableStyles/FunctionArgs.css');margin-left: 0;margin-right: auto;" class="TableStyle-FunctionArgs" cellspacing="0">
+            <col style="width: 140px;" class="Column-Column1" />
+            <col style="width: 80px;" class="Column-Column3" />
+            <col class="Column-Column2" />
+            <tbody>
+                <tr class="Body-Body1">
+                    <td class="BodyB-Column1-Body1">params</td>
+                    <td class="BodyB-Column3-Body1">(input)</td>
+                    <td class="BodyA-Column2-Body1">A pointer to a DBEXPCSV_PARAMS structure.</td>
+                </tr>
+            </tbody>
+        </table>
+        <table style="width: 100%;mc-table-style: url('../../Resources/TableStyles/FunctionArgs.css');margin-left: 0;margin-right: auto;caption-side: top;" class="TableStyle-FunctionArgs" cellspacing="0">
+            <col style="width: 140px;" class="Column-Column1" />
+            <col style="width: 80px;" class="Column-Column3" />
+            <col class="Column-Column2" />
+            <tbody>
+                <tr class="Body-Body1">
+                    <td class="BodyE-Column1-Body1">task</td>
+                    <td class="BodyE-Column3-Body1">(input)</td>
+                    <td class="BodyD-Column2-Body1">A pointer to a <code>DB_TASK</code> structure.</td>
+                </tr>
+                <tr class="Body-Body1">
+                    <td class="BodyB-Column1-Body1">dbn</td>
+                    <td class="BodyB-Column3-Body1">(input)</td>
+                    <td class="BodyA-Column2-Body1">The database number.</td>
+                </tr>
+            </tbody>
+        </table>
+        <p class="Heading">Description</p>
+        <p>This API exports data from the database to an ASCII text files that can then be moved to another computer, or used as input into other tools that read ASCII formatted files (for example, dbimp). The <b>d_dbexpcsv</b> API writes all data from each record type to a separate file; it is the record name with file extension .txt. If a record name, <code>recname</code>, is specified, then only that record type's occurrences are exported. The created files will consist of one text line per record occurrence with <code>sep_char</code> characters separating the data fields.</p>
+        <p>The dbexp API has two ways of printing extended ASCII characters to the output files. The default is to write out the octal value. Since dbimp cannot handle this method, the extended option can be used to print the extended ASCII character as the character. For example, ASCII 2 would be printed as "\002" without the extended and as a smiley face with the extended option.</p>
+        <table style="width: 100%;border-collapse: collapse;border-left-style: solid;border-left-width: 1px;border-left-color: #c0c0c0;border-right-style: solid;border-right-width: 1px;border-right-color: #c0c0c0;border-top-style: solid;border-top-width: 1px;border-top-color: #c0c0c0;border-bottom-style: solid;border-bottom-width: 1px;border-bottom-color: #c0c0c0;margin-left: 0;margin-right: auto;mc-table-style: url('../../Resources/TableStyles/ParamStruct.css');caption-side: top;" class="TableStyle-ParamStruct" cellspacing="0">
+            <caption>DBEXPCSV_PARAMS structure</caption>
+            <col style="width: 116px;" class="Column-Column1" />
+            <col style="width: 125px;" class="Column-Column2" />
+            <col class="Column-Column3" />
+            <thead>
+                <tr class="Head-Header1">
+                    <th class="HeadE-Column1-Header1">Member</th>
+                    <th class="HeadE-Column2-Header1">Type</th>
+                    <th class="HeadD-Column3-Header1">Description</th>
+                </tr>
+            </thead>
+            <tbody>
+                <tr class="Body-Body1">
+                    <td style="font-family: monospace;" class="BodyE-Column1-Body1">quiet</td>
+                    <td style="font-family: monospace;" class="BodyE-Column2-Body1">DB_BOOLEAN</td>
+                    <td class="BodyD-Column3-Body1">No output except for errors.</td>
+                </tr>
+                <tr class="Body-Body1">
+                    <td style="font-family: monospace;" class="BodyE-Column1-Body1">verbose</td>
+                    <td style="font-family: monospace;" class="BodyE-Column2-Body1">DB_BOOLEAN</td>
+                    <td class="BodyD-Column3-Body1">Show detailed output of the operations performed on the database</td>
+                </tr>
+                <tr class="Body-Body1">
+                    <td style="font-family: monospace;" class="BodyE-Column1-Body1">decimal</td>
+                    <td style="font-family: monospace;" class="BodyE-Column2-Body1">DB_BOOLEAN</td>
+                    <td class="BodyD-Column3-Body1">Print database addresses as long integers.</td>
+                </tr>
+                <tr class="Body-Body1">
+                    <td style="font-family: monospace;" class="BodyE-Column1-Body1">unicode</td>
+                    <td style="font-family: monospace;" class="BodyE-Column2-Body1">DB_BOOLEAN</td>
+                    <td class="BodyD-Column3-Body1">Deprecated. Left in for legacy code.</td>
+                </tr>
+                <tr class="Body-Body1">
+                    <td style="font-family: monospace;" class="BodyE-Column1-Body1">extended</td>
+                    <td style="font-family: monospace;" class="BodyE-Column2-Body1">DB_BOOLEAN</td>
+                    <td class="BodyD-Column3-Body1">Print extended ASCII characters (default is to use octal).</td>
+                </tr>
+                <tr class="Body-Body1">
+                    <td style="font-family: monospace;" class="BodyE-Column1-Body1">rec_addr</td>
+                    <td style="font-family: monospace;" class="BodyE-Column2-Body1">DB_BOOLEAN</td>
+                    <td class="BodyD-Column3-Body1">Print the database address as the first field of each record instance.</td>
+                </tr>
+                <tr class="Body-Body1">
+                    <td style="font-family: monospace;" class="BodyE-Column1-Body1">mem_addr</td>
+                    <td style="font-family: monospace;" class="BodyE-Column2-Body1">DB_BOOLEAN</td>
+                    <td class="BodyD-Column3-Body1">Print the database address of the owners of all sets for which a record is a member.</td>
+                </tr>
+                <tr class="Body-Body1">
+                    <td style="font-family: monospace;" class="BodyE-Column1-Body1">textblob</td>
+                    <td style="font-family: monospace;" class="BodyE-Column2-Body1">DB_BOOLEAN</td>
+                    <td class="BodyD-Column3-Body1">Export blob fields as ASCII characters</td>
+                </tr>
+                <tr class="Body-Body1">
+                    <td style="font-family: monospace;" class="BodyE-Column1-Body1">sep_char</td>
+                    <td style="font-family: monospace;" class="BodyE-Column2-Body1">char</td>
+                    <td class="BodyD-Column3-Body1">The field separator character (default is ',')</td>
+                </tr>
+                <tr class="Body-Body1">
+                    <td style="font-family: monospace;" class="BodyE-Column1-Body1">esc_char</td>
+                    <td style="font-family: monospace;" class="BodyE-Column2-Body1">char</td>
+                    <td class="BodyD-Column3-Body1">The escape character (default is '\')</td>
+                </tr>
+                <tr class="Body-Body1">
+                    <td style="font-family: monospace;" class="BodyE-Column1-Body1">n_recs</td>
+                    <td style="font-family: monospace;" class="BodyE-Column2-Body1">uint16_t</td>
+                    <td class="BodyD-Column3-Body1">The number of record names listed in the <code>recnames</code> parameter.  This should be 0 if you want to export all records in the database.</td>
+                </tr>
+                <tr class="Body-Body1">
+                    <td style="font-family: monospace;" class="BodyE-Column1-Body1">recnames</td>
+                    <td style="font-family: monospace;" class="BodyE-Column2-Body1">char</td>
+                    <td class="BodyD-Column3-Body1">An array of record names listing the specific records that will be exported.  If this list is empty all records in the database will be exported.</td>
+                </tr>
+                <tr class="Body-Body1">
+                    <td style="font-family: monospace;" class="BodyE-Column1-Body1">stdout_file</td>
+                    <td style="font-family: monospace;" class="BodyE-Column2-Body1">const char *</td>
+                    <td class="BodyD-Column3-Body1">This specifies the name of the file to which output data will be written. If set to PSP_STDOUT, stdout is used. If set to NULL or to an empty string, no output will be generated.</td>
+                </tr>
+                <tr class="Body-Body1">
+                    <td style="font-family: monospace;" class="BodyE-Column1-Body1">printfData</td>
+                    <td style="font-family: monospace;" class="BodyE-Column2-Body1">void *</td>
+                    <td class="BodyD-Column3-Body1">Deprecated. Set to NULL.</td>
+                </tr>
+                <tr class="Body-Body1">
+                    <td style="font-family: monospace;" class="BodyB-Column1-Body1">openfiles</td>
+                    <td style="font-family: monospace;" class="BodyB-Column2-Body1">uint8_t</td>
+                    <td class="BodyA-Column3-Body1">Deprecated. Set to 0.</td>
+                </tr>
+            </tbody>
+        </table>
+        <p class="Heading">Currency Changes</p>
+        <p>This utility will invalidate currency.</p>
+        <p class="Heading">Locking Requirements</p>
+        <p>This utility requires exclusive read to the database.  If you open the database in shared 's' mode you must get read ('r') locks on all database files.</p>
+        <p class="Heading">Required Headers</p><pre xml:space="preserve">#include "dutilproto.h"</pre>
+        <p class="Heading">Libraries</p>
+        <table style="width: 100%; margin-left: 0; margin-right: auto;">
+            <col style="width: 200px;">
+            </col>
+            <col>
+            </col>
+            <thead>
+                <tr>
+                    <th>Library Name</th>
+                    <th>Description</th>
+                </tr>
+            </thead>
+            <tbody>
+                <tr>
+                    <td><code>rdmdbexp<span class="MyVariablesLibraryVersion">11</span></code>
+                    </td>
+                    <td><span class="MyVariablesProductShortName">RDM</span> database export library</td>
+                </tr>
+            </tbody>
+        </table>
+        <p>See <a href="../../GS/distrib.htm#Library">Library Naming Conventions</a> section for full library name and a list of library dependencies.</p>
+        <p class="Heading">Return Codes</p>
+        <table class="TableStyle-CoreErrCodes" cellspacing="0" style="mc-table-style: url('../../Resources/TableStyles/CoreErrCodes.css');">
+            <col class="Column-Column1" />
+            <col class="Column-Column2" />
+            <col class="Column-Column3" />
+            <thead>
+                <tr class="Head-Header1">
+                    <th class="HeadE-Column1-Header1">Value</th>
+                    <th class="HeadE-Column2-Header1">Name</th>
+                    <th class="HeadD-Column3-Header1">Description</th>
+                </tr>
+            </thead>
+            <tbody>
+                <tr class="Body-Body1">
+                    <td class="BodyB-Column1-Body1">0</td>
+                    <td class="BodyB-Column2-Body1">S_OKAY</td>
+                    <td class="BodyA-Column3-Body1">normal return, okay</td>
+                </tr>
+            </tbody>
+        </table>
+        <table class="TableStyle-CoreErrCodes" cellspacing="0" style="mc-table-style: url('../../Resources/TableStyles/CoreErrCodes.css');">
+            <col class="Column-Column1" />
+            <col class="Column-Column2" />
+            <col class="Column-Column3" />
+            <tbody>
+                <tr class="Body-Body1">
+                    <td class="BodyB-Column1-Body1">-4</td>
+                    <td class="BodyB-Column2-Body1">S_INVDB</td>
+                    <td class="BodyA-Column3-Body1">cannot open dictionary</td>
+                </tr>
+            </tbody>
+        </table>
+        <table class="TableStyle-CoreErrCodes" cellspacing="0" style="mc-table-style: url('../../Resources/TableStyles/CoreErrCodes.css');">
+            <col class="Column-Column1" />
+            <col class="Column-Column2" />
+            <col class="Column-Column3" />
+            <tbody>
+                <tr class="Body-Body1">
+                    <td class="BodyB-Column1-Body1">-21</td>
+                    <td class="BodyB-Column2-Body1">S_INCOMPAT</td>
+                    <td class="BodyA-Column3-Body1">incompatible dictionary file</td>
+                </tr>
+            </tbody>
+        </table>
+        <table class="TableStyle-CoreErrCodes" cellspacing="0" style="mc-table-style: url('../../Resources/TableStyles/CoreErrCodes.css');">
+            <col class="Column-Column1" />
+            <col class="Column-Column2" />
+            <col class="Column-Column3" />
+            <tbody>
+                <tr class="Body-Body1">
+                    <td class="BodyB-Column1-Body1">-904</td>
+                    <td class="BodyB-Column2-Body1">S_NOMEMORY</td>
+                    <td class="BodyA-Column3-Body1">out of memory</td>
+                </tr>
+            </tbody>
+        </table>
+        <table class="TableStyle-CoreErrCodes" cellspacing="0" style="mc-table-style: url('../../Resources/TableStyles/CoreErrCodes.css');">
+            <col class="Column-Column1" />
+            <col class="Column-Column2" />
+            <col class="Column-Column3" />
+            <tbody>
+                <tr class="Body-Body1">
+                    <td class="BodyB-Column1-Body1">-905</td>
+                    <td class="BodyB-Column2-Body1">S_NOFILE</td>
+                    <td class="BodyA-Column3-Body1">error opening data or key file</td>
+                </tr>
+            </tbody>
+        </table>
+        <table class="TableStyle-CoreErrCodes" cellspacing="0" style="mc-table-style: url('../../Resources/TableStyles/CoreErrCodes.css');">
+            <col class="Column-Column1" />
+            <col class="Column-Column2" />
+            <col class="Column-Column3" />
+            <tbody>
+                <tr class="Body-Body1">
+                    <td class="BodyB-Column1-Body1">-919</td>
+                    <td class="BodyB-Column2-Body1">S_BADWRITE</td>
+                    <td class="BodyA-Column3-Body1">error writing to a data or key file</td>
+                </tr>
+            </tbody>
+        </table>
+        <p class="Heading">See Also</p>
+        <p><a href="../../util/dbexp.htm">dbexp utility</a>
+        </p>
+        <p class="Heading">Example</p><pre xml:space="preserve">
+/* RDM Database ASCII Export Utility API Example ******************************
+*/
+int32_t MAIN(int32_t argc, const char *const *argv)
+{
+    int32_t         status = S_OKAY;
+    DB_TASK        *task;
+    DBEXPCSV_PARAMS params;
+    char           *recnames[2] = {"author", "info"};
+
+    memset(&amp;params, 0, sizeof(DBEXPCSV_PARAMS));
+
+    /* just set the non-zero parameters */
+    params.verbose     = TRUE;
+    params.rec_addr    = TRUE;
+    params.mem_addr    = TRUE;
+    params.n_recs      = 2;
+    params.recnames    = recnames;
+    params.stdout_file = PSP_STDOUT;
+
+    if ((status = d_opentask(&amp;task)) == S_OKAY) {
+        if ((status = d_open("tims", "x", task)) == S_OKAY) {
+            status = d_dbexpcsv(&amp;params, task, CURR_DB);
+            d_close(task);
+        }
+        d_closetask(task);
+    }
+
+    return(0);
+}
+</pre>
+        <hr MadCap:conditions="Default.ScreenOnly" width="100%" size="0" align="center" />
+        <p MadCap:conditions="Default.ScreenOnly" style="font-size: 8pt;"><span class="MyVariablesCopyright">Copyright © 2012, Raima Inc. All rights reserved.</span>
+        </p>
+        <script type="text/javascript" src="../../SkinSupport/MadCapBodyEnd.js">
+        </script>
+        <p class="MCWebHelpFramesetLink MCWebHelpFramesetLinkBottom" style="display: none;"><a href="../../../Default_CSH.htm#RM/utilapi/d_dbexpcsv.htm" style="">Open topic with navigation</a>
+        </p>
+    </body>
+</html>

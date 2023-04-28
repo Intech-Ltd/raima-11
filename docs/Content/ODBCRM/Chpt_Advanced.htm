@@ -1,0 +1,215 @@
+<?xml version="1.0" encoding="utf-8"?>
+<!DOCTYPE html PUBLIC "-//W3C//DTD XHTML 1.0 Strict//EN" "http://www.w3.org/TR/xhtml1/DTD/xhtml1-strict.dtd">
+<html xmlns:MadCap="http://www.madcapsoftware.com/Schemas/MadCap.xsd" MadCap:tocPath="SQL API|ODBC User's Guide" MadCap:InPreviewMode="false" MadCap:PreloadImages="false" MadCap:RuntimeFileType="Topic" MadCap:TargetType="WebHelp" lang="en-us" xml:lang="en-us" MadCap:PathToHelpSystem="../../" MadCap:HelpSystemFileName="Default.xml" MadCap:SearchType="Stem">
+    <head>
+        <meta http-equiv="Content-Type" content="text/html; charset=utf-8" /><title>Advanced Topics</title>
+        <link rel="icon" type="image/png" href="http://docs.raima.com/favicon.png" />
+        <link href="../SkinSupport/MadCap.css" rel="stylesheet" />
+        <link href="../Resources/Stylesheets/raima.css" rel="stylesheet" />
+        <script src="../SkinSupport/MadCapAll.js" type="text/javascript">
+        </script>
+    </head>
+    <body>
+        <p class="MCWebHelpFramesetLink MCWebHelpFramesetLinkTop" style="display: none;"><a href="../../Default_CSH.htm#ODBCRM/Chpt_Advanced.htm" style="">Open topic with navigation</a>
+        </p>
+        <div class="MCBreadcrumbsBox_0"><span class="MCBreadcrumbsPrefix">You are here: </span><a class="MCBreadcrumbsLink" href="../dbRSQL.htm">SQL API</a><span class="MCBreadcrumbsDivider"> &gt; </span><a class="MCBreadcrumbsLink" href="dbODBCUG.htm">ODBC User's Guide</a><span class="MCBreadcrumbsDivider"> &gt; </span><span class="MCBreadcrumbs">Advanced Topics</span>
+        </div>
+        <h1><a MadCap:generatedBookmark="TOC" name="Advanced_Topics"></a>Advanced Topics</h1>
+        <h2><a MadCap:generatedBookmark="TOC" name="Working_with_Parameters"></a>Working with Parameters</h2>
+        <p>Oftentimes an application needs to execute multiple SQL statements that are almost identical. For instance, an application inserting multiple rows into a table typically executes an <b>INSERT</b> statement differing only in the actual values to insert, as shown below.</p>
+        <p class="Caption">Example 8 Multiple INSERT statements</p><pre xml:space="preserve">INSERT INTO person VALUES 'Jackson, Michael', 'M', '1';
+INSERT INTO person VALUES 'Swift, Taylor', 'F', '2';
+INSERT INTO person VALUES 'Mercury, Freddie', 'F', '1';
+</pre>
+        <p>Calling SQLExecDirect three times will get the job done, but it is not the most efficient way of handling the case as <code>SQLExecDirect</code> prepares and executes each statement. Since the syntax of the three statements is identical, it saves an application time if the identical portion of the statements can be prepared just once, and the insertion of different values can be executed separately.</p>
+        <p><span class="MyVariablesProductShortName">RDM</span> ODBC provides that exact feature, called dynamic parameter binding. An application can prepare an SQL statement replacing the actual values with the symbols called parameter markers ('?'). Statements that include parameter markers are called parameterized statements.</p>
+        <p class="Caption">Example 9 Statement with parameter markers</p><pre xml:space="preserve">INSERT INTO person VALUES ?, ?, ?;</pre>
+        <p>An application can perform parameter binding on each of the parameter markers of a parameterized statement by calling <code>SQLBindParameter</code>. <code>SQLBindParameter</code> lets an application specify a variable to store the value that will replace the parameter marker at statement execution time. This allows an application to dynamically change the values that go with a statement after the statement has been prepared and before it has been executed.</p>
+        <p>The following example inserts three rows into the PERSON table using dynamic parameter binding.</p>
+        <p class="Caption">Example 10 Dynamic parameter binding</p><pre xml:space="preserve">#include "sqlrdm.h"
+
+typedef struct person {
+    char name[36];
+    char gender[2];
+    char jobclass[2];
+} PERSON;
+
+/* Three rows to insert into the PERSON table */
+static const PERSON people[] = {
+    {"Jackson, Michael", "M", "1"},
+    {"Swift, Taylor", "F", "2"},
+    {"Mercury, Freddie", "M", "1"}
+};
+
+SQLRETURN insertMultipleRows(
+    SQLHDBC  hDbc,
+    SQLHSTMT hStmt)
+{
+    SQLRETURN   rc;
+    const char *pszInsert = "INSERT INTO person VALUES ?, ?, ?";
+    SQLLEN      cb1, cb2, cb3;
+    uint16_t    ii;
+
+    /* Assumption: hStmt has already been allocated */
+    
+    /* Prepare the statement once */
+    rc = SQLPrepare(hStmt, (SQLCHAR *) pszInsert, SQL_NTS);
+    if (SQL_SUCCEEDED(rc)) {
+        /* Bind parameters for the three parameter markers */
+        (void) SQLBindParameter(hStmt, 1, SQL_PARAM_INPUT,
+                SQL_C_CHAR, SQL_CHAR, 35, 0, szName, 0, &amp;cb1);
+        (void) SQLBindParameter(hStmt, 1, SQL_PARAM_INPUT,
+                SQL_C_CHAR, SQL_CHAR, 1, 0, szGender, 0, &amp;cb2);
+        (void) SQLBindParameter(hStmt, 1, SQL_PARAM_INPUT,
+                SQL_C_CHAR, SQL_CHAR, 1, 0, szJob, 0, &amp;cb3);
+
+        for (ii = 0; ii &lt; RLEN(people); ii++) {
+            /* Copy the values of the ii-th row into bound variables */ 
+            strcpy(szName, people[ii].name);
+            strcpy(szGender, people[ii].gender);
+            strcpy(szJobclass, people[ii].jobclass);
+
+            cb1 = cb2 = cb3 = SQL_NTS;
+
+            /* Execute the prepared statement using the variables
+               that are just bound to the parameters */
+            rc = SQLExecute(hStmt);
+            if (!SQL_SUCCEEDED(rc))
+                break;
+        }
+
+        if (SQL_SUCCEEDED(rc))
+            SQLEndTran(SQL_HANDLE_DBC, hDbc, SQL_COMMIT);
+        else
+            SQLEndTran(SQL_HANDLE_DBC, hDbc, SQL_ROLLBACK);
+    }
+
+    return rc;
+}               
+</pre>
+        <p>The last argument of <code>SQLBindParameter</code> can be used to specify the length of the actual data bound to a parameter. For fixed data types, the content of the argument is ignored. For character and binary data types, the length should be expressed in the number of bytes, or SQL_NTS if the data is a null-terminated string. SQL_NULL_DATA should be specified to indicate that NULL will be inserted into the corresponding column.</p>
+        <h2><a MadCap:generatedBookmark="TOC" name="Fetching_Multiple_Rows_at_Once"></a>Fetching Multiple Rows at Once</h2>
+        <p><code>SQLFetch</code> retrieves one row of the result set at a time. It can be a significant network overhead for an application accessing the data source through a remote server. To reduce network traffic, <span class="MyVariablesProductShortName">RDM</span> ODBC provides a way to tell its driver to retrieve the specified number of rows at a time. An application can call <code>SQLSetStmtAttr</code> and set the SQL_ATTR_ROW_ARRAY_SIZE statement attribute to the number of rows to retrieve with a single call to <code>SQLFetch</code>, as shown in Example 11. If the value of the attribute is 0 (as is by default), <code>SQLFetch</code> retrieves one row at a time.</p>
+        <p>When an application fetches multiple rows at a time, the variable it binds to a column must be an array whose cardinality should match the number of rows to retrieve. For instance, if 10 rows are to be fetched at a time, the variable bound to an INTEGER column must be declared as "<code>int16_t var[10]</code>".</p>
+        <p>When one call to SQLFetch returns multiple rows, the return code of <code>SQLFetch</code> itself cannot represent the potentially different statuses of the retrieved rows. For instance, one of the 10 rows retrieved may have its data truncated. In a situation like that, where some (but not all) returned rows contain errors or warnings, <code>SQLFetch</code> returns SQL_SUCCESS_WITH_INFO. An application can call <code>SQLGetDiagRec</code> to retrieve all the errors and warnings contained in the result set.</p>
+        <p>An application can also tell the ODBC driver to store the statuses of all result rows into an array specified by the application. It can be done by setting the</p>
+        <p>SQL_ATTR_ROW_STATUS_PTR statement attribute to the pointer to the array of SQLUSMALLINTs. The cardinality of the array should match the number of result rows to retrieve at once.</p>
+        <p>Finally, an application can set the SQL_ATTR_ROWS_FETCHED_PTR statement attribute to the pointer to an SQLULEN variable to have the number of returned rows stored in that variable.</p>
+        <p>The following example illustrates how to retrieve 10 rows at a time from the PERSON table.</p>
+        <p class="Caption">Example 11 Retrieving multiple rows</p><pre xml:space="preserve">#include "sqlrdm.h"
+
+#define ROW_ARRAY_SIZE 10 /* Fetch 10 rows at a time */
+
+SQLRETURN runDbOperations(
+    SQLHDBC hDbc)
+{
+    SQLRETURN   rc;
+    SQLHSTMT    hStmt;
+    const char *pszStmt = "SELECT * FROM person";
+    char        szName[ROW_ARRAY_SIZE][36];
+    char        szGender[ROW_ARRAY_SIZE][2];
+    char        szJob[ROW_ARRAY_SIZE][2];
+    SQLLEN      cb1[ROW_ARRAY_SIZE],
+                cb2[ROW_ARRAY_SIZE],
+                cb3[ROW_ARRAY_SIZE];
+    SQLULEN     ucbFetchedRows;
+    SQLULEN     ii;
+
+    /* Allocate a statement handle */
+    rc = SQLAllocHandle(SQL_HANDLE_STMT, hDbc, &amp;hStmt);
+    if (SQL_SUCCEEDED(rc)) {
+        /* Open the NSFAWARDS database first */
+        rc = SQLExecDirect(hStmt, (SQLCHAR *) "OPEN nsfawards",
+                SQL_NTS);
+        if (SQL_SUCCEEDED(rc)) {
+            /* Specify to retrieve 10 rows at a time */
+            (void) SQLSetStmtAttr(hStmt, SQL_ATTR_ROW_ARRAY_SIZE,
+                    (SQLPOINTER) ROW_ARRAY_SIZE, 0);
+
+            /* Specify the storage for the # of fetched rows */
+            (void) SQLSetStmtAttr(hStmt,
+                    SQL_ATTR_ROWS_FETCHED_PTR,
+                    (SQLPOINTER) &amp;ucbFetchedRows, 0);
+
+            /* Execute a SELECT statement */
+            rc = SQLExecDirect(hStmt,
+                (SQLCHAR *) pszStmt, SQL_NTS);
+ 
+            if (SQL_SUCCEEDED(rc)) {
+                /* Bind all the 3 columns; note that the length
+                   argument (arg. 5) is the size of one element
+                   of the bound variable */ 
+                (void) SQLBindCol(hStmt 1, SQL_C_CHAR,
+                        szName, sizeof(szName[0]), cb1);
+                (void) SQLBindCol(hStmt 2, SQL_C_CHAR,
+                        szGender, sizeof(szGender[0]), &amp;cb2);
+                (void) SQLBindCol(hStmt 3, SQL_C_CHAR,
+                        szJob, sizeof(szJob[0]), &amp;cb3);
+
+                while ((rc = SQLFetch(hStmt)) != SQL_NO_DATA) {
+                    /* ucbFetchedRows = # of rows */
+                    for (ii = 0; ii &lt; ucbFetchedRows; ii++) {
+                        if (cb1[ii] != SQL_NULL_DATA)
+                             printf("Name = %s\n", szName[ii]);
+                        if (cb2[ii] != SQL_NULL_DATA) {
+                             printf("Gender = %s\n",
+                                 szGender[ii]);
+                        }
+                        if (cb3[ii] != SQL_NULL_DATA) {
+                             printf("Jobclass = %s\n", 
+                                 szJob[ii]);
+                        }
+                    }
+                }
+            }
+        }
+        (void) SQLFreeHandle(SQL_HANDLE_STMT, hStmt);
+    }
+
+    return rc;
+}
+</pre>
+        <p>With an ODBC driver that supports scrollable cursors, an application can call <code>SQLFetchScroll</code> to scroll the result set back and forth. The <span class="MyVariablesProductShortName">RDM</span> ODBC Driver only supports forward-only cursors. While it provides <code>SQLFetchScroll</code>, the function only accepts SQL_FETCH_NEXT as the fetch type. It means <code>SQLFetch</code> and SQLFetchScroll currently work the same way in <span class="MyVariablesProductShortName">RDM</span> ODBC.</p>
+        <h2><a MadCap:generatedBookmark="TOC" name="Retrieving_Data_in_Parts"></a>Retrieving Data in Parts</h2>
+        <p>Binding columns using <code>SQLBindCol</code> allows an application to retrieve the content of a given column in one shot. It works well when the column contains fixed-length data, such as an integer, floating-point number and date/time where the size of the data is known before fetching the column.</p>
+        <p>On the other hand, it may not always be efficient, desired or even possible to retrieve the whole content of a column that contains string or binary data.  In that case, an application can retrieve the data in parts by calling <code>SQLGetData</code>. <code>SQLGetData</code> works similarly to <code>SQLBindCol</code> except that <code>SQLGetData</code> is called after the row is fetched, not before.  This allows an application to call SQLGetData on the same column multiple times in order to retrieve the column data by the size specified with the function. For instance, if an application calls <code>SQLGetData</code> with the size of data set to 100 on a column that contains a 800-character string, it will need to call the function 8 times on that column in order to read in the whole data.</p>
+        <p><code>SQLGetData</code> returns SQL_SUCCESS_WITH_INFO (SQLSTATE "01S02" – data truncated) if there is more data to be retrieved on that column. When it has retrieved the last chunk of data, it returns SQL_SUCCESS. An application can use this mechanism to detect the last read of the data. If called after the last part of the data has been retrieved, <code>SQLGetData</code> returns SQL_NO_DATA.</p>
+        <p>The following example illustrates how an application can retrieve a character data in parts using <code>SQLGetData</code>.</p><pre xml:space="preserve">#include "sqlrdm.h"
+
+#define MAX_FETCH_SIZE 100
+
+SQLRETURN getCharData(
+    SQLHSTMT hStmt)
+{
+    SQLRETURN rc;
+    char      szData[100];
+
+    /* Assumption; hStmt is already allocated */
+
+    rc = SQLExecDirect(hStmt, (SQLCHAR *) "SELECT col1 FROM vartable",
+            SQL_NTS);
+    if (SQL_SUCCEEDED(rc)) {
+        while ((rc = SQLFetch(hStmt)) != SQL_NO_DATA) {
+            do {
+                rc = SQLGetData(hStmt, 1, SQL_C_CHAR, szData,
+                        MAX_FETCH_SIZE, NULL);
+                if (SQL_SUCCEEDED(rc))
+                    printf("%s", szData);
+            } while (rc == SQL_SUCCESS_WITH_INFO);
+            printf("\n");
+        }
+    }
+
+    return rc;
+}
+</pre>
+        <p>This mechanism can only be used to retrieve character or binary data in parts. If called on a fixed-length column more than once, <code>SQLGetData</code> returns SQL_NO_DATA except for the first call.</p>
+        <hr MadCap:conditions="Default.ScreenOnly" width="100%" size="0" align="center" />
+        <p MadCap:conditions="Default.ScreenOnly" style="font-size: 8pt;"><span class="MyVariablesCopyright">Copyright © 2012, Raima Inc. All rights reserved.</span>
+        </p>
+        <script type="text/javascript" src="../SkinSupport/MadCapBodyEnd.js">
+        </script>
+        <p class="MCWebHelpFramesetLink MCWebHelpFramesetLinkBottom" style="display: none;"><a href="../../Default_CSH.htm#ODBCRM/Chpt_Advanced.htm" style="">Open topic with navigation</a>
+        </p>
+    </body>
+</html>

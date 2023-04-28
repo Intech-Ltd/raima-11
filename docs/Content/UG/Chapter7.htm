@@ -1,0 +1,738 @@
+<?xml version="1.0" encoding="utf-8"?>
+<!DOCTYPE html PUBLIC "-//W3C//DTD XHTML 1.0 Strict//EN" "http://www.w3.org/TR/xhtml1/DTD/xhtml1-strict.dtd">
+<html xmlns:MadCap="http://www.madcapsoftware.com/Schemas/MadCap.xsd" MadCap:tocPath="Native API|User's Guide" MadCap:InPreviewMode="false" MadCap:PreloadImages="false" MadCap:RuntimeFileType="Topic" MadCap:TargetType="WebHelp" lang="en-us" xml:lang="en-us" class="" MadCap:PathToHelpSystem="../../" MadCap:HelpSystemFileName="Default.xml" MadCap:SearchType="Stem">
+    <head>
+        <meta http-equiv="Content-Type" content="text/html; charset=utf-8" /><title>Multi User Overview</title>
+        <link rel="icon" type="image/png" href="http://docs.raima.com/favicon.png" />
+        <link href="../SkinSupport/MadCap.css" rel="stylesheet" />
+        <link href="../Resources/TableStyles/fncSummary.css" rel="stylesheet" />
+        <link href="../Resources/Stylesheets/raima.css" rel="stylesheet" />
+        <script src="../SkinSupport/MadCapAll.js" type="text/javascript">
+        </script>
+    </head>
+    <body>
+        <p class="MCWebHelpFramesetLink MCWebHelpFramesetLinkTop" style="display: none;"><a href="../../Default_CSH.htm#UG/Chapter7.htm" style="">Open topic with navigation</a>
+        </p>
+        <div class="MCBreadcrumbsBox_0"><span class="MCBreadcrumbsPrefix">You are here: </span><a class="MCBreadcrumbsLink" href="../dbCore.htm">Native API</a><span class="MCBreadcrumbsDivider"> &gt; </span><a class="MCBreadcrumbsLink" href="dbUG.htm">User's Guide</a><span class="MCBreadcrumbsDivider"> &gt; </span><span class="MCBreadcrumbs">Multi-User Overview</span>
+        </div>
+        <h1 class="firstHeading"><a MadCap:generatedBookmark="TOC" name="Multi-User_Overview"></a>Multi-User Overview</h1>
+        <h2 class="Heading2"><a MadCap:generatedBookmark="TOC" name="7.1_Introduction"></a>7.1 Introduction</h2>
+        <p>This section contains the information you need to build your application in multi-user mode. It explains  multi-user operation and how to use an <span class="MyVariablesProductShortName">RDM</span> multi-user environment.</p>
+        <p>Shared databases are opened in the <code>d_open</code> call with a mode of "s" or "r", where "r" is read-only. The modes "o" (one-user) or "x" (exclusive) are synonymous. If a database has been opened by a user in one of these modes, a second user will be prevented from opening the database.</p>
+        <p><i>Exclusive</i> use of a database differs from multi-user or <i>shared</i> use in that only one user may have a database opened exclusively at one time, allowing updates to made without requiring locks.</p>
+        <h2 class="Heading2"><a MadCap:generatedBookmark="TOC" name="7.2_Multi-User_Database_Control"></a><a name="7.7"></a>7.2 Multi-User Database Control                                                                       </h2>
+        <p>In the example below, two users are attempting to update a record from the database at about the same time. The left column gives a relative time and the other columns identify the actions that occur for the respective user at each time. </p>
+        <table style="width: 100%;caption-side: top;border-left-style: solid;border-left-width: 1px;border-left-color: #c0c0c0;border-right-style: solid;border-right-width: 1px;border-right-color: #c0c0c0;border-top-style: solid;border-top-width: 1px;border-top-color: #c0c0c0;border-bottom-style: solid;border-bottom-width: 1px;border-bottom-color: #c0c0c0;border-collapse: collapse;margin-left: 0;margin-right: auto;">
+            <caption>Table 7-1. Two Users Updating a Record</caption>
+            <col />
+            <col />
+            <col />
+            <tr>
+                <th>Time </th>
+                <th>User 1 </th>
+                <th>User 2 </th>
+            </tr>
+            <tr>
+                <td>1 </td>
+                <td>Read record </td>
+                <td>&#160; </td>
+            </tr>
+            <tr>
+                <td>2 </td>
+                <td>&#160; </td>
+                <td>Read record </td>
+            </tr>
+            <tr>
+                <td>3 </td>
+                <td>Modify record </td>
+                <td>&#160; </td>
+            </tr>
+            <tr>
+                <td>4 </td>
+                <td>&#160; </td>
+                <td>Modify record </td>
+            </tr>
+            <tr>
+                <td>5 </td>
+                <td>Write record </td>
+                <td>&#160; </td>
+            </tr>
+            <tr>
+                <td>6 </td>
+                <td>&#160; </td>
+                <td>Write record </td>
+            </tr>
+        </table>
+        <p>At Time 1, User 1 reads the record from the database. At Time 2, User 2 reads the record. Both users then modify and write the record back to the database. But User 2's copy of the record does not have User 1's changes (they were made after User 2 read the record). Thus, when User 2's record is written to the database, User 1's changes are lost. If User 2 had not read the record until after Time 5, the changes from User 1 would not have been lost. But without any control, there is no way to guarantee that User 2 will put off reading until User 1's updates are completed.&#160; </p>
+        <p>The solution is to provide a mechanism whereby updates to shared data are synchronized, so that only one user can be updating the shared data at a time. The mechanism usually is some form of a lock, which is used to serialize updates to data shared among multiple users. A lock must be applied before shared data is updated, so that other users cannot update the locked data. Thus, through use of a lock, the above example would proceed as shown in the following table: </p>
+        <table style="width: 100%;caption-side: top;border-collapse: collapse;border-left-style: solid;border-left-width: 1px;border-left-color: #c0c0c0;border-right-style: solid;border-right-width: 1px;border-right-color: #c0c0c0;border-top-style: solid;border-top-width: 1px;border-top-color: #c0c0c0;border-bottom-style: solid;border-bottom-width: 1px;border-bottom-color: #c0c0c0;margin-left: 0;margin-right: auto;">
+            <caption>Table 7-2. Two Users Updating a Record, Using Locks</caption>
+            <col />
+            <col />
+            <col />
+            <tr>
+                <th>Time </th>
+                <th>
+                    <p>User 1 </p>
+                </th>
+                <th>
+                    <p>User 2 </p>
+                </th>
+            </tr>
+            <tr>
+                <td>1 </td>
+                <td>Request record lock </td>
+                <td><![CDATA[ ]]></td>
+            </tr>
+            <tr>
+                <td>2 </td>
+                <td>Lock granted </td>
+                <td>Request record lock </td>
+            </tr>
+            <tr>
+                <td>3 </td>
+                <td>Read record </td>
+                <td><![CDATA[ ]]></td>
+            </tr>
+            <tr>
+                <td>4 </td>
+                <td>Modify record </td>
+                <td><![CDATA[ ]]></td>
+            </tr>
+            <tr>
+                <td>5 </td>
+                <td>Write record </td>
+                <td><![CDATA[ ]]></td>
+            </tr>
+            <tr>
+                <td>6 </td>
+                <td>Free lock </td>
+                <td>Lock granted </td>
+            </tr>
+            <tr>
+                <td>7 </td>
+                <td>&#160;</td>
+                <td>Read record </td>
+            </tr>
+            <tr>
+                <td>8 </td>
+                <td><![CDATA[ ]]></td>
+                <td>Modify record </td>
+            </tr>
+            <tr>
+                <td>9 </td>
+                <td><![CDATA[ ]]></td>
+                <td>Write record </td>
+            </tr>
+            <tr>
+                <td>10 </td>
+                <td><![CDATA[ ]]></td>
+                <td>Free lock </td>
+            </tr>
+        </table>
+        <p>Once User 1's lock request is granted at Time 2, User 2 will wait for the record to be unlocked before continuing. When User 1 has completed the update, the lock is freed at Time 6. User 2 is then granted the lock, and the record (which now includes User 1's changes) is read and then updated with User 2's changes. </p>
+        <p>As the above example illustrates, the key issue in multi-user database applications is data integrity, ensuring that no data is lost and that the data is logically consistent (that is, the interdata relationships that should exist do exist). Data integrity is supported in <span class="MyVariablesProductShortName">RDM</span> through locking and transaction processing.</p>
+        <p>File locking and record locking are used, as in the example, to prevent loss of data by serializing (ordering) access to shared files and records so that only one user at a time can update them. </p>
+        <p>Multi-user database application programming is a difficult task, which should be approached with careful planning and design. The problems that can occur in multi-user programs are often very difficult to resolve. The capabilities provided in <span class="MyVariablesProductShortName">RDM</span> are sufficient for you to balance both data integrity and good performance. The remainder of this section explains the <span class="MyVariablesProductShortName">RDM</span> implementation of these capabilities, including guidelines for their effective use. </p>
+        <h2 class="Heading2"><a MadCap:generatedBookmark="TOC" name="7.3_Operational_Environment"></a><a name="7.8"></a>7.3 Operational Environment </h2>
+        <p>The <span class="MyVariablesProductShortName">RDM</span> Transactional File Server (TFS) coordinates locks and performs controlled transactional updates to the database files. The <span class="MyVariablesProductShortName">RDM</span> multi-user operational environment is depicted in Figure 7-1. </p>
+        <p style="font-weight: bold;">
+            <img src="../Resources/Images/UsersGuide/UG-Fig-7-1_605x467.png" style="width: 605;height: 467;" />
+            <br />Fig. 7-1. Multi-User Operational Environment</p>
+        <p>Each process executes its own copy of the program using a (set of) database(s). Each process will be referred to as a user. In reality, database users equate to database tasks (<code>DB_TASK</code>s), but frequently there is only one database task per process. </p>
+        <p>Management of the <span class="MyVariablesProductShortName">RDM</span> locks, and transactional updates are performed by the  (TFS). Each process sends lock requests to the TFS, which queues the requests on a "first come, first served" basis. The process will wait for the TFS to send a reply either granting or denying the request. Locks are denied when the lock request has waited on the queue for a period longer than the timeout value specified by the requesting process. The TFS is a program that can be executed from any node on a network or as a background task on a stand-alone machine.</p>
+        <p>Multi-user database programs must open the database in shared access mode. This is done by passing an open type of "s" to function <code><a href="../RM/api/d_open.htm">d_open</a></code>. For example, to open the TIMS database for multi-user access, issue the following call: </p><pre>if (d_open("tims", "s", task) == S_UNAVAIL)
+{
+	printf("database unavailable\n");
+	exit(1);
+}</pre>
+        <p>Status code <code>S_UNAVAIL</code> is returned when some other database program has opened the TIMS database in exclusive access mode. </p>
+        <p>Database files and all other files related to the database are stored in the domain of the TFS. For the TIMS database, the TFS will have a <code>tims</code> directory under its document root. The TIMS dictionary, data, key and vardata files are stored there. Additional files may exist in the database's directory. In Figure 7-1, there are <code>.log</code> and <code>.log.arch</code> files, which are transaction log files. Each of these files represent the changes of one transaction, where the transactions were committed in the order of the log file names. A log file must be written to the database files by the TFS. Once written, a log file is either deleted or archived. Thus, a <code>.log.arch</code> file is simply a log file that has already been written to the database files, but not yet deleted. The purpose of log files is primarily for mirroring. If mirroring is not being performed, nor are the files copied to another medium for backup purposes, then the log files should simply be deleted. This is a configurable option.</p>
+        <h2 class="Heading2"><a MadCap:generatedBookmark="TOC" name="7.4_File_Locking"></a><a name="7.4"></a>7.4 File Locking </h2>
+        <h3 class="Heading3"><a MadCap:generatedBookmark="TOC" name="7.4.1_Introduction"></a>7.4.1 Introduction </h3>
+        <p><span class="MyVariablesProductShortName">RDM</span> uses the term "read-lock" for the more common industry term "shared lock". They mean the same thing in that a read-lock is placed for the purpose or reading (not updating) data, which means that other tasks can read the data at the same time, hence the term <i>shared</i>. The <span class="MyVariablesProductShortName">RDM</span> term "write-lock" is used in this manual rather than the term "exclusive lock", but again they mean the same thing. A write-lock is placed for the purpose of writing (updating) data, which must be done by one task only, or <i>exclusively</i>. These locks are not to be confused with database open modes "s" (shared database, requiring tasks to request appropriate locks) and "x" (exclusive access with no locks required).</p>
+        <p>The locking granularity provided by <span class="MyVariablesProductShortName">RDM</span> is the <i>file lock</i>. In the <span class="MyVariablesProductShortName">RDM</span> environment, file locking can be used very effectively without sacrificing performance. In fact, well-performing multi-user applications can and have been written using only file locking. </p>
+        <p>Much of the file locking functionality provided in <span class="MyVariablesProductShortName">RDM</span> has been developed to optimize multi-user performance. In addition, the <a href="#7.12">Program Design Considerations</a> section gives some general program design guidelines to help you effectively use the <span class="MyVariablesProductShortName">RDM</span> capabilities. Table 7-3 lists the file locking functions. </p>
+        <table style="width: 100%;caption-side: top;border-collapse: collapse;mc-table-style: url('../Resources/TableStyles/fncSummary.css');margin-left: 0;margin-right: auto;" class="TableStyle-fncSummary" cellspacing="0">
+            <caption>Table 7-3. File Locking Functions</caption>
+            <col class="Column-Column1" />
+            <col class="Column-Column2" />
+            <thead>
+                <tr class="Head-Header1">
+                    <th class="HeadE-Column1-Header1">Function </th>
+                    <th class="HeadD-Column2-Header1">Definition </th>
+                </tr>
+            </thead>
+            <tbody>
+                <tr class="Body-Body1">
+                    <td class="BodyE-Column1-Body1"><a href="../RM/api/d_reclock.htm">d_reclock</a>
+                    </td>
+                    <td class="BodyD-Column2-Body1">Lock data and key files associated with record type </td>
+                </tr>
+                <tr class="Body-Body1">
+                    <td class="BodyE-Column1-Body1"><a href="../RM/api/d_setlock.htm">d_setlock</a>
+                    </td>
+                    <td class="BodyD-Column2-Body1">Lock data files associated with set type </td>
+                </tr>
+                <tr class="Body-Body1">
+                    <td class="BodyE-Column1-Body1"><a href="../RM/api/d_keylock.htm">d_keylock</a> <![CDATA[ ]]></td>
+                    <td class="BodyD-Column2-Body1">Lock key file containing key field </td>
+                </tr>
+                <tr class="Body-Body1">
+                    <td class="BodyE-Column1-Body1"><a href="../RM/api/d_lock.htm">d_lock</a>
+                    </td>
+                    <td class="BodyD-Column2-Body1">Lock group of record and set types </td>
+                </tr>
+                <tr class="Body-Body1">
+                    <td class="BodyE-Column1-Body1"><a href="../RM/api/d_recfree.htm">d_recfree</a>
+                    </td>
+                    <td class="BodyD-Column2-Body1">Free lock on record type </td>
+                </tr>
+                <tr class="Body-Body1">
+                    <td class="BodyE-Column1-Body1"><a href="../RM/api/d_setfree.htm">d_setfree</a>
+                    </td>
+                    <td class="BodyD-Column2-Body1">Free lock on set type </td>
+                </tr>
+                <tr class="Body-Body1">
+                    <td class="BodyE-Column1-Body1"><a href="../RM/api/d_keyfree.htm">d_keyfree</a>
+                    </td>
+                    <td class="BodyD-Column2-Body1">Free lock on key field type </td>
+                </tr>
+                <tr class="Body-Body1">
+                    <td class="BodyE-Column1-Body1"><a href="../RM/api/d_freeall.htm">d_freeall</a> <![CDATA[ ]]></td>
+                    <td class="BodyD-Column2-Body1">Free all read locks </td>
+                </tr>
+                <tr class="Body-Body1">
+                    <td class="BodyE-Column1-Body1"><a href="../RM/api/d_reclstat.htm">d_reclstat</a>
+                    </td>
+                    <td class="BodyD-Column2-Body1">Get record type's lock status </td>
+                </tr>
+                <tr class="Body-Body1">
+                    <td class="BodyE-Column1-Body1"><a href="../RM/api/d_setlstat.htm">d_setlstat</a>
+                    </td>
+                    <td class="BodyD-Column2-Body1">Get set type's lock status </td>
+                </tr>
+                <tr class="Body-Body1">
+                    <td class="BodyE-Column1-Body1"><a href="../RM/api/d_keylstat.htm">d_keylstat</a>
+                    </td>
+                    <td class="BodyD-Column2-Body1">Get key field type's lock status </td>
+                </tr>
+                <tr class="Body-Body1">
+                    <td class="BodyB-Column1-Body1"><a href="../RM/api/d_timeout.htm">d_timeout</a>
+                    </td>
+                    <td class="BodyA-Column2-Body1">Specify wait time before timeout </td>
+                </tr>
+            </tbody>
+        </table>
+        <p>Note that functions <code>d_trend</code> and <code>d_trabort</code> also affect file locking although they are not listed here. Recall that both functions free locked files. The remaining pages of this section describe the functions listed in Table 7-3. </p>
+        <p>Function <code>d_reclock</code> locks the data file containing the record type, as well as all key files containing key fields defined in the specified record type, and all vardata files containing variable-length fields specified in the record type. For example, assume the following DDL statements appear in your schema: </p><pre xml:space="preserve">data file "tims.d01" contains system, key_word, intersect;
+data file "tims.d02" contains author, borrower, info, infotext;
+vardata file "tims.v01" contains info_title;
+vardata file "tims.v02" contains id_code;
+key file "tims.k01" contains id_code;
+key file "tims.k02" contains frnd, kword;
+...
+record info {
+    unique key varchar id_code[48]; /* dewey dec. code */
+    varchar info_title[80];         /* title of book, article, mag. */
+    char publisher[32];             /* name of publisher */
+    char pub_date[12];              /* date of publication */
+    int info_type;                  /* 0=book, 1=mag, 2=art */
+}
+...
+record key_word {
+    unique key char kword[32];      /* subject key words */
+}
+record intersect {
+    int16_t int_type;
+}
+...
+set key_to_info {
+    order last;
+    owner key_word;
+    member intersect;
+}</pre>
+        <p style="font-weight: normal;">The call <code>d_reclock(INFO, "r", task, CURR_DB)</code> will cause <code>tims.d02</code>, <code>tims.v01</code>, <code>tims.v02</code> and <code>tims.k01</code> to be read-locked. The call <code>d_reclock(KEY_WORD,"r", task, CURR_DB)</code> will cause <code>tims.d01</code> and <code>tims.k02</code> to be read-locked. Record locks are always necessary when creating a record, or when modifying key fields in records, because they guarantee that all of the files related to the record will be locked. </p>
+        <p>Function <code>d_setlock</code> locks the data files that contain the owner and member record types of the specified set. The call <code>d_setlock(KEY_TO_INFO, "r", CURR_DB)</code> will cause only file <code>tims.d01</code> to be read-locked, because both record types (<code>key_word</code> and <code>intersect</code>) are contained in the same file. This function does not lock key files associated with records. Set locks are necessary when connecting or disconnecting records in sets, or when traversing sets, because they guarantee that all of the files related to the set will be locked. Note, however, that if record locks had already been applied to both the <code>key_word</code> and <code>intersect</code> record types, the set lock would not be needed (although it would be a good practice to lock the set anyway). Any time the correct files have been locked, even though by a different locking call, functions that use the files will execute without locking errors. </p>
+        <p>Function <code>d_keylock</code> locks the key file that contains the specified key field. The call <code>d_keylock(ID_CODE, "r", CURR_DB)</code> will lock only file <code>tims.k01</code>. By locking only a key file, you may scan keys, as in the following code: </p><pre xml:space="preserve">d_keylock(ID_CODE, "r", task, CURR_DB);
+for ( status=d_keyfrst(ID_CODE, task, CURR_DB);
+      status == S_OKAY;
+      status=d_keynext(ID_CODE, task, CURR_DB) )
+{
+    d_keyread(id_code, task);
+    printf("id code: %s\n", id_code);
+}
+d_keyfree (ID_CODE, task, CURR_DB);</pre>
+        <p> By locking only the key file, you eliminate the overhead of obtaining locks on the data file, and possibly other key files related to the same record type. Also, in a multi-user environment, it is important not to lock any files that are not going to be used, because you may be preventing other users from making progress. </p>
+        <p>Table 7-4 lists the types of locks that can be applied. </p>
+        <table style="width: 100%;caption-side: top;border-left-style: solid;border-left-width: 1px;border-left-color: #c0c0c0;border-right-style: solid;border-right-width: 1px;border-right-color: #c0c0c0;border-top-style: solid;border-top-width: 1px;border-top-color: #c0c0c0;border-bottom-style: solid;border-bottom-width: 1px;border-bottom-color: #c0c0c0;border-collapse: collapse;margin-left: 0;margin-right: auto;">
+            <caption>Table 7-4. File Lock Types</caption>
+            <col />
+            <col />
+            <tr>
+                <th>Type </th>
+                <th>Description </th>
+            </tr>
+            <tr>
+                <td>"r"</td>
+                <td>Read lock ("shared", multiple tasks)</td>
+            </tr>
+            <tr>
+                <td>"w"</td>
+                <td>Write lock ("exclusive", one task only)</td>
+            </tr>
+            <tr>
+                <td>"k"</td>
+                <td>Keep lock (retain as read-lock after d_trend)</td>
+            </tr>
+        </table>
+        <p>Functions <code>d_recfree</code>, <code>d_setfree</code>, and <code>d_keyfree</code> free read locks on their respective record, set, or key field types for their database. Function <code>d_freeall</code> will free all read-locked files across all databases. All of these may only be called outside of a transaction. A transaction must hold locks until the end of the transaction, at which time it will automatically free them.</p>
+        <p>The current lock status of a record, set, or key type can be found by calling functions <code>d_reclstat</code>, <code>d_setlstat</code>, or <code>d_keylstat</code>. The lock status indicates whether the calling task has the specified item locked, and if so, with what type of lock. It does not indicate whether other tasks have the item locked. </p>
+        <p>Function <code>d_timeout</code> is used to inform the lock manager of the number of seconds that lock requests from this process are to wait on the queue before being denied. </p>
+        <p>Function <code>d_lock</code> is used to lock a group of record and set types, and is described in detail in <a href="#7.9.6">Grouped Lock Requests</a>.</p>
+        <h3 class="Heading3"><a MadCap:generatedBookmark="TOC" name="7.4.2_Read_Locks"></a><a name="7.9.2"></a>7.4.2 Read Locks </h3>
+        <p>A lock type "r" passed to a locking function specifies that the files are to be read-locked. A read lock on a file prevents other processes from placing a write-lock on that file. Other processes are allowed to read-lock the file. Thus, when a file is read-locked, other processes are allowed to read the file but are prevented from updating the file. </p>
+        <p>Functions that only read from the database but cannot be safely executed concurrently with updates require that the files involved be read-locked. In addition, the key access functions and set navigation functions require that the files be read-locked. The record access functions listed in Table 7-5 can be executed concurrently with updates and, therefore, do not require that the data file be locked. If the record being read happens to have been deleted, status code <code>S_DELETED</code> will be returned by the function. </p>
+        <p class="Notes">Using these functions without a lock will retrieve data from your local cache without ensuring that it is the most up-to-date data. To guarantee that you are viewing the current record values, use a read lock. </p>
+        <table style="width: 100%;caption-side: top;border-left-style: solid;border-left-width: 1px;border-left-color: #c0c0c0;border-right-style: solid;border-right-width: 1px;border-right-color: #c0c0c0;border-top-style: solid;border-top-width: 1px;border-top-color: #c0c0c0;border-bottom-style: solid;border-bottom-width: 1px;border-bottom-color: #c0c0c0;border-collapse: collapse;margin-left: 0;margin-right: auto;mc-table-style: url('../Resources/TableStyles/fncSummary.css');" class="TableStyle-fncSummary" cellspacing="0">
+            <caption>Table 7-5. Read Functions that Do Not Need a Lock</caption>
+            <col class="Column-Column1" />
+            <col class="Column-Column2" />
+            <thead>
+                <tr class="Head-Header1">
+                    <th class="HeadE-Column1-Header1">Function </th>
+                    <th class="HeadD-Column2-Header1">Definition </th>
+                </tr>
+            </thead>
+            <tbody>
+                <tr class="Body-Body1">
+                    <td class="BodyE-Column1-Body1"><a href="../RM/api/d_cmtype.htm">d_cmtype</a>
+                    </td>
+                    <td class="BodyD-Column2-Body1">Get record type of current member </td>
+                </tr>
+                <tr class="Body-Body1">
+                    <td class="BodyE-Column1-Body1"><a href="../RM/api/d_cotype.htm">d_cotype</a>
+                    </td>
+                    <td class="BodyD-Column2-Body1">Get record type of current owner </td>
+                </tr>
+                <tr class="Body-Body1">
+                    <td class="BodyE-Column1-Body1"><a href="../RM/api/d_crread.htm">d_crread</a>
+                    </td>
+                    <td class="BodyD-Column2-Body1">Read field from current record </td>
+                </tr>
+                <tr class="Body-Body1">
+                    <td class="BodyE-Column1-Body1"><a href="../RM/api/d_csmread.htm">d_csmread</a>
+                    </td>
+                    <td class="BodyD-Column2-Body1">Read field from current member </td>
+                </tr>
+                <tr class="Body-Body1">
+                    <td class="BodyE-Column1-Body1"><a href="../RM/api/d_csoread.htm">d_csoread</a>
+                    </td>
+                    <td class="BodyD-Column2-Body1">Read field from current owner </td>
+                </tr>
+                <tr class="Body-Body1">
+                    <td class="BodyE-Column1-Body1"><a href="../RM/api/d_members.htm">d_members</a>
+                    </td>
+                    <td class="BodyD-Column2-Body1">Get count of set members </td>
+                </tr>
+                <tr class="Body-Body1">
+                    <td class="BodyE-Column1-Body1"><a href="../RM/api/d_recfrst.htm">d_recfrst</a>
+                    </td>
+                    <td class="BodyD-Column2-Body1">Position to first occurrence of record type </td>
+                </tr>
+                <tr class="Body-Body1">
+                    <td class="BodyE-Column1-Body1"><a href="../RM/api/d_reclast.htm">d_reclast</a>
+                    </td>
+                    <td class="BodyD-Column2-Body1">Position to last occurrence of record type </td>
+                </tr>
+                <tr class="Body-Body1">
+                    <td class="BodyE-Column1-Body1"><a href="../RM/api/d_recnext.htm">d_recnext</a>
+                    </td>
+                    <td class="BodyD-Column2-Body1">Position to next occurrence of record type </td>
+                </tr>
+                <tr class="Body-Body1">
+                    <td class="BodyE-Column1-Body1"><a href="../RM/api/d_recprev.htm">d_recprev</a>
+                    </td>
+                    <td class="BodyD-Column2-Body1">Position to previous occurrence of record type </td>
+                </tr>
+                <tr class="Body-Body1">
+                    <td class="BodyB-Column1-Body1"><a href="../RM/api/d_recread.htm">d_recread</a>
+                    </td>
+                    <td class="BodyA-Column2-Body1">Read current record </td>
+                </tr>
+            </tbody>
+        </table>
+        <p>Read locks can be requested either from outside or within a transaction. Read locks that are issued within a transaction, or are not freed prior to a call to <code>d_trbegin</code>, are freed by either <code>d_trend</code> or <code>d_trabort</code> (unless the lock is to be kept, see <a href="#7.9.5">Upgrading/Downgrading of File Locks</a>). Read locks requested outside a transaction are freed by calling the appropriate lock freeing function, or by the termination of an intervening transaction. </p>
+        <h3 class="Heading3"><a MadCap:generatedBookmark="TOC" name="7.4.3_Write_Locks"></a><a name="7.4.3"></a>7.4.3 Write Locks </h3>
+        <p>In order to update the database, the files to be updated must be write-locked. Write locks are requested by passing a "w" lock type to the locking function. A write lock gives the requesting process exclusive access to the locked file. </p>
+        <p>Write locks can only be requested within a transaction. Error code <code>S_TRNOTACT</code> will be returned by the lock function if a transaction is not active when the write lock request is made. Write locks are freed by <code>d_trend</code> or <code>d_trabort</code>. </p>
+        <p>A multi-user programming problem that often occurs is called deadlock. Deadlock is the situation where multiple processes each hold locks on certain resources, and each is waiting to lock resources that are held by the others. The simplest example of deadlock is where Process 1 has Resource A locked and is requesting a lock on Resource B, while Process 2 has a lock on Resource B and is requesting a lock on Resource A. Both processes require access to both resources in order to complete their transactions, but both will wait forever for the other to free its resources. See <a href="#7.5.3">Avoiding Deadlocks</a> for more information.</p>
+        <h3 class="Heading3"><a MadCap:generatedBookmark="TOC" name="7.4.4_Upgrading_Downgrading_of_File_Locks"></a><a name="7.9.5"></a>7.4.4 Upgrading/Downgrading of File Locks </h3>
+        <p>Record, set, and key types that are read-locked do not need to be freed when a transaction is started. Moreover, the capability to upgrade a read lock to a write lock is provided. Similarly, a capability is provided to prevent <code>d_trend</code> from freeing a lock, keeping the record or set type read-locked after the transaction has ended. This provides for improved performance by allowing database pages to remain in the local cache, reducing the amount of required disk I/O. </p>
+        <p>To upgrade a read lock to a write lock, leave the record, set, or key type locked and re-issue the <code>d_reclock</code>, <code>d_setlock</code>, or <code>d_keylock</code> call (with type "w") after <code>d_trbegin</code>. The upgrade is only granted if there are no other upgrade requests queued and all other read locks have been freed. Granted upgrade requests ensure that no changes have been made by other processes between the read and write lock activity. If any normal write-locks (that is, not upgrades) are on the queue, the requested upgrade will be granted after all read locks have been freed but before the first queued write lock. If another upgrade request has been queued by the lock manager, the upgrade will be denied immediately (<code>S_UNAVAIL</code> status) but the record or set type will remain read-locked. The proper action in this situation is as follows: </p>
+        <ol>
+            <li value="1">Abort the transaction. </li>
+            <li value="2">Start a new transaction. </li>
+            <li value="3">Request a normal write lock. </li>
+            <li value="4">Update the necessary data. </li>
+        </ol>
+        <p>If the normal write lock request is denied, you should abort and restart the transaction as usual.                                         </p>
+        <p>To downgrade a write lock to a read lock, or to keep a record or set type read-locked after execution of <code>d_trend</code>, re-issue a <code>d_reclock</code> or <code>d_setlock</code> call with type "k" prior to <code>d_trend</code>. </p>
+        <h3 class="Heading3"><a MadCap:generatedBookmark="TOC" name="7.4.5_Grouped_Lock_Requests"></a><a name="7.9.6"></a>7.4.5 Grouped Lock Requests </h3>
+        <p>Functions <code>d_reclock</code> and <code>d_setlock</code> only allow for locking record or set types one at a time, requiring each request to be granted by the lock manager before the next lock request is processed. It is a preferred programming practice to lock a group of record or set types in a single request, none of the locks being granted unless all of the requested files are available. In fact, deadlock-free programs result when all needed locks are requested at the beginning of each transaction and processing only continues when all have been granted. This is one of the standard techniques for avoiding deadlock. </p>
+        <p>Function <code>d_lock</code> provides this grouped lock request capability. The first argument passed to <code>d_lock</code> is an integer containing the count of the number of items to be locked. The second argument is a pointer to the packet of lock requests. Each lock request is placed in a LOCK_REQUEST structure entry as defined below and declared in file <code>rdm.h</code>. </p><pre xml:space="preserve">typedef struct {
+	uint32_t item;       /* number of record or set to be locked */
+	int32_t  type; 	     /* type of lock */
+} LOCK_REQUEST;</pre>
+        <p>Structure field item contains the record or set constant (as defined in <code><i>dbname</i>.h</code>) for the record or set to be locked. Key types cannot be locked using function <code>d_lock</code>. Field type contains the type of lock to be applied: 'r', 'w', 'x', or 'k'. (Note that these are single character constants and not strings.) </p>
+        <p>Grouped lock requests can be statically defined. For example, suppose that, for transaction <code>trxc02</code>, record types <code>EMP</code> and <code>JOBS</code> and set <code>DEPT_EMPS</code> are to be locked. The following variables could be declared and used as follows: </p><pre xml:space="preserve">LOCK_REQUEST trxc02[] = {
+	{EMP, 		'w'},
+	{JOBS, 		'w'},
+	{DEPT_EMPS, 	'r'}
+};
+static const int32_t trxc02_count = sizeof(trxc02) / sizeof(trxc02[0]);
+...
+d_trbegin("trxc02", task);
+if (d_lock(trxc02_count, trxc02, task, CURR_DB) == S_OKAY) {
+	
+    ... 			/* process transaction */
+    d_trend(task);
+}
+else
+	d_trabort(task);</pre>
+        <p>The trade-off associated with using <code>d_lock</code>, as opposed to waiting until you actually need the lock before you request it, is that the files are locked and others are prevented from using them for a longer period of time. The actual impact will depend on how you design your application program. The peace of mind associated with knowing your program is free of deadlock is often worth some performance penalty. </p>
+        <h3 class="Heading3"><a MadCap:generatedBookmark="TOC" name="7.4.6_Static_Records"></a>7.4.6 Static Records </h3>
+        <p>In a multi-user environment, there are applications in which certain information in the database is virtually static (that is, it does not change). Examples of this kind of data would be menus, data entry forms, help screens, user messages, etc. Rather than requiring database programs to place locks on this data in order to access it, a record attribute called <code>static</code> can be defined in the DDL to identify this kind of information as follows: </p><pre xml:space="preserve">static <b>record</b>                                         <![CDATA[ ]]><i>recname</i> {&#160;&#160; 
+	... 
+} </pre>
+        <p>Data files that contain a static record must contain only static records. Static records can be used in sets, but only when the set itself also does not change. </p>
+        <p>To change static records, the database must be opened in exclusive access mode. </p>
+        <p>The principal advantage in using static records is performance improvements due to better caching of the static data. Dynamic data requires that the page buffers be cleared when a file lock is requested, in order to ensure concurrent database synchronization. Static data does not need to be cleared because no synchronization is necessary when there are no changes. </p>
+        <h3><a MadCap:generatedBookmark="TOC" name="7.4.7_Read-Only-Transactions"></a><a name="7.4.7"></a>7.4.7 Read-Only-Transactions</h3>
+        <p><span class="MyVariablesProductShortName">RDM</span> implements a form of Multi Version Concurrency Control called <i>read-only-transactions</i>. A read-only-transaction begins and ends with the functions <code>d_trrobegin</code> and <code>d_trroend</code>, respectively.</p>
+        <p>Within a read-only-transaction, an entire database remains unchanged in the view of the task, even though other tasks may be performing updates. It creates a virtual snapshot of the database at the instant of the <code>d_trrobegin</code> function which is released by <code>d_trroend</code>.</p>
+        <p>Read-only-transactions are incompatible with normal transactions (used for updating the database) and the two types of "transactions" should not be confused. Locking is not allowed during a read-only-transaction, although read-locks that exist at the time the read-only-transaction begins will remain as read-locks, and may also be freed.</p>
+        <p>The purpose and advantage of a read-only-transaction is that read-locks are not required in order to have a consistent view of a database at a given point in time. The alternative is to obtain read-locks for all relevant record and set types for the duration of the view. But read-locking prevents transactions from occurring until the locks are freed, which will delay all tasks that issue write-locks. This increases concurrency and overall system performance.</p>
+        <p class="Heading">Implementation</p>
+        <p>The read-only-transactions in <span class="MyVariablesProductShortName">RDM</span> are implemented within the TFS. When a task begins a read-only-transaction, the TFS notes the last completed transaction number. Then, when database pages are updated, it keeps old versions of the pages in the cache that represent the state of the database at the beginning of the read-only-transaction for that task. The TFS will do this for each task that begins a read-only-transaction. Because of this cache, is it important to keep read-only-transactions as short as possible, and never indefinite in length.</p>
+        <p class="Heading">When to Use Read-Only-Transactions</p>
+        <p>The first requirement when using a read-only-transaction is that it is okay if data becomes slightly out of date while it is being viewed. An example may be a report of river volumes at the moment - even though the numbers in the database may change, it is still meaningful to view all values as of that moment.</p>
+        <p>A multi-user system which has frequent updates can be slowed down by read-locks. If read-only-transactions are used such that no read-locks are needed, then the transactions can proceed unimpeded while data is read.</p>
+        <p class="Heading">When Not to Use Read-Only-Transactions</p>
+        <p>When data must be read and must not change prior to an update, then a read-only-transaction is not appropriate for reading. An example may be a transfer between accounts, where it is first verified that the source account has a greater balance than the transfer amount.</p>
+        <p>A multi-user system which has infrequent updates but frequent queries may be better off applying read locks for the queries. This is because read-only-transactions force the TFS to track the version of each reading task, and the cache processing may become inefficient.</p>
+        <h2 class="Heading2"><a MadCap:generatedBookmark="TOC" name="7.5_Program_Design_Considerations"></a><a name="7.12"></a>7.5 Program Design Considerations </h2>
+        <h3 class="Heading3"><a MadCap:generatedBookmark="TOC" name="7.5.1_Basic_Guidelines"></a>7.5.1 Basic Guidelines </h3>
+        <p>The primary guideline to follow in designing a multi-user application that uses the <span class="MyVariablesProductShortName">RDM</span> locking functionality is: </p>
+        <blockquote>
+            <p style="font-style: italic;font-weight: bold;">Minimize the amount of time that a file is locked.&#160; </p>
+        </blockquote>
+        <p>The application program has complete control over the use of file locks. If the application's design adheres to this first principle, the result can be well-performing multi-user applications. A necessary corollary to the above principle is: </p>
+        <blockquote>
+            <p style="font-weight: bold;font-style: italic;">Caution: Never allow the end-user to control the duration of a file lock! </p>
+        </blockquote>
+        <p>That is, never design the program so that a file is kept locked while the program is waiting for the end-user to perform some function. With the capabilities provided in <span class="MyVariablesProductShortName">RDM</span> there is never any reason for these guidelines to be violated. </p>
+        <p>When changes are made in one part of the database, there may be no reason to prevent changes or queries in another part of the database, which basically means:</p>
+        <blockquote>
+            <p style="font-weight: bold;font-style: italic;">Follow concurrency guidelines when designing DDL and transactions.</p>
+        </blockquote>
+        <p>The design techniques that follow show how these principles are applied in data entry, deletion, modification, and retrieval. </p>
+        <h3><a MadCap:generatedBookmark="TOC" name="7.5.2_Concurrency"></a>7.5.2 Concurrency</h3>
+        <p>A key goal in achieving system-wide multi-user performance is to allow multiple tasks to proceed unencumbered by the others. To put it another way, one task shouldn't have to wait in line for another task to complete before it can start. Tasks that can run at the same time without interfering with each other can be said to be able to run <i>concurrently</i>. Most modern operating systems allow multiple tasks to run concurrently, even with a single CPU. Concurrent tasks that do not block each other will each get their share of the CPU, resulting in smooth, optimal response. When multiple cores or CPUs are available, tasks may run simultaneously. However, programming for optimal concurrency also leads to the best simultaneous operation as well.</p>
+        <p>When multiple tasks (whether they are threads in a single process, or multiple processes) must access data in a database, it is necessary to use locking to maintain data integrity. Any task that reads two interrelated data must know that no other task is in the process of changing one or both of them. Any task that is performing an update must have exclusive access to the records, sets and keys it needs. This exclusive access will, in turn, block any other task that needs to read or update the same data.</p>
+        <p>When one task can lock certain regions of the database while another task locks a different region, they can both proceed without interference. The concept of <i>granularity</i> then becomes an issue. On one extreme, if the entire database must be locked in order to do an update, then nothing can be concurrent. Another extreme is locking individual fields within records, which could allow for a high degree of concurrency (but high overhead for tracking locks). As you have probably already read, <span class="MyVariablesProductShortName">RDM</span> locks at a file level, which is not very granular, hence the guidelines to begin and end transactions quickly.</p>
+        <p>The following sections contain a few rules and heuristics for designing a database intended for high-throughput multi-user operation.</p>
+        <h4><a MadCap:generatedBookmark="TOC" name="7.5.2.1_DDL_Considerations"></a>7.5.2.1 DDL Considerations</h4>
+        <p><b>Keep every file pure - only one record, key, BLOB or vardata field type</b>. When multiple types are placed into one file, locking one of the types locks all, which reduces concurrency.</p>
+        <p><b>Don't create record types that contain fields that may be used for two different purposes</b>. For example, by overloading fields. Consider an "auto part" record in an application that always knows the make of the part. An overloaded record may start with the make, then contain a generic part field that stores any encoding of a part number:</p><pre xml:space="preserve">record auto_part {<br />                                              int32_t make;     /* 0=Ford, 1=Chevy, 2=Saturn */
+    char part_no[15]; /* store any part number as a string */
+    int32_t on_hand;  /* how many are at this store */
+    ...
+}</pre>
+        <p>The above record type would be used for all parts, meaning that when searching for a Chevy part, a Ford part cannot be added or updated. To facilitate concurrency at the expense of a little more programming, the parts could be broken up according to how they are commonly accessed:</p><pre xml:space="preserve">data file "parts.00" contains ford_part;
+data file "parts.01" contains chevy_part;
+data file "parts.02" contains saturn_part;
+record ford_part {
+    int32_t part_no;   /* Ford parts are 8 digit numbers */
+    int32_t on_hand;
+}
+record chevy_part {
+    char part_no[10];  /*&#160;Chevy is a mixture of 9 letters and digits */
+    int32_t on_hand;
+}
+record saturn_part {
+    char part_no[12];  /* Longer conbination of letters and digits */
+    int32_t in_hand;
+}</pre>
+        <h4><a MadCap:generatedBookmark="TOC" name="7.5.2.2_Program_Considerations"></a>7.5.2.2 Program Considerations</h4>
+        <p><b>Where possible, keep readers and updaters away from each other</b>. This is a goal, not necessarily a technique. Many readers can access the same data without interfering with each other, but as soon as a writer appears, it must wait until all readers are done (meaning that read locks must be of short duration), then it will delay all readers until it has completed. One effective method to avoid this situation is to use Read-Only Transactions.</p>
+        <p><b>Use read-only-transactions whenever they make the system more efficient</b>. It may not be obvious whether the use of read-only-transactions will benefit your system response or throughput, but it should be easy to check it both ways. In the first test, apply read locks to all record and set types that will be used, followed by a <code>d_freeall</code> when done. In the second test, replace the locks with <code>d_trrobegin</code> and the <code>d_freeall</code> with <code>d_trroend</code>.</p>
+        <p><b>Offload some reading tasks to another computer by using mirroring</b>. Allow updaters to run with few or no readers on a master database, but mirror the changes to a second machine where readers can view the almost live data.</p>
+        <p><b>Use static record types</b>. Static record types can only be updated when opened exclusively. This means that they are off-limits to all other tasks when they are being updated. If they need to be updated daily, weekly or monthly, a system procedure that performs updates while other tasks are off or quiescent will allow very fast reading the rest of the time.</p>
+        <p><b>Journal/batch/post</b>. If updates are frequent, and reads don't need to be "up to the minute," consider using a circular table to journal a set of changes, then as the table fills up, or after a fixed period of time, an updater summarizes the table in order to update other records in the database in one batch transaction. This way, readers can proceed without needing to frequently re-lock the record types they are using. If a daily cycle works, readers can shut down overnight while the database is updated - either from the day's activities or with new data.</p>
+        <p><b>Use read-lock upgrades and keep locks sparingly</b>. Read locks, held outside of a transaction to prevent changes until the transaction begins, will prevent other identical procedures from continuing. Keeping write-locks (downgraded to read locks) after a transaction commits will also prevent other tasks from proceeding. If these mechanisms are used, it should be done in a single procedure that has priority over others.</p>
+        <h3><a MadCap:generatedBookmark="TOC" name="7.5.3_Deadlock_Avoidance"></a><a name="7.5.3"></a>7.5.3 Deadlock Avoidance</h3>
+        <p>As already discussed in <a href="#7.4.3">7.4.3 Write Locks</a>, deadlocks can occur when one task holds locks needed by another, while the other is holding locks needed by the one task. </p>
+        <p>To avoid this situation, <span class="MyVariablesProductShortName">RDM</span> provides function <code>d_timeout</code>, which allows the application to specify how long to wait on the queue before denying a lock request. The default wait time is 10 seconds. An integer argument is passed to <code>d_timeout</code> to specify the number of seconds before timing out. A value of -1 disables timeouts (you should be certain your program is deadlock free). A value of zero may be used to cause a timeout when a lock request cannot be immediately granted. When status <code>S_UNAVAIL</code> is returned from a lock function (indicating a timeout) the program should abort the transaction and then restart it, in order to prevent deadlock. Status <code>S_UNAVAIL</code> is also returned when the lock manager is temporarily unable to handle the lock request.</p>
+        <p>Deadlock avoidance requires more thought, but will result in smoother system operation. There are two locking rules that result in deadlock free programs:</p>
+        <ol>
+            <li value="1">Never do incremental locking. Incremental locking is obtaining a (set of) lock(s) at one point in time, then asking for more locks later. When multiple locks are needed for a transaction, request all of them at the beginning of the transaction. This may include some locks that are not always needed for this transaction.</li>
+            <li value="2">Incremental locking with restrictions. The first restriction is that all records, keys, BLOBs and vardata fields are stored in separate files. The second is that locks are always performed in the same order by all tasks. For example, task 1 may lock group A and conditionally group B, then conditionally group C. Task 2 may only need group C, and conditionally group B, but it must lock B, then C. Each task must lock the same groups in the same order. It is <i>not</i> okay to group lock all of A, B and C when another task is locking them incrementally. It is <i>not</i> okay to rearrange the order of the groups.</li>
+        </ol>
+        <h3 class="Heading3"><a MadCap:generatedBookmark="TOC" name="7.5.4_Data_Entry"></a>7.5.4 Data Entry </h3>
+        <p>The entry of new records and set connections into a database is very straightforward. The steps involved are outlined below. </p>
+        <ol>
+            <li value="1">Collect all relevant data from user. </li>
+            <li value="2">Begin transaction. </li>
+            <li value="3">Write-lock necessary record and set types. </li>
+            <li value="4">Create new record occurrences and make necessary set connections. </li>
+            <li value="5">End transaction. </li>
+        </ol>
+        <p>The goal is to minimize the amount of time that a file is locked. In this procedure, the files are locked for only the amount of time it takes to perform Steps 4 and 5. A segment of the <code>ent_info</code> code from the TIMS example is given below with multi-user control functions added. </p><pre xml:space="preserve">int info_cnt = 5;
+LOCK_REQUEST info_pkt[] = {
+    {AUTHOR_LIST, 'w'},
+    {INFO, 'w'},
+    {ABSTRACT, 'w'},
+    {INTERSECT, 'w'},
+    {KEY_WORD, 'w'}
+};
+	...
+/* Enter technical information records into TIMS database */
+int32_t ent_info(DB_TASK *task)
+{
+    int32_t status;
+    char s[SIZEOF_NAME];  /* generic string variable */
+
+    /* enter tech info into TIMS database */
+    while (get_info() != EOF)
+    {
+        d_trbegin("ent_info", task);
+        do {
+            status = d_lock(info_cnt, &amp;info_pkt, task, CURR_DB);
+        } while (status == S_UNAVAIL);
+			/* Wait until locks are available */
+        if (status != S_OKAY)
+        {
+            d_trabort(task);
+            ... /* Notify user of problem */
+            return (0);
+        }
+        /* see if author exists */
+        ...
+        /* create new tech. info record */
+        if (d_fillnew(INFO, &amp;irec, task, CURR_DB) == S_DUPLICATE)
+        {
+            d_trabort(task);
+            printf("duplicate id_code: %s\n", irec.id_code);
+        }
+        else
+        {
+            /* connect to author record */
+            ...
+            enter_key_words(task);
+
+            enter_abstract(task);
+
+            d_trend(task);
+        }
+    }
+    return (0);
+}                                                                                   </pre>
+        <p>In the <code>info_pkt</code> lock request packet, one set type and four record types are locked, even though five set types are involved in the transaction. The <span class="MyVariablesProductShortName">RDM</span> runtime system does not care how a file lock is obtained, as long as the appropriate files are locked when the operation requiring the lock is performed. The data files involved in the set operations are locked when the record types are locked. The lock packet could have listed every set type and every record type involved in the transaction, but this would make it larger than necessary. (<span class="MyVariablesProductShortName">RDM</span> does optimize the lock requests so that a lock request for a given file is made only once.) The <code>d_lock</code> call is repeated until the file locks are granted. This cannot produce a deadlock in this situation since no other files are locked. Notice that if the <code>id_code</code> is a duplicate, the transaction is aborted. </p>
+        <p>In this case, however, another data entry guideline has been violated, which is that files should not be kept locked while control has been given to the user. Functions <code>enter_key_words</code> and <code>enter_abstract</code> both prompt the user for information while the files are locked. To properly implement the function, it would be necessary to redesign the program so that the user first enters all of the needed information (that is, have <code>get_info </code>also prompt for the key words and abstract), after which the transaction is processed. </p>
+        <h3 class="Heading3"><a MadCap:generatedBookmark="TOC" name="7.5.5_Data_Deletion"></a>7.5.5 Data Deletion </h3>
+        <p>Deletion of records and sets follows basically the same guidelines as data entry: </p>
+        <ol>
+            <li value="1">From user, identify data to be deleted. </li>
+            <li value="2">Read-lock relevant files (if necessary). </li>
+            <li value="3">Read data to be deleted. </li>
+            <li value="4">Free read-locks. </li>
+            <li value="5">Display data to user and request confirmation. Cancel operation if not confirmed. </li>
+            <li value="6">Begin transaction. </li>
+            <li value="7">Write-lock necessary set and record types. </li>
+            <li value="8">Perform necessary set disconnections and record deletions. </li>
+            <li value="9">End transaction. </li>
+        </ol>
+        <p>Steps 2 through 5 are optional. They should not occur between Steps 7 and 8, however, because of the confirmation request. In this procedure, the files are read-locked for the duration of Step 3 and write-locked for the duration of steps 8 and 9. In Step 2, read locks are necessary if the data is to be accessed by key or by set. If it can be accessed directly (for example, <code>d_recread</code>), the file need not be read-locked at all. </p>
+        <p>Function <b>del_info </b>from the <a href="Chapter5.htm">Database Manipulation</a> section illustrates the previous procedure. </p><pre xml:space="preserve">int read_cnt = 2;
+LOCK_REQUEST read_pkt[] = {
+	{AUTHOR, 'r'},
+	{INFO, 'r'},
+};
+
+int info_cnt = 5;
+LOCK_REQUEST info_pkt[] = {
+	{AUTHOR_LIST, 'w'},
+	{INFO, 'w'},
+	{ABSTRACT, 'w'},
+	{INTERSECT, 'w'},
+	{KEY_WORD, 'w'}
+};
+
+/* Delete technical information records from TIMS database */
+int32_t del_info(DB_TASK *task)
+{
+    int32_t status;
+    struct info irec;
+    int32_t count;
+    char id[SIZEOF_ID_CODE], name[SIZEOF_NAME];
+
+    /* find info to be deleted */
+    printf("id_code: ");
+    getstring(id,SIZEOF_ID_CODE);
+    if (d_lock(read_cnt, &amp;read_pkt, task, CURR_DB) != S_OKAY)
+    {
+        printf("data not available\n");
+        return;
+    }
+    if (d_keyfind(ID_CODE, id, task, CURR_DB) == S_NOTFOUND)
+    {
+        d_freeall(task, CURR_DB);
+        printf("id_code %s not on file\n", id);
+        return (0);
+    }
+    d_recread(&amp;irec, task, CURR_DB);
+
+    /* get author name */
+    d_findco(HAS_PUBLISHED, task, CURR_DB);
+    d_crread(NAME, name, task, CURR_DB);
+    d_freeall(task, CURR_DB);
+
+    /* confirm delete request */
+    printf("author: %s\n", name);
+    printf("title : %s\n", irec.info_title);
+    printf("delete (y/n)? ");
+    getstring(id,SIZEOF_ID_CODE);
+    if (id[0] != 'Y' &amp;&amp; id[0] != 'y')
+        return (0);
+
+    d_trbegin("del_info", task);
+    while (d_lock(info_cnt, &amp;info_pkt, task, CURR_DB) == S_UNAVAIL)
+        ; 	/* wait till locks are available */
+
+    /* disconnect any listed articles */
+    ...
+
+    /* disconnect and delete borrowers */
+    ...
+
+    /* disconnect and delete abstract */
+    ...
+
+    /* disconnect and delete intersect and (possibly) key word */
+    ...
+
+    /* disconnect info record from author and delete */
+    ...
+
+    /* delete author too, if he has no other pubs */
+    ...
+
+    if (status == S_OKAY)
+        d_trend(task);
+    else
+        d_trabort(task);
+    return (0);
+}</pre>
+        <h3 class="Heading3"><a MadCap:generatedBookmark="TOC" name="7.5.6_Data_Modification"></a>7.5.6 Data Modification </h3>
+        <p>The general procedure for the modification of data follows: </p>
+        <ol>
+            <li value="1">From user, identify data to be modified. </li>
+            <li value="2">Read-lock relevant record and set (if necessary) types. </li>
+            <li value="3">Read data to be modified. </li>
+            <li value="4">Free read-locks. </li>
+            <li value="5">Allow user to edit data. </li>
+            <li value="6">Begin transaction. </li>
+            <li value="7">Write-lock necessary set and record types. </li>
+            <li value="8">Perform necessary modifications. </li>
+            <li value="9">End transaction. </li>
+        </ol>
+        <h3 class="Heading3"><a MadCap:generatedBookmark="TOC" name="7.5.7_Data_Retrieval"></a><a name="7.5.7"></a>7.5.7 Data Retrieval </h3>
+        <p>In a typical database application, data retrieval operations usually fall into one of the following three types: </p>
+        <ol>
+            <li value="1">Locating a record or related record occurrences. </li>
+            <li value="2">Browsing through a list of records where there may be one record per line on the display. </li>
+            <li value="3">Producing reports where many records in the database may need to be accessed. </li>
+        </ol>
+        <p>For Type 1 data retrieval in <span class="MyVariablesProductShortName">RDM</span>, the procedure is simply to lock the necessary record, set, or key types, access the data, then free the locks and display the results. For example, the following code displays an item by id code from the TIMS database: </p><pre xml:space="preserve">struct info irec;        /* info record variable */
+char name[SIZEOF_NAME];  /* author's name */
+	...
+printf("enter id code: ");
+getstring(irec.id_code,SIZEOF_ID_CODE);
+if (d_keylock(ID_CODE, "r", task, CURR_DB) != S_OKAY)
+{
+    ... /* tell the user */
+    return;
+}
+if (d_setlock(HAS_PUBLISHED, "r", task, CURR_DB) != S_OKAY)
+{
+    ... /* tell the user */
+    return;
+}
+if (d_keyfind(ID_CODE, irec.id_code, task, CURR_DB) == S_OKAY)
+{
+    d_keyfree(ID_CODE, task, CURR_DB);
+    d_recread(&amp;irec, task, CURR_DB);
+    d_findco(HAS_PUBLISHED, task, CURR_DB);
+    d_recread(AUTHOR, name, task, CURR_DB);
+    d_setfree(HAS_PUBLISHED, task, CURR_DB);
+    ...     /* display author &amp; info record contents */
+}
+else
+{
+    d_freeall(task);
+    printf("info record not found\n");
+}</pre>
+        <p>Since the <code>info</code> record is accessed by <code>id_code</code>, <code><a href="../RM/api/d_keylock.htm">d_keylock</a></code> is used to lock only the key file containing <code>id_code</code> keys. Function <code>d_reclock</code> could also be used to lock the data and key files associated with info. In this case it would make no difference which one you used. In general, however, <code>d_reclock</code> may lock key files that are not involved in the operation (since it locks all key files and some may not be used). The <code>d_setlock</code> call locks the data files containing the owner and member record types of set <code>HAS_PUBLISHED</code>, which in this case is simply <code>tims.d02</code> (see tims DDL specification in the <a href="Chapter4.htm">Database Design</a> section). Notice that the file locks are freed as soon as they are no longer needed. </p>
+        <p>Data retrieval of Types 2 and 3 use the following procedure: </p>
+        <ol>
+            <li value="1">Lock necessary record, set, or key types. </li>
+            <li value="2">Retrieve some predetermined amount of data. For example, if browsing, this may be a screen full. </li>
+            <li value="3">Save the position so that it can be reestablished.</li>
+            <li value="4">Free locks. </li>
+            <li value="5">If browsing, display retrieved data. </li>
+            <li value="6">Go to step 1. </li>
+        </ol>
+        <p>With interactive browsing, it is imperative that the locks be freed after Step 3. Otherwise, the duration of the locks would be dependent on the end user, who typically would press some key to view the next page of data. </p>
+        <p>In a report, the data is printed in Step 2, and Step 5 is eliminated. Although the locks could remain in place for the duration of the report, this would prevent any updates to the locked files until the report completes. This procedure allows updates by iteratively freeing and re-locking the files during the report. The duration of the locks should remain reasonably small. The following code will print a report of all info records contained in the TIMS database in <code>id_code</code> order: </p><pre xml:space="preserve">struct info irec; /* info record variable */
+int ii;
+
+for ( ii = 0; ; )
+{
+    if (ii == 0)
+    {
+        if (d_reclock(INFO, "r", task, CURR_DB) != S_OKAY)
+        {
+            ...    /* report locking error */
+            break;
+        }
+    }
+    if (d_keynext(ID_CODE, task, CURR_DB) != S_OKAY)
+    {
+        d_recfree(INFO, task, CURR_DB);
+        break;
+    }
+    d_recread(&amp;irec, task, CURR_DB);
+    printf("id_code: %-20s title: %s\n", irec.id_code, irec.info_title);
+    if (++ii == 20)
+    {
+        d_recfree(INFO, task, CURR_DB);
+        ii = 0;
+    }
+}</pre>
+        <p>The lock on the info record type will be freed every 20 records, allowing any queued write-lock requests access to the locked files. </p>
+        <h3 class="Heading3"><a MadCap:generatedBookmark="TOC" name="7.5.8_Other_Considerations"></a>7.5.8 Other Considerations </h3>
+        <p>Use of static data can greatly improve database access performance. Static data can only be changed when a database is opened in exclusive access mode. Thus, to access static data in shared mode, no locks are required, and full virtual memory caching of the static data is performed. Things that only periodically change, such as keyed data validation tables and general ledger accounts, are good candidates for static definition. </p>
+        <p>Operations that involve processing all occurrences of a particular record type, but do not require that the records be ordered, should utilize the sequential record scan functions <code>d_recfrst</code> and <code>d_recnext</code>. These functions do not require the file to be locked. </p>
+        <h2 class="Heading2"><a MadCap:generatedBookmark="TOC" name="7.6_One-User_Mode"></a>7.6 One-User Mode </h2>
+        <p>Two different one-user modes are available in <span class="MyVariablesProductShortName">RDM</span>. A database can be opened in exclusive access mode by passing open type "x" as the second argument on the <code>d_open</code> call. A "one-user-only mode" is selected by passing open type "o" to <code>d_open</code>. </p>
+        <p>In earlier versions of <span class="MyVariablesProductShortName">RDM</span>, these modes behaved differently. But from this version forward, they both establish exclusive control over the entire database, eliminating the need for additional locks in order to perform transactions.</p>
+        <hr MadCap:conditions="Default.ScreenOnly" width="100%" size="0" align="center" />
+        <p MadCap:conditions="Default.ScreenOnly" style="font-size: 8pt;"><span class="MyVariablesCopyright">Copyright © 2012, Raima Inc. All rights reserved.</span>
+        </p>
+        <script type="text/javascript" src="../SkinSupport/MadCapBodyEnd.js">
+        </script>
+        <p class="MCWebHelpFramesetLink MCWebHelpFramesetLinkBottom" style="display: none;"><a href="../../Default_CSH.htm#UG/Chapter7.htm" style="">Open topic with navigation</a>
+        </p>
+    </body>
+</html>

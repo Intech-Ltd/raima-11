@@ -1,0 +1,1279 @@
+<?xml version="1.0" encoding="utf-8"?>
+<!DOCTYPE html PUBLIC "-//W3C//DTD XHTML 1.0 Strict//EN" "http://www.w3.org/TR/xhtml1/DTD/xhtml1-strict.dtd">
+<html xmlns:MadCap="http://www.madcapsoftware.com/Schemas/MadCap.xsd" MadCap:tocPath="C++ API" MadCap:InPreviewMode="false" MadCap:PreloadImages="false" MadCap:RuntimeFileType="Topic" MadCap:TargetType="WebHelp" lang="en-us" xml:lang="en-us" MadCap:PathToHelpSystem="../../" MadCap:HelpSystemFileName="Default.xml" MadCap:SearchType="Stem">
+    <head>
+        <meta http-equiv="Content-Type" content="text/html; charset=utf-8" /><title>Operational Overview</title>
+        <link rel="icon" type="image/png" href="http://docs.raima.com/favicon.png" />
+        <link href="../SkinSupport/MadCap.css" rel="stylesheet" />
+        <link href="../Resources/TableStyles/ArgsTwoCol.css" rel="stylesheet" />
+        <link href="../Resources/Stylesheets/raima.css" rel="stylesheet" />
+        <script src="../SkinSupport/MadCapAll.js" type="text/javascript">
+        </script>
+    </head>
+    <body>
+        <p class="MCWebHelpFramesetLink MCWebHelpFramesetLinkTop" style="display: none;"><a href="../../Default_CSH.htm#CPPUG/cpp-op-overview.htm" style="">Open topic with navigation</a>
+        </p>
+        <div class="MCBreadcrumbsBox_0"><span class="MCBreadcrumbsPrefix">You are here: </span><a class="MCBreadcrumbsLink" href="dbCPP.htm">C++ API</a><span class="MCBreadcrumbsDivider"> &gt; </span><span class="MCBreadcrumbs">Operational Overview</span>
+        </div>
+        <h1><a MadCap:generatedBookmark="TOC" name="Operational_Overview_..11"></a>Operational Overview</h1>
+        <p>The C++ API allows developers to create powerful embedded applications without needing to worry about the low-level details required by the <span class="MyVariablesProductShortName">RDM</span> Navigation APIs.  While the C++ API contains a large set of functionality it does not implement everything that is supported by the <span class="MyVariablesProductShortName">RDM</span> Core API.  In this sections we look at the operations that are supported by the C++ API.</p>
+        <h2><a MadCap:generatedBookmark="TOC" name="Database_Control_Methods"></a>Database Control Methods</h2>
+        <p>There are methods implemented in the Db interface that allow the developer to Open, Create, Destroy and Initialize the database our C++ API classes encapsulate.</p>
+        <h3><a MadCap:generatedBookmark="TOC" name="Opening"></a>Opening</h3>
+        <p>A database is opened by using one of the overloaded static open methods generated in the Db interface.  Calling these static methods give the application the database specific Db interface that is used to access the <span class="MyVariablesProductShortName">RDM</span> database throughout the application.</p><pre xml:space="preserve">static Db_measurements Open (…) throw (rdm_exception&amp;);</pre>
+        <p>This method has two optional</p>
+        <table style="caption-side: top;mc-table-style: url('../Resources/TableStyles/ArgsTwoCol.css');" class="TableStyle-ArgsTwoCol" cellspacing="0">
+            <col class="Column-Column1" />
+            <col class="Column-Column2" />
+            <tbody>
+                <tr class="Body-Body1">
+                    <td class="BodyE-Column1-Body1">name</td>
+                    <td class="BodyD-Column2-Body1">The database name to use for the open call.  The default value for this parameter is the name defined in the schema.</td>
+                </tr>
+                <tr class="Body-Body1">
+                    <td class="BodyB-Column1-Body1">mode</td>
+                    <td class="BodyA-Column2-Body1">The mode to open the database in.  The default is multi-user shared mode ("s")</td>
+                </tr>
+            </tbody>
+        </table>
+        <h3><a MadCap:generatedBookmark="TOC" name="Initializing"></a>Initializing</h3>
+        <p>A database can be initialized by using the Initialize method in the Db interface.  The Initialize method will (re)create all data, key, index, and blob files defined in the database schema.  Any existing data stored in the database will be lost when calling this method.</p><pre xml:space="preserve">void Initialize (void) const throw (rdm_exception&amp;);</pre>
+        <h3><a MadCap:generatedBookmark="TOC" name="Destroy"></a>Destroy</h3>
+        <p>A database can be destroyed by using the Destroy method in the Db interface.  The Destroy method will remove all data, key, index, blob, log, and dbd files that make up a database.  All Db and Cursor interfaces referencing this database become invalid after calling Destroy.  All data stored in the database is lost when calling this method.</p><pre xml:space="preserve">void Destroy (void) const throw (rdm_exception&amp;);</pre>
+        <h3><a MadCap:generatedBookmark="TOC" name="Close"></a>Close</h3>
+        <p>There is no explicit method for closing a database.  The smart pointer implementation will automatically close the database when all references to the Db interface are de-allocated, reassigned, explicitly released or go out of scope.  When this happens all internal resources held for the Db interface will be freed.</p>
+        <p>The following example demonstrates the usage of Open, Initialize and Destroy.</p><pre xml:space="preserve">/* Measurement C++ API example application */
+int32_t EXTERNAL_FCN measurements_main(
+    int32_t            argc,
+    const char *const *argv)
+{
+    Db_measurements db;
+ 
+    UNREF_PARM(argc)
+    UNREF_PARM(argv)
+ 
+    try
+    {
+        /* Open the measurement database */
+        db = db.Open("s");
+ 
+        /* Remove any existing data from the database */
+        db.Initialize();
+    }
+    catch(rdm_exception&amp; e)
+    {
+        cerr &lt;&lt; "Error " &lt;&lt; e.error() &lt;&lt; " opening/initializing database: "  &lt;&lt; e.what(); 
+        return 1;
+    }
+ 
+    /* Perform operations with db */
+    . . .
+ 
+ 
+/* Remove all database files before cleanly exiting */
+try
+{
+    db.Destroy();
+}
+catch(rdm_exception&amp; e)
+{
+    cerr &lt;&lt; "Error " &lt;&lt; e.error() &lt;&lt; " destroying database: "  &lt;&lt; e.what(); 
+    return 1;
+}
+ 
+    return 0;
+}
+</pre>
+        <h2><a MadCap:generatedBookmark="TOC" name="Transaction_Control_Methods"></a>Transaction Control Methods</h2>
+        <p>The Db interface contains the methods providing transaction management functionality for the C++ API.  When using the C++ API all read and write operations are executed within the context of a "read" or "write" transaction.  This differs slightly from the convention of the core API where transactions are only required for "write" operations.  The C++ API allows for simultaneous read transactions, but requires exclusive access to records for write transactions.  This is similar to the core API except that in the C++ API lock management is encapsulated within transaction handling.</p>
+        <h3><a MadCap:generatedBookmark="TOC" name="Update_Transactions"></a>Update Transactions</h3>
+        <p>All operations which may modify the contents of a database must be performed within the context of a "write" transaction.  While the C++ interface will implicitly begin and end write transactions for the developer, it is considered poor programming practice to rely on these implicit transactions.  Instead developers should explicitly start write transactions by using the <code>Db.BeginUpdate</code> method.</p><pre xml:space="preserve">void BeginUpdate () const throw (rdm_exception&amp;);</pre>
+        <p>This method has two optional parameters</p>
+        <table style="caption-side: top;mc-table-style: url('../Resources/TableStyles/ArgsTwoCol.css');" class="TableStyle-ArgsTwoCol" cellspacing="0">
+            <col class="Column-Column1" />
+            <col class="Column-Column2" />
+            <tbody>
+                <tr class="Body-Body1">
+                    <td class="BodyE-Column1-Body1">types</td>
+                    <td class="BodyD-Column2-Body1">An array of recordType Identifiers to be locked</td>
+                </tr>
+                <tr class="Body-Body1">
+                    <td class="BodyB-Column1-Body1">num</td>
+                    <td class="BodyA-Column2-Body1">The number of recordType values in the array</td>
+                </tr>
+            </tbody>
+        </table>
+        <p>If you do not provide parameters for the <code>BeginUpdate</code> method every record type and key file in the database will be write locked.  In the following example both the measurement and sensor records will be locked by the Update method.</p><pre xml:space="preserve">void add_measurement(
+    Db_measurements     db, 
+    struct measurement *sensor_fields,
+    Cursor_sensor       s) throw (rdm_exception&amp;)
+{
+    Cursor_measurement m;
+    db.BeginUpdate();
+    try
+    {
+        m = db.New_measurement_recordWithFieldValues(sensor_fields);
+        m.Connect_sensor_measurement(s);
+        db.End(); 
+    }
+    catch (rdm_exception e)
+    {
+        db.Abort(); 
+    }
+}
+</pre>
+        <p>If you only need to lock certain records for your operation you can specify those records using the <code>BeginUpdate</code> parameters.</p><pre xml:space="preserve">Cursor_sensor add_sensor(
+    Db_measurements  db, 
+    struct sensor   *sensor_fields) throw (rdm_exception&amp;)
+{
+    Cursor_sensor s;
+    recordType rtypes[]= {Cursor_sensor::Type()};
+    db.BeginUpdate(rtypes, 1);
+    try
+    {
+        s = db.New_sensor_recordWithFieldValues(sensor_fields);
+        db.End(); 
+    }
+    catch (rdm_exception e)
+    {
+        db.Abort(); 
+    }
+    return s;
+}
+</pre>
+        <p>You can also use a special end marker in the array instead of specifying the number of record types.</p><pre xml:space="preserve">Cursor_sensor add_sensor2(
+    Db_measurements  db, 
+    struct sensor   *sensor_fields) throw (rdm_exception&amp;)
+{
+    Cursor_sensor s;
+    recordType rtypes[]= {Cursor_sensor::Type(), Cursor::NoMoreTypes()};
+    db.BeginUpdate(rtypes);
+    try
+    {
+        s = db.New_sensor_recordWithFieldValues(sensor_fields);
+        db.End(); 
+    }
+    catch (rdm_exception e)
+    {
+        db.Abort(); 
+    }
+    return s;
+}
+</pre>
+        <h3><a MadCap:generatedBookmark="TOC" name="Read_Transactions"></a>Read Transactions</h3>
+        <p>Read Transactions allow an application to read data from a database without blocking other readers.  While it is legal to read data using Update Transactions those require exclusive access to the records and therefore do not promote parallelism to the same degree.  The C++ interface will implicitly begin and end read transactions, but it is considered better programming to explicitly begin and end transactions.</p><pre xml:space="preserve">void BeginRead () const throw (rdm_exception&amp;);</pre>
+        <p>If you do not provide parameters for the <code>BeginRead</code> method every record type and key file in the database will be read locked.  In the following example both the measurement and sensor records will be locked by the <code>BeginRead</code> method.</p><pre xml:space="preserve">void read_measurement(
+    Db_measurements     db, 
+    Cursor_measurement  m,
+    struct sensor      *sensor_fields,
+    struct measurement *measurement_fields) throw (rdm_exception&amp;)
+{
+    db.BeginRead();
+    try
+    {
+        m.GetFieldValues(measurement_fields);
+        m.Get_sensor_measurement_owner().Get_name(sensor_fields-&gt;name);
+    }
+    catch (rdm_exception e)
+    {
+        db.End();
+        throw e;
+    }
+    db.End();
+}
+</pre>
+        <p>If you only need to lock certain records for your operation you can specify those records using the <code>BeginRead</code> parameters.</p><pre xml:space="preserve">void read_sensor(
+    Db_measurements  db, 
+    Cursor_sensor    s,
+    struct sensor   *sensor_fields) throw (rdm_exception&amp;)
+{
+    recordType rtypes[]= {Cursor_sensor::Type()};
+    db.BeginRead(rtypes, 1);
+    try
+    {
+        s.GetFieldValues(sensor_fields);
+    }
+    catch (rdm_exception e)
+    {
+        db.End();
+        throw e;
+    }
+    db.End();
+}
+</pre>
+        <p>You can also use a special end marker in the array instead of specifying the number of record types.</p><pre xml:space="preserve">void read_sensor2(
+    Db_measurements  db, 
+    Cursor_sensor    s,
+    struct sensor   *sensor_fields) throw (rdm_exception&amp;)
+{
+    recordType rtypes[]= {Cursor_sensor::Type(), Cursor::NoMoreTypes()};
+    db.BeginRead(rtypes);
+    try
+    {
+        s.GetFieldValues(sensor_fields);
+    }
+    catch (rdm_exception e)
+    {
+        db.End();
+        throw e;
+    }
+    db.End();
+}
+</pre>
+        <h3><a MadCap:generatedBookmark="TOC" name="Database_Snapshots"></a>Database Snapshots</h3>
+        <p>While read transactions allow for multiple readers they block all potential writers.  If you would like to read data from the database without blocking writers you can utilize database snapshots.  These snapshots create a transaction consistent view of a database at a particular point in time.  Any changes made by other database users will not be visible within the snapshot, however they will be available when snapshot ends.  Database snapshots can greatly increase parallelism, however they require the engine to retain information about database changes, and this can require a significant amount of memory.  It is recommended that snapshots be used for a limited duration especially on hardware with limited resources.</p>
+        <p>Database snapshots are created using the <code>db.BeginSnapshot</code> method.</p><pre xml:space="preserve">void BeginSnapshot () const throw (rdm_exception&amp;);</pre>
+        <p>This method takes no parameters and creates a static read-only view of the database.</p><pre xml:space="preserve">void list_sensors(
+    Db_measurements  db) throw (rdm_exception&amp;)
+{
+    Cursor_sensor s;
+    struct sensor s_fields;
+    db.BeginSnapshot();
+    try
+    {
+        s = db.Get_sensor_records();
+        for(s.First(); s != Cursor::GetAfterLast(); s++)
+        {
+            s.Get_name(s_fields.name);
+            cout &lt;&lt; s_fields.name &lt;&lt; endl;
+        }
+    }
+    catch (rdm_exception e)
+    {
+        db.End();
+        throw e;
+    }
+    db.End();
+}
+</pre>
+        <h3><a MadCap:generatedBookmark="TOC" name="Transaction_Commits"></a>Transaction Commits</h3>
+        <p>The <code>db.End</code> method will end an active transaction or snapshot.  Calling <code>db.End</code> will</p>
+        <ul>
+            <li value="1">Commit any modifications made in a write transaction</li>
+            <li value="2">Free locks obtained in a Write transaction</li>
+            <li value="3">Free locks obtained in a Read transaction</li>
+            <li value="4">Release a database snapshot</li>
+        </ul><pre xml:space="preserve">void End (void) const throw (rdm_exception&amp;);
+Cursor_sensor add_sensor(
+    Db_measurements  db, 
+    struct sensor   *sensor_fields) throw (rdm_exception&amp;)
+{
+    Cursor_sensor s;
+    recordType rtypes[]= {Cursor_sensor::Type()};
+    db.BeginUpdate(rtypes, 1);
+    try
+    {
+        s = db.New_sensor_recordWithFieldValues(sensor_fields);        
+    }
+    catch (rdm_exception e)
+    {
+        db.Abort(); 
+        throw e;
+    }
+    db.End();
+    return s;
+}
+</pre>
+        <h3><a MadCap:generatedBookmark="TOC" name="Transaction_Aborts"></a>Transaction Aborts</h3>
+        <p>If there is an exception in the processing of a transaction block you would normally abort the transaction instead of committing it.  The <code>db.Abort</code> method is similar to the <code>db.End</code> method except that it rolls back changes made in a write transaction instead of persisting them.  It is illegal to call <code>db.Abort</code> for a read transaction or snapshot.</p><pre xml:space="preserve">void Abort (void) const throw (rdm_exception&amp;);
+Cursor_sensor add_sensor(
+    Db_measurements  db, 
+    struct sensor   *sensor_fields) throw (rdm_exception&amp;)
+{
+    Cursor_sensor s;
+    recordType rtypes[]= {Cursor_sensor::Type()};
+    db.BeginUpdate(rtypes, 1);
+    try
+    {
+        s = db.New_sensor_recordWithFieldValues(sensor_fields);        
+    }
+    catch (rdm_exception e)
+    {
+        db.Abort(); 
+        throw e;
+    }
+    db.End();
+    return s;
+}
+</pre>
+        <h3><a MadCap:generatedBookmark="TOC" name="Precommit"></a>Precommit</h3>
+        <p>The <span class="MyVariablesProductShortName">RDM</span> C++ interface can be involved in multi-system transactions by the use of the <code>db.Precommit</code> method.  In two-phase commit protocols there is a voting phase and a commit phase.  The <code>db.Precommit</code> method is used in the voting phase to validate that a transaction is able to commit.  Typically if <code>db.Precommit</code> does not throw an exception then <code>db.End</code> will not throw an exception.  By using <code>db.Precommit</code> your application can check if the database is able to commit a transaction before issuing the actual <code>db.End</code> or <code>db.Abort</code> command.</p>
+        <p>Consider our measurement example application, perhaps we want to periodically transfer readings from the device to an enterprise DBMS for data warehousing purposes.  If the readings on the device are critical we may want to make sure that they are successfully entered in the enterprise DBMS before we delete them from the embedded database.  We can do this by using a two phase-commit and having both the embedded database and the enterprise database confirm the ability to commit before actually ending the transaction.</p><pre xml:space="preserve">void Precommit (void) const throw (rdm_exception&amp;);</pre><pre xml:space="preserve">void delete_measurement(
+    Cursor_measurement  m,
+    Db_measurements     db) throw (rdm_exception&amp;)
+{
+    bool b_do_commit = true;
+    db.BeginUpdate();
+    try
+    {
+        m.Disconnect_sensor_measurement();
+        m.Delete();
+    }
+    catch (rdm_exception e)
+    {
+        db.Abort(); 
+        throw e;
+    }
+
+    try
+    {
+        db.Precommit();
+    }
+    catch (rdm_exception e)
+    {
+        /* Send precommit failed message to transaction broker */
+        db.Abort();
+        throw e;
+    }
+    
+    /* Send precommit succeeded message to transaction broker */
+
+    /* Ask transaction broker if we should End or Abort */
+    if(b_do_commit == true)
+        db.End();
+    else
+        db.Abort();
+}
+</pre>
+        <h2><a MadCap:generatedBookmark="TOC" name="New_Methods"></a>New Methods</h2>
+        <p>The Db interface provides a set of generated methods for adding new records to the database.  Each record declared in the database schema will have two "New" methods - <code>New_<i>recordname</i>_record</code> and <code>New_<i>recordname</i>_recordWithFieldValues</code>.  The first method creates a record with field values initialized to default values.  The second method creates a record with values initialized with data that is provided to the method.  These methods return a singleton cursor object for the newly created record and must be called within an Update transaction block.  If a record has a unique key definition it is not possible to create more than one record with default values unless the unique key field of the created record is set to something else before the next record is created.</p>
+        <p>To create a new record with default values</p><pre xml:space="preserve">Cursor_recname New_recname_record (void) const throw (rdm_exception&amp;);</pre>
+        <p>The caller of the function can use the cursor that is returned to set field values in the new record.</p><pre xml:space="preserve">Cursor_sensor add_sensor2(
+    struct sensor   *sensor_fields,
+    Db_measurements  db) throw (rdm_exception&amp;)
+{
+    Cursor_sensor s;
+    recordType rtypes[]= {Cursor_sensor::Type(), Cursor::NoMoreTypes()};
+    db.BeginUpdate(rtypes);
+    try
+    {
+        s = db.New_sensor_record();
+    }
+    catch (rdm_exception e)
+    {
+        db.Abort();
+        throw e;
+    }
+    db.End();
+    return s;
+}
+</pre>
+        <p>To create a new record with specified values</p><pre xml:space="preserve">Cursor_<i>recname</i> New_<i>recname</i>_recordWithFieldValues (
+&#160;&#160;&#160;&#160;struct <i>recname</i> *fields) const throw (rdm_exception&amp;);</pre><pre xml:space="preserve">Cursor_sensor add_sensor(
+    struct sensor   *sensor_fields,
+    Db_measurements  db) throw (rdm_exception&amp;)
+{
+    Cursor_sensor s;
+    recordType rtypes[]= {Cursor_sensor::Type()};
+    db.BeginUpdate(rtypes, 1);
+    try
+    {
+        s = db.New_sensor_recordWithFieldValues(sensor_fields);        
+    }
+    catch (rdm_exception e)
+    {
+        db.Abort(); 
+        throw e;
+    }
+    db.End();
+    return s;
+}
+
+</pre>
+        <h2><a MadCap:generatedBookmark="TOC" name="Delete_Methods"></a>Delete Methods</h2>
+        <p>The Cursor interface contains two methods to remove records from a database.  The <code>Cursor.Delete</code> method is for deleting a record that is not actively connected to any sets.  The <code>Cursor.DisconnectAndDelete</code> method will disconnect the record from any sets before it is deleted.  Both methods require an active transaction context with locks on the cursor record, the <code>Cursor.DisconnectAndDelete</code> method also requires locks on any records related to the cursor record through a set.</p><pre xml:space="preserve">Cursor Delete (void) const throw (rdm_exception&amp;);</pre><pre xml:space="preserve">Cursor DisconnectAndDelete (void) const throw (rdm_exception&amp;);</pre>
+        <p>The first example shows how to use <code>Cursor.Delete</code> to remove a Sensor record that does not have any measurements related to it.</p><pre xml:space="preserve">/* Note: this only works if the sensor has no associated measurements.  If
+ * the sensor has measurements then an exception will by thrown by the
+ * s.Delete call
+ */
+void delete_sensor(
+    Cursor_sensor   s,
+    Db_measurements db) throw (rdm_exception&amp;)
+{
+    recordType rtypes[]= {s.Type()};
+    db.BeginUpdate(rtypes, 1);
+    try
+    {
+        s.Delete();
+    }
+    catch (rdm_exception e)
+    {
+        db.Abort(); 
+        throw e;
+    }
+    db.End();
+}
+
+</pre>
+        <p>The second example demonstrates how to use <code>Cursor.DisconnectAndDelete</code> to remove a Measurement record that is associated with a Sensor.</p><pre xml:space="preserve">void delete_measurement2(
+    Cursor_measurement  m,
+    Db_measurements     db) throw (rdm_exception&amp;)
+{
+    recordType rtypes[]= {Cursor_sensor::Type(), Cursor_measurement::Type()};
+    db.BeginUpdate(rtypes, 2);
+    try
+    {
+        m.DisconnectAndDelete();
+    }
+    catch (rdm_exception e)
+    {
+        db.Abort(); 
+        throw e;
+    }
+    db.End();
+}
+</pre>
+        <h2><a MadCap:generatedBookmark="TOC" name="Get_Methods"></a>Get Methods</h2>
+        <p>The Cursor interface has a set of generated methods for retrieving non-blob field data stored in record.  There is a method for retrieving all of fields in a record (<code>Cursor.GetFieldData</code>) and methods to retrieve each field value individually (<code>Cursor.Get_<i>fieldname</i></code>).  These need to be run within a transaction block – Update, Read, or Snapshot.</p><pre xml:space="preserve">void GetFieldValues (struct record_name *fields) const throw (rdm_exception&amp;);</pre><pre xml:space="preserve">void Get_fieldname (&lt;type&gt; val) const throw (rdm_exception&amp;);</pre>
+        <p>This example shows how to retrieve all the field values from a <code>Cursor_measurement</code> object and just the name field from a <code>Cursor_sensor</code> object.</p><pre xml:space="preserve">void read_measurement(
+    struct measurement *measurement_fields,
+    struct sensor      *sensor_fields,
+    Cursor_measurement  m,
+    Db_measurements     db) throw (rdm_exception&amp;) 
+{
+    Cursor_sensor s;
+    db.BeginRead();
+    try
+    {
+        m.GetFieldValues(measurement_fields);
+        m.Get_sensor_measurement_owner().Get_name(sensor_fields-&gt;name);
+    }
+    catch (rdm_exception e)
+    {
+        db.End();
+        throw e;
+    }
+    db.End();
+}
+</pre>
+        <h2><a MadCap:generatedBookmark="TOC" name="Set_Methods"></a>Set Methods</h2>
+        <p>Updating data in the database is done through the Cursor interface's generated Set methods methods.  There is a method for setting all the fields in a record (<code>Cursor.SetFieldData</code>) and methods to set each field value individually (<code>Cursor.Set_<i>fieldname</i></code>).  These need to be run within an Update transaction block.</p><pre xml:space="preserve">void SetFieldValues (const struct recordname *fields) const throw (rdm_exception&amp;);</pre><pre xml:space="preserve">void Set_fieldname (&lt;type&gt; val) const throw (rdm_exception&amp;);</pre>
+        <p>This example shows how to set all the field values from a <code>Cursor_sensor</code> object.</p><pre xml:space="preserve">void update_sensor(
+    struct sensor   *sensor_fields,
+    Cursor_sensor    s,
+    Db_measurements  db) throw (rdm_exception&amp;)
+{
+    recordType rtypes[]= {Cursor_sensor::Type()};
+    db.BeginUpdate(rtypes, 1);
+    try
+    {
+        s.SetFieldValues(sensor_fields);
+    }
+    catch (rdm_exception e)
+    {
+        db.Abort();
+        throw e;
+    }
+    db.End();
+}
+</pre>
+        <p>This example illustrates how to update the value field of a measurement record</p><pre xml:space="preserve">void update_measurement_value(
+    int32_t             value,
+    Cursor_measurement  m,
+    Db_measurements     db) throw (rdm_exception&amp;)
+{
+    recordType rtypes[]= {Cursor_measurement::Type()};
+    db.BeginUpdate(rtypes, 1);
+    try
+    {
+        m.Set_value(value);
+    }
+    catch (rdm_exception e)
+    {
+        db.Abort();
+        throw e;
+    }
+    db.End();
+}
+</pre>
+        <h2><a MadCap:generatedBookmark="TOC" name="Blob_Methods"></a>Blob Methods</h2>
+        <p>Blob fields are handled slightly differently from standard fields, in addition to the Cursor generated Get and Set methods there are methods generated for retrieving and setting the size of the blob field.  If you set the blob size to a value less than the current size the field will be truncated.  If you set the size of a blob fields to a value larger than the existing size then the field will be padded with NULL bytes.  As with standard fields Set Methods require and Update transaction and Get Methods require a Read transaction or Snapshot.</p>
+        <p>The <code>Cursor.Set</code> method is generated for each blob field to add or update data to a blob field.  This method has more parameters than the Cursor.Set methods for standard fields.  If you specify an offset in the middle of the existing data then the new data will overwrite any existing data.</p><pre xml:space="preserve">void Set_<i>blobfieldname</i> (uint32_t offset, const void *buf, uint32_t size)
+    const throw (rdm_exception&amp;);</pre>
+        <table style="caption-side: top;mc-table-style: url('../Resources/TableStyles/ArgsTwoCol.css');" class="TableStyle-ArgsTwoCol" cellspacing="0">
+            <col class="Column-Column1" />
+            <col class="Column-Column2" />
+            <tbody>
+                <tr class="Body-Body1">
+                    <td class="BodyE-Column1-Body1">offset</td>
+                    <td class="BodyD-Column2-Body1">The offset into the blob field to write the data</td>
+                </tr>
+                <tr class="Body-Body1">
+                    <td class="BodyE-Column1-Body1">buf</td>
+                    <td class="BodyD-Column2-Body1">The data to write to the blob</td>
+                </tr>
+                <tr class="Body-Body1">
+                    <td class="BodyB-Column1-Body1">size</td>
+                    <td class="BodyA-Column2-Body1">The size of the data to be written to the blob field</td>
+                </tr>
+            </tbody>
+        </table><pre xml:space="preserve">void add_measurement_raw_data(
+    const void         *raw_data,
+    uint32_t            size,
+    Cursor_measurement  m,
+    Db_measurements     db) throw (rdm_exception&amp;) 
+{
+    db.BeginUpdate();
+    try
+    {
+        m.Set_raw_data(0, raw_data, size);
+    }
+    catch (rdm_exception e)
+    {
+        db.Abort(); 
+        throw e;
+    }
+    db.End(); 
+}
+</pre>
+        <p>There is a <code>Cursor.Get</code> method generated for each blob field to read data from a blob field.  This method has more parameters than the Get methods for standard fields</p><pre xml:space="preserve">void Get_blobfieldname (uint32_t offset, void *buf, uint32_t len, uint32_t *size= NULL)
+&#160;&#160;&#160;&#160;const throw (rdm_exception&amp;);</pre>
+        <table style="caption-side: top;mc-table-style: url('../Resources/TableStyles/ArgsTwoCol.css');" class="TableStyle-ArgsTwoCol" cellspacing="0">
+            <col class="Column-Column1" />
+            <col class="Column-Column2" />
+            <tbody>
+                <tr class="Body-Body1">
+                    <td class="BodyE-Column1-Body1">offset</td>
+                    <td class="BodyD-Column2-Body1">The offset into the blob field to read data from</td>
+                </tr>
+                <tr class="Body-Body1">
+                    <td class="BodyE-Column1-Body1">buf</td>
+                    <td class="BodyD-Column2-Body1">A buffer to write the data read</td>
+                </tr>
+                <tr class="Body-Body1">
+                    <td class="BodyE-Column1-Body1">len</td>
+                    <td class="BodyD-Column2-Body1">The amount of data to read into buf</td>
+                </tr>
+                <tr class="Body-Body1">
+                    <td class="BodyB-Column1-Body1">size</td>
+                    <td class="BodyA-Column2-Body1">The amount of data that was read into buf</td>
+                </tr>
+            </tbody>
+        </table><pre xml:space="preserve">void read_measurement_raw_data(
+    void               *raw_data,
+    uint32_t            size,
+    uint32_t           *bytes_read,
+    Cursor_measurement  m,
+    Db_measurements     db) throw (rdm_exception&amp;) 
+{
+    db.BeginRead();
+    try
+    {
+        m.Get_raw_data(0, raw_data, size, bytes_read);
+    }
+    catch (rdm_exception e)
+    {
+        db.End(); 
+        throw e;
+    }
+    db.End(); 
+}
+</pre>
+        <p>There is a <code>Cursor.Set_size</code> method generated for each blob field to change the size of the field.  This can result in the field being truncated or padded with NULL bytes.</p><pre xml:space="preserve">void Set_<i>blobfieldname</i>_size (uint32_t size) const throw (rdm_exception&amp;);</pre>
+        <table style="caption-side: top;mc-table-style: url('../Resources/TableStyles/ArgsTwoCol.css');" class="TableStyle-ArgsTwoCol" cellspacing="0">
+            <col class="Column-Column1" />
+            <col class="Column-Column2" />
+            <tbody>
+                <tr class="Body-Body1">
+                    <td class="BodyB-Column1-Body1">size</td>
+                    <td class="BodyA-Column2-Body1">The new size for the blob field</td>
+                </tr>
+            </tbody>
+        </table><pre xml:space="preserve">void set_measurement_raw_data_size(
+    uint32_t            size,
+    Cursor_measurement  m,
+    Db_measurements     db) throw (rdm_exception&amp;) 
+{
+    db.BeginUpdate();
+    try
+    {
+        m.Set_raw_data_size(size);
+    }
+    catch (rdm_exception e)
+    {
+        db.Abort(); 
+        throw e;
+    }
+    db.End(); 
+}
+</pre>
+        <p>There is a <code>Cursor.Get_size</code> method generated for each blob field to get the current size of the field.</p><pre xml:space="preserve">void Get_<i>blobfieldname</i>_size (uint32_t *size) const throw (rdm_exception&amp;);</pre>
+        <table style="caption-side: top;mc-table-style: url('../Resources/TableStyles/ArgsTwoCol.css');" class="TableStyle-ArgsTwoCol" cellspacing="0">
+            <col class="Column-Column1" />
+            <col class="Column-Column2" />
+            <tbody>
+                <tr class="Body-Body1">
+                    <td class="BodyB-Column1-Body1">size</td>
+                    <td class="BodyA-Column2-Body1">A variable to get the <b>current</b> size of the blob field</td>
+                </tr>
+            </tbody>
+        </table><pre xml:space="preserve">void get_measurement_raw_data_size(
+    uint32_t           *size,
+    Cursor_measurement  m,
+    Db_measurements     db) throw (rdm_exception&amp;) 
+{
+    db.BeginRead();
+    try
+    {
+        m.Get_raw_data_size(size);
+    }
+    catch (rdm_exception e)
+    {
+        db.End(); 
+        throw e;
+    }
+    db.End(); 
+}
+</pre>
+        <h2><a MadCap:generatedBookmark="TOC" name="Network_Model_Set_Methods"></a>Network Model Set Methods</h2>
+        <p>The Cursor interface has generated methods to support connecting and disconnecting records to sets.  Methods that deal with connecting or disconnecting records to sets require Update transactions and locks on both the owner and member record types.  See the <span class="MyVariablesProductShortName">RDM</span> User's Guide for more information on Network Model Sets.</p>
+        <p>The <code>Cursor.Connect_<i>setname</i></code> method connects a member to an owner's set chain.</p><pre xml:space="preserve">void Connect_setname (const Cursor_ownertype &amp;owner) const throw (rdm_exception&amp;);</pre>
+        <table style="caption-side: top;mc-table-style: url('../Resources/TableStyles/ArgsTwoCol.css');" class="TableStyle-ArgsTwoCol" cellspacing="0">
+            <col class="Column-Column1" />
+            <col class="Column-Column2" />
+            <tbody>
+                <tr class="Body-Body1">
+                    <td class="BodyB-Column1-Body1">owner</td>
+                    <td class="BodyA-Column2-Body1">A cursor positioned to the owner record the member will be connected to</td>
+                </tr>
+            </tbody>
+        </table><pre xml:space="preserve">Cursor_measurement add_measurement(
+    struct measurement *measurement_fields,
+    Cursor_sensor       s,
+    Db_measurements     db) throw (rdm_exception&amp;) 
+{
+    Cursor_measurement m;
+    db.BeginUpdate();
+    try
+    {
+        m = db.New_measurement_recordWithFieldValues(measurement_fields);
+        m.Connect_sensor_measurement(s);        
+    }
+    catch (rdm_exception e)
+    {
+        db.Abort(); 
+        throw e;
+    }
+    db.End(); 
+    return m;
+}
+</pre>
+        <p>The <code>Cursor.Disconnect_<i>setname</i></code> method will remove a record from a set chain.</p><pre xml:space="preserve">void Disconnect_sensor_measurement (void) const throw (rdm_exception&amp;);</pre><pre xml:space="preserve">void delete_sensor2(
+    Cursor_sensor   s,
+    Db_measurements db) throw (rdm_exception&amp;)
+{
+    recordType rtypes[]= {s.Type(), Cursor_measurement::Type()};
+    Cursor_measurement m;
+    db.BeginUpdate(rtypes, 2);
+    try
+    {
+        m = s.Get_sensor_measurement_members();
+        while(m != Cursor::GetAfterLast())
+        {
+            m.Disconnect_sensor_measurement();
+            m++;
+        }
+        s.Delete();
+    }
+    catch (rdm_exception e)
+    {
+        db.Abort(); 
+        throw e;
+    }
+    db.End();
+}
+</pre>
+        <p>The <code>Cursor.Reconnect_<i>setname</i></code> method will remove a record from a set chain and add it to another set chain.  This method is required when navigating set members via a SetCursor as the member record will drop out of the cursor when it is disconnected.</p><pre xml:space="preserve">void Reconnect_sensor_measurement (const Cursor_sensor &amp;owner) const throw (rdm_exception&amp;);</pre>
+        <table style="caption-side: top;mc-table-style: url('../Resources/TableStyles/ArgsTwoCol.css');" class="TableStyle-ArgsTwoCol" cellspacing="0">
+            <col class="Column-Column1" />
+            <col class="Column-Column2" />
+            <tbody>
+                <tr class="Body-Body1">
+                    <td class="BodyB-Column1-Body1">owner</td>
+                    <td class="BodyA-Column2-Body1">A cursor positioned to the new owner record the member will be connected to</td>
+                </tr>
+            </tbody>
+        </table><pre xml:space="preserve">void move_measurement(
+    Cursor_measurement m,
+    Cursor_sensor      s,
+    Db_measurements    db) throw (rdm_exception&amp;)
+{
+    recordType rtypes[]= {s.Type(), Cursor_measurement::Type()};
+    db.BeginUpdate(rtypes, 2);
+    try
+    {
+        m.Reconnect_sensor_measurement(s);
+    }
+    catch (rdm_exception e)
+    {
+        db.Abort(); 
+        throw e;
+    }
+    db.End();
+}
+</pre>
+        <p>The <code>Cursor.Get_<i>setname</i>_count</code> method will return the number of members contained in a SetCursor collection.  The function does not require a read transaction, but can potentially read old data without one.</p><pre xml:space="preserve">int32_t Get_sensor_measurement_count (void) const throw (rdm_exception&amp;);
+int32_t get_number_of_measurements(
+    Cursor_sensor   s,
+    Db_measurements db) throw (rdm_exception&amp;) 
+{
+    int32_t member_count;
+    db.BeginRead();
+    try
+    {
+        member_count = s.Get_sensor_measurement_count();
+    }
+    catch (rdm_exception e)
+    {
+        db.End();
+        throw e;
+    }
+    db.End();
+    return member_count;
+}
+</pre>
+        <h2><a MadCap:generatedBookmark="TOC" name="Cursor_Creation_Methods"></a>Cursor Creation Methods</h2>
+        <p>In the C++ interface record searching and navigation is done though Cursor interfaces.  There are four types of Cursors supported by <span class="MyVariablesProductShortName">RDM</span>– table scan cursors, key scan cursors, and set member cursors, and singleton cursors.  These cursors have a common interface and therefore can be interchanged.  This section covers the generated methods that give you cursors containing a single record or groups of records.</p>
+        <h3><a MadCap:generatedBookmark="TOC" name="Table_Scan_Cursors"></a>Table Scan Cursors</h3>
+        <p>A table scan cursor provides the ability to navigate all the records of a particular record type in sequential order.  The exact ordering of those records will not be known to the application.  In our example application this would be useful for a function that wants to find the average measurement value stored in the measurement record.  The order in which the records are returned are not important in this calculation, but we do need to access every record instance.</p>
+        <p>A Table Scan cursor is returned from the Db interface with the <code>Db.Get_<i>recname</i>_records</code> method.  There is no need for a transaction when calling <code>Db.Get_<i>recname</i>_records</code>, however a Read transaction or Snapshot is required to read data from a Cursor.</p><pre xml:space="preserve">Cursor_<i>rectype</i> Get_<i>recname</i>_records (void) const throw (rdm_exception&amp;);</pre>
+        <table style="caption-side: top;mc-table-style: url('../Resources/TableStyles/ArgsTwoCol.css');" class="TableStyle-ArgsTwoCol" cellspacing="0">
+            <col class="Column-Column1" />
+            <col class="Column-Column2" />
+            <tbody>
+                <tr class="Body-Body1">
+                    <td class="BodyB-Column1-Body1" style="font-weight: bold;font-style: normal;font-family: sans-serif;">Returns:</td>
+                    <td class="BodyA-Column2-Body1">A table scan cursor contain a collection of all the <i>recname</i> records positioned at the first record instance.</td>
+                </tr>
+            </tbody>
+        </table><pre xml:space="preserve">void get_average_measurement(
+    double          *avg,
+    Db_measurements  db) throw (rdm_exception&amp;)
+{
+    Cursor_measurement m;
+    double total;
+    int32_t cur_value;
+    int64_t count;
+
+    db.BeginSnapshot();
+    try
+    {
+        for(m = db.Get_measurement_records(), count=0, total=0; m != Cursor::GetAfterLast(); m++, count++)
+        {
+            m.Get_value(&amp;cur_value);
+            total += cur_value;
+        }
+    }
+    catch (rdm_exception e)
+    {
+        db.End(); 
+        throw e;
+    }
+    db.End();
+    *avg = total / count;
+}
+</pre>
+        <p>The Cursor interface has a common method <code>Cursor.GetRecords</code> to obtain a table scan cursor for it's own record type.  This method is similar to the generated method in the Db interface except that the resulting Cursor is not positioned at the first record instance, but rather at the location of the record that created the cursor – if that location is meaningful.  Since table scan cursors are not ordered in a deterministic manner this method is of limited use.</p><pre xml:space="preserve">Cursor GetRecords (void) const throw (rdm_exception&amp;);</pre>
+        <p>One potential use case would be to determine if a record was placed at the end of a file.  Since <span class="MyVariablesProductShortName">RDM</span> recycles slots when records are deleted it is possible that a record could be placed in the middle of the file or at the end.  The following example uses the <code>Cursor.GetRecords</code> method to determine if a newly inserted record was placed at the end of a file.  It is also an example of how you can chain method calls together.</p><pre xml:space="preserve">Cursor_measurement add_measurement2(
+    bool               *b_rec_at_end,
+    struct measurement *measurement_fields,
+    Cursor_sensor       s,
+    Db_measurements     db) throw (rdm_exception&amp;) 
+{
+    Cursor_measurement m;
+
+    db.BeginUpdate();
+    try
+    {
+        m = db.New_measurement_recordWithFieldValues(measurement_fields);
+        m.Connect_sensor_measurement(s);
+        *b_rec_at_end = m.GetRecords().Next().AfterLast();
+    }
+    catch (rdm_exception e)
+    {
+        db.Abort(); 
+        throw e;
+    }
+    db.End(); 
+    return m;
+}
+</pre>
+        <h3><a MadCap:generatedBookmark="TOC" name="Key_Scan_Cursors"></a>Key Scan Cursors</h3>
+        <p>Key Scan Cursors are similar to Table Scan cursors, except they are based on an b-tree index.  A Key Scan Cursor allows an application to iterate through all of the records in a particular record type in index order.  In addition Key Scan cursors add methods for direct record searches.</p>
+        <p>A <i>recname</i> Key Scan cursor is returned from the Db interface with the generated <code>Db.Get_<i>recname</i>_recordsBy_<i>indexname</i></code> method.  <code>Db.Get_<i>recname</i>_recordsBy_<i>indexname</i></code> requires a Read Transaction or Snapshot, however the C++ API will implicitly create and release a Read Transaction if one is not active.  <span class="MyVariablesProductShortName">RDM</span> best practices suggest explicitly creating transactions instead of solely relying on implicit transactions.  The <i>recname</i> Key Scan cursor returned by <code>Db.Get_<i>recname</i>_recordsBy_<i>indexname</i></code> will be positioned at the first record in the cursor collection.</p><pre xml:space="preserve">Cursor_<i>recname</i> Get_<i>recname</i>_recordsBy_<i>indexname</i> (void) const throw (rdm_exception&amp;);</pre>
+        <p>The following example shows how to display a list of all the sensors in the database ordered by the sensor name.</p><pre xml:space="preserve">void list_sensors_by_name(
+    Db_measurements  db) throw (rdm_exception&amp;)
+{
+    Cursor_sensor s;
+    struct sensor s_fields;
+    db.BeginSnapshot();
+    try
+    {
+        s = db.Get_sensor_recordsBy_name();
+        for(s.First(); s != Cursor::GetAfterLast(); s++)
+        {
+            s.Get_name(s_fields.name);
+            cout &lt;&lt; s_fields.name &lt;&lt; endl;
+        }
+    }
+    catch (rdm_exception e)
+    {
+        db.End();
+        throw e;
+    }
+    db.End();
+}
+</pre>
+        <p>It is also possible to obtain a Key Scan Cursor directly from another cursor by using the generated method <code>Cursor.GetRecordsBy_<i>indexname</i></code>.  This result is similar to the method in the Db interface except that the resulting Cursor is not positioned at the first record instance, but at the location of the record from which we derived the new cursor from.</p><pre xml:space="preserve">Cursor_<i>recname</i> GetRecordsBy_<i>indexname</i>() const throw (rdm_exception&amp;);</pre>
+        <p>The following example uses the <code>GetRecordsBy_<i>indexname</i></code> from a Cursor to display all sensor readings that have occurred after the current reading in the cursor (based on the k_reading index).</p><pre xml:space="preserve">void list_subsequent_measurements(
+    Cursor_measurement m,
+    Db_measurements    db) throw (rdm_exception&amp;)
+{
+    Cursor_measurement m_later;
+    struct measurement m_fields;
+    db.BeginSnapshot();
+    try
+    {
+        m_later = m.GetRecordsBy_k_reading();
+        for(m_later.Next(); m_later != Cursor::GetAfterLast(); m_later++)
+        {
+            m_later.GetFieldValues(&amp;m_fields);
+            display_measurement(&amp;m_fields);
+        }
+    }
+    catch (rdm_exception e)
+    {
+        db.End();
+        throw e;
+    }
+    db.End();
+}
+</pre>
+        <p>The Cursor interface also provides generated methods for performing searches on indexed fields.  For each index defined in the database there will by a <code>Cursor.KeyFindBy_<i>indexname</i></code> method generated.  This method will reposition the cursor to the first occurrence of the key value in the cursor collection.  This method repositions the cursor to the first occurrence of the key value in the cursor collection, but it does not change the Cursor type.  If you call <code>KeyFindBy_<i>indexname</i></code> from a Record Scan cursor any subsequent Next or Previous calls will be based on the Cursor order and not on the index order.  <code>Cursor.KeyFindBy_<i>indexname</i></code> requires a Read Transaction.</p>
+        <p>When calling <code>KeyFindBy_<i>index</i></code> name from a Key Scan cursor, if you do not get an exact match the Cursor will not be at a valid record, but it will be positioned at the index location where a match would have been located.  Consider an integer index containing the values 1, 2, 7, and 8, a <code>KeyFindBy_<i>indexname</i></code> with a value of 5 would result in a positioning the index to a point where a call to Previous would position the Cursor to the record with the '2' index value and a call to Next would position the Cursor to the record with the '7' index value.  Attempted to read/write/delete from a Cursor that is not currently positioned at a record will result in a <code>rdm_not_at_record_exception</code> being thrown.</p>
+        <p>When working with a Set Member Cursor the <code>KeyFindBy_<i>indexname</i></code> will only find records that are in the cursor.  While Key Scan and Record Scan cursors contain all of the records in a table, Set Member cursors only contain member records associated with a particular owner.</p>
+        <p>Since a Singleton cursor by definition contains only a single record, the <code>KeyFindBy_<i>indexname</i></code> method for a Singleton Cursor is not meaningful.</p><pre xml:space="preserve">void KeyFindBy_<i>indexname</i> (<i>field</i>_type *<i>field</i>_value) const throw (rdm_exception&amp;);</pre>
+        <p>This method has one parameter</p>
+        <table style="caption-side: top;mc-table-style: url('../Resources/TableStyles/ArgsTwoCol.css');" class="TableStyle-ArgsTwoCol" cellspacing="0">
+            <col class="Column-Column1" />
+            <col class="Column-Column2" />
+            <tbody>
+                <tr class="Body-Body1">
+                    <td class="BodyB-Column1-Body1"><i>field</i>_value</td>
+                    <td class="BodyA-Column2-Body1">The index value that will be used to position the cursor</td>
+                </tr>
+            </tbody>
+        </table>
+        <p>This example shows how to position a Sensor cursor to a particular sensor record based on the indexed name field.  For this function it does not matter if the cursor is a Record Scan or Key Scan cursor.</p><pre xml:space="preserve">void lookup_sensor(
+    char           *name,
+    Cursor_sensor   s,
+    Db_measurements db) throw (rdm_exception&amp;)
+{
+    recordType rtypes[]= {s.Type()};
+    db.BeginRead(rtypes, 1);
+    try
+    {
+        s.KeyFindBy_name(name);
+    }
+    catch (rdm_exception e)
+    {
+        db.End(); 
+        throw e;
+    }
+    db.End();
+}
+</pre>
+        <p>Compound keys have an addition overloaded <code>Cursor.KeyFindBy_<i>indexname</i></code> method</p><pre xml:space="preserve">void KeyFindBy_<i>indexname</i> (int32_t nFields, uint32_t partialStrLen, 
+&#160;&#160;&#160;&#160;<i>field</i>_type *<i>field</i>_value) const throw (rdm_exception&amp;);</pre>
+        <table style="caption-side: top;mc-table-style: url('../Resources/TableStyles/ArgsTwoCol.css');" class="TableStyle-ArgsTwoCol" cellspacing="0">
+            <col class="Column-Column1" />
+            <col class="Column-Column2" />
+            <tbody>
+                <tr class="Body-Body1">
+                    <td class="BodyE-Column1-Body1">nFields</td>
+                    <td class="BodyD-Column2-Body1">The number of fields to use in the search. If this parameter is zero, the function searches all fields. If this parameter is a non-zero value, the function uses only the number of fields indicated.</td>
+                </tr>
+                <tr class="Body-Body1">
+                    <td class="BodyE-Column1-Body1">partialStrLen</td>
+                    <td class="BodyD-Column2-Body1">The partial string length in bytes. If this parameter is a non-zero value, the function uses only this many bytes of the last field being considered (depending on nFields above).</td>
+                </tr>
+                <tr class="Body-Body1">
+                    <td class="BodyB-Column1-Body1"><i>field</i>_value</td>
+                    <td class="BodyA-Column2-Body1">The index value that will be used to position the cursor</td>
+                </tr>
+            </tbody>
+        </table>
+        <p>This example shows how to position a Measurement cursor to a particular record based on the k_reading compound key.  For this function it does not matter if the cursor is a Record Scan or Key Scan cursor.</p><pre xml:space="preserve">void lookup_measurement(
+    struct measurement_k_reading *reading,
+    Cursor_measurement            m,
+    Db_measurements               db) throw (rdm_exception&amp;)
+{
+    recordType rtypes[]= {m.Type()};
+    db.BeginRead(rtypes, 1);
+    try
+    {
+        m.KeyFindBy_k_reading(2, 0, reading);
+    }
+    catch (rdm_exception e)
+    {
+        db.End(); 
+        throw e;
+    }
+    db.End();
+}	
+</pre>
+        <h3><a MadCap:generatedBookmark="TOC" name="Set_Member_Cursors"></a>Set Member Cursors</h3>
+        <p>Set Member Cursors differ from Table Scan Cursors and Key Scan Cursors as they can only be obtained from another Cursor and they typically contain a subset of a table's total records.  A Set Member Cursor allows an application to navigate network model set relationships.  The Set Member Cursor contains a collection of all the member records that are associated with a particular owner record.  There are two generated methods to obtain Set Member Cursors.</p>
+        <p>Every record that is an "owner" in a set relationship will have a generated method called <code>Cursor.Get_<i>setname</i>_members</code>.  This method will return a Set Member collection containing all of the member records associated with the current record in the owner's cursor collection.  The cursor will be positioned at the first record in the collection.</p><pre xml:space="preserve">Cursor_rectype Get_setname_members (void) const throw (rdm_exception&amp;);</pre>
+        <p>This example displays all of the measurements associated with a sensor through the <code>sensor_measurement</code> set.</p><pre xml:space="preserve">void list_sensor_measurements(
+    Cursor_sensor   s,
+    Db_measurements db) throw (rdm_exception&amp;)
+{
+    int32_t            ii;
+    Cursor_measurement m;
+    struct measurement m_fields;
+    db.BeginRead();
+    try
+    {
+        m = s.Get_sensor_measurement_members();
+        for(m.First(), ii=0; m != Cursor::GetAfterLast(); m++, ii++)
+        {
+            m.GetFieldValues(&amp;m_fields);
+            cout &lt;&lt; "Reading: " &lt;&lt; ii &lt;&lt; endl;
+            cout &lt;&lt; "Time: " &lt;&lt; m_fields.time &lt;&lt; endl;
+            cout &lt;&lt; "Value: " &lt;&lt; m_fields.value &lt;&lt; endl;
+        }
+    }
+    catch (rdm_exception e)
+    {
+        db.End();
+        throw e;
+    }
+    db.End();
+}
+</pre>
+        <p>Every record that is a "member" in a set relationship will have a generated method called <code>Cursor.Get_<i>setname</i>_siblings</code>.  This method will return a Set Member collection containing all of the member records with the same owner as the original cursor.  The new cursor collection will be positioned at the location of the cursor from which we derived the new Set Member cursor and not the first member.</p><pre xml:space="preserve">Cursor_<i>rectype</i> Get_<i>setname</i>_siblings (void) const throw (rdm_exception&amp;);</pre>
+        <p>In our test application sensors store their measurement readings using a set.  This set will put all new readings at the end of the set chain.  By using the <code>Get_sensor_measurement_siblings</code> method we can find all of sensor's readings that came before or after a particular reading without needing an index.</p><pre xml:space="preserve">void list_prior_measurements_for_sensor(
+    Cursor_measurement m,
+    Db_measurements    db) throw (rdm_exception&amp;)
+{
+    int32_t            ii;
+    Cursor_measurement m_prior;
+    struct measurement m_fields;
+    db.BeginRead();
+    try
+    {
+        m_prior = m.Get_sensor_measurement_siblings();
+        for(m_prior.Prev(), ii=0; m_prior != Cursor::GetBeforeFirst(); m_prior--, ii++)
+        {
+            m_prior.GetFieldValues(&amp;m_fields);
+            cout &lt;&lt; "Reading: " &lt;&lt; ii &lt;&lt; endl;
+            cout &lt;&lt; "Time: " &lt;&lt; m_fields.time &lt;&lt; endl;
+            cout &lt;&lt; "Value: " &lt;&lt; m_fields.value &lt;&lt; endl;
+        }
+    }
+    catch (rdm_exception e)
+    {
+        db.End();
+        throw e;
+    }
+    db.End();
+}
+</pre>
+        <h3><a MadCap:generatedBookmark="TOC" name="Singleton_Cursors"></a>Singleton Cursors</h3>
+        <p>The final type of cursor is a singleton cursor which can only contain one record.  For convenience a singleton can be used just as any other type of cursor, however it will never yield more than one record.</p>
+        <p>When creating a new record the generated <code>Db.New_<i>recordname</i>_record</code> and <code>Db.New_<i>recordname</i>_recordWithFieldValues</code> methods return a Singleton Cursor containing the newly created record.</p>
+        <p>Each record that is defined as a member in a set relationship will have a method generated to obtain a singleton cursor containing the records "Owner".</p><pre xml:space="preserve">Cursor_ownerrec Get_<i>setname</i>_owner (void) const throw (rdm_exception&amp;);</pre>
+        <table style="caption-side: top;mc-table-style: url('../Resources/TableStyles/ArgsTwoCol.css');" class="TableStyle-ArgsTwoCol" cellspacing="0">
+            <col class="Column-Column1" />
+            <col class="Column-Column2" />
+            <tbody>
+                <tr class="Body-Body1">
+                    <td class="BodyB-Column1-Body1" style="font-weight: bold;font-style: normal;font-family: sans-serif;">Returns:</td>
+                    <td class="BodyA-Column2-Body1">A singleton cursor containing the owner record.</td>
+                </tr>
+            </tbody>
+        </table>
+        <p>This example shows how to get a singleton cursor containing the related sensor record for any measurement stored in our sample database.</p><pre xml:space="preserve">Cursor_sensor get_sensor_for_measurement(
+    Cursor_measurement  m,
+    Db_measurements     db) throw (rdm_exception&amp;) 
+{
+    Cursor_sensor s;
+    db.BeginRead();
+    try
+    {
+        s = m.Get_sensor_measurement_owner();
+    }
+    catch (rdm_exception e)
+    {
+        db.End();
+        throw e;
+    }
+    db.End();
+    return s;
+}
+</pre>
+        <p>Each cursor also contains a <code>Cursor.GetThis</code> method that will return a Singleton Cursor for the current record in the cursor collection.  This allows an application to save a reference to a particular record for later use.</p><pre xml:space="preserve">Cursor GetThis (void) const throw (rdm_exception&amp;);</pre>
+        <table style="caption-side: top;mc-table-style: url('../Resources/TableStyles/ArgsTwoCol.css');" class="TableStyle-ArgsTwoCol" cellspacing="0">
+            <col class="Column-Column1" />
+            <col class="Column-Column2" />
+            <tbody>
+                <tr class="Body-Body1">
+                    <td class="BodyB-Column1-Body1" style="font-weight: bold;font-style: normal;font-family: sans-serif;">Returns:</td>
+                    <td class="BodyA-Column2-Body1">A singleton cursor containing the owner record.</td>
+                </tr>
+            </tbody>
+        </table>
+        <h3><a MadCap:generatedBookmark="TOC" name="Special_Singletons"></a>Special Singletons</h3>
+        <p>There are two special singletons 'BeforeFirst' and 'AfterLast' used for cursor navigation.  These special singletons can be obtained using static methods in the Cursor interface and identify when a Cursor is positioned before the first record in the collection or after the final record in the collection.</p><pre xml:space="preserve">static Cursor GetBeforeFirst (void) throw ();</pre>
+        <table style="caption-side: top;mc-table-style: url('../Resources/TableStyles/ArgsTwoCol.css');" class="TableStyle-ArgsTwoCol" cellspacing="0">
+            <col class="Column-Column1" />
+            <col class="Column-Column2" />
+            <tbody>
+                <tr class="Body-Body1">
+                    <td class="BodyB-Column1-Body1" style="font-weight: bold;font-style: normal;font-family: sans-serif;">Returns:</td>
+                    <td class="BodyA-Column2-Body1">The BeforeFirst special singleton</td>
+                </tr>
+            </tbody>
+        </table><pre xml:space="preserve">static Cursor GetAfterLast (void) throw ();</pre>
+        <table style="caption-side: top;mc-table-style: url('../Resources/TableStyles/ArgsTwoCol.css');" class="TableStyle-ArgsTwoCol" cellspacing="0">
+            <col class="Column-Column1" />
+            <col class="Column-Column2" />
+            <tbody>
+                <tr class="Body-Body1">
+                    <td class="BodyB-Column1-Body1" style="font-weight: bold;font-style: normal;font-family: sans-serif;">Returns:</td>
+                    <td class="BodyA-Column2-Body1">The AfterLast special singleton</td>
+                </tr>
+            </tbody>
+        </table>
+        <p>This example demonstrates how to navigate through a cursor collection and uses the GetAfterLast singleton to identify when we have processed the final record in a cursor collection.</p><pre xml:space="preserve">void list_sensors(
+    Db_measurements  db) throw (rdm_exception&amp;)
+{
+    Cursor_sensor s;
+    struct sensor s_fields;
+    db.BeginSnapshot();
+    try
+    {
+        s = db.Get_sensor_records();
+        for(s.First(); s != Cursor::GetAfterLast(); s++)
+        {
+            s.Get_name(s_fields.name);
+            cout &lt;&lt; s_fields.name &lt;&lt; endl;
+        }
+    }
+    catch (rdm_exception e)
+    {
+        db.End();
+        throw e;
+    }
+    db.End();
+}
+</pre>
+        <h2><a MadCap:generatedBookmark="TOC" name="Cursor_Navigation_Methods"></a>Cursor Navigation Methods</h2>
+        <p>A Cursor obtained from a Db interface is always positioned to the first record in the sequence.  A Cursor obtained from another Cursor is typically positioned to the same record as the originating Cursor.  Once a Cursor had been obtained there are methods to navigate through the collections of records contained by the Cursor.  All Cursors in the <span class="MyVariablesProductShortName">RDM</span> C++ Interface are considered live Cursors.  Any changes made to the database will affect all active Cursors.  If you need a Cursor to remain constant you must ensure a transaction is kept for the life of the Cursor.</p>
+        <h3><a MadCap:generatedBookmark="TOC" name="First"></a>First</h3>
+        <p>It is possible to position a Cursor to the first record in the Cursor collection with the <code>Cursor.First</code> method.  This method returns a copy of the Cursor which allows it to be chained in a series of method calls.</p><pre xml:space="preserve">Cursor First (void) const throw (rdm_exception&amp;);</pre>
+        <table style="caption-side: top;mc-table-style: url('../Resources/TableStyles/ArgsTwoCol.css');" class="TableStyle-ArgsTwoCol" cellspacing="0">
+            <col class="Column-Column1" />
+            <col class="Column-Column2" />
+            <tbody>
+                <tr class="Body-Body1">
+                    <td class="BodyB-Column1-Body1" style="font-weight: bold;font-style: normal;font-family: sans-serif;">Returns:</td>
+                    <td class="BodyA-Column2-Body1">The Cursor you are using positioned to the first record in the collection.</td>
+                </tr>
+            </tbody>
+        </table>
+        <p>The following example demonstrates the use of the <code>Cursor.First</code> method in looping through all of the records in a Cursor collection.</p><pre xml:space="preserve">	void list_sensors(
+	    Db_measurements  db) throw (rdm_exception&amp;)
+	{
+	    Cursor_sensor s;
+	    struct sensor s_fields;
+	    db.BeginSnapshot();
+	    try
+	    {
+	        s = db.Get_sensor_records();
+	        for(s.First(); s != Cursor::GetAfterLast(); s++)
+	        {
+	            s.Get_name(s_fields.name);
+	            cout &lt;&lt; s_fields.name &lt;&lt; endl;
+	        }
+	    }
+	    catch (rdm_exception e)
+	    {
+	        db.End();
+	        throw e;
+	    }
+	    db.End();
+	}
+</pre>
+        <h3><a MadCap:generatedBookmark="TOC" name="Last"></a>Last</h3>
+        <p>It is possible to position a Cursor to the last record in the Cursor collection with the <code>Cursor.Last</code> method.  This method returns a copy of the Cursor which allows it to be chained in a series of method calls.</p><pre xml:space="preserve">Cursor Last (void) const throw (rdm_exception&amp;);</pre>
+        <table style="caption-side: top;mc-table-style: url('../Resources/TableStyles/ArgsTwoCol.css');" class="TableStyle-ArgsTwoCol" cellspacing="0">
+            <col class="Column-Column1" />
+            <col class="Column-Column2" />
+            <tbody>
+                <tr class="Body-Body1">
+                    <td class="BodyB-Column1-Body1" style="font-weight: bold;font-style: normal;font-family: sans-serif;">Returns:</td>
+                    <td class="BodyA-Column2-Body1">The Cursor you are using positioned to the last record in the collection.</td>
+                </tr>
+            </tbody>
+        </table>
+        <p>The following example demonstrates the use of the <code>Cursor.Last</code> method by displaying the last 5 records in a Set collection</p><pre xml:space="preserve">void list_latest_sensor_measurements(
+    Cursor_sensor   s,
+    Db_measurements db) throw (rdm_exception&amp;)
+{
+    int32_t            ii;
+    Cursor_measurement m;
+    struct measurement m_fields;
+    db.BeginRead();
+    try
+    {
+        m = s.Get_sensor_measurement_members();
+        for(m.Last(), ii=0; m != Cursor::GetBeforeFirst() &amp;&amp; ii &lt; 5; m--, ii++)
+        {
+            m.GetFieldValues(&amp;m_fields);
+            cout &lt;&lt; "Reading: " &lt;&lt; ii &lt;&lt; endl;
+            cout &lt;&lt; "Time: " &lt;&lt; m_fields.time &lt;&lt; endl;
+            cout &lt;&lt; "Value: " &lt;&lt; m_fields.value &lt;&lt; endl;
+        }
+    }
+    catch (rdm_exception e)
+    {
+        db.End();
+        throw e;
+    }
+    db.End();
+}
+</pre>
+        <h3><a MadCap:generatedBookmark="TOC" name="Next"></a>Next</h3>
+        <p>Position a Cursor to the next record in the collection by using the <code>Cursor.Next</code> method.  The <code>'++'</code> operator can be used as a shortcut for the <code>Cursor.Next</code> method.  This method returns a copy of the Cursor which allows it to be chained in a series of method calls.</p><pre xml:space="preserve">Cursor Next (void) const throw (rdm_exception&amp;);</pre><pre xml:space="preserve">Cursor operator ++ (void) const throw (rdm_exception&amp;);</pre><pre xml:space="preserve">Cursor operator ++ (int) const throw (rdm_exception&amp;);</pre>
+        <table style="caption-side: top;mc-table-style: url('../Resources/TableStyles/ArgsTwoCol.css');" class="TableStyle-ArgsTwoCol" cellspacing="0">
+            <col class="Column-Column1" />
+            <col class="Column-Column2" />
+            <tbody>
+                <tr class="Body-Body1">
+                    <td class="BodyB-Column1-Body1" style="font-weight: bold;font-style: normal;font-family: sans-serif;">Returns:</td>
+                    <td class="BodyA-Column2-Body1">The Cursor you are using positioned to the next record in the collection.</td>
+                </tr>
+            </tbody>
+        </table>
+        <p>The following example demonstrates the use of chaining <code>Cursor.Next</code> method to determine if a record is the final record in a Cursor Collection</p><pre xml:space="preserve">Cursor_measurement add_measurement2(
+    bool               *b_rec_at_end,
+    struct measurement *measurement_fields,
+    Cursor_sensor       s,
+    Db_measurements     db) throw (rdm_exception&amp;) 
+{
+    Cursor_measurement m;
+
+    db.BeginUpdate();
+    try
+    {
+        m = db.New_measurement_recordWithFieldValues(measurement_fields);
+        m.Connect_sensor_measurement(s);
+        *b_rec_at_end = m.GetRecords().Next().AfterLast();
+    }
+    catch (rdm_exception e)
+    {
+        db.Abort(); 
+        throw e;
+    }
+    db.End(); 
+    return m;
+}
+</pre>
+        <h3><a MadCap:generatedBookmark="TOC" name="Prev"></a>Prev</h3>
+        <p>Position a Cursor to the previous record in the collection by using the <code>Cursor.Prev</code> method.  The <code>'--'</code> operator can be used as a shortcut for the <code>Cursor.Prev</code> method.  This method returns a copy of the Cursor which allows it to be chained in a series of method calls.</p><pre xml:space="preserve">Cursor Prev (void) const throw (rdm_exception&amp;);</pre><pre xml:space="preserve">Cursor operator -- (void) const throw (rdm_exception&amp;);</pre><pre xml:space="preserve">Cursor operator -- (int) const throw (rdm_exception&amp;);</pre>
+        <table style="caption-side: top;mc-table-style: url('../Resources/TableStyles/ArgsTwoCol.css');" class="TableStyle-ArgsTwoCol" cellspacing="0">
+            <col class="Column-Column1" />
+            <col class="Column-Column2" />
+            <tbody>
+                <tr class="Body-Body1">
+                    <td class="BodyB-Column1-Body1" style="font-weight: bold;font-style: normal;font-family: sans-serif;">Returns:</td>
+                    <td class="BodyA-Column2-Body1">The Cursor you are using positioned to the previous record in the collection.</td>
+                </tr>
+            </tbody>
+        </table>
+        <p>The following example demonstrates the use <code>Cursor.Prev</code> method and <code>'--'</code> operator to display prior measurements from a sensor.</p><pre xml:space="preserve">void list_prior_measurements_for_sensor(
+    Cursor_measurement m,
+    Db_measurements    db) throw (rdm_exception&amp;)
+{
+    int32_t            ii;
+    Cursor_measurement m_prior;
+    struct measurement m_fields;
+    db.BeginRead();
+    try
+    {
+        m_prior = m.Get_sensor_measurement_siblings();
+        for(m_prior.Prev(), ii=0; m_prior != Cursor::GetBeforeFirst(); m_prior--, ii++)
+        {
+            m_prior.GetFieldValues(&amp;m_fields);
+            cout &lt;&lt; "Reading: " &lt;&lt; ii &lt;&lt; endl;
+            cout &lt;&lt; "Time: " &lt;&lt; m_fields.time &lt;&lt; endl;
+            cout &lt;&lt; "Value: " &lt;&lt; m_fields.value &lt;&lt; endl;
+        }
+    }
+    catch (rdm_exception e)
+    {
+        db.End();
+        throw e;
+    }
+    db.End();
+}
+</pre>
+        <p class="Caption">Example 1: Cursor.Prev method</p>
+        <h3><a MadCap:generatedBookmark="TOC" name="Count"></a>Count</h3>
+        <p>Each cursor has a GetCount method which will returns the number of items contained in the Cursor collection.  By definition the GetCount method for a Singleton Cursor will always return 1.  The GetCount method for the special Cursors (BeforeFirst/AfterLast) will always return 0.</p>
+        <p>A read transaction is not required for this method, but it is possible to retrieve out of data information without one.</p><pre xml:space="preserve">uint64_t GetCount (void) const throw (rdm_exception&amp;);</pre>
+        <table style="caption-side: top;mc-table-style: url('../Resources/TableStyles/ArgsTwoCol.css');" class="TableStyle-ArgsTwoCol" cellspacing="0">
+            <col class="Column-Column1" />
+            <col class="Column-Column2" />
+            <tbody>
+                <tr class="Body-Body1">
+                    <td class="BodyB-Column1-Body1" style="font-weight: bold;font-style: normal;font-family: sans-serif;">Returns:</td>
+                    <td class="BodyA-Column2-Body1">The number of items contained in the Cursor collection</td>
+                </tr>
+            </tbody>
+        </table>
+        <p>The following example demonstrates the use <code>Cursor.GetCount</code> method to retrieve the number of sensors records in the database.</p><pre xml:space="preserve">int64_t get_number_of_sensors(
+    Cursor_sensor   s,
+    Db_measurements db) throw (rdm_exception&amp;) 
+{
+    int64_t sensor_count;
+    db.BeginRead();
+    try
+    {
+        sensor_count = s.GetCount();
+    }
+    catch (rdm_exception e)
+    {
+        db.End();
+        throw e;
+    }
+    db.End();
+    return sensor_count;
+}
+</pre>
+        <h2><a MadCap:generatedBookmark="TOC" name="Cursor_Comparison_Methods"></a>Cursor Comparison Methods</h2>
+        <p>A cursor can be positioned at any record in the sequence, it can also be positioned before the first record or after the last record.  At times we may want to compare the position of one cursor with the position of another.  To support this the C++ interface provide a set of methods and overloaded operators that compare cursor positions.</p>
+        <h3><a MadCap:generatedBookmark="TOC" name="Equal"></a>Equal</h3>
+        <p>The <code>'=='</code> operator and the <code>Cursor.At</code> method perform a comparison for equality.  They will return true only if the positions that are being compared represent the same record (or both are before the first record or after the last record).  The cursors involved in the comparison do not need to be of the same type.</p><pre xml:space="preserve">bool At (const Cursor&amp; cursor) const throw (rdm_exception&amp;);</pre><pre xml:space="preserve">bool operator == (const Cursor&amp; cursor) const throw (rdm_exception&amp;);</pre>
+        <h3><a MadCap:generatedBookmark="TOC" name="Not_Equal"></a>Not Equal</h3>
+        <p>The <code>'!='</code> operator and the <code>Cursor.NotAt</code> method perform a comparison for inequality.  They will return true only if the positions that are being compared do not represent the same record.  The cursors involved in the comparison do not need to be of the same type.</p><pre xml:space="preserve">bool NotAt (const Cursor&amp; cursor) const throw (rdm_exception&amp;);</pre><pre xml:space="preserve">bool operator != (const Cursor&amp; cursor) const throw (rdm_exception&amp;);</pre>
+        <h3><a MadCap:generatedBookmark="TOC" name="Less_Than"></a>Less Than</h3>
+        <p>The <code>'&lt;'</code> operator and the <code>Cursor.Before</code> method perform less than comparison for two cursors.  They will return true only if the position in the left operand comes before the position in the right operand (as it is positioned in the left operands cursor sequence).  The cursors involved in the comparison do not need to be of the same type.</p>
+        <p>A key scan cursor (<code>cursor1</code>) and a record scan cursor (<code>cursor2</code>) may contain the exact same set of records, but the records typically occur in different orders.  A comparison between these cursors will be based on the order of the left operand.  The means if <code>cursor1 &lt; cusor2</code> (key order) it does not necessarily mean <code>cursor2 &gt; cursor1</code> (record order)</p><pre xml:space="preserve">bool Before (const Cursor&amp; cursor) const throw (rdm_exception&amp;);</pre><pre xml:space="preserve">bool operator &lt; (const Cursor&amp; cursor) const throw (rdm_exception&amp;);</pre>
+        <h3><a MadCap:generatedBookmark="TOC" name="Less_Than_Or_Equal"></a>Less Than Or Equal</h3>
+        <p>The <code>'&lt;=' </code>operator and the <code>Cursor.BeforeAt</code> method perform a less than or equal comparison for two cursors.  They will return true if the <code>'&lt;'</code> operator or the <code>'=='</code> operator return true.</p><pre xml:space="preserve">bool BeforeAt (const Cursor&amp; cursor) const throw (rdm_exception&amp;);</pre><pre xml:space="preserve">bool operator &lt;= (const Cursor&amp; cursor) const throw (rdm_exception&amp;);</pre>
+        <h3><a MadCap:generatedBookmark="TOC" name="Greater_Than"></a>Greater Than</h3>
+        <p>The <code>'&gt;'</code> operator and the <code>Cursor.After</code> method perform greater than comparison for two cursors.  They return the negated result of the <code>'&lt;='</code> operator.</p><pre xml:space="preserve">bool After (const Cursor&amp; cursor) const throw (rdm_exception&amp;);</pre><pre xml:space="preserve">bool operator &gt; (const Cursor&amp; cursor) const throw (rdm_exception&amp;);</pre>
+        <h3><a MadCap:generatedBookmark="TOC" name="Greater_Than_Or_Equal"></a>Greater Than Or Equal</h3>
+        <p>The <code>'&gt;='</code> operator and the <code>Cursor.FasterAt</code> method perform a greater than or equal comparison for two cursors.  They will return the negated result of the <code>'&lt;'</code> operator.</p>
+        <hr MadCap:conditions="Default.ScreenOnly" width="100%" size="0" align="center" />
+        <p MadCap:conditions="Default.ScreenOnly" style="font-size: 8pt;"><span class="MyVariablesCopyright">Copyright © 2012, Raima Inc. All rights reserved.</span>
+        </p>
+        <script type="text/javascript" src="../SkinSupport/MadCapBodyEnd.js">
+        </script>
+        <p class="MCWebHelpFramesetLink MCWebHelpFramesetLinkBottom" style="display: none;"><a href="../../Default_CSH.htm#CPPUG/cpp-op-overview.htm" style="">Open topic with navigation</a>
+        </p>
+    </body>
+</html>

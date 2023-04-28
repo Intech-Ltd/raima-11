@@ -1,0 +1,47 @@
+<?xml version="1.0" encoding="utf-8"?>
+<!DOCTYPE html PUBLIC "-//W3C//DTD XHTML 1.0 Strict//EN" "http://www.w3.org/TR/xhtml1/DTD/xhtml1-strict.dtd">
+<html xmlns:MadCap="http://www.madcapsoftware.com/Schemas/MadCap.xsd" MadCap:tocPath="Native API|User's Guide" MadCap:InPreviewMode="false" MadCap:PreloadImages="false" MadCap:RuntimeFileType="Topic" MadCap:TargetType="WebHelp" lang="en-us" xml:lang="en-us" class="" MadCap:PathToHelpSystem="../../" MadCap:HelpSystemFileName="Default.xml" MadCap:SearchType="Stem">
+    <head>
+        <meta http-equiv="Content-Type" content="text/html; charset=utf-8" /><title>Unicode Support</title>
+        <link rel="icon" type="image/png" href="http://docs.raima.com/favicon.png" />
+        <link href="../SkinSupport/MadCap.css" rel="stylesheet" />
+        <link href="../Resources/Stylesheets/raima.css" rel="stylesheet" />
+        <script src="../SkinSupport/MadCapAll.js" type="text/javascript">
+        </script>
+    </head>
+    <body>
+        <p class="MCWebHelpFramesetLink MCWebHelpFramesetLinkTop" style="display: none;"><a href="../../Default_CSH.htm#UG/Chapter9.htm" style="">Open topic with navigation</a>
+        </p>
+        <div class="MCBreadcrumbsBox_0"><span class="MCBreadcrumbsPrefix">You are here: </span><a class="MCBreadcrumbsLink" href="../dbCore.htm">Native API</a><span class="MCBreadcrumbsDivider"> &gt; </span><a class="MCBreadcrumbsLink" href="dbUG.htm">User's Guide</a><span class="MCBreadcrumbsDivider"> &gt; </span><span class="MCBreadcrumbs">UNICODE Support</span>
+        </div>
+        <h1 class="firstHeading"><a MadCap:generatedBookmark="TOC" name="Unicode_Support"></a>Unicode Support</h1>
+        <p><span class="MyVariablesProductShortName">RDM</span> supports Unicode by providing the following capabilities:</p>
+        <ol>
+            <li value="1">Unicode data can be stored in <span class="MyVariablesProductShortName">RDM</span> application databases</li>
+            <li value="2">	Unicode is supported by the <span class="MyVariablesProductShortName">RDM</span> API</li>
+            <li value="3"><span class="MyVariablesProductShortName">RDM</span> utility programs on Microsoft Windows systems support Unicode input and output files</li>
+        </ol>
+        <p>These capabilities are discussed in more detail below.</p>
+        <h2><a MadCap:generatedBookmark="TOC" name="9.1_Unicode_data_stored_in_databases"></a>9.1 Unicode data stored in databases</h2>
+        <p><span class="MyVariablesProductShortName">RDM</span> supports both character (<code>char</code>) and widechar (<code>wchar_t</code>) arrays as data types in application databases. As with all other fields in the application database, <span class="MyVariablesProductShortName">RDM</span> does not perform any translation of character or widechar strings – it just stores whatever is passed to it in binary form and retrieves the same data when requested.</p>
+        <p>The size and usage of the <code>wchar_t</code> data type is operating system dependent. On Microsoft Windows systems <code>wchar_t</code> is a 16-bit data type, used for UTF-16 data. On Unix and Linux systems it is a 32-bit data type, used for UCS-4 data. Data in UTF-8 format is stored the same on all systems, in arrays of type char.</p>
+        <p>If a character or widechar array is defined as a key field then <span class="MyVariablesProductShortName">RDM</span> will sort the field values using the locale-dependent collation functions available on the target system. These will sort US ASCII and UTF-8 data stored in char string fields according to the locale settings. Widechar key fields will be sorted as UTF-16 or UCS-4, depending on the operating system. Again the locale will determine the sort order.</p>
+        <h2><a MadCap:generatedBookmark="TOC" name="9.2_Locale"></a>9.2 Locale</h2>
+        <p><span class="MyVariablesProductShortName">RDM</span> does not change the locale settings on the system, but uses whatever settings are selected at runtime. If the application does not explicitly set the locale then the settings will be dependent on the system configuration of the target system. The application should set the required locale explicitly to avoid the risk of database corruption caused by conflicting locale settings on different computers that are all accessing the same database.</p>
+        <h2><a MadCap:generatedBookmark="TOC" name="9.3_Unicode_is_supported_by_the_API"></a>9.3 Unicode is supported by the API</h2>
+        <p>For all <span class="MyVariablesProductShortName">RDM</span> API functions with character string parameters, or structured parameters containing string elements, there are also variant functions with widechar string parameters or structures. The widechar function names have the suffix 'W' appended to them, but are otherwise the same. Widechar structures will also have a 'W' suffix. For example the function <code>d_open</code>, which opens a database, receives the database name in a <code>char *</code> parameter, while <code>d_openW</code> receives the database name in a <code>wchar_t *</code> parameter.</p>
+        <p>The SQL API also supports Unicode in the same way. For example the function <code>SQLPrepareW</code> receives the SQL statement to be prepared in a <code>SQLWCHAR</code> string. Otherwise this function is identical to <code>SQLPrepare</code>, which receives the SQL statement in a <code>SQLCHAR</code> string. As with other data types, <code>SQLWCHAR</code> data can be bound to columns and parameters with the functions <code>SQLBindCol</code> and <code>SQLBindParameter</code>.</p>
+        <h2><a MadCap:generatedBookmark="TOC" name="9.4_Utility_programs_on_Windows"></a>9.4 Utility programs on Windows</h2>
+        <p>Unicode files are used mainly on Microsoft Windows systems, where the UTF-16 format is used. The <span class="MyVariablesProductShortName">RDM</span> utility programs generally have a command line option for specifying UTF-16 input or output files.</p>
+        <p>Internally <span class="MyVariablesProductShortName">RDM</span> manages all strings such as database names, file names, SQL statements etc. as UTF-8 strings. All widechar strings passed in via Unicode API functions are converted to UTF-8 in input.</p>
+        <h2><a MadCap:generatedBookmark="TOC" name="9.5_Combined_Library"></a>9.5 Combined Library</h2>
+        <p>In earlier versions of <span class="MyVariablesProductShortName">RDM</span>, support for Unicode was provided through separate libraries, one set of libraries containing Unicode-only APIs and another set containing non-Unicode APIs. There is now only one set of libraries, which contain both Unicode and non-Unicode functions.</p>
+        <hr MadCap:conditions="Default.ScreenOnly" width="100%" size="0" align="center" />
+        <p MadCap:conditions="Default.ScreenOnly" style="font-size: 8pt;"><span class="MyVariablesCopyright">Copyright © 2012, Raima Inc. All rights reserved.</span>
+        </p>
+        <script type="text/javascript" src="../SkinSupport/MadCapBodyEnd.js">
+        </script>
+        <p class="MCWebHelpFramesetLink MCWebHelpFramesetLinkBottom" style="display: none;"><a href="../../Default_CSH.htm#UG/Chapter9.htm" style="">Open topic with navigation</a>
+        </p>
+    </body>
+</html>

@@ -1,0 +1,127 @@
+<?xml version="1.0" encoding="utf-8"?>
+<!DOCTYPE html PUBLIC "-//W3C//DTD XHTML 1.0 Strict//EN" "http://www.w3.org/TR/xhtml1/DTD/xhtml1-strict.dtd">
+<html xmlns:MadCap="http://www.madcapsoftware.com/Schemas/MadCap.xsd" MadCap:tocPath="SQL API|SQL Language Guide|Reference Guide|SQL UDF Reference" MadCap:InPreviewMode="false" MadCap:PreloadImages="false" MadCap:RuntimeFileType="Topic" MadCap:TargetType="WebHelp" lang="en-us" xml:lang="en-us" MadCap:PathToHelpSystem="../../../" MadCap:HelpSystemFileName="Default.xml" MadCap:SearchType="Stem">
+    <head>
+        <meta http-equiv="Content-Type" content="text/html; charset=utf-8" /><title>udfInit</title>
+        <link rel="icon" type="image/png" href="http://docs.raima.com/favicon.png" />
+        <link href="../../SkinSupport/MadCap.css" rel="stylesheet" />
+        <link href="../../Resources/TableStyles/FunctionArgs.css" rel="stylesheet" />
+        <link href="../../Resources/TableStyles/SQLErrorCodes.css" rel="stylesheet" />
+        <link href="../../Resources/Stylesheets/raima.css" rel="stylesheet" />
+        <script src="../../SkinSupport/MadCapAll.js" type="text/javascript">
+        </script>
+    </head>
+    <body>
+        <p class="MCWebHelpFramesetLink MCWebHelpFramesetLinkTop" style="display: none;"><a href="../../../Default_CSH.htm#SQL/UDFREF/udfInit.htm" style="">Open topic with navigation</a>
+        </p>
+        <div class="MCBreadcrumbsBox_0"><span class="MCBreadcrumbsPrefix">You are here: </span><a class="MCBreadcrumbsLink" href="../../dbRSQL.htm">SQL API</a><span class="MCBreadcrumbsDivider"> &gt; </span><a class="MCBreadcrumbsLink" href="../dbSQL.htm">SQL Language Guide</a><span class="MCBreadcrumbsDivider"> &gt; </span><a class="MCBreadcrumbsLink" href="../SQLStmtRef.htm">Reference Guide</a><span class="MCBreadcrumbsDivider"> &gt; </span><span class="MCBreadcrumbs">udfInit</span>
+        </div>
+        <h3 class="newpage">udfInit<a name="kanchor254"></a></h3>
+        <p>Initialize execution of a user-defined function</p>
+        <p class="Heading">Prototype</p><pre xml:space="preserve">RSQL_ERRCODE EXTERNAL_FCN <i>udfInit</i>(
+    HSTMT               hStmt,  
+    void               *pRegCtx,
+    void               *pFcnCtx)
+</pre>
+        <p class="Heading">Arguments</p>
+        <table style="width: 100%;mc-table-style: url('../../Resources/TableStyles/FunctionArgs.css');margin-left: 0;margin-right: auto;" class="TableStyle-FunctionArgs" cellspacing="0">
+            <col class="Column-Column1" />
+            <col class="Column-Column3" />
+            <col class="Column-Column2" />
+            <tbody>
+                <tr class="Body-Body1">
+                    <td class="BodyE-Column1-Body1">hStmt</td>
+                    <td class="BodyE-Column3-Body1">(input)</td>
+                    <td class="BodyD-Column2-Body1">Statement handle of SQL statement referencing this UDF.</td>
+                </tr>
+                <tr class="Body-Body1">
+                    <td class="BodyE-Column1-Body1">pFcnCtx</td>
+                    <td class="BodyE-Column3-Body1">(input)</td>
+                    <td class="BodyD-Column2-Body1">Pointer to the user program allocated registration context data area.</td>
+                </tr>
+                <tr class="Body-Body1">
+                    <td class="BodyB-Column1-Body1">pResult</td>
+                    <td class="BodyB-Column3-Body1">(output)</td>
+                    <td class="BodyA-Column2-Body1">Pointer to the <code>RSQL_VALUE</code> variable to contain the result value.</td>
+                </tr>
+            </tbody>
+        </table>
+        <p class="Heading">Description</p>
+        <p>The <i>udfInit</i> function is called by <span class="MyVariablesRSQLName">RDM SQL</span> when the SQL statement containing the UDF call is executed (<code>rsqlExecute</code>).  This function is used to initialize data that needs to survive multiple calls to the <i>udfScalarCall</i> or <i>udfAggCall</i> functions during the processing of the SQL statement.  The pointer to this allocated memory is called the function context pointer and is passed to the <i>udfInit</i> function (as well as each of the other execution-time functions) through the <code>pFcnCtx</code> argument.  If no initialization is needed then this function is unnecessary and its entry in the <code>UDFLOADTABLE</code> can be assigned to <code>NULL</code>.</p>
+        <p>The <code>hStmt</code> argument is the statement handle of the SQL statement that contains a reference to the UDF.   It can be used by any of the UDF implementation functions to discover any needed information about the invoking statement (e.g., <code>rsqlGetStmtType</code>).</p>
+        <p>The <code>pRegCtx</code> argument is the registration context pointer that was passed by the application to the <code>rsqlRegisterUDFs</code> function.  This can be used to pass any necessary application-specific control information that may be needed by any of the UDFs (e.g., a random number seed for any function that generates random numbers).</p>
+        <p>The <code>pFcnCtx</code> argument is a pointer to the function context data area and is typically defined as a struct type with fields defined for any of the data that needs to survive the calls to the <i>udfScalarCall</i> or <i>udfAggCall</i> functions. <span class="MyVariablesRSQLName">RDM SQL</span> will allocate and clear this memory based on the size (in bytes) specified in the call to <code>rsqlRegisterUDFs</code> (argument <code>szFcnCtx</code>).</p>
+        <p class="Heading">Example</p><pre xml:space="preserve">#include "rsql.h"
+...
+/* ======================================================================
+   Initialization function for generic UDF
+*/
+static RSQL_ERRCODE EXTERNAL_FCN MyUdfInit (
+    HSTMT    hstmt,        /* in:  statement handle */
+    void    *pRegCtx,      /* in:  ptr to registration context */
+    void    *pFcnCtx);     /* in:  ptr to fcn execution context data area */
+{
+    MYUDF_CTX *pCtx = (MYUDF_CTX *)pFcnCtx;
+
+    UNREF_PARM(hStmt)
+    UNREF_PARM(pRegCtx)
+
+    /* do needed initialization of pCtx */
+	. . .
+
+    return errSUCCESS;
+}
+</pre>
+        <p class="Heading">Return Codes</p>
+        <table class="TableStyle-SQLErrorCodes" cellspacing="0" style="mc-table-style: url('../../Resources/TableStyles/SQLErrorCodes.css');">
+            <col class="Column-Column1" />
+            <col class="Column-Column2" />
+            <col class="Column-Column3" />
+            <col class="Column-Column4" />
+            <tbody>
+                <tr class="Body-Body1">
+                    <th class="BodyB-Column1-Body1" style="font-weight: bold;">Error Code</th>
+                    <th class="BodyB-Column2-Body1" style="font-weight: bold;">Enum Identifier</th>
+                    <th class="BodyB-Column3-Body1" style="font-weight: bold;">SQL State</th>
+                    <th class="BodyA-Column4-Body1" style="font-weight: bold;">Description</th>
+                </tr>
+            </tbody>
+        </table>
+        <table class="TableStyle-SQLErrorCodes" cellspacing="0" style="mc-table-style: url('../../Resources/TableStyles/SQLErrorCodes.css');">
+            <col class="Column-Column1" />
+            <col class="Column-Column2" />
+            <col class="Column-Column3" />
+            <col class="Column-Column4" />
+            <tbody>
+                <tr class="Body-Body1">
+                    <td class="BodyB-Column1-Body1">0</td>
+                    <td class="BodyB-Column2-Body1">errSUCCESS</td>
+                    <td class="BodyB-Column3-Body1">00000</td>
+                    <td class="BodyA-Column4-Body1">no error was detected</td>
+                </tr>
+            </tbody>
+        </table>
+        <p class="Heading">See Also</p>
+        <p><a href="../../SQLRM/rsqlRegisterUDFs.htm">rsqlRegisterUDFs</a>
+        </p>
+        <p><a href="udfCheck.htm">udfCheck</a>
+        </p>
+        <p><a href="udfTerm.htm">udfTerm</a>
+        </p>
+        <p><a href="udfScalarCall.htm">udfScalarCall</a>
+        </p>
+        <p><a href="udfAggCall.htm">udfAggCall</a>
+        </p>
+        <p><a href="udfAggResult.htm">udfAggResult</a>
+        </p>
+        <p><a href="udfAggReset.htm">udfAggReset</a>
+        </p>
+        <hr MadCap:conditions="Default.ScreenOnly" width="100%" size="0" align="center" />
+        <p MadCap:conditions="Default.ScreenOnly" style="font-size: 8pt;"><span class="MyVariablesCopyright">Copyright © 2012, Raima Inc. All rights reserved.</span>
+        </p>
+        <script type="text/javascript" src="../../SkinSupport/MadCapBodyEnd.js">
+        </script>
+        <p class="MCWebHelpFramesetLink MCWebHelpFramesetLinkBottom" style="display: none;"><a href="../../../Default_CSH.htm#SQL/UDFREF/udfInit.htm" style="">Open topic with navigation</a>
+        </p>
+    </body>
+</html>

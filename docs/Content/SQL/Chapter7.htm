@@ -1,0 +1,184 @@
+<?xml version="1.0" encoding="utf-8"?>
+<!DOCTYPE html PUBLIC "-//W3C//DTD XHTML 1.0 Strict//EN" "http://www.w3.org/TR/xhtml1/DTD/xhtml1-strict.dtd">
+<html xmlns:MadCap="http://www.madcapsoftware.com/Schemas/MadCap.xsd" MadCap:tocPath="SQL API|SQL Language Guide|User's Guide" MadCap:InPreviewMode="false" MadCap:PreloadImages="false" MadCap:RuntimeFileType="Topic" MadCap:TargetType="WebHelp" lang="en-us" xml:lang="en-us" MadCap:PathToHelpSystem="../../" MadCap:HelpSystemFileName="Default.xml" MadCap:SearchType="Stem">
+    <head>
+        <meta http-equiv="Content-Type" content="text/html; charset=utf-8" /><title>Changing and Deleting Data in a Database</title>
+        <link rel="icon" type="image/png" href="http://docs.raima.com/favicon.png" />
+        <link href="../SkinSupport/MadCap.css" rel="stylesheet" />
+        <link href="../Resources/Stylesheets/raima.css" rel="stylesheet" />
+        <script src="../SkinSupport/MadCapAll.js" type="text/javascript">
+        </script>
+    </head>
+    <body>
+        <p class="MCWebHelpFramesetLink MCWebHelpFramesetLinkTop" style="display: none;"><a href="../../Default_CSH.htm#SQL/Chapter7.htm" style="">Open topic with navigation</a>
+        </p>
+        <div class="MCBreadcrumbsBox_0"><span class="MCBreadcrumbsPrefix">You are here: </span><a class="MCBreadcrumbsLink" href="../dbRSQL.htm">SQL API</a><span class="MCBreadcrumbsDivider"> &gt; </span><a class="MCBreadcrumbsLink" href="dbSQL.htm">SQL Language Guide</a><span class="MCBreadcrumbsDivider"> &gt; </span><a class="MCBreadcrumbsLink" href="Chapter1.htm">User's Guide</a><span class="MCBreadcrumbsDivider"> &gt; </span><span class="MCBreadcrumbs">Changing and Deleting Data in a Database</span>
+        </div>
+        <h1 class="firstHeading"><a MadCap:generatedBookmark="TOC" name="Changing_and_Deleting_Data_in_a_Database"></a>Changing and Deleting Data in a Database</h1>
+        <p class="Quotation">Politicians are like diapers. They both need</p>
+        <p class="Quotation">changing regularly and for the same reason.</p>
+        <p class="QuoteAuthor">- Unknown</p>
+        <p>As I write this sentence and look up and see the quote at the top of the page which I found several weeks ago, I note that today is election day in the USA.  Interesting coincidence.   However, what you will learn about changing and deleting data in a database using SQL in this section will be much easier than changing politicians!</p>
+        <p>The SQL <b>update</b> statement is used to change the value of one or more columns in the rows of a particular table.  The SQL <b>delete</b> statement can be used to delete one or more rows from a particular table.   Two forms are provided for each statement.  A searched update or delete contains a <b>where</b> clause that is used to determine which rows of the table are to be updated or deleted.  Searched updates and deletes are designed to be used interactively although they are also easily used in an application program.   A positioned update or delete is used in conjunction with a <b>select</b> statement that is being processed under a separate statement handle and is only used within an application program.  For that reason, the discussion on positioned updates and deletes will be discussed in the <a href="Chapter11.htm">Using SQL in an Application Program</a> section.</p>
+        <h2><a MadCap:generatedBookmark="TOC" name="Searched_Delete_Statement"></a>Searched Delete Statement</h2>
+        <p>The syntax for the delete statement is as follows.</p><pre class="Grammar" xml:space="preserve">delete_stmt:
+ 		<b>delete from</b> [<i>db_name</i>.]<i>table_name</i> 
+ 			[<b>where</b> {conditional_expr | <b>current of</b>   <![CDATA[ ]]><i>cursor_name</i>}]</pre>
+        <p>If no <b>where</b> clause is specified then all of the rows in the table are deleted.  If a <b>where</b> clause is specified then only those rows for which the conditional expression is true will be deleted.  If a referential integrity violation occurs on any row during the execution of the <b>delete</b> statement, then the delete fails with no rows deleted.  A referential integrity violation occurs when there is a foreign key reference to a row to be deleted and the foreign key/references declaration does not include <b>on delete cascade</b>. All foreign key/references declarations that do include <b>on delete cascade</b> will cause the referencing rows from those tables to be deleted as well.</p>
+        <p>Our antiquarian bookshop has a limited first edition, first impression copy of  Jacob's Room by Virginia Woolf worth 32,500 pounds.  The owner has loaned this copy to the British Library for an upcoming Virginia Woolf exhibition.  Hence, it needs to be removed from the inventory.  The following queries show the pertinent information from the book table as well as the entries in all the tables that reference the book.</p><pre xml:space="preserve">select bookid, publ_year, price, title from book where bookid = "woolf03";
+BOOKID         PUBL_YEAR          PRICE TITLE
+woolf03             1922       32500.00 Jacob's room [by] Virginia Woolf.
+
+select * from related_name where bookid = "woolf03";
+BOOKID         NAME
+woolf03        Hogarth Press, publisher.
+
+select * from genre_books where bookid = "woolf03";
+BOOKID         GENRE
+woolf03        Psychological fiction
+woolf03        Experimental fiction
+
+select * from subjects_books where bookid = "woolf03";
+BOOKID         SUBJECT
+woolf03        World War, 1914-1918
+woolf03        Young men
+woolf03        England
+
+select text from note natural join note_line where bookid = "woolf03";
+TEXT
+First edition, first impression. One of probably
+   40 'A' subscribers copies.</pre>
+        <p>Because all of the references to this particular book have  foreign keys that specify <b>on delete cascade</b>, all that is needed to remove the book and its references is to issue the following statement.</p><pre xml:space="preserve">delete from book where bookid = "woolf03";</pre>
+        <p>The previous four <b>select</b> statements will now not return any results.   Now suppose you want to delete the genre "Gothic fiction."   You might first attempt the direct approach as follows.</p><pre xml:space="preserve">delete from genres  where text = "Gothic fiction";
+**** referential integrity error: row to be deleted is referenced</pre>
+        <p>The referential integrity error results from the fact that the foreign key references to this table are by default <b>on delete restrict</b> which prevents the deletion of rows from a table where references exist.   The genres table is referenced by only one other foreign key: the genre column of the <code>genres_books</code> table.   You can use the following query to list all of the rows in <code>genres_books</code> that reference "Gothic fiction."</p><pre xml:space="preserve">select * from genres_books where genre = "Gothic fiction";
+BOOKID         GENRE
+austen06       Gothic fiction</pre>
+        <p>There is only one reference which is Jane Austen's Northanger Abbey.  So to delete "Gothic fiction" from the genres table you must first delete the reference in <code>genres_books</code> (which is appropriate considering the book is not gothic fiction but is, in fact, a parody of gothic fiction).</p><pre xml:space="preserve">delete from genres_books where genre = "Gothic fiction";
+**** 1 rows affected
+delete from genres where text = "Gothic fiction";
+**** 1 rows affected</pre>
+        <p>At this point, since these are only examples, I suggest that you issue a rollback to restore the database back to its original state.</p><pre xml:space="preserve">select * from genres where text = "Gothic fiction";
+TEXT
+
+select * from genres_books where genre = "Gothic fiction";
+BOOKID         GENRE
+
+rollback;
+
+select * from genres where text = "Gothic fiction";
+TEXT
+Gothic fiction
+
+select * from genres_books where genre = "Gothic fiction";
+BOOKID         GENRE
+austen06       Gothic fiction</pre>
+        <h2><a MadCap:generatedBookmark="TOC" name="Searched_Update_Statement"></a>Searched Update Statement</h2>
+        <p>The syntax for the searched <b>update</b> statement is given below.</p><pre class="Grammar" xml:space="preserve">update_stmt:
+ 		<b>update</b>  [<i>db_name</i>.]<i>table_name</i> 
+			<b>set</b>  <i>column_name</i> = expression[, <i>column_name</i> = expression]... 
+ 			[<b>where</b> {conditional_expr | <b>current of</b>   <i>cursor_name</i>}]</pre>
+        <p>The values to which the named columns in the <b>set</b> clause are assigned are the evaluated results of the specified column expressions.  The column values in <code>[db_name.]table_name</code> referenced by the expressions are the pre-updated column values.  The rows that are updated are those for which <code>conditional_expr</code> is true.  If the update of any of the selected rows results in an referential integrity violation (i.e., a foreign key column in the table is changed to a value that does not exist in the referenced table), the update is aborted and the changes to the rows that had already been modified are discarded.  If the <b>where</b> clause is not specified, all of the rows in the specified table are updated.</p>
+        <p>If one of the columns specified in the <b>set</b> clause is a primary key that is referenced by one or more foreign key references in other tables then one of two results can occur.  If the foreign key declaration in the <b>create table</b> statement of the referencing table is specified with <b>on update cascade</b> then the update will succeed and the column values of all referencing rows will automatically (and instantly) be updated accordingly.  If no on clause is specified or if <b>on update restrict</b> is specified, the update will be rejected with a referential integrity error.</p>
+        <p>The following query lists the unsold books priced at £25,000 and above in the order in which the books were acquired.</p><pre xml:space="preserve">select bookid, date_acqd, price, title from book 
+ 	where date_sold is null and price &gt;= 25000.00 
+ 	order by date_acqd;
+
+BOOKID         DATE_ACQD           PRICE TITLE
+shakespeare01  2006-01-02     175000.00 The Tragicall Historie of Hamlet, Prince...
+poe02          2006-02-14      25000.00 Tales of the grotesque and arabesque
+decartes01     2006-03-09      75000.00 Principia philosophiae
+twain01        2006-08-06      32500.00 The celebrated jumping frog of Calaveras ...
+shakespeare07  2006-10-26      25000.00 Works. 1709
+shakespeare03  2007-05-22      75000.00 Macbeth, a tragedy.
+shakespeare06  2007-08-22      34500.00 King Richard II
+twain03        2007-09-17      67500.00 The adventures of Tom Sawyer,
+potter04       2007-12-19      80000.00 The tale of Peter Rabbit
+shakespeare04  2008-02-09     250000.00 Plays
+wells02        2009-03-24      30000.00 The island of Doctor Moreau,
+woolf03        2009-08-10      32500.00 Jacob's room [by] Virginia Woolf.
+shelley01      2009-11-26      25000.00 Frankenstein; or, The modern Prometheus.
+raleigh01      2010-01-12      32500.00 The history of the world.</pre>
+        <p>Given the difficult economic conditions and because they have been sitting in inventory unsold for some time, the shop owner has decided to lower the price by 15% on the most expensive books that were acquired prior to 2007.   The following <b>update</b> statement will do this.</p>
+        <p>Note that the values in the <code>date_acqd</code> and <code>date_sold</code> columns in your installation of the bookshop database example will be comprised of dates later than those shown here.</p><pre xml:space="preserve">update book set price = price - price*0.15
+    where date_sold is null and date_acqd &lt; date "2007-01-01" and price &gt;= 25000.00;
+**** 5 rows affected
+
+select bookid, date_acqd, price, title from book 
+ 	where date_sold is null and price &gt;= 25000.00 order by date_acqd;
+
+BOOKID         DATE_ACQD          PRICE TITLE
+shakespeare01  2006-01-02     148750.00 The Tragicall Historie of Hamlet, Prince...
+decartes01     2006-03-09      63750.00 Principia philosophiae
+twain01        2006-08-06      27625.00 The celebrated jumping frog of Calaveras ...
+shakespeare03  2007-05-22      75000.00 Macbeth, a tragedy.
+shakespeare06  2007-08-22      34500.00 King Richard II
+twain03        2007-09-17      67500.00 The adventures of Tom Sawyer,
+potter04       2007-12-19      80000.00 The tale of Peter Rabbit
+shakespeare04  2008-02-09     250000.00 Plays
+wells02        2009-03-24      30000.00 The island of Doctor Moreau,
+woolf03        2009-08-10      32500.00 Jacob's room [by] Virginia Woolf.
+shelley01      2009-11-26      25000.00 Frankenstein; or, The modern Prometheus.
+raleigh01      2010-01-12      32500.00 The history of the world.</pre>
+        <p>It was also noticed that the <code>bookid</code> values in the book table all begin with the author's last name followed by a two-digit ordered sequence.  However, two authors share the same last name:  Emily and Charlotte Bronte.  The <code>bookid</code> values for the two sisters begin with the first initial to differentiate between the authors.  The shop owner was to change this so that the initial follows the last name in order to preserve the last name <code>bookid</code> convention.   Since all foreign key references to <code>bookid</code> have been declared with the <b>on update cascade</b> specification, it is possible to update the <code>bookid</code> column even though it is the book table's primary key.  The following example shows the <b>update</b> statements that do this.  Notice the use of the built-in string function replace.</p><pre xml:space="preserve">select bookid, last_name, title from book where last_name like "Bronte%";
+
+BOOKID         LAST_NAME     TITLE
+cbronte01      BronteC       Jane Eyre. An autobiography. Ed. by Currer Bell [pseud.]
+cbronte02      BronteC       Villette.
+cbronte03      BronteC       Jane Eyre.
+ebronte01      BronteE       Wuthering Heights. A novel.
+
+update book set bookid = replace(bookid, "cbronte", "brontec") 
+ 	where last_name = "BronteC";
+
+*** 3 rows affected
+
+update book set bookid = replace(bookid, "ebronte", "brontee") 
+ 	where last_name = "BronteE";
+
+*** 1 rows affected
+
+select bookid, last_name, title from book where last_name like "Bronte%";
+
+BOOKID         LAST_NAME     TITLE
+brontec01      BronteC       Jane Eyre. An autobiography. Ed. by Currer Bell [pseud.]
+brontec02      BronteC       Villette.
+brontec03      BronteC       Jane Eyre.
+brontee01      BronteE       Wuthering Heights. A novel.</pre>
+        <p>One final comment.  Notice that in none of the above examples was a <b>commit</b> statement issued.  Hence, the changes made by the foregoing update statements have not yet been permanently stored in the database.  Since, these were just examples, let's just go ahead and issue a <b>rollback</b> statement to discard them.</p><pre xml:space="preserve">rollback;
+
+select bookid, date_acqd, price, title from book
+     where date_sold is null and price &gt;= 25000.00 order by date_acqd;
+
+BOOKID         DATE_ACQD        PRICE TITLE
+shakespeare01  2006-01-02      175000 The Tragicall Historie of Hamlet, Prince...
+poe02          2006-02-14       25000 Tales of the grotesque and arabesque
+decartes01     2006-03-09       75000 Principia philosophiae
+twain01        2006-08-06       32500 The celebrated jumping frog of Calaveras ...
+shakespeare07  2006-10-26       25000 Works. 1709
+shakespeare03  2007-05-22       75000 Macbeth, a tragedy.
+shakespeare06  2007-08-22       34500 King Richard II
+twain03        2007-09-17       67500 The adventures of Tom Sawyer,
+potter04       2007-12-19       80000 The tale of Peter Rabbit
+shakespeare04  2008-02-09      250000 Plays
+wells02        2009-03-24       30000 The island of Doctor Moreau,
+woolf03        2009-08-10       32500 Jacob's room [by] Virginia Woolf.
+shelley01      2009-11-26       25000 Frankenstein; or, The modern Prometheus.
+raleigh01      2010-01-12       32500 The history of the world.
+
+select bookid, last_name, title from book where last_name like "Bronte%";
+
+BOOKID         LAST_NAME     TITLE
+cbronte01      BronteC       Jane Eyre. An autobiography. Ed. by Currer Bell [pseud.]
+cbronte02      BronteC       Villette.
+cbronte03      BronteC       Jane Eyre.
+ebronte01      BronteE       Wuthering Heights. A novel.</pre>
+        <hr MadCap:conditions="Default.ScreenOnly" width="100%" size="0" align="center" />
+        <p MadCap:conditions="Default.ScreenOnly" style="font-size: 8pt;"><span class="MyVariablesCopyright">Copyright © 2012, Raima Inc. All rights reserved.</span>
+        </p>
+        <script type="text/javascript" src="../SkinSupport/MadCapBodyEnd.js">
+        </script>
+        <p class="MCWebHelpFramesetLink MCWebHelpFramesetLinkBottom" style="display: none;"><a href="../../Default_CSH.htm#SQL/Chapter7.htm" style="">Open topic with navigation</a>
+        </p>
+    </body>
+</html>

@@ -1,0 +1,87 @@
+<?xml version="1.0" encoding="utf-8"?>
+<!DOCTYPE html PUBLIC "-//W3C//DTD XHTML 1.0 Strict//EN" "http://www.w3.org/TR/xhtml1/DTD/xhtml1-strict.dtd">
+<html xmlns:MadCap="http://www.madcapsoftware.com/Schemas/MadCap.xsd" MadCap:tocPath="Native API|Reference Manual|Platform Support Functions (psp_ Prefix)" MadCap:InPreviewMode="false" MadCap:PreloadImages="false" MadCap:RuntimeFileType="Topic" MadCap:TargetType="WebHelp" lang="en-us" xml:lang="en-us" MadCap:PathToHelpSystem="../../" MadCap:HelpSystemFileName="Default.xml" MadCap:SearchType="Stem">
+    <head>
+        <meta http-equiv="Content-Type" content="text/html; charset=utf-8" /><title>psp_syncStart</title>
+        <link rel="icon" type="image/png" href="http://docs.raima.com/favicon.png" />
+        <link href="../SkinSupport/MadCap.css" rel="stylesheet" />
+        <link href="../Resources/TableStyles/FunctionArgs.css" rel="stylesheet" />
+        <link href="../Resources/Stylesheets/raima.css" rel="stylesheet" />
+        <script src="../SkinSupport/MadCapAll.js" type="text/javascript">
+        </script>
+    </head>
+    <body>
+        <p class="MCWebHelpFramesetLink MCWebHelpFramesetLinkTop" style="display: none;"><a href="../../Default_CSH.htm#PSPRM/psp_syncStart.htm" style="">Open topic with navigation</a>
+        </p>
+        <div class="MCBreadcrumbsBox_0"><span class="MCBreadcrumbsPrefix">You are here: </span><a class="MCBreadcrumbsLink" href="../dbCore.htm">Native API</a><span class="MCBreadcrumbsDivider"> &gt; </span><a class="MCBreadcrumbsLink" href="../RM/dbRM.htm">Reference Manual</a><span class="MCBreadcrumbsDivider"> &gt; </span><a class="MCBreadcrumbsLink" href="../RM/Chapter5.htm">Platform Support Functions (psp_ Prefix)</a><span class="MCBreadcrumbsDivider"> &gt; </span><span class="MCBreadcrumbs">psp_syncStart</span>
+        </div>
+        <h3 class="newpage"><a name="kanchor193"></a>psp_syncStart</h3>
+        <p>Start
+a new event (set the event semaphore to non-signaled)&#160;&#160;&#160;&#160;&#160;&#160;&#160;&#160;&#160;&#160;&#160;&#160;&#160;&#160;&#160;&#160;&#160;&#160;&#160;&#160;&#160;&#160;</p>
+        <p class="Heading"> Prototype</p><pre xml:space="preserve">void&#160;psp_syncStart (
+&#160;&#160;&#160;&#160;PSP_SEM&#160;handle)</pre>
+        <p class="Heading">Parameter</p>
+        <table style="width: 100%;mc-table-style: url('../Resources/TableStyles/FunctionArgs.css');margin-left: 0;margin-right: auto;" class="TableStyle-FunctionArgs" cellspacing="0">
+            <col style="width: 140px;" class="Column-Column1" />
+            <col style="width: 80px;" class="Column-Column3" />
+            <col class="Column-Column2" />
+            <tbody>
+                <tr class="Body-Body1">
+                    <td style="" class="BodyB-Column1-Body1">handle</td>
+                    <td style="" class="BodyB-Column3-Body1">(input)</td>
+                    <td style="" class="BodyA-Column2-Body1">The handle to an
+event semaphore.</td>
+                </tr>
+            </tbody>
+        </table>
+        <h4 class="BodyIndent4">Description</h4>
+        <p>This
+function starts an event by placing the event semaphore into a non-signaled
+state.&#160; This means that any other thread calling <code>psp_syncWait</code> will hang
+until some thread calls <code>psp_syncResume</code>.</p>
+        <p class="Heading">Return Codes</p>
+        <p>None</p>
+        <p class="Heading">See Also</p>
+        <p><a href="psp_syncResume.htm">psp_syncResume</a>
+        </p>
+        <p><a href="psp_syncWait.htm">psp_syncWait</a>
+        </p>
+        <p class="Heading">Example</p><pre class="Example" xml:space="preserve">#include "psp.h"
+
+void myThread(void *arg)
+{
+    PSP_SEM     sem = *(PSP_SEM *)arg;
+    
+    printf("initializing thread\n");
+    psp_sleep(1000); /* simulate initialization */
+    
+    /* initialization is done, main thread can continue */
+    psp_syncResume(sem);
+    psp_sleep(1000);
+}
+
+main(int argc, char *argv[])
+{
+    PSP_SEM      sem;
+    
+    sem = psp_syncCreate(PSP_EVENT_SEM);
+    if (sem)
+    {
+        psp_syncStart(sem);
+        psp_threadBegin(myThread, 0, (void *)&amp;sem);
+        printf("waiting for thread to initialize\n");
+        psp_syncWait(sem, PSP_INDEFINITE_WAIT);
+        printf("thread initialized\n");
+        psp_sleep(2000);
+    }
+}
+</pre>
+        <hr MadCap:conditions="Default.ScreenOnly" width="100%" size="0" align="center" />
+        <p MadCap:conditions="Default.ScreenOnly" style="font-size: 8pt;"><span class="MyVariablesCopyright">Copyright © 2012, Raima Inc. All rights reserved.</span>
+        </p>
+        <script type="text/javascript" src="../SkinSupport/MadCapBodyEnd.js">
+        </script>
+        <p class="MCWebHelpFramesetLink MCWebHelpFramesetLinkBottom" style="display: none;"><a href="../../Default_CSH.htm#PSPRM/psp_syncStart.htm" style="">Open topic with navigation</a>
+        </p>
+    </body>
+</html>

@@ -1,0 +1,138 @@
+<?xml version="1.0" encoding="utf-8"?>
+<!DOCTYPE html PUBLIC "-//W3C//DTD XHTML 1.0 Strict//EN" "http://www.w3.org/TR/xhtml1/DTD/xhtml1-strict.dtd">
+<html xmlns:MadCap="http://www.madcapsoftware.com/Schemas/MadCap.xsd" MadCap:tocPath="Replication and Mirroring Guide|User's Guide" MadCap:InPreviewMode="false" MadCap:PreloadImages="false" MadCap:RuntimeFileType="Topic" MadCap:TargetType="WebHelp" lang="en-us" xml:lang="en-us" class="" MadCap:PathToHelpSystem="../../" MadCap:HelpSystemFileName="Default.xml" MadCap:SearchType="Stem">
+    <head>
+        <meta http-equiv="Content-Type" content="text/html; charset=utf-8" /><title>Mirroring and Replication Utilities</title>
+        <link rel="icon" type="image/png" href="http://docs.raima.com/favicon.png" />
+        <link href="../SkinSupport/MadCap.css" rel="stylesheet" />
+        <link href="../Resources/Stylesheets/raima.css" rel="stylesheet" />
+        <script src="../SkinSupport/MadCapAll.js" type="text/javascript">
+        </script>
+    </head>
+    <body>
+        <p class="MCWebHelpFramesetLink MCWebHelpFramesetLinkTop" style="display: none;"><a href="../../Default_CSH.htm#DFUG/Chapter4.htm" style="">Open topic with navigation</a>
+        </p>
+        <div class="MCBreadcrumbsBox_0"><span class="MCBreadcrumbsPrefix">You are here: </span><a class="MCBreadcrumbsLink" href="../dbDataFlow.htm">Replication and Mirroring Guide</a><span class="MCBreadcrumbsDivider"> &gt; </span><span class="MCBreadcrumbsSelf">User's Guide</span><span class="MCBreadcrumbsDivider"> &gt; </span><span class="MCBreadcrumbs">Mirroring and Replication Utilities</span>
+        </div>
+        <h1><a MadCap:generatedBookmark="TOC" name="Mirroring_and_Replication_Utilities"></a>Mirroring and Replication Utilities</h1>
+        <p>Four utilities exist to implement Replication. The first three, <code>dbmirror</code>, <code>dbrep</code>, and <code>dbrepsql</code> have already been discussed in the section above. Another, <code>dbget</code>, is used to initiate the Replication process.</p>
+        <p> The steps below are followed to mirror a database:</p>
+        <ol>
+            <li value="1">Run <code>dbmirror</code> on the master TFS computer.</li>
+            <li value="2">Run <code>dbmirror</code> on the slave computer.</li>
+            <li value="3">Run <code>dbget</code> on the slave computer. Identify the master database and the slave <code>dbmirror</code>.</li>
+        </ol>
+        <p>The steps below are followed to replicate a database into an <span class="MyVariablesProductShortName">RDM</span> slave:</p>
+        <ol>
+            <li value="1">Run <code>dbmirror</code> on the master TFS computer.</li>
+            <li value="2">Run <code>dbrep</code> on the slave computer.</li>
+            <li value="3">Run <code>dbget</code> on the slave computer. Identify the master database and the slave <code>dbrep</code>.</li>
+        </ol>
+        <p>The steps below are followed to replicate a database into a SQL database engine:</p>
+        <ol>
+            <li value="1">Run <code>dbmirror</code> on the master TFS computer.</li>
+            <li value="2">Run <code>dbrepsql</code> on the slave computer.</li>
+            <li value="3">Run <code>dbget</code> on the slave computer. Identify the master database and the slave <code>dbrepsql</code>.</li>
+        </ol>
+        <p>Step 3 is performed for each separate database that is to be mirrored or replicated.</p>
+        <p>The <code>dbmirror</code> utility spawns threads for each database connection.  The master <code>dbmirror</code>'s threads respond to requests from the slave utilities, which will ask for the <i>next</i> transaction log file. The slave <code>dbmirror</code> keeps track of the last log file it received. The slave <code>dbmirror</code> may also be re-started after a termination or disconnection. It will determine the transaction ID of the last received log file and begin again (upon request by <code>dbget</code>) by requesting the next log file.</p>
+        <p>The <code>dbmirror</code> utility may serve as both master and mirroring slave at the same time. It may be a slave to create a mirror of a database for which it is also the master, for yet another slave requesting the same database. Thus a chain or tree of mirroring can be set up if necessary. It also can serve as master for multiple slaves of the same database, and for multiple databases.</p>
+        <p>The following examples would set up mirroring from a master database to two slaves using three computers:</p>
+        <p>The master TFS, <code>tfs.raima.com</code>:</p><pre xml:space="preserve">tfserver -d c:\RDM\databases
+dbmirror -d c:\RDM\databases</pre>
+        <p>The first slave TFS, <code>RLM-lptp</code>, requesting the <code>sales</code> database:</p><pre xml:space="preserve">start tfserver -d d:\db
+start dbmirror -d d:\db
+dbget -b sales@tfs.raima.com</pre>
+        <p>The second slave TFS, <code>acctg-main</code>, requesting the <code>sales</code> and <code>invntory</code> databases:</p><pre xml:space="preserve">
+cd c:\acct-dbs
+start tfserver
+start dbmirror
+dbget -b sales@tfs.raima.com
+dbget -b invntory@tfs.raima.com</pre>
+        <p>A single synchronous slave can be started as follows:</p><pre xml:space="preserve">dbget -sync -b sales@tfs.raima.com</pre>
+        <p>To deliberately stop synchronous mirroring, <code>dbget</code> must be used:</p><pre xml:space="preserve">dbget -unsync -b sales@tfs.raima.com</pre>
+        <h2><a MadCap:generatedBookmark="TOC" name="Dbmirror_Usage"></a>Dbmirror Usage</h2>
+        <p>The <code>dbmirror</code> utility is run one time, even when there are two or more master databases that will be mirrored. It will start one thread for each mirrored master database.</p>
+        <p>The <code>dbmirror</code> utility will accompany a TFS which is controlling access to master database(s). If <code>dbmirror</code> is to operate as a slave only, the TFS is optional, but when the TFS is not running on a slave computer, only log files will be created in the database subdirectory under the document root. These log files can serve as a backup of a database should the database need to be reconstructed.</p>
+        <p style="font-style: normal;">The <code>dbmirror</code> utility is itself a server which listens on its own separate port. However, when starting or referring to this utility, the <i>anchor port</i> (the port the TFS is using) is used. For those who need to make sure the proper ports are open in a firewall, the utility's port is the anchor port plus 1.</p><pre xml:space="preserve">dbmirror [-d PATH] [-p N] [-v] [-nodisk]
+
+  -d               = PATH location of server document root (absolute, or relative
+                     to current directory)
+  -p               = TCP&#160;Anchor Port N of slave's TFS (default is <span class="MyVariablesDefaultPort">21553</span>)
+  -v               = Verbose output
+  -nodisk          = do not store log files on the local disk drive
+  -stdout filename = Specify a file name to write errors and warnings</pre>
+        <p>The <code>-d</code> option should identify the same document root directory as the one being used by the TFS. If this option is not specified, the current directory is used.</p>
+        <p>The <code>-v</code> option will print a log of mirroring activity. Use this to verify that your configuration is working, but leave it off for normal operation because it will interfere with performance.</p>
+        <p>The <code>-nodisk</code> option is used when databases are defined to be inmemory and you want the Replication utility to keep its files only in memory also.</p>
+        <h2><a MadCap:generatedBookmark="TOC" name="Dbrep,_dbrepsql_Usage"></a>Dbrep, dbrepsql Usage</h2>
+        <p>The <code>dbrep</code> or <code>dbrepsql</code> utilities are servers which listen on their own separate ports. However, when starting or referring to one of them, the <i>anchor port</i> (the port the TFS is using) is used. For those who need to make sure the proper ports are open in a firewall, the utility's port is the anchor port plus 1. For this reason, you cannot run both <code>dbrep</code> and <code>dbrepsql</code> with the same anchor port.</p><pre xml:space="preserve">{dbrep|dbrepsql} [-d PATH] [-p N] [-v] [-nodisk]
+ 
+  -d               = PATH location of server document root (absolute, or relative
+                     to current directory)
+  -p               = TCP&#160;Anchor Port N of slave's TFS (default is <span class="MyVariablesDefaultPort">21553</span>)
+  -v               = Verbose output
+  -nodisk          = do not store log files on the local disk drive
+  -stdout filename = Specify a file name to write errors and warnings</pre>
+        <p>The command-line options for both utilities are the same, and the definitions are the same as in the <code>dbmirror</code> utility. For <code>dbrep</code>, a local <span class="MyVariablesProductShortName">RDM</span> database will be created and/or maintained. For <code>dbrepsql</code>, an SQL database matching the definition of the master <span class="MyVariablesProductShortName">RDM</span> database must have been defined and made accessible. See the <code><a href="#schemaxlate">schemaxlate</a></code> utility and <a href="#12.6">Replication Setup</a> sections for more details.</p>
+        <p>The <code>dbrep</code> or <code>dbrepsql</code> utility is run one time, even when there are 2 or more databases that will be replicated. It will start one thread for each replicated database.</p>
+        <p>The <code>-nodisk</code> option is used when databases are defined to be inmemory and you want the Replication utility to keep its files only in memory also.</p>
+        <h2><a MadCap:generatedBookmark="TOC" name="Installation_as_Service_or_Daemon_Process"></a>Installation as Service or Daemon Process</h2>
+        <p>The following options are available for the <code>dbmirror</code>, <code>dbrep</code> or <code>dbrepsql</code> utilities for the purpose of starting them in the background:</p><pre xml:space="preserve">{dbmirror|dbrep|dbrepsql} [-start|-stop|-query] [-stdout <i>filename</i>]
+
+  -start = Start utility as background process 
+  -stop  = Shut down the utility
+  -query = Determine if the utility is running in the background or not</pre>
+        <p>The <code>-stdout <i>filename</i></code> option is used when stdout is not appropriate, such as when the utility is started in the background. All error and warning output will be written to <code style="font-style: italic;">filename</code>.</p>
+        <p>The following options function on Windows systems in order to treat the utility as an automatic Windows service:</p><pre xml:space="preserve">{dbmirror|dbrep|dbrepsql} [-install exepath|-uninstall]
+ 
+  -install exepath = Install utility as a service. The exepath is the directory
+                     containing the utility, or directory\utility.EXE
+  -uninstall       = Uninstall this utility</pre>
+        <p>When installed as a service, use the Windows Services Manager to start and stop, rather than the command-line options above. By default, the service will be automatic, and will be started when it is installed.</p>
+        <h2><a MadCap:generatedBookmark="TOC" name="Dbget_Usage"></a>Dbget Usage</h2>
+        <p>The <code>dbget</code> utility is used to make a request to a slave process (<code>dbmirror</code>, <code>dbrep</code> or <code>dbrepsql</code>) to initiate mirroring or replication for a particular database. The slave process must be running before <code>dbget</code>'s notification can be processed. For every database being mirrored or replicated, <code>dbget</code> must be invoked once. <code>Dbget</code> is also used to cleanly stop mirroring or replication. Mirroring or replication may be started up again after it has been stopped.</p><pre xml:space="preserve">dbget [-u DBUSERID] [-s HOSTNAME] [-p N] [-sync] [-unsync] [-b] [-e] [-override_inmem]
+      [-dsn dsn;user;pswd] [-oracle|-mssql|-mysql] dbname[@masterTFSdomain][:masterTFSport]
+
+  -u                                       = DBUSERID to use during
+                                             transactions
+  -s                                       = HOSTNAME of slave DBMIRROR
+                                             (default is localhost)
+  -p                                       = Anchor port N of the slave DBMIRROR
+                                             (default is <i><span class="MyVariablesDefaultPort">21553</span></i>)
+  -sync                                    = Mirrored database is synchronous
+  -unsync                                  = End persistent synchronous
+                                             mirroring
+  -b                                       = Begin mirroring or replication
+  -e                                       = End mirroring or replication
+  -override_inmem                          = This slave database is on-disk,
+                                             regardless of the master's storage media
+  -dsn                                     = Specify a DSN for dbrepsql
+  -oracle                                  = Slave dbrepsql connects to Oracle
+                                             server
+  -mssql                                   = Slave dbrepsql connects to
+                                             Microsoft SQL server
+  -mysql                                   = Slave dbrepsql connects to MySQL
+                                             server
+  dbname[@masterTFSdomain][:masterTFSport] = Name and location of master
+                                             database TFS.
+                                             Default domain is <i>localhost</i>.
+                                             Default port is <i><span class="MyVariablesDefaultPort">21553</span></i>.</pre>
+        <p>Together, the <code>-s</code> and <code>-p</code> options identify the location of the slave utility that will "get" a database. When not specified, <code>localhost:<span class="MyVariablesDefaultPort">21553</span></code> is used, which are the defaults used by the <code>dbmirror</code> utility.</p>
+        <p>It is not necessary to use <code>-u</code> to provide a DBUSERID. This option may be specified in order to distinguish this utility from other runtimes when monitoring system activity.</p>
+        <p>The <code>-sync</code> and <code>-unsync</code> options place a slave mirror database into or out of synchronous mirroring mode, respectively. If another synchronous mirror for this database already exists, the<code> -sync</code> request will be rejected.</p>
+        <h2><a MadCap:generatedBookmark="TOC" name="Schemaxlate_Usage"></a><a name="schemaxlate"></a>Schemaxlate Usage</h2><pre xml:space="preserve">schemaxlate [-n] [-f] [-o outfile] [-d device] [-oracle|-mssql|-mysql] dbname
+<br />  -n      = Force fields to allow NULLs<br />  -f      = Force overwrite of existing output file<br />  -o      = Name of output file, default is &lt;dbname&gt;_rdms.sql<br />  -d      = Name of device for files, default is sqldev (for RDMs)<br />  -oracle = Create output compatible with Oracle (default output file is
+            &lt;dbname&gt;_oracle.sql)<br />  -mssql  = Create output compatible with Microsoft SQL Server (default output
+            file is &lt;dbname&gt;_mssql.sql)<br />  -mysql  = Create output compatible with MySQL (default output
+            file is &lt;dbname&gt;_mysql.sql)</pre>
+        <p>By default, this utility generates SQL&#160;DDL&#160;for RDM&#160;Server. The options for Oracle, MS&#160;SQL&#160;Server or MySQL cause slight variations in the DDL&#160;to make it compatible with the target system.</p>
+        <hr MadCap:conditions="Default.ScreenOnly" width="100%" size="0" align="center" />
+        <p MadCap:conditions="Default.ScreenOnly" style="font-size: 8pt;"><span class="MyVariablesCopyright">Copyright © 2012, Raima Inc. All rights reserved.</span>
+        </p>
+        <script type="text/javascript" src="../SkinSupport/MadCapBodyEnd.js">
+        </script>
+        <p class="MCWebHelpFramesetLink MCWebHelpFramesetLinkBottom" style="display: none;"><a href="../../Default_CSH.htm#DFUG/Chapter4.htm" style="">Open topic with navigation</a>
+        </p>
+    </body>
+</html>

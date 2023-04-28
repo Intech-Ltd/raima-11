@@ -1,0 +1,128 @@
+<?xml version="1.0" encoding="utf-8"?>
+<!DOCTYPE html PUBLIC "-//W3C//DTD XHTML 1.0 Strict//EN" "http://www.w3.org/TR/xhtml1/DTD/xhtml1-strict.dtd">
+<html xmlns:MadCap="http://www.madcapsoftware.com/Schemas/MadCap.xsd" MadCap:tocPath="Replication and Mirroring Guide|Utilities" MadCap:InPreviewMode="false" MadCap:PreloadImages="false" MadCap:RuntimeFileType="Topic" MadCap:TargetType="WebHelp" lang="en-us" xml:lang="en-us" MadCap:PathToHelpSystem="../../" MadCap:HelpSystemFileName="Default.xml" MadCap:SearchType="Stem">
+    <head>
+        <meta http-equiv="Content-Type" content="text/html; charset=utf-8" /><title>dbrep, dbrepsql</title>
+        <link rel="icon" type="image/png" href="http://docs.raima.com/favicon.png" />
+        <link href="../SkinSupport/MadCap.css" rel="stylesheet" />
+        <link href="../Resources/TableStyles/ArgsTwoCol.css" rel="stylesheet" />
+        <link href="../Resources/Stylesheets/raima.css" rel="stylesheet" />
+        <script src="../SkinSupport/MadCapAll.js" type="text/javascript">
+        </script>
+    </head>
+    <body>
+        <p class="MCWebHelpFramesetLink MCWebHelpFramesetLinkTop" style="display: none;"><a href="../../Default_CSH.htm#util/dbrep.htm" style="">Open topic with navigation</a>
+        </p>
+        <div class="MCBreadcrumbsBox_0"><span class="MCBreadcrumbsPrefix">You are here: </span><a class="MCBreadcrumbsLink" href="../dbDataFlow.htm">Replication and Mirroring Guide</a><span class="MCBreadcrumbsDivider"> &gt; </span><a class="MCBreadcrumbsLink" href="../DFUG/DFUtilities.htm">Utilities</a><span class="MCBreadcrumbsDivider"> &gt; </span><span class="MCBreadcrumbs">dbrep, dbrepsql</span>
+        </div>
+        <h3 class="newpage">dbrep, dbrepsql</h3>
+        <p>Database Replication Slave Utility</p>
+        <p class="Heading">Prototype
+</p><pre xml:space="preserve">dbrep{sql} [-d PATH] [-p PORT] [-v] [nodisk] 
+            [-start | -stop | -query | -install PATH | -uninstall]
+</pre>
+        <p class="Heading">Description
+</p>
+        <p>The <b>dbrep</b> utility is a replication utility that performs replication only.  <b>dbrep</b>may be in master or slave roles.
+When in the master role, it can serve files to <b>dbmirror</b>, <b>dbrep</b> or <b>dbrepsql</b> slaves. The same <b>dbrep</b> utility may act as both master and slave at the same time. The same <b>dbrep</b> slave may operate  on any number of databases from any number of different master database locations. It always runs on the same computer as a TFS&#160;(the <a href="tfserver.htm">tfserver</a> utility or a customized TFS created by the programmer). The TFS/<b>dbrep</b> partnership is established by using successive TCP/IP&#160;ports (e.g. if the TFS uses port 2335, then dbrep is using 2336).</p>
+        <p><b>Dbrep</b> requires a TFS to be running on the same computer. The <b>dbrep</b>utility initiates a connection to the master dbmirror when the <b>dbget</b> utility is run with command-line options that identify this <b>dbrep</b> and a database that is hosted by another TFS. In response to <b>dbget</b>, <b>dbrep</b> will begin a slave thread which connects to the master dbmirror and requests updates from the database identified in the dbget command-line.</p>
+        <p>The <b>dbrepsql</b> utility operates in the same manner as <b>dbrep</b>, except that it replicates to SQL&#160;databases. <b>Dbrep</b> creates and maintains an <span class="MyVariablesProductShortName">RDM</span> database, but <b>dbrepsql</b> maintains a SQL&#160;database that has been externally created and made available through ODBC.</p>
+        <p>When <b>dbget</b> notifies <b>dbrepsql</b> to begin replication of a database, it will have supplied the destination type (that is, RDM&#160;Server, Oracle, Microsoft SQL&#160;Server, or MySQL), because there are slight differences in the sequence of ODBC&#160;&#160;function calls required for each one. When the <b>dbget</b> command-line doesn't identify one of the SQL database types, it defaults to RDM&#160;Server.</p>
+        <p>To locate the ODBC&#160;data source, <b>dbrepsql</b> reads the environment variable named <code>RDSLOGIN</code>. In an RDM&#160;Server environment, which variable is already used to locate the server. When using other types of SQL&#160;database servers, the same environment variable will be used to identify the ODBC data source, the username, and password, as follows:</p><pre xml:space="preserve">RDSLOGIN=Oracle-svr;WLWadmin;Jn@@f0</pre>
+        <p>Alternately, the data source can be specified as the –dsn option to the dbget command.</p>
+        <p>This database must exist before <b>dbrepsql</b> is asked to add its updates from the master. The SQL&#160;DDL&#160;used to define the database must have been derived from the original <span class="MyVariablesProductShortName">RDM</span> DDL file, and the <a href="schemaxlate.htm">schemaxlate</a> utility must have been used to create a customized SQL&#160;DDL&#160;file.</p>
+        <p>By convention, the slave database replicate created by <b>dbrep</b> is placed within a directory that is named after the host of the master database. For example, if the database named <code>tims</code> is mirrored from a host identified as <code>tfs.raima.com</code>, then the replicate of <code>tims</code> will be stored in:</p><pre xml:space="preserve">documentRoot/tfs.raima.com-<i>master_port</i>/tims</pre>
+        <p>All databases replicated to this document root from the same host will be stored in the same subdirectory. Databases stored in subdirectories are the products of mirroring or replication, and thus cannot be opened for updating. See <a href="../DFUG/Chapter7.htm">Opening Slave Databases from Programs</a> for more information about using read-only databases from programs.</p>
+        <p>When this utility is run as a foreground process, it may be cleanly terminated by issuing SIGINT&#160;(normally ^C from the keyboard). SIGTERM&#160;has the same effect. If the utility does not terminate immediately it will be terminated immediately (cleanly or not) upon the third signal.</p>
+        <p class="Heading">Options</p>
+        <table style="caption-side: top;mc-table-style: url('../Resources/TableStyles/ArgsTwoCol.css');" class="TableStyle-ArgsTwoCol" cellspacing="0">
+            <col class="Column-Column1" style="width: 200px;" />
+            <col class="Column-Column2" />
+            <tbody>
+                <tr class="Body-Body1">
+                    <td class="BodyE-Column1-Body1">-h</td>
+                    <td class="BodyD-Column2-Body1">Display this usage information</td>
+                </tr>
+                <tr class="Body-Body1">
+                    <td class="BodyE-Column1-Body1">-B</td>
+                    <td class="BodyD-Column2-Body1">Do not display the banner</td>
+                </tr>
+                <tr class="Body-Body1">
+                    <td class="BodyE-Column1-Body1">-V</td>
+                    <td class="BodyD-Column2-Body1">Display the version information</td>
+                </tr>
+                <tr class="Body-Body1">
+                    <td class="BodyE-Column1-Body1">-q</td>
+                    <td class="BodyD-Column2-Body1">Quiet mode.  No information will be displayed</td>
+                </tr>
+                <tr class="Body-Body1">
+                    <td class="BodyE-Column1-Body1">-stdout file</td>
+                    <td class="BodyD-Column2-Body1">Redirect <code>stdout</code> to the specified file</td>
+                </tr>
+                <tr class="Body-Body1">
+                    <td class="BodyE-Column1-Body1">-stderr file</td>
+                    <td class="BodyD-Column2-Body1">Redirect <code>stderr</code> to the specified file</td>
+                </tr>
+                <tr class="Body-Body1" MadCap:conditions="CmdLine.TFS">
+                    <td class="BodyB-Column1-Body1">-tfs TFS_TYPE</td>
+                    <td class="BodyA-Column2-Body1">Specify the TFS type to use (TFST, TFSR, or TFSS) [default = TFST]</td>
+                </tr>
+            </tbody>
+        </table>
+        <table style="caption-side: top;mc-table-style: url('../Resources/TableStyles/ArgsTwoCol.css');" class="TableStyle-ArgsTwoCol" cellspacing="0">
+            <col class="Column-Column1" style="width: 200px;" />
+            <col class="Column-Column2" />
+            <tbody>
+                <tr class="Body-Body1">
+                    <td class="BodyE-Column1-Body1">-d PATH</td>
+                    <td class="BodyD-Column2-Body1">The path of the <i>Document Root</i>. Default is current directory.
+</td>
+                </tr>
+                <tr class="Body-Body1">
+                    <td class="BodyE-Column1-Body1">-p N</td>
+                    <td class="BodyD-Column2-Body1">Anchor PORT, referring to the TFS associated with this utility. Default is <span class="MyVariablesDefaultPort">21553</span>.</td>
+                </tr>
+                <tr class="Body-Body1">
+                    <td class="BodyE-Column1-Body1">-v</td>
+                    <td class="BodyD-Column2-Body1">Verbose output.</td>
+                </tr>
+                <tr class="Body-Body1">
+                    <td class="BodyE-Column1-Body1">-start</td>
+                    <td class="BodyD-Column2-Body1">Begin execution of utility as a separate process.</td>
+                </tr>
+                <tr class="Body-Body1">
+                    <td class="BodyE-Column1-Body1">-stop</td>
+                    <td class="BodyD-Column2-Body1">Stop execution of utility as a separate process.</td>
+                </tr>
+                <tr class="Body-Body1">
+                    <td class="BodyE-Column1-Body1">-query</td>
+                    <td class="BodyD-Column2-Body1">Check the status of the utility process (running/not running).</td>
+                </tr>
+                <tr class="Body-Body1">
+                    <td class="BodyE-Column1-Body1">-install PATH</td>
+                    <td class="BodyD-Column2-Body1"><b>Windows only,</b> Requires administrative privilege. Install utility as an automatic service. <i>PATH</i> is the directory or fully qualified path to the utility's executable file.</td>
+                </tr>
+                <tr class="Body-Body1">
+                    <td class="BodyE-Column1-Body1">-uninstall</td>
+                    <td class="BodyD-Column2-Body1"><b>Windows only,</b> Requires administrative privilege. Uninstall the utility service. Use the service control manager to stop the execution of the service first.</td>
+                </tr>
+                <tr class="Body-Body1">
+                    <td class="BodyB-Column1-Body1">-nodisk</td>
+                    <td class="BodyA-Column2-Body1">Don't use any disk I/O.</td>
+                </tr>
+            </tbody>
+        </table>
+        <p class="Heading">Replication User's Guide</p>
+        <p><a href="../DFUG/Chapter2.htm">Replication Architecture</a>
+        </p>
+        <p><a href="../DFUG/Chapter2.htm#DBStorageLoc">Database Storage Location</a>
+        </p>
+        <hr MadCap:conditions="Default.ScreenOnly" width="100%" size="0" align="center" />
+        <p MadCap:conditions="Default.ScreenOnly" style="font-size: 8pt;"><span class="MyVariablesCopyright">Copyright © 2012, Raima Inc. All rights reserved.</span>
+        </p>
+        <script type="text/javascript" src="../SkinSupport/MadCapBodyEnd.js">
+        </script>
+        <p class="MCWebHelpFramesetLink MCWebHelpFramesetLinkBottom" style="display: none;"><a href="../../Default_CSH.htm#util/dbrep.htm" style="">Open topic with navigation</a>
+        </p>
+    </body>
+</html>

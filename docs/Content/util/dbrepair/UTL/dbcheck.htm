@@ -1,0 +1,173 @@
+<?xml version="1.0" encoding="utf-8"?>
+<!DOCTYPE html PUBLIC "-//W3C//DTD XHTML 1.0 Strict//EN" "http://www.w3.org/TR/xhtml1/DTD/xhtml1-strict.dtd">
+<html xmlns:MadCap="http://www.madcapsoftware.com/Schemas/MadCap.xsd" MadCap:tocPath="Utility Programs|DB Repair Guide|Utility Descriptions" MadCap:InPreviewMode="false" MadCap:PreloadImages="false" MadCap:RuntimeFileType="Topic" MadCap:TargetType="WebHelp" lang="en-us" xml:lang="en-us" MadCap:PathToHelpSystem="../../../../" MadCap:HelpSystemFileName="Default.xml" MadCap:SearchType="Stem">
+    <head>
+        <meta http-equiv="Content-Type" content="text/html; charset=utf-8" /><title>dbcheck</title>
+        <link rel="icon" type="image/png" href="http://docs.raima.com/favicon.png" />
+        <link href="../../../SkinSupport/MadCap.css" rel="stylesheet" />
+        <link href="../../../Resources/TableStyles/ArgsTwoCol.css" rel="stylesheet" />
+        <link href="../../../Resources/Stylesheets/raima.css" rel="stylesheet" />
+        <script src="../../../SkinSupport/MadCapAll.js" type="text/javascript">
+        </script>
+    </head>
+    <body>
+        <p class="MCWebHelpFramesetLink MCWebHelpFramesetLinkTop" style="display: none;"><a href="../../../../Default_CSH.htm#util/dbrepair/UTL/dbcheck.htm" style="">Open topic with navigation</a>
+        </p>
+        <div class="MCBreadcrumbsBox_0"><span class="MCBreadcrumbsPrefix">You are here: </span><a class="MCBreadcrumbsLink" href="../../../dbUTIL.htm">Utility Programs</a><span class="MCBreadcrumbsDivider"> &gt; </span><span class="MCBreadcrumbsSelf">DB Repair Guide</span><span class="MCBreadcrumbsDivider"> &gt; </span><a class="MCBreadcrumbsLink" href="../Chapter2.htm">Utility Descriptions</a><span class="MCBreadcrumbsDivider"> &gt; </span><span class="MCBreadcrumbs">dbcheck</span>
+        </div>
+        <h3 class="newpage"><a MadCap:generatedBookmark="TOC" name="dbcheck"></a>dbcheck</h3>
+        <p>Database consistency check utility</p>
+        <p class="Heading">Prototype</p><pre xml:space="preserve">dbcheck [-docroot path] [-s] [-k] [-dk] [-kd] [-v] [-dv] [-vd] [-b] [-db] [-a] 
+    [-openmode mode] [-nk] [-nv] [-nb] [-qd] [-qk] [-r #] [-p #] [-f #] [-t] 
+    [-c] [-l] [-locale locale] [-stderr filename] [-q|-stdout filename]
+    dbname [dbfile[ dbfile]...]
+</pre>
+        <p class="Heading">Description</p>
+        <p>This utility checks the consistency of all database files in database dbname. If any database files (dbfile) are specified, only those files are checked. Otherwise, all files in the database are checked.</p>
+        <p>The <b>dbcheck</b> utility checks database consistency by validating the position of each record occurrence and checking the integrity of the delete chains. Options perform more complete consistency checks. Use of these options slows down <b>dbcheck</b> execution.</p>
+        <p>With the -s option, the <b>dbcheck</b> utility can perform set consistency checking. Set membership consistency verifies the following:</p>
+        <ol style="list-style-type: decimal;margin-left: 36pt;" start="1">
+            <li value="1">Member and owner record types are valid</li>
+            <li value="2">Membership count is correct</li>
+            <li value="3">Doubly linked lists are properly formed</li>
+        </ol>
+        <p>The -k option causes <b>dbcheck</b> to verify the B-tree structure of the key files. This ensures that each node (except the root node) is at least half full, that the number of filled slots is correct, that the key slots on each node are properly sorted, and that each leaf node is at the correct level in the B-tree. Note that if the -dk option does not result in any errors, it is very unlikely that the -k option will result in any inconsistencies.</p>
+        <p>Key file structure consistency checks performed (optionally) verify that:&#160;</p>
+        <ol>
+            <li value="1">All B-tree pages are either in the B-tree or are deleted </li>
+            <li value="2">All B-tree null child pointers are at the same tree level </li>
+            <li value="3">B-tree key order is correct </li>
+            <li value="4">Duplicate keys are correct </li>
+        </ol>
+        <p>The -dk option validates the existence of the key values associated with each record and key field in the data files. Optional keys are only checked if the key has been stored. The -kd option will read, for each key in a key file, the associated record and check to ensure that the key's data field contents matches that stored in the key file. If the key is optional, the "key stored" bit in the record header is also checked.</p>
+        <p>Inconsistencies are reported with a message indicating the nature of the inconsistency and the file and location of the offending record or key. If the -t option is specified, a trace back of the B-tree is printed when a key file inconsistency is detected.</p>
+        <p>The -v option causes <b>dbcheck</b> to verify the structure of varchar files. This ensures that each varchar is less than the maximum size, that the varchar pointers point to valid locations, and varchar file chunk points to a valid varchar field.</p>
+        <p class="Heading">Options</p>
+        <table style="width: 100%;border-collapse: collapse;mc-table-style: url('../../../Resources/TableStyles/ArgsTwoCol.css');margin-left: 0;margin-right: auto;" class="TableStyle-ArgsTwoCol" cellspacing="0">
+            <col style="width: 150px;" class="Column-Column1" />
+            <col class="Column-Column2" />
+            <tbody>
+                <tr MadCap:conditions="" class="Body-Body1">
+                    <td style="font-family: monospace;" class="BodyE-Column1-Body1">-q</td>
+                    <td class="BodyD-Column2-Body1">Quiet - suppresses all output (except errors) </td>
+                </tr>
+                <tr MadCap:conditions="" class="Body-Body1">
+                    <td style="font-family: monospace;" class="BodyE-Column1-Body1">-docroot <i>path</i></td>
+                    <td class="BodyD-Column2-Body1">[non-RPC configuration only] Specifies the document root when in Direct-Link or Standalone configuration.</td>
+                </tr>
+                <tr MadCap:conditions="" class="Body-Body1">
+                    <td style="font-family: monospace;" class="BodyE-Column1-Body1">-s</td>
+                    <td class="BodyD-Column2-Body1">Performs a complete consistency check of sets.</td>
+                </tr>
+                <tr MadCap:conditions="" class="Body-Body1">
+                    <td style="font-family: monospace;" class="BodyE-Column1-Body1">-k</td>
+                    <td class="BodyD-Column2-Body1">Performs B-tree structure consistency check. This checks to ensure that the key file adheres to all of the rules for a B-tree. If -dk is also specified, this check is unnecessary.</td>
+                </tr>
+                <tr MadCap:conditions="" class="Body-Body1">
+                    <td style="font-family: monospace;" class="BodyE-Column1-Body1">-dk</td>
+                    <td class="BodyD-Column2-Body1">Checks the existence of each key from each record occurrence. While scanning a data file, a <code>d_keyfind</code> is performed on each key to ensure that it exists.</td>
+                </tr>
+                <tr class="Body-Body1">
+                    <td style="font-family: monospace;" class="BodyE-Column1-Body1">-kd</td>
+                    <td class="BodyD-Column2-Body1">Checks the existence of each record from each key. While scanning a key file, a <code>d_recread</code> function call is performed and the associated key field value is checked against the key to ensure that it matches.</td>
+                </tr>
+                <tr class="Body-Body1">
+                    <td style="font-family: monospace;" class="BodyE-Column1-Body1">-v</td>
+                    <td class="BodyD-Column2-Body1">
+                        <p>Perform checks on varchar files.
+</p>
+                    </td>
+                </tr>
+                <tr class="Body-Body1">
+                    <td style="font-family: monospace;" class="BodyE-Column1-Body1">-dv</td>
+                    <td class="BodyD-Column2-Body1">Checks the existence of each varchar chunk referenced from a varchar field while scanning a data file.
+</td>
+                </tr>
+                <tr class="Body-Body1">
+                    <td style="font-family: monospace;" class="BodyE-Column1-Body1">-vd</td>
+                    <td class="BodyD-Column2-Body1">Checks the validity of the owner pointer for each varchar chunk in a varchar file.</td>
+                </tr>
+                <tr class="Body-Body1">
+                    <td style="font-family: monospace;" class="BodyE-Column1-Body1">-b</td>
+                    <td class="BodyD-Column2-Body1">Perform BLOB file structure consistency check.</td>
+                </tr>
+                <tr class="Body-Body1">
+                    <td style="font-family: monospace;" class="BodyE-Column1-Body1">-db</td>
+                    <td class="BodyD-Column2-Body1">Checks the existence of each BLOB from each record occurrence.</td>
+                </tr>
+                <tr class="Body-Body1">
+                    <td style="font-family: monospace;" class="BodyE-Column1-Body1">-a</td>
+                    <td class="BodyD-Column2-Body1">All. Performs all of the above consistency checks.</td>
+                </tr>
+                <tr class="Body-Body1">
+                    <td style="font-family: monospace;" class="BodyE-Column1-Body1">-openmode <i>mode</i></td>
+                    <td class="BodyD-Column2-Body1">Spedify the open mode to use for the database (default 's' using ROT).</td>
+                </tr>
+                <tr class="Body-Body1">
+                    <td style="font-family: monospace;" class="BodyE-Column1-Body1">-nk</td>
+                    <td class="BodyD-Column2-Body1">Disables key file checking, -k, -dk and -kd.</td>
+                </tr>
+                <tr class="Body-Body1">
+                    <td style="font-family: monospace;" class="BodyE-Column1-Body1">-nv</td>
+                    <td class="BodyD-Column2-Body1">Disables varchar checking, -v, -dv and -vd.
+</td>
+                </tr>
+                <tr class="Body-Body1">
+                    <td style="font-family: monospace;" class="BodyE-Column1-Body1">-nb</td>
+                    <td style="font-style: normal;" class="BodyD-Column2-Body1">Disables blob checking, -b and -db.</td>
+                </tr>
+                <tr class="Body-Body1">
+                    <td style="font-family: monospace;" class="BodyE-Column1-Body1">-qd</td>
+                    <td style="font-style: normal;" class="BodyD-Column2-Body1">Quick dchain checks (only report one dchain error per file).</td>
+                </tr>
+                <tr class="Body-Body1">
+                    <td style="font-family: monospace;" class="BodyE-Column1-Body1">-qk</td>
+                    <td style="font-style: normal;" class="BodyD-Column2-Body1">Quick key checks (only report one error per key file).</td>
+                </tr>
+                <tr class="Body-Body1">
+                    <td style="font-family: monospace;" class="BodyE-Column1-Body1">-r&#160;#</td>
+                    <td style="font-style: normal;" class="BodyD-Column2-Body1">Reports every # percentage completed to stderr.</td>
+                </tr>
+                <tr class="Body-Body1">
+                    <td style="font-family: monospace;" class="BodyE-Column1-Body1">-p #</td>
+                    <td style="font-style: normal;" class="BodyD-Column2-Body1">Sets to # the number of pages in the <span class="MyVariablesProductShortName">RDM</span> cache for use by <b>dbcheck</b>. For example, <code>-p 128</code> specifies that <b>dbcheck</b> is to allocate 128 pages for the cache. The default is 64 pages. If an insufficient memory error (S_NOMEMORY) occurs when starting dbcheck, use the <code>-p</code> option to specify a value less than 64.</td>
+                </tr>
+                <tr class="Body-Body1">
+                    <td style="font-family: monospace;" class="BodyE-Column1-Body1">-f #</td>
+                    <td style="font-style: normal;" class="BodyD-Column2-Body1">Maximum number of open files allowed to have open at once.</td>
+                </tr>
+                <tr class="Body-Body1">
+                    <td style="font-family: monospace;" class="BodyE-Column1-Body1">-t</td>
+                    <td style="font-style: normal;" class="BodyD-Column2-Body1">Prints a trace back of the B-tree when a key file inconsistency is detected.</td>
+                </tr>
+                <tr class="Body-Body1">
+                    <td style="font-family: monospace;" class="BodyE-Column1-Body1">-c</td>
+                    <td style="font-style: normal;" class="BodyD-Column2-Body1">Prints a count of objects scanned in the check.</td>
+                </tr>
+                <tr class="Body-Body1">
+                    <td style="font-family: monospace;" class="BodyE-Column1-Body1">-l</td>
+                    <td style="font-style: normal;" class="BodyD-Column2-Body1">Log errors to repair database.</td>
+                </tr>
+                <tr class="Body-Body1">
+                    <td style="font-family: monospace;" class="BodyE-Column1-Body1">-locale <i>locale</i></td>
+                    <td style="font-style: normal;" class="BodyD-Column2-Body1">Specify a <i>locale</i> to use for ordering string values.</td>
+                </tr>
+                <tr class="Body-Body1">
+                    <td style="font-family: monospace;" class="BodyE-Column1-Body1">-stderr <i>filename</i></td>
+                    <td style="font-style: normal;" class="BodyD-Column2-Body1">Print stderr to <i>filename</i>.</td>
+                </tr>
+                <tr class="Body-Body1">
+                    <td style="font-family: monospace;" class="BodyB-Column1-Body1">-stdout <i>filename</i></td>
+                    <td style="font-style: normal;" class="BodyA-Column2-Body1">Print stdout to <i>filename</i></td>
+                </tr>
+            </tbody>
+        </table>
+        <hr MadCap:conditions="Default.ScreenOnly" width="100%" size="0" align="center" />
+        <p MadCap:conditions="Default.ScreenOnly" style="font-size: 8pt;"><span class="MyVariablesCopyright">Copyright © 2012, Raima Inc. All rights reserved.</span>
+        </p>
+        <script type="text/javascript" src="../../../SkinSupport/MadCapBodyEnd.js">
+        </script>
+        <p class="MCWebHelpFramesetLink MCWebHelpFramesetLinkBottom" style="display: none;"><a href="../../../../Default_CSH.htm#util/dbrepair/UTL/dbcheck.htm" style="">Open topic with navigation</a>
+        </p>
+    </body>
+</html>

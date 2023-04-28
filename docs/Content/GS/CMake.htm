@@ -1,0 +1,134 @@
+<?xml version="1.0" encoding="utf-8"?>
+<html xmlns:MadCap="http://www.madcapsoftware.com/Schemas/MadCap.xsd" MadCap:tocPath="Installation Guide and Release Notes" MadCap:InPreviewMode="false" MadCap:PreloadImages="false" MadCap:RuntimeFileType="Topic" MadCap:TargetType="WebHelp" lang="en-us" xml:lang="en-us" MadCap:PathToHelpSystem="../../" MadCap:HelpSystemFileName="Default.xml" MadCap:SearchType="Stem">
+    <head>
+        <meta http-equiv="Content-Type" content="text/html; charset=utf-8" />
+        <title>Using CMake</title>
+        <link rel="icon" type="image/png" href="http://docs.raima.com/favicon.png" />
+        <link href="../SkinSupport/MadCap.css" rel="stylesheet" />
+        <link href="../Resources/Stylesheets/raima.css" rel="stylesheet" />
+        <script src="../SkinSupport/MadCapAll.js" type="text/javascript">
+        </script>
+    </head>
+    <body>
+        <p class="MCWebHelpFramesetLink MCWebHelpFramesetLinkTop" style="display: none;">
+            <a href="../../Default_CSH.htm#GS/CMake.htm" style="">Open topic with navigation</a>
+        </p>
+        <div class="MCBreadcrumbsBox_0">
+            <span class="MCBreadcrumbsPrefix">You are here: </span>
+            <span class="MCBreadcrumbsSelf">Installation Guide and Release Notes</span>
+            <span class="MCBreadcrumbsDivider"> &gt; </span>
+            <span class="MCBreadcrumbs">Using CMake</span>
+        </div>
+        <h1 class="firstHeading">
+            <a MadCap:generatedBookmark="TOC" name="Using_CMake">
+            </a>Using CMake</h1>
+        <p>This section explains how to use CMake with <span class="MyVariablesProductShortName">RDM</span>:</p>
+        <ul>
+            <li value="1">Overview of CMake</li>
+            <li value="2">Using CMake</li>
+        </ul>
+        <h2>
+            <a MadCap:generatedBookmark="TOC" name="Overview_..25">
+            </a>Overview</h2>
+        <p>
+            <span class="MyVariablesProductShortName">RDM</span> supports CMake. This allows generation of native make files or project files for various IDEs on many platforms. This allows greater flexibility and customization for building the software.</p>
+        <p>From cmake.org:</p>
+        <p class="ParamIndent">CMake is used to control the software compilation process using simple platform and compiler independent configuration files. CMake generates native make files and workspaces that can be used in the compiler environment of your choice.</p>
+        <p>By adding your own CMake configuration files, you can extend this support to your own application development, integrating the <span class="MyVariablesProductShortName">RDM</span> development headers and libraries.</p>
+        <p>For more information about CMake, please see <a href="http://www.cmake.org/">http://www.cmake.org/</a>. </p>
+        <p class="Notes">NOTE: CMake minimum version <strong>2.6</strong> is required and must be obtained separately. Only configuration files (CMakeLists.txt) are provided with the <span class="MyVariablesProductShortName">RDM</span> install. CMake itself is available as a free download from <a href="http://www.cmake.org/">http://www.cmake.org/</a> for many platforms including Windows, Linux, MacOS, and others. Many Linux distributions have it available through their package managers as well.</p>
+        <p>A detailed explanation of how CMake works is beyond the scope of this document. However, briefly, CMake is used to generate either project or make files of different types through the use of generators. Some examples of these are listed below. These generators vary by platform, and you will need the exact name of the one you want to use. To see a list of what is available to you, type <span class="code">cmake -h</span> from your command prompt, and look under the "Generators" section at the end of the output.</p>
+        <table style="width: 100%;border-left-style: solid;border-left-width: 1px;border-left-color: #c0c0c0;border-right-style: solid;border-right-width: 1px;border-right-color: #c0c0c0;border-top-style: solid;border-top-width: 1px;border-top-color: #c0c0c0;border-bottom-style: solid;border-bottom-width: 1px;border-bottom-color: #c0c0c0;">
+            <caption>Examples of support added by CMake</caption>
+            <col />
+            <col />
+            <col />
+            <col />
+            <tbody>
+                <tr>
+                    <td>&#160;</td>
+                    <td style="font-style: italic;">Windows</td>
+                    <td style="font-style: italic;">Mac OS</td>
+                    <td style="font-style: italic;">Linux/Unix</td>
+                </tr>
+                <tr>
+                    <td style="font-style: italic;">Project Files</td>
+                    <td>
+                        <ul>
+                            <li value="1">Visual Studio 6*</li>
+                            <li value="2">Visual Studio 2002</li>
+                            <li value="3">Visual Studio 2003</li>
+                            <li value="4">Visual Studio 2005</li>
+                            <li value="5">Visual Studio 2008</li>
+                            <li value="6">Visual Studio 2010</li>
+                            <li value="7">Eclipse CDT 4.0</li>
+                            <li value="8">CodeBlocks</li>
+                        </ul>
+                    </td>
+                    <td>
+                        <ul>
+                            <li value="1">XCode</li>
+                            <li value="2">Eclipse CDT 4.0</li>
+                            <li value="3">CodeBlocks</li>
+                        </ul>
+                    </td>
+                    <td>
+                        <ul>
+                            <li value="1">KDevelop 3</li>
+                            <li value="2">Eclipse CDT 4.0</li>
+                            <li value="3">CodeBlocks</li>
+                        </ul>
+                    </td>
+                </tr>
+                <tr>
+                    <td style="font-style: italic;">Make Files</td>
+                    <td>
+                        <ul>
+                            <li value="1">NMake</li>
+                            <li value="2">Borland</li>
+                            <li value="3">MSYS</li>
+                            <li value="4">MinGW</li>
+                            <li value="5">Watcom WMake</li>
+                        </ul>
+                    </td>
+                    <td>
+                        <ul>
+                            <li value="1">Unix Makefiles</li>
+                        </ul>
+                    </td>
+                    <td>
+                        <ul>
+                            <li value="1">Unix Makefiles</li>
+                        </ul>
+                    </td>
+                </tr>
+            </tbody>
+        </table>
+        <p class="ParamIndent">*Note: Although CMake supports VS 6, <span class="MyVariablesProductShortName">RDM</span> may not be compatible with VS 6. Official support is limited to VS 2008 and VS 2010 on Windows. Other versions may work fine, however we make no guarantee.</p>
+        <h2>
+            <a MadCap:generatedBookmark="TOC" name="Using_CMake_..26">
+            </a>Using CMake</h2>
+        <h3>
+            <a MadCap:generatedBookmark="TOC" name="Examples_and_Tutorials">
+            </a>Examples and Tutorials</h3>
+        <p>Although typically an out of source build (separate build directory) is used with CMake, in <span class="MyVariablesProductShortName">RDM</span> we support both in and out of source builds, it is your choice which to use. These steps assume that you have installed CMake on your system, and have it in your path.</p>
+        <ol>
+            <li value="1">The first step depends on whether you are doing an in source or out of source build. From a command prompt:<ul><li value="1">For an <strong>in source build</strong>- navigate to the GettingStarted directory in the <span class="MyVariablesProductShortName">RDM</span> install.</li><li value="2">For an <strong>out of source build</strong>- create a directory to build in. For simplicity, we recommend also putting this in the GettingStarted directory, but it can be anywhere.</li></ul></li>
+            <li value="2">Run CMake to either generate make files or a project file, passing it the location of the GettingStarted directory, which contains the top level CMake file for the Examples and Tutorials - <span class="code">cmake [relative path to GettingStarted directory]</span><ul><li value="1">Running it without the -G option will generate the default for your platform (typically a VS project file on Windows and Unix Makefiles on Linux/Unix):<ul><li value="1">in source -</li></ul><pre xml:space="preserve">cmake .</pre><ul><li value="1">out of source -</li></ul><pre xml:space="preserve">cmake ..</pre></li><li value="2">To generate a specific type of project or makefile, add the -G option (to see a list of generators available, run cmake -h first):<ul><li value="1">Create an XCode project: <span class="code">cmake -G "Xcode" ..</span></li><li value="2">Create a VS 2010 project <span class="code">cmake -G "Visual Studio 10" ..</span></li><li value="3">Create NMake makefiles: <span class="code">cmake -G "NMake Makefiles" ..</span></li></ul></li></ul><p>CMake will then configure the project or makefiles according to your system (similar to the Autotools configure script).</p><p>A complete example (generating Unix Makefiles, in a build directory):</p><pre xml:space="preserve">&gt; cd /opt/Raima/<span class="MyVariablesProductShortName">RDM</span>_<span class="MyVariablesProductVersion">11.0</span>/GettingStarted/<br />&gt; mkdir build-make<br />&gt; cmake ..<br />-- The C compiler identification is GNU<br />-- The CXX compiler identification is GNU<br />-- Checking whether C compiler has -isysroot<br />-- Checking whether C compiler has -isysroot - yes<br />-- Check for working C compiler: /usr/bin/gcc<br />-- Check for working C compiler: /usr/bin/gcc -- works<br />-- Detecting C compiler ABI info<br />-- Detecting C compiler ABI info - done<br />-- Checking whether CXX compiler has -isysroot<br />-- Checking whether CXX compiler has -isysroot - yes<br />-- Check for working CXX compiler: /usr/bin/c++<br />-- Check for working CXX compiler: /usr/bin/c++ -- works<br />-- Detecting CXX compiler ABI info<br />-- Detecting CXX compiler ABI info - done<br />-- Configuring done<br />-- Generating done<br />-- Build files have been written to: /opt/Raima/<span class="MyVariablesProductShortName">RDM</span>_<span class="MyVariablesProductVersion">11.0</span>/GettingStarted/build-make</pre></li>
+            <li value="3">If you created a project file, then you are done. Open the project with your IDE. If you created make files, you then need to build using them. For example:<ul><li value="1">Unix&#160;Makefiles: <span class="code">make</span><br /></li></ul><ul><li value="1">Windows NMake Makefiles: <span class="code">nmake</span></li></ul></li>
+        </ol>
+        <p>Congratulations, you've now built the <span class="MyVariablesProductShortName">RDM</span> Examples and Tutorials with CMake:</p>
+        <p style="text-align: center;">
+            <img src="../Resources/Images/cmake1.png" />
+        </p>
+        <hr MadCap:conditions="Default.ScreenOnly" width="100%" size="0" align="center" />
+        <p MadCap:conditions="Default.ScreenOnly" style="font-size: 8pt;">
+            <span class="MyVariablesCopyright">Copyright © 2012, Raima Inc. All rights reserved.</span>
+        </p>
+        <script type="text/javascript" src="../SkinSupport/MadCapBodyEnd.js">
+        </script>
+        <p class="MCWebHelpFramesetLink MCWebHelpFramesetLinkBottom" style="display: none;">
+            <a href="../../Default_CSH.htm#GS/CMake.htm" style="">Open topic with navigation</a>
+        </p>
+    </body>
+</html>

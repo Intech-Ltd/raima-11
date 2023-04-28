@@ -1,0 +1,53 @@
+<?xml version="1.0" encoding="utf-8"?>
+<!DOCTYPE html PUBLIC "-//W3C//DTD XHTML 1.0 Strict//EN" "http://www.w3.org/TR/xhtml1/DTD/xhtml1-strict.dtd">
+<html xmlns:MadCap="http://www.madcapsoftware.com/Schemas/MadCap.xsd" MadCap:tocPath="" MadCap:InPreviewMode="false" MadCap:PreloadImages="false" MadCap:RuntimeFileType="Topic" MadCap:TargetType="WebHelp" lang="en-us" xml:lang="en-us" MadCap:PathToHelpSystem="../../" MadCap:HelpSystemFileName="Default.xml" MadCap:SearchType="Stem">
+    <head>
+        <meta http-equiv="Content-Type" content="text/html; charset=utf-8" /><title>Installing RDM on Windows</title>
+        <link rel="icon" type="image/png" href="http://docs.raima.com/favicon.png" />
+        <link href="../SkinSupport/MadCap.css" rel="stylesheet" />
+        <link href="../Resources/Stylesheets/raima.css" rel="stylesheet" />
+        <script src="../SkinSupport/MadCapAll.js" type="text/javascript">
+        </script>
+    </head>
+    <body>
+        <p class="MCWebHelpFramesetLink MCWebHelpFramesetLinkTop" style="display: none;"><a href="../../Default_CSH.htm#IG/Windows.htm" style="">Open topic with navigation</a>
+        </p>
+        <h1 class="firstHeading">Installing <span class="MyVariablesProductShortName">RDM</span> on Windows</h1>
+        <p>This section covers the installation of <span class="MyVariablesProductShortName">RDM</span> binary distributions that are provided for Windows in the form of compressed self-extracting installers with the extension <span class="code">.exe</span>. The Engine package must be installed first, then add-on components may be installed.</p>
+        <p class="Notes">These instructions are for installing a standard desktop/server version. For installing an embedded/cross compiled platform, see <a href="Hosted.htm">here</a>.</p>
+        <p class="Notes">Some registry entries are added for version and install path information only, however no other changes to the environment are made. These entries will be removed upon uninstall.</p>
+        <p class="Heading">Engine Installation</p>
+        <p>This is the base install, and must be installed <strong>first</strong>. </p>
+        <li value="7">1. To begin the install, open the installer:</li>
+        <li value="8">
+            <img src="../Resources/Images/icon1.PNG" />
+            <br />
+        </li>
+        <p xml:space="preserve" class="Notes">NOTE: On Windows Vista and Windows 7, you may be prompted for your password for Administrator level access.</p>
+        <p>2. When prompted, accept the license and confirm the install location.</p>
+        <p class="Notes">NOTE: It is highly recommended that the default install location is used, ie <span class="code"><span class="MyVariablesInstallHomeW">C:\Raima\RDM\</span></span><span style="mc-tag-and-class: span;" class="MyVariablesProductVersion">11.0</span>. It is also not recommended to have more than one install per minor version, ie: one 10.0 and one 10.1, but not multiple of each.</p>
+        <p>3. The installer will then install the Engine into the specified directory, and create a shortcut link in the Start menu.</p>
+        <p>
+            <img src="../Resources/Images/installer.PNG" title="Install complete" alt="Install complete" />
+        </p>
+        <p class="Heading">Silent/Quiet Installation</p>
+        <p>To install RDM from the command line, without any graphical windows, simply execute the installer as follows:</p><pre xml:space="preserve">C:\&gt;rdm-engine-bin-win-x32-<span class="MyVariablesMajorVersion">11</span>.<span class="MyVariablesMinorVersion">0</span>.<span class="MyVariablesPatch">0</span>.741.exe /S /D=[install dir]</pre>
+        <p>Where:</p>
+        <p class="ParamIndent">/S - Silent install</p>
+        <p class="ParamIndent">/D=[install dir] - Specify target install directory</p>
+        <p>Both should be used together.</p>
+        <p class="Heading">Uninstall</p>
+        <p>Choose uninstall from the RDM Start menu item, or run uninstall.exe from the install folder. <span class="wrong-inline">Warning: all files in the installation directory will be removed!</span></p>
+        <p>
+            <img src="../Resources/Images/uninst.PNG" />
+        </p>
+        <p class="Notes">NOTE: <strong>Always</strong> remove the software using the uninstall option. Do not attempt to remove by deleting the installation directory manually.</p>
+        <hr MadCap:conditions="Default.ScreenOnly" width="100%" size="0" align="center" />
+        <p MadCap:conditions="Default.ScreenOnly" style="font-size: 8pt;"><span class="MyVariablesCopyright">Copyright © 2012, Raima Inc. All rights reserved.</span>
+        </p>
+        <script type="text/javascript" src="../SkinSupport/MadCapBodyEnd.js">
+        </script>
+        <p class="MCWebHelpFramesetLink MCWebHelpFramesetLinkBottom" style="display: none;"><a href="../../Default_CSH.htm#IG/Windows.htm" style="">Open topic with navigation</a>
+        </p>
+    </body>
+</html>

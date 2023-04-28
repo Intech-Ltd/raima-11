@@ -1,0 +1,144 @@
+<?xml version="1.0" encoding="utf-8"?>
+<!DOCTYPE html PUBLIC "-//W3C//DTD XHTML 1.0 Strict//EN" "http://www.w3.org/TR/xhtml1/DTD/xhtml1-strict.dtd">
+<html xmlns:MadCap="http://www.madcapsoftware.com/Schemas/MadCap.xsd" MadCap:tocPath="Utility Programs|SQL Utilities" MadCap:InPreviewMode="false" MadCap:PreloadImages="false" MadCap:RuntimeFileType="Topic" MadCap:TargetType="WebHelp" lang="en-us" xml:lang="en-us" MadCap:PathToHelpSystem="../../" MadCap:HelpSystemFileName="Default.xml" MadCap:SearchType="Stem">
+    <head>
+        <meta http-equiv="Content-Type" content="text/html; charset=utf-8" /><title>rdmsqlserver</title>
+        <link rel="icon" type="image/png" href="http://docs.raima.com/favicon.png" />
+        <link href="../SkinSupport/MadCap.css" rel="stylesheet" />
+        <link href="../Resources/TableStyles/ArgsTwoCol.css" rel="stylesheet" />
+        <link href="../Resources/Stylesheets/raima.css" rel="stylesheet" />
+        <script src="../SkinSupport/MadCapAll.js" type="text/javascript">
+        </script>
+    </head>
+    <body>
+        <p class="MCWebHelpFramesetLink MCWebHelpFramesetLinkTop" style="display: none;"><a href="../../Default_CSH.htm#util/rdmsqlserver.htm" style="">Open topic with navigation</a>
+        </p>
+        <div class="MCBreadcrumbsBox_0"><span class="MCBreadcrumbsPrefix">You are here: </span><a class="MCBreadcrumbsLink" href="../dbUTIL.htm">Utility Programs</a><span class="MCBreadcrumbsDivider"> &gt; </span><a class="MCBreadcrumbsLink" href="../dbUTILsql.htm">SQL Utilities</a><span class="MCBreadcrumbsDivider"> &gt; </span><span class="MCBreadcrumbs">rdmsqlserver</span>
+        </div>
+        <h3 class="newpage"><span class="MyVariablesUrdmsqlserver">rdmsqlserver</span>
+        </h3>
+        <p>Remote database connectivity server</p>
+        <p class="Heading">Command Syntax</p><pre xml:space="preserve">rdmsqlserver [-h] [-B] [-V] [-q|[-stdout file]] [-stderr file] [-tfs type]
+             [-docroot path] [-d path] [-p N] [-v] [-stdout filename]
+             [-start|-stop|-query|-install exepath|-uninstall]
+</pre>
+        <p class="Heading">Description</p>
+        <p><b><span class="MyVariablesUrdmsqlserver">rdmsqlserver</span></b> is a command-line utility that lets an <span class="MyVariablesProductShortName">RDM</span> ODBC/JDBC application manage <span class="MyVariablesRSQLName">RDM SQL</span> databases stored on a remote computer. The <span class="MyVariablesProductShortName">RDM</span> ODBC/JDBC libraries communicate with <b><span class="MyVariablesUrdmsqlserver">rdmsqlserver</span></b> through TCP/IP. <b><span class="MyVariablesUrdmsqlserver">rdmsqlserver</span></b> uses the <span class="MyVariablesRSQLName">RDM SQL</span> library to access a tfserver that manages the <span class="MyVariablesRSQLName">RDM SQL</span> databases.</p>
+        <p><b><span class="MyVariablesUrdmsqlserver">rdmsqlserver</span></b> can reside on the same computer as the <span class="MyVariablesProductShortName">RDM</span> ODBC/JDBC application does, or on a remote computer. In the case of the latter, the architectures of the computer where <b><span class="MyVariablesUrdmsqlserver">rdmsqlserver</span></b> is running does not need to match that of the computer that runs the <span class="MyVariablesProductShortName">RDM</span> ODBC/JDBC application. Note that <b><span class="MyVariablesUrdmsqlserver">rdmsqlserver</span></b> and the target tfserver must be on comparable platform architectures.</p>
+        <p><b><span class="MyVariablesUrdmsqlserver">rdmsqlserver</span></b> can be executed as a foreground process or as a daemon process. It can also be installed as a service on Windows.  To determine if <b><span class="MyVariablesUrdmsqlserver">rdmsqlserver</span></b> is already running, use the <code>-query</code> option (the <code>-query</code> option will work whether <b><span class="MyVariablesUrdmsqlserver">rdmsqlserver</span></b> has been started in the foreground or background).</p>
+        <p>When this utility is run as a foreground process, it may be cleanly terminated by issuing SIGINT (normally <code>^C</code> from the keyboard). SIGTERM has the same effect. If the utility does not terminate immediately it will be terminated immediately (cleanly or not) upon the third signal.</p>
+        <p class="Heading">Options</p>
+        <table style="caption-side: top;mc-table-style: url('../Resources/TableStyles/ArgsTwoCol.css');" class="TableStyle-ArgsTwoCol" cellspacing="0">
+            <col class="Column-Column1" style="width: 200px;" />
+            <col class="Column-Column2" />
+            <tbody>
+                <tr class="Body-Body1">
+                    <td class="BodyE-Column1-Body1">-h</td>
+                    <td class="BodyD-Column2-Body1">Display this usage information</td>
+                </tr>
+                <tr class="Body-Body1">
+                    <td class="BodyE-Column1-Body1">-B</td>
+                    <td class="BodyD-Column2-Body1">Do not display the banner</td>
+                </tr>
+                <tr class="Body-Body1">
+                    <td class="BodyE-Column1-Body1">-V</td>
+                    <td class="BodyD-Column2-Body1">Display the version information</td>
+                </tr>
+                <tr class="Body-Body1">
+                    <td class="BodyE-Column1-Body1">-q</td>
+                    <td class="BodyD-Column2-Body1">Quiet mode.  No information will be displayed</td>
+                </tr>
+                <tr class="Body-Body1">
+                    <td class="BodyE-Column1-Body1">-stdout file</td>
+                    <td class="BodyD-Column2-Body1">Redirect <code>stdout</code> to the specified file</td>
+                </tr>
+                <tr class="Body-Body1">
+                    <td class="BodyE-Column1-Body1">-stderr file</td>
+                    <td class="BodyD-Column2-Body1">Redirect <code>stderr</code> to the specified file</td>
+                </tr>
+                <tr class="Body-Body1" MadCap:conditions="CmdLine.TFS">
+                    <td class="BodyB-Column1-Body1">-tfs TFS_TYPE</td>
+                    <td class="BodyA-Column2-Body1">Specify the TFS type to use (TFST, TFSR, or TFSS) [default = TFST]</td>
+                </tr>
+            </tbody>
+        </table>
+        <table style="caption-side: top;mc-table-style: url('../Resources/TableStyles/ArgsTwoCol.css');" class="TableStyle-ArgsTwoCol" cellspacing="0">
+            <col class="Column-Column1" style="width: 200px;" />
+            <col class="Column-Column2" />
+            <tbody>
+                <tr class="Body-Body1">
+                    <td class="BodyE-Column1-Body1">-d PATH</td>
+                    <td class="BodyD-Column2-Body1">The path of the <i>Document Root</i>. Default is current directory.
+</td>
+                </tr>
+                <tr class="Body-Body1">
+                    <td class="BodyE-Column1-Body1">-p N</td>
+                    <td class="BodyD-Column2-Body1">Anchor PORT, referring to the TFS associated with this utility. Default is <span class="MyVariablesDefaultPort">21553</span>.</td>
+                </tr>
+                <tr class="Body-Body1">
+                    <td class="BodyE-Column1-Body1">-v</td>
+                    <td class="BodyD-Column2-Body1">Verbose output.</td>
+                </tr>
+                <tr class="Body-Body1">
+                    <td class="BodyE-Column1-Body1">-start</td>
+                    <td class="BodyD-Column2-Body1">Begin execution of utility as a separate process.</td>
+                </tr>
+                <tr class="Body-Body1">
+                    <td class="BodyE-Column1-Body1">-stop</td>
+                    <td class="BodyD-Column2-Body1">Stop execution of utility as a separate process.</td>
+                </tr>
+                <tr class="Body-Body1">
+                    <td class="BodyE-Column1-Body1">-query</td>
+                    <td class="BodyD-Column2-Body1">Check the status of the utility process (running/not running).</td>
+                </tr>
+                <tr class="Body-Body1">
+                    <td class="BodyE-Column1-Body1">-install PATH</td>
+                    <td class="BodyD-Column2-Body1"><b>Windows only,</b> Requires administrative privilege. Install utility as an automatic service. <i>PATH</i> is the directory or fully qualified path to the utility's executable file.</td>
+                </tr>
+                <tr class="Body-Body1">
+                    <td class="BodyE-Column1-Body1">-uninstall</td>
+                    <td class="BodyD-Column2-Body1"><b>Windows only,</b> Requires administrative privilege. Uninstall the utility service. Use the service control manager to stop the execution of the service first.</td>
+                </tr>
+                <tr class="Body-Body1">
+                    <td class="BodyB-Column1-Body1">-nodisk</td>
+                    <td class="BodyA-Column2-Body1">Don't use any disk I/O.</td>
+                </tr>
+            </tbody>
+        </table>
+        <table style="width: 100%;mc-table-style: url('../Resources/TableStyles/ArgsTwoCol.css');margin-left: 0;margin-right: auto;" class="TableStyle-ArgsTwoCol" cellspacing="0">
+            <col class="Column-Column1" style="width: 200px;" />
+            <col class="Column-Column2" />
+            <tbody>
+                <tr class="Body-Body1">
+                    <td class="BodyB-Column1-Body1">-notfs</td>
+                    <td class="BodyA-Column2-Body1">Do not allow direct connection to TFS</td>
+                </tr>
+            </tbody>
+        </table>
+        <p class="Heading">Comments</p>
+        <p style="font-weight: bold;font-style: normal;font-family: monospace;">-d[ocroot] path</p>
+        <blockquote>
+            <p>The <code>docroot</code> option is used only when <b><span class="MyVariablesUrdmsqlserver">rdmsqlserver</span></b> uses a direct-link (TFST) or standalone (TFSS).</p>
+        </blockquote>
+        <p style="font-weight: bold;font-style: normal;font-family: monospace;">-p N</p>
+        <blockquote>
+            <p>The port number option specified for <b><span class="MyVariablesUrdmsqlserver">rdmsqlserver</span></b> is called an "anchor port," or the base port number off which we generate an appropriate port number for our other utilities that use port numbers.</p>
+            <p>For external tfserver (TFSR)&#160;configurations the port number must be the port number for the external tfserver running on the same computer.</p>
+            <p>For embedded and external tfservers (TFST&#160;and TFSR), <span class="MyVariablesUrdmsqlserver">rdmsqlserver</span> will use the port number provided + two&#160;(2)&#160;to calculate the port number to be used as the listening port for <span class="MyVariablesProductShortName">RDM</span> ODBC/JDBC connections. For example, if port 5000 is specified with "<code>-p</code>" (i.e. "<code>-p 5000</code>"), <b><span class="MyVariablesUrdmsqlserver">rdmsqlserver</span></b> will listen on port 5002.</p>
+        </blockquote>
+        <p style="font-weight: bold;font-style: normal;font-family: monospace;">-install <i>exepath</i></p>
+        <blockquote>
+            <p>On Windows, you may install <b><span class="MyVariablesUrdmsqlserver">rdmsqlserver</span></b> as a service that will run automatically by using this option. The <code style="font-style: italic;">exepath</code> must be the fully qualified path to the <b><span class="MyVariablesUrdmsqlserver">rdmsqlserver</span></b> executable, or to the directory in which it resides. All required DLLs must reside either in the same directory as <b><span class="MyVariablesUrdmsqlserver">rdmsqlserver</span></b>, or in the Windows system directory. This option requires administrative privilege. To stop/start the <b><span class="MyVariablesUrdmsqlserver">rdmsqlserver</span></b> service, use the Windows service control manager.</p>
+        </blockquote>
+        <p class="Heading">See Also</p>
+        <p><a href="../ODBCRM/Chpt_Datasource.htm">Connecting to a Data&#160;Source</a>
+        </p>
+        <hr MadCap:conditions="Default.ScreenOnly" width="100%" size="0" align="center" />
+        <p MadCap:conditions="Default.ScreenOnly" style="font-size: 8pt;"><span class="MyVariablesCopyright">Copyright © 2012, Raima Inc. All rights reserved.</span>
+        </p>
+        <script type="text/javascript" src="../SkinSupport/MadCapBodyEnd.js">
+        </script>
+        <p class="MCWebHelpFramesetLink MCWebHelpFramesetLinkBottom" style="display: none;"><a href="../../Default_CSH.htm#util/rdmsqlserver.htm" style="">Open topic with navigation</a>
+        </p>
+    </body>
+</html>

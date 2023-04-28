@@ -1,0 +1,293 @@
+<?xml version="1.0" encoding="utf-8"?>
+<!DOCTYPE html PUBLIC "-//W3C//DTD XHTML 1.0 Strict//EN" "http://www.w3.org/TR/xhtml1/DTD/xhtml1-strict.dtd">
+<html xmlns:MadCap="http://www.madcapsoftware.com/Schemas/MadCap.xsd" MadCap:tocPath="Native API|User's Guide" MadCap:InPreviewMode="false" MadCap:PreloadImages="false" MadCap:RuntimeFileType="Topic" MadCap:TargetType="WebHelp" lang="en-us" xml:lang="en-us" class="" MadCap:PathToHelpSystem="../../" MadCap:HelpSystemFileName="Default.xml" MadCap:SearchType="Stem">
+    <head>
+        <meta http-equiv="Content-Type" content="text/html; charset=utf-8" /><title>Operational Overview</title>
+        <link rel="icon" type="image/png" href="http://docs.raima.com/favicon.png" />
+        <link href="../SkinSupport/MadCap.css" rel="stylesheet" />
+        <link href="../Resources/TableStyles/fncSummary.css" rel="stylesheet" />
+        <link href="../Resources/TableStyles/ArgsTwoCol.css" rel="stylesheet" />
+        <link href="../Resources/TableStyles/TwoColNoLines.css" rel="stylesheet" />
+        <link href="../Resources/Stylesheets/raima.css" rel="stylesheet" />
+        <script src="../SkinSupport/MadCapAll.js" type="text/javascript">
+        </script>
+    </head>
+    <body>
+        <p class="MCWebHelpFramesetLink MCWebHelpFramesetLinkTop" style="display: none;"><a href="../../Default_CSH.htm#UG/Chapter3.htm" style="">Open topic with navigation</a>
+        </p>
+        <div class="MCBreadcrumbsBox_0"><span class="MCBreadcrumbsPrefix">You are here: </span><a class="MCBreadcrumbsLink" href="../dbCore.htm">Native API</a><span class="MCBreadcrumbsDivider"> &gt; </span><a class="MCBreadcrumbsLink" href="dbUG.htm">User's Guide</a><span class="MCBreadcrumbsDivider"> &gt; </span><span class="MCBreadcrumbs">Operational Overview</span>
+        </div>
+        <h1 class="firstHeading"><a MadCap:generatedBookmark="TOC" name="Operational_Overview_..18"></a>Operational Overview</h1>
+        <h2 class="Heading2"><a MadCap:generatedBookmark="TOC" name="3.1_Introduction_..19"></a>3.1 Introduction </h2>
+        <p>This section presents an overview of the basic operation of the <span class="MyVariablesProductShortName">RDM</span> DBMS. Each system component is identified and described, and the operational flow of an <span class="MyVariablesProductShortName">RDM</span> C or C++ program is given. A simple, introductory example is then developed illustrating the basic use of the system. Your understanding of what each component does and how it fits into the overall system is essential to your ability to use <span class="MyVariablesProductShortName">RDM</span> effectively. </p>
+        <h2 class="Heading2"><a MadCap:generatedBookmark="TOC" name="3.2_System_Components"></a><a name="3.2"></a>3.2 System Components </h2>
+        <p>Figure 3-1 is a diagram of all of the <span class="MyVariablesProductShortName">RDM</span> system components. Arrows indicate input and output between the components and text files (for example, schema), specific file types in the database (for example, key files), or the database in general. </p>
+        <p class="Caption">
+            <img src="../Resources/Images/UsersGuide/UG-Fig-3-1_640x452.png" style="width: 640;height: 452;" />
+            <br />Fig. 3-1. <span class="MyVariablesProductShortName">RDM</span> System Components</p>&#160; 
+<h3 class="Heading3"><a MadCap:generatedBookmark="TOC" name="3.2.1_The_Transactional_File_Server"></a><a name="TFS"></a>3.2.1 The Transactional File Server</h3><p>Beginning with <span class="MyVariablesProductShortName">RDM</span> version 10, the Runtime Library no longer writes directly to disk files. Database disk I/O and safe transactional updates are controlled by the TFS (Transactional File Server). The TFS resides on any computer that is visible through TCP/IP, such as the computer names in a LAN or the domain names on Internet. An application program which has linked in the runtime library will locate the TFS through a default name and port, or can easily override the defaults to locate any visible TFS.</p><p>The TFS also contains the record-type locking functionality formerly contained in the lock manager. Thus, a connection to the TFS is sufficient for all multi-user database access. Contrasted to earlier versions of <span class="MyVariablesProductShortName">RDM</span>, there is no longer a need to mount or share a common file system or run a separate lock manager process.</p><p>One runtime library is able to connect to multiple TFS's, and one TFS can handle requests from many runtime libraries. Each TFS manages the databases stored in its root directory. All <span class="MyVariablesProductShortName">RDM</span> databases are stored in this directory, each in its own subdirectory. A database subdirectory is named after the database, and all database-related files, including transaction log files are stored in its subdirectory.</p><h3 class="Heading3"><a MadCap:generatedBookmark="TOC" name="3.2.2_The_RDM_Runtime_Library"></a>3.2.2 The <span class="MyVariablesProductShortName">RDM</span> Runtime Library </h3><p>Database manipulation and control is performed through calls to C functions contained in the <span class="MyVariablesProductShortName">RDM</span> runtime library. The library is linked with the object code for a C or C++ database application program to produce the executable program. </p><p>The runtime library functions contained in the library perform such operations as opening and closing databases, creating and modifying records and fields, connecting and disconnecting sets, searching for records through keys and sets, and controlling multi-user access through interaction with the system lock manager. </p><h3><a MadCap:generatedBookmark="TOC" name="3.2.3_Utilities"></a>3.2.3 Utilities</h3><p><span class="MyVariablesProductShortName">RDM</span> utilities are programs which either have some purpose in creating a database, or perform common functions on a database that are frequently useful for an application developer or end user.</p><table class="TableStyle-TwoColNoLines" style="border-collapse: collapse;mc-table-style: url('../Resources/TableStyles/TwoColNoLines.css');margin-left: 0;margin-right: auto;" cellspacing="0"><col class="Column-Column1" style="width: 150px;" /><col class="Column-Column2" /><tbody><tr class="Body-Body1"><td class="BodyE-Column1-Body1">ddlp</td><td class="BodyD-Column2-Body1">&#160;The Database Definition Language Processor, ddlp, is a utility that compiles a DDL specification, called a schema, and produces the database dictionary. The dictionary contains database content and organization data that is used by the <span class="MyVariablesProductShortName">RDM</span> runtime library functions (see below).<br /><br />A C or C++ header file (not shown in Figure 3-1) also is created by the ddlp. This file contains constants and declarations associated with a specific database for use by the C or C++ programs that access the database.</td></tr><tr class="Body-Body1"><td class="BodyE-Column1-Body1">initdb</td><td class="BodyD-Column2-Body1">The initialization of the data and key files for a new database is performed by the database initialization utility, initdb.</td></tr><tr class="Body-Body1"><td class="BodyE-Column1-Body1">ida</td><td class="BodyD-Column2-Body1">The Interactive Database Access utility, ida, is a menu-driven database manipulation tool that provides an easy-to-use interface for entering, modifying, and retrieving database information through most of the <span class="MyVariablesProductShortName">RDM</span> functions.<br /><br />The ida utility is a useful tool for learning to use <span class="MyVariablesProductShortName">RDM</span> as well as a tool for maintaining existing databases.</td></tr><tr class="Body-Body1"><td class="BodyE-Column1-Body1">dal</td><td class="BodyD-Column2-Body1">The Database Access Language, dal, is a simple, interpreted language that includes most of the <span class="MyVariablesProductShortName">RDM</span> user-level functions as its commands. With built-in variables and a looping construct, it allows quick prototyping of simple sequences of <span class="MyVariablesProductShortName">RDM</span> function calls. In addition, a database programmer can learn more about <span class="MyVariablesProductShortName">RDM</span> by using dal.</td></tr><tr class="Body-Body1"><td class="BodyE-Column1-Body1">dbcheck</td><td class="BodyD-Column2-Body1">The consistency of an <span class="MyVariablesProductShortName">RDM</span> database can be checked using the dbcheck utility. This utility checks to ensure that data and key files are consistent and that all set linkages are correct. Thus, dbcheck is used to check for database corruption.</td></tr><tr class="Body-Body1"><td class="BodyE-Column1-Body1">dbimp</td><td class="BodyD-Column2-Body1">Data from ASCII text files can be imported into an <span class="MyVariablesProductShortName">RDM</span> database using the dbimp utility. This utility is able to create, store, and form set connections involving one or more record types from data in a standard ASCII format.<br /><br />The dbimp utility is useful in setting up test data, transporting <span class="MyVariablesProductShortName">RDM</span> data between systems, importing data from another DBMS, and, in conjunction with dbexp, performing ASCII file dumps and reloads of an <span class="MyVariablesProductShortName">RDM</span> database.</td></tr><tr class="Body-Body1"><td class="BodyE-Column1-Body1">dbexp</td><td class="BodyD-Column2-Body1">The database export utility, dbexp, is used to output the contents of an <span class="MyVariablesProductShortName">RDM</span> database into a standard ASCII format. The exported data can then be used by another DBMS. You may also use dbexp with dbimp to transfer a database to a different environment or for performing an ASCII file dump and reload.</td></tr><tr class="Body-Body1"><td class="BodyE-Column1-Body1">keybuild</td><td class="BodyD-Column2-Body1">Utility keybuild is used to recreate key (index) files from the contents of data files. It is useful for implementing DDL changes where non-key fields are changed to key fields or key fields are changed to non-key fields. It can also be used to rebuild the key files after a database corruption (for example, as reported by dbcheck).</td></tr><tr class="Body-Body1"><td class="BodyB-Column1-Body1">keypack</td><td class="BodyA-Column2-Body1">The Key File Packing utility can be used to decrease the size of existing key files. This utility is designed especially for large, static key files which will require very little or no modification after they are packed. The keypack utility places as many keys as possible into each B-tree node so that the key file is smaller and lookups are quicker. However, modification of the key file after it has been packed becomes a very expensive operation.</td></tr></tbody></table><h2><a MadCap:generatedBookmark="TOC" name="3.3_Operational_Flow"></a>3.3 Operational Flow </h2><p>The basic operational flow for creating an <span class="MyVariablesProductShortName">RDM</span> C or C++ application program is shown in Figure 3-2. </p><p class="Caption"><img src="../Resources/Images/UsersGuide/UG-Fig-3-2_640x575.png" style="width: 640;height: 575;" /><br />Fig. 3-2. <span class="MyVariablesProductShortName">RDM</span> Operation</p><p>The Database Definition Language specification is submitted to the DDL processor, which compiles the DDL and creates the database dictionary. The DDL processor also creates a header file of structure and constant declarations for use with the C or C++ programs that access the database. </p><p>The source code for your application program, which includes the header file created by <code>ddlp</code> and the standard <span class="MyVariablesProductShortName">RDM</span> header file (<code>rdm.h</code>), is then compiled, and the resulting object code is linked with the <span class="MyVariablesProductShortName">RDM</span> runtime library to create the executable application program. The <span class="MyVariablesProductShortName">RDM</span> library functions called from within the program manipulate the database content as defined by the dictionary. </p><p>The following procedure summarizes the basic steps necessary to create an <span class="MyVariablesProductShortName">RDM</span> application. </p><ol><li style="font-family: Arial;" value="1">Design the database. That is, determine what data is to be stored in the database and how it should be organized. </li><li style="font-family: Arial;" value="2">Prepare the DDL specification using your usual text editor. </li><li style="font-family: Arial;" value="3">Compile the DDL specification using the DDL processor, <code>ddlp</code>. </li><li style="font-family: Arial;" value="4">Correct any DDL errors reported by <code>ddlp</code>. </li><li style="font-family: Arial;" value="5">Initialize the database using <code>initdb</code>. </li><li style="font-family: Arial;" value="6">Experiment with the database, using <code>dal</code> or <code>ida</code> to create and access some test data. Refine your database design as necessary. </li><li style="font-family: Arial;" value="7">Design and code your C or C++ application program, incorporating the appropriate calls to the <span class="MyVariablesProductShortName">RDM</span> functions. Your program should include the <code>rdm.h</code> header and the database-specific header file created by <code>ddlp</code>. </li><li style="font-family: Arial;" value="8">Compile the C or C++ program. </li><li style="font-family: Arial;" value="9">Link the program with the <span class="MyVariablesProductShortName">RDM</span> library to create your executable. </li><li style="font-family: Arial;" value="10">Make sure the TFS (<code>tfserver</code>) is running.</li><li style="font-family: Arial;" value="11">Run your <span class="MyVariablesProductShortName">RDM</span> application program. </li></ol><p>The following section illustrates each of these steps by describing the development of a simple database application. </p><h2 class="Heading2"><a MadCap:generatedBookmark="TOC" name="3.4_Introductory_Example"></a><a name="3.4"></a>3.4 Introductory Example </h2><p>This section introduces the use of <span class="MyVariablesProductShortName">RDM</span> through the development of a simple database application. A description of the program requirements is given in the next section. The database design is then explained followed by the program design. Finally, the program code is described with particular attention paid to the <span class="MyVariablesProductShortName">RDM</span> function calls. </p><h3 class="Heading3"><a MadCap:generatedBookmark="TOC" name="3.4.1_Requirements"></a>3.4.1 Requirements </h3><p>The purpose of the example project is to write a program that will maintain a database of books, magazines (journals), and articles contained in a technical library. Information to be stored in the database includes: </p><ul><li style="font-family: Arial;" value="1"><i>Identification code</i>: a text field containing a Dewey-Decimal code or other kind of code to be determined by a user. </li><li style="font-family: Arial;" value="2"><i>Author name</i>: a text field containing the name of the author in "last, first, middle" format. </li><li style="font-family: Arial;" value="3"><i>Title</i>: a text field containing the title of the book, magazine, or article. </li><li style="font-family: Arial;" value="4"><i>Publisher</i>: a text field containing the name of the publisher. </li><li style="font-family: Arial;" value="5"><i>Date published</i>: a date field containing the copyright date of the publication. </li><li style="font-family: Arial;" value="6"><i>Information type</i>: an integer field containing a code that identifies whether the information is a book, magazine, or article.                 </li></ul><p>The stored information must be retrievable by either the identification code or author name. If an author has more than one publication in the library, all of the publications must be displayed. </p><p>User interaction will be performed by using simple text input and output. Five commands will be provided: </p><ul><li style="font-family: Arial;" value="1">Enter technical information </li><li style="font-family: Arial;" value="2">Delete technical information </li><li style="font-family: Arial;" value="3">Find technical information by id code </li><li style="font-family: Arial;" value="4">Find technical information by author </li><li style="font-family: Arial;" value="5">Close database and quit </li></ul><p>The commands will be selected from a simple command-prompt menu. </p><h3 class="Heading3"><a MadCap:generatedBookmark="TOC" name="3.4.2_Database_Design"></a>3.4.2 Database Design </h3><p>The database will be composed of one record type which contains the following data fields: </p><table style="width: 100%;border-collapse: collapse;mc-table-style: url('../Resources/TableStyles/ArgsTwoCol.css');margin-left: 0;margin-right: auto;" class="TableStyle-ArgsTwoCol" cellspacing="0"><col class="Column-Column1" /><col class="Column-Column2" /><tr class="Body-Body1"><td class="BodyE-Column1-Body1"><p>id_code </p></td><td class="BodyD-Column2-Body1"><p>15-character field containing the identification code </p></td></tr><tr class="Body-Body1"><td class="BodyE-Column1-Body1"><p>info_title </p></td><td class="BodyD-Column2-Body1"><p>79-character field containing the title </p></td></tr><tr class="Body-Body1"><td class="BodyE-Column1-Body1"><p>author </p></td><td class="BodyD-Column2-Body1"><p>31-character field containing author name </p></td></tr><tr class="Body-Body1"><td class="BodyE-Column1-Body1"><p>publisher </p></td><td class="BodyD-Column2-Body1"><p>31-character field containing publisher name </p></td></tr><tr class="Body-Body1"><td class="BodyE-Column1-Body1"><p>pub_date </p></td><td class="BodyD-Column2-Body1"><p>11-character field containing publication date </p></td></tr><tr class="Body-Body1"><td class="BodyE-Column1-Body1"><p>info_type </p></td><td class="BodyD-Column2-Body1"><p>Integer code field which identifies the information type as follows: 0 = book, 1 = magazine, 2 = article </p></td></tr></table><p>Field <code>id_code</code> will be a unique key field. That is, it will be used to uniquely access a single record occurrence in the database. </p><p>The <code>author</code> field will be a non-unique key field. This will provide access to all information records associated with a particular author. This is because keys are maintained in the index in sorted order and, thus, all duplicate keys will be grouped together. </p><p>The <span class="MyVariablesProductShortName">RDM</span> DDL that implements this database design (assume it is contained in file <code>tims.ddl</code>) is given below. </p><pre xml:space="preserve">/* Technical Information Management System*/
+database tims
+{
+    data file "tims.d01" contains info;
+    key file  "tims.k01" contains id_code;
+    key file  "tims.k02" contains author;
+
+    record info
+    {
+        unique key char id_code[16];
+        char     info_title[80];
+        key char author[32];
+        char     publisher[32];
+        char     pub_date[12];
+        int32_t  info_type;
+    }
+}</pre><p>The first line is a comment that describes the database. As in C, comments are specified in DDL between "/*" and "*/" pairs. Although comments may be placed throughout the database definition file, those comments before the keyword <code>database</code> will be copied into the resulting header file. </p><p>The database statement names the database. The name chosen here, <code>tims</code>, is an acronym for "<i>Technical Information Management System</i>." </p><p>The DDL file (or schema) defines the database to be composed of one data file, <code>tims.d01</code>, and two key files, <code>tims.k01</code> (containing id_code keys) and <code>tims.k02</code> (containing author keys). </p><p>One record type named <code>info</code> is declared to contain all of the data fields. To accommodate the null byte that terminates strings in C, each character field is one character longer than specified in the requirements, allowing the standard <code>strcpy</code> function to be used. Note that <code>id_code</code> is identified as a unique key and that <code>author</code> is identified as a key. (Duplicate keys are allowed unless the unique qualifier is present). </p><p>The schema is compiled with the following command: </p><pre>ddlp tims.ddl </pre><p>The <code>ddlp</code> will display the following text: </p><pre xml:space="preserve">Database Definition Language Processor Utility
+<span class="MyVariablesProductName">Raima Database Manager</span>  <![CDATA[ ]]><span class="MyVariablesReleaseVersion">11.0.0</span> Build <span class="MyVariablesBuild">412</span>  <![CDATA[ ]]><span class="MyVariablesVersionDate">[2-15-2012]</span>  <![CDATA[ ]]><span class="MyVariablesURLHome">http://www.raima.com</span><br />Copyright (c) <span class="MyVariablesCopyrightYear">2012</span>  <![CDATA[ ]]><span class="MyVariablesCompanyName">Raima Inc.</span>, All rights reserved. 
+
+0 errors detected</pre><p>Upon successful completion, the <code>ddlp</code> will have created two files. File <code>tims.dbd</code> contains the database dictionary. File <code>tims.h</code> is the header file to be included in each C source file using the tims database. The contents of <code>tims.h</code> are shown below. </p><pre xml:space="preserve">#ifndef TIMS_H
+#define TIMS_H
+/*lint ++flb */
+
+/* Technical Information Management System*/
+
+/* database tims record/key structure declarations */
+
+struct info {
+   char id_code[16];
+   char info_title[80];
+   char author[32];
+   char publisher[32];
+   char pub_date[12];
+   int32_t info_type;
+};
+
+/* record, field and set table entry definitions */
+
+/* File Id Constants */
+
+/* Record Name Constants */
+#define INFO 10000
+
+/* Field Name Constants */
+#define ID_CODE 0L
+#define INFO_TITLE 1L
+#define AUTHOR 2L
+#define PUBLISHER 3L
+#define PUB_DATE 4L
+#define INFO_TYPE 5L
+
+/* Set Name Constants */
+
+/* Field Sizes */
+#define SIZEOF_ID_CODE 16
+#define SIZEOF_INFO_TITLE 80
+#define SIZEOF_AUTHOR 32
+#define SIZEOF_PUBLISHER 32
+#define SIZEOF_PUB_DATE 12
+#define SIZEOF_INFO_TYPE 4
+
+/*lint --flb */
+#endif    /* TIMS_H */</pre><p>This file contains a <code>struct</code> declaration for the <code>info</code> record. This <code>struct</code> is for use by the C/C++ application in declaring variables that contain occurrences of the <code>info</code> record from the database. Also included in this file are constant definitions for the <code>info</code> record and for each data field. These constants will be passed to the <span class="MyVariablesProductShortName">RDM</span> C functions that require them. </p><p>The next step is to initialize the database with the following command: </p><pre>initdb tims </pre><p>Then <span class="MyVariablesProductShortName">RDM</span> will display the following text: </p><pre xml:space="preserve">Database Initialization Utility
+<span class="MyVariablesProductName">Raima Database Manager</span>  <![CDATA[ ]]><span class="MyVariablesReleaseVersion">11.0.0</span> Build <span class="MyVariablesBuild">412</span>  <![CDATA[ ]]><span class="MyVariablesVersionDate">[2-15-2012]</span>  <![CDATA[ ]]><span class="MyVariablesURLHome">http://www.raima.com</span><br />Copyright (c) <span class="MyVariablesCopyrightYear">2012</span>  <![CDATA[ ]]><span class="MyVariablesCompanyName">Raima Inc.</span>, All rights reserved.
+
+tims initialized
+</pre><h3 class="Heading3"><a MadCap:generatedBookmark="TOC" name="3.4.3_Program_Design"></a>3.4.3 Program Design </h3><p>The program for this example consists of the following functions: </p><table style="width: 100%;border-collapse: collapse;margin-left: 0;margin-right: auto;mc-table-style: url('../Resources/TableStyles/ArgsTwoCol.css');" class="TableStyle-ArgsTwoCol" cellspacing="0"><col class="Column-Column1" /><col class="Column-Column2" /><tr class="Body-Body1"><td class="BodyE-Column1-Body1"><p>main </p></td><td class="BodyD-Column2-Body1"><p>Main program, command menu control </p></td></tr><tr class="Body-Body1"><td class="BodyE-Column1-Body1"><p>ent_info </p></td><td class="BodyD-Column2-Body1"><p>Enter technical information data </p></td></tr><tr class="Body-Body1"><td class="BodyE-Column1-Body1"><p>del_info </p></td><td class="BodyD-Column2-Body1"><p>Delete technical information data </p></td></tr><tr class="Body-Body1"><td class="BodyE-Column1-Body1"><p>by_id </p></td><td class="BodyD-Column2-Body1"><p>Find technical information by id_code </p></td></tr><tr class="Body-Body1"><td class="BodyE-Column1-Body1"><p>by_author </p></td><td class="BodyD-Column2-Body1"><p>Find technical information by author </p></td></tr><tr class="Body-Body1"><td class="BodyE-Column1-Body1"><p>get_info </p></td><td class="BodyD-Column2-Body1"><p>Get technical information data from user </p></td></tr><tr class="Body-Body1"><td class="BodyE-Column1-Body1"><p>pr_info </p></td><td class="BodyD-Column2-Body1"><p>Print technical information data </p></td></tr></table><p>Figure 3-3 shows the function call structure for the program. </p><p class="Caption"><img src="../Resources/Images/UsersGuide/0200000A.jpg" class="img_1" /><br />Fig. 3-3. Call Structure of the Example Program</p><p>The <span class="MyVariablesProductShortName">RDM</span> runtime library functions to be used in the example are summarized in the following table. Note that, by convention, all <span class="MyVariablesProductShortName">RDM</span> runtime functions begin with a <code>d_</code> prefix. </p><table style="width: 100%;border-collapse: collapse;mc-table-style: url('../Resources/TableStyles/fncSummary.css');margin-left: 0;margin-right: auto;caption-side: top;" class="TableStyle-fncSummary" cellspacing="0"><col class="Column-Column1" /><col class="Column-Column2" /><thead><tr class="Head-Header1"><th class="HeadE-Column1-Header1">Function</th><th class="HeadD-Column2-Header1">Description</th></tr></thead><tbody><tr class="Body-Body1"><td class="BodyE-Column1-Body1"><a href="../RM/api/d_open.htm" class="Hyperlink">d_open</a></td><td class="BodyD-Column2-Body1"><p>Open a database </p></td></tr><tr class="Body-Body1"><td class="BodyE-Column1-Body1"><a href="../RM/api/d_close.htm" class="Hyperlink">d_ close</a></td><td class="BodyD-Column2-Body1"><p>Close a database </p></td></tr><tr class="Body-Body1"><td class="BodyE-Column1-Body1"><a href="../RM/api/d_fillnew.htm" class="Hyperlink">d_fillnew</a></td><td class="BodyD-Column2-Body1"><p>Fill and store a new record occurrence </p></td></tr><tr class="Body-Body1"><td class="BodyE-Column1-Body1"><a href="../RM/api/d_keyfind.htm" class="Hyperlink">d_keyfind</a></td><td class="BodyD-Column2-Body1"><p>Find a key occurrence </p></td></tr><tr class="Body-Body1"><td class="BodyE-Column1-Body1"><a href="../RM/api/d_keynext.htm" class="Hyperlink">d_keynext</a></td><td class="BodyD-Column2-Body1"><p>Find the next key occurrence </p></td></tr><tr class="Body-Body1"><td class="BodyE-Column1-Body1"><a href="../RM/api/d_keyread.htm" class="Hyperlink">d_keyread</a></td><td class="BodyD-Column2-Body1"><p>Retrieve the current key value </p></td></tr><tr class="Body-Body1"><td class="BodyE-Column1-Body1"><a href="../RM/api/d_recread.htm" class="Hyperlink">d_recread</a></td><td class="BodyD-Column2-Body1"><p>Read a record contents </p></td></tr><tr class="Body-Body1"><td class="BodyB-Column1-Body1"><a href="../RM/api/d_delete.htm" class="Hyperlink">d_delete</a></td><td class="BodyA-Column2-Body1"><p>Delete a record occurrence </p></td></tr></tbody></table><h3 class="Heading3"><a MadCap:generatedBookmark="TOC" name="3.4.4_Program_Description"></a>3.4.4 Program Description </h3><p>The C code for the main program is given below. The first three lines include directives to incorporate the standard C header file <code>stdio.h</code>, the standard <span class="MyVariablesProductShortName">RDM</span> header file <code>rdm.h</code>, and the <code>tims</code> database header file <code>tims.h</code>. The <span class="MyVariablesProductShortName">RDM</span> header file contains the constant definitions for the <span class="MyVariablesProductShortName">RDM</span> function return status code.&#160; </p><pre xml:space="preserve">#include &lt;stdio.h&gt;
+#include "rdm.h"
+#include "tims.h"
+
+(... other functions, shown below, go here ...)
+
+
+/* Technical Information Management System */
+main()
+{
+   char     cmd[20]; /* command entry string */
+   int      err;
+   DB_TASK *task;
+
+   /* open the "tims" database */
+   if ((err=d_opentask(&amp;task)) != S_OKAY ||
+       (err=d_open("tims","o", task)) != S_OKAY)
+   {
+      printf("Failure to open database, error=%d\n", err);
+      return (0);
+   }
+
+   for ( ; ; ) {
+      /* display command menu */
+      printf("\nTIMS Commands:\n");
+      printf(" 1 - Enter technical information\n");
+      printf(" 2 - Delete technical information\n");
+      printf(" 3 - Find technical info by id_code\n");
+      printf(" 4 - Find technical info by author\n");
+      printf(" q - Quit\n");
+      printf("enter command: ");
+      getstring(cmd, sizeof(cmd));
+
+      switch (cmd[0]) {
+         case '1': ent_info(task); break;
+         case '2': del_info(task); break;
+         case '3': by_id(task); break;
+         case '4': by_author(task); break;
+         case 'q':
+            d_close(task);
+            d_closetask(task);
+            exit(0);
+         default :
+            printf("*** bad command--re-enter\n");
+            break;
+      }
+   }
+}</pre><p>In this example we are opening the database in single user mode, using <code>"o"</code> in the <code>d_open</code> call. </p><p>The <code>d_opentask</code> call requires one parameter, a pointer to the task pointer. <span class="MyVariablesProductShortName">RDM</span> will allocate a task structure and return the pointer to the program for use in all subsequent calls that are associated with the task. The <code>d_open</code> call requires three arguments. The first argument is the name of the database to be opened (this is the same name that appears in the DDL&#160;file after the <code>database </code>keyword). The second argument indicates that the database is to be opened in one (single) user mode (that is, only one user will access the database).&#160; The third argument is the task pointer. </p><p>The main program displays the command menu, prompts for and gets a command character from the user, and calls the function associated with the command. If <code>"q"</code> is entered, the database is closed (<code>d_close</code>), then the task is closed (<code>d_closetask</code>) and execution is terminated (exit). </p><p>The <code>task</code> variable is passed to every function that will be accessing the database.</p><p>The following two functions, <code>get_info </code>and <code>pr_info </code>use a structure called <code>info </code>to define a variable called <code>irec</code>. The info structure comes from <code>tims.h</code>, and matches the sizes and types of data fields in the <code>info </code>record as defined in the <code>tims.ddl </code>file. The <code>tims.h</code> file shown above includes this structure definition.</p><p>Function <code>get_info</code> gets the <code>info</code> record data from the user and stores it into <code>irec</code>. Function <code>pr_info</code> displays to the user the contents of <code>irec</code>. These functions are given below. </p><pre xml:space="preserve">/* safe gets() */
+char *getstring(char *s, size_t size)
+{
+    size_t len;
+
+    if (fgets(s, (int) (unsigned int) size, stdin) == NULL)
+        return NULL;
+    
+    len = strlen(s);
+    if (s[len-1] == '\n')
+        s[len-1] = '\0';
+    
+    return s;
+}
+
+/* Fill irec with info data from user*/
+int get_info(struct info *irec)
+{
+   char txt[40];
+
+   printf("author : ");
+   if ((getstring(irec-&gt;author, SIZEOF_AUTHOR) == NULL) || (irec-&gt;author[0] == '\0'))
+      return( EOF );
+    else {
+      for ( ; ; ) {
+         printf("id_code : ");  getstring(irec-&gt;id_code, SIZEOF_ID_CODE);
+         printf("title : ");    getstring(irec-&gt;info_title, SIZEOF_INFO_TITLE);
+         printf("publisher: "); getstring(irec-&gt;publisher, SIZEOF_PUBLISHER);
+         printf("pub. date: "); getstring(irec-&gt;pub_date, SIZEOF_PUB_DATE);
+         for ( ; ; ){
+            printf("info type: ");
+            getstring(txt, sizeof(txt));
+            sscanf(txt, "%d", &amp;irec-&gt;info_type);
+            if ((irec-&gt;info_type &gt;= 0) &amp;&amp; (irec-&gt;info_type &lt;= 2))
+               break;
+            printf("invalid - correct types are:\n");
+            printf("0=book, 1=magazine, 2=article\n");
+         }
+         printf("enter data (y/n)? ");
+         getstring(txt, sizeof(txt));
+         if ((txt[0] == 'y') || (txt[0] == 'Y'))
+            return( 0 );
+      }
+   }
+}</pre><p><code>get_info</code> validates the <code>info_type</code> code to ensure that it is 0, 1, or 2. The function returns <code>EOF</code> whenever gets returns <code>NULL</code> or the user enters only a &lt;Return&gt;. </p><p>Note also that the field size information is utilized to limit the number of characters that are read into a field (e.g. <code>SIZEOF_ID_CODE</code>). These size constants are also derived from the DDL&#160;and defined in <code>tims.h</code> for this purpose.</p><pre xml:space="preserve">/* Print technical information record
+*/
+pr_info(struct info *irec)
+{
+   printf("id code : %s\n", irec-&gt;id_code);
+   printf("author : %s\n", irec-&gt;author);
+   printf("title : %s\n", irec-&gt;info_title);
+   printf("publisher: %s\n", irec-&gt;publisher);
+   printf("pub date : %s\n", irec-&gt;pub_date);
+   printf("info type: ");
+   switch (irec-&gt;info_type) {
+      case 0: printf("book\n"); break;
+      case 1: printf("magazine\n"); break;
+      case 2: printf("article\n"); break;
+   }
+}</pre><p>Function <code>pr_info</code> interprets the <code>info_type</code> code to display "book", "magazine", or "article." </p><p>Function <code>ent_info</code> (below) repeatedly calls <code>get_info</code> and then calls the <span class="MyVariablesProductShortName">RDM</span> function <code>d_fillnew</code> to fill and store a new occurrence of the <code>info </code>record. The first argument passed to <code>d_fillnew</code> is record constant <code>INFO</code> which is declared in file <code>tims.h</code> and identifies the type of record being created and filled. If the irec-&gt;id_code value matches a <code>id_code</code> key value in the database, <a href="../RM/api/d_fillnew.htm" style="font-family: monospace;">d_fillnew</a> returns status code S_DUPLICATE. The task parameter must be supplied to each <span class="MyVariablesProductShortName">RDM</span> function. A fourth parameter, <code>CURR_DB</code>, refers to the <i>current database</i>. When a function addresses a particular database (multiple databases may be opened within one task), a <a href="Chapter5.htm#5.9">database number</a> must be supplied. In this example, only one database is open, so the default <code>CURR_DB</code> may be used. A database number of 0 would also work.</p><pre xml:space="preserve">/* Enter technical information records into TIMS database
+*/
+ent_info(DB_TASK *task)
+{
+   struct info irec;
+
+   /* enter tech info into TIMS database */
+   while (get_info(&amp;irec) != EOF)
+   {
+      /* create new tech. info record */
+      if (d_fillnew(INFO, &amp;irec, task, CURR_DB) == S_DUPLICATE)
+         printf("duplicate id_code: %s/n", irec.id_code);
+   }
+}</pre><p>Function <code>del_info</code> deletes an <code>info</code> record occurrence. The record to be deleted is identified from a user-specified <code>id_code</code>. Function <a href="../RM/api/d_keyfind.htm" style="font-family: monospace;">d_keyfind</a> is used to locate the specified <code>id_code</code> key and returns status <code>S_NOTFOUND</code> if the key is not on file. If the key is found, <a href="../RM/api/d_recread.htm" style="font-family: monospace;">d_recread</a> is called to read the contents of the record into variable <code>irec</code>. Then <code>pr_info</code> displays the contents of <code>irec</code>, and the user is prompted for confirmation of the delete operation. If confirmed, <a href="../RM/api/d_delete.htm" style="font-family: monospace;">d_delete</a> is called to delete the record (and its keys). </p><pre xml:space="preserve">/* Delete technical information records from TIMS database*/
+del_info(DB_TASK *task)
+{
+   char   id[SIZEOF_ID_CODE];
+   struct info irec;
+   int    status;
+
+   printf("id_code: ");
+   getstring(id, sizeof(id));
+
+   /* search database for matching id_code key */
+   if ((status=d_keyfind(ID_CODE, id, task, CURR_DB)) == S_NOTFOUND)
+      printf("id_code %s not on file\n", id);
+   else if (status == S_OKAY){
+      /* read record associated with the found key */
+      d_recread(&amp;irec, task, CURR_DB);
+      pr_info(&amp;irec);
+      printf("delete (y/n)? ");
+      getstring(id, sizeof(id));
+      if ((id[0] == 'Y') || (id[0] == 'y'))
+         d_delete(task, CURR_DB); /* delete the record */
+   }
+   else
+       printf("Database error: %d\n", status);
+}</pre><p>Function <code>by_id</code> is actually similar to <code>del_info</code> in that an <code>info</code> record is located through a <a href="../RM/api/d_keyfind.htm" style="font-family: monospace;">d_keyfind</a> of a user-specified <code>id_code</code> value. If found, the contents are read by <a href="../RM/api/d_recread.htm" style="font-family: monospace;">d_recread</a> and are displayed by <code>pr_info</code>. Of course, no delete occurs since the display of the record contents is all that is desired. </p><pre xml:space="preserve">/* Find technical information by id_code*/
+by_id(DB_TASK *task)
+{
+   char   id[SIZEOF_ID_CODE];
+   struct info irec;
+   int    status;
+
+   printf("id_code: " );
+   getstring(id, sizeof(id));
+
+   /* search database for matching id_code key */
+   if ((status=d_keyfind(ID_CODE, id, task, CURR_DB)) == S_NOTFOUND)
+      printf("id_code %s not on file\n", id);
+   else if (status == S_OKAY) {
+      /* read found record and print contents */
+      d_recread(&amp;irec, task, CURR_DB);
+      pr_info(&amp;irec);
+   }
+   else
+       printf("Database error: %d\n", status);
+}                                                                  <![CDATA[ ]]></pre><p>Locating <code>info</code> record occurrences by the author's name is somewhat more complex in that there may be more than one record per author and all are to be displayed. </p><p>Function <code>by_author</code> searches for the user-specified author name through the call to <a href="../RM/api/d_keyfind.htm" style="font-family: monospace;">d_keyfind</a>. If found, the record contents are read into <code>irec</code> by <a href="../RM/api/d_recread.htm" style="font-family: monospace;">d_recread</a> and displayed by <code>pr_info</code>. The user is prompted to press &lt;Enter&gt; when ready to continue. The call to function <a href="../RM/api/d_keynext.htm" style="font-family: monospace;">d_keynext</a> positions to the next higher <code>author</code> key, returning status S_OKAY if there was indeed a next key (status S_NOTFOUND is returned when at the end of the key file). Function <a href="../RM/api/d_keyread.htm" style="font-family: monospace;">d_keyread</a> reads the value of the key into the <code>author</code> variable, which is then compared (<code>strcmp</code>) with the <code>author</code> field in <i style="font-weight: bold;">irec</i>. </p><pre xml:space="preserve">/* Find technical information by author
+*/
+by_author(DB_TASK *task)
+{
+   char   author[SIZEOF_AUTHOR], reply[5];
+   int    status;
+   struct info irec;
+	
+   printf("author: ");
+   getstring(author, sizeof(author));
+
+   /* search database for matching author key */
+   if ((status=d_keyfind(AUTHOR, author, task, CURR_DB)) == S_NOTFOUND)
+      printf("author %s not on file\n", author);
+   else if (status == S_OKAY) {
+      do {
+         /* read found record */
+         d_recread(&amp;irec, task, CURR_DB);
+
+         /* print record contents */
+         pr_info(&amp;irec);
+         printf("--- press &lt;enter&gt; to continue");
+         getstring(reply, sizeof(reply));
+
+         /* read next key on file--keys are always sorted */
+         status = d_keynext(AUTHOR, task, CURR_DB);
+         if (status == S_OKAY)
+            status =d_keyread(author, task); /* read value */
+
+         /* continue while keys have same author name */
+      } while ((status == S_OKAY) &amp;&amp; (strcmp(irec.author, author) == 0));
+   }
+   else
+       printf("Database error: %d\n", status);
+}
+</pre><p>Assuming that the program was contained in file intro.c, a C-compile command similar to the following would build the example program on Unix/Linux: </p><pre xml:space="preserve">cc -I../include -o intro intro.c -L../lib -lrdmrdm<span class="MyVariablesLibraryVersion">11</span>          <![CDATA[                                             ]]></pre><p>Or in a Windows environment:</p><pre xml:space="preserve">cl -Od -Zi -MD -DWINDOWS_X86 -IC:\RDM\include intro.c C:\RDM\lib\win32\rdmrdm<span class="MyVariablesLibraryVersion">11</span>.lib</pre><p>Then to execute the program simply enter: </p><pre>intro </pre><p class="Notes">Note that these commands all assume that you have the appropriate environment set up for locating include files and libraries. In particular, files <code>tims.h</code> and <code>rdm.h</code> should be in either the current directory or in ../include. The <span class="MyVariablesProductShortName">RDM</span> runtime library should be located either in the current directory or in ../lib. </p><hr MadCap:conditions="Default.ScreenOnly" width="100%" size="0" align="center" /><p MadCap:conditions="Default.ScreenOnly" style="font-size: 8pt;"><span class="MyVariablesCopyright">Copyright © 2012, Raima Inc. All rights reserved.</span></p><script type="text/javascript" src="../SkinSupport/MadCapBodyEnd.js"></script><p class="MCWebHelpFramesetLink MCWebHelpFramesetLinkBottom" style="display: none;"><a href="../../Default_CSH.htm#UG/Chapter3.htm" style="">Open topic with navigation</a></p></body>
+</html>

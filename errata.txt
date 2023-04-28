@@ -1,0 +1,142 @@
+
+          Raima Database Manager Release  11.0.3 Build 620 - 8/30/2012
+
+
+
+1 - What's New
+--------------------------------------------------------------------
+
+- Objective-C/Cocoa API for Mac OS X & iOS
+- Core Database Access from SQL API
+- UDF support in SQL
+- Ability to change TFS types at runtime
+- Ability to embed the rdmsqlserver in an application
+- Performance improvements
+
+
+2 - Known Issues
+--------------------------------------------------------------------
+
+Area: TFS
+
+ 4618
+        A database should only be managed by one tfs
+
+        Workaround: Ensure that a tfs is not running in the subdirectory of another tfs.
+
+ 4626
+        d_tfsIterateConnectedUsers callback function is not reentrant.
+
+
+Area: Runtime
+
+ 2638
+        On Unix, the directory is not synced. In rare circumstances,
+        transaction log files may be lost after a crash.
+
+        Workaround:
+        If available, mount your filesystem with the option to always
+        sync. Note that this will have an impact on performance, but
+        will give better data safety in the event of a crash.
+
+ 3663
+        The function d_initialize() must be used by itself in a
+        transaction.
+
+        Workaround:
+        Explicitly iterate through all the records that are to be
+        deleted and explicitly delete them.
+
+ 3664
+        The function d_lmstat() can not determine which tfs to query
+
+        Workaround:
+        Ensure that the task passed into d_lmstat only has one tfserver 
+        connected with it.
+
+
+Area: SQL
+
+ 3424
+        Right or left joins where without an index or references are not supported.
+
+ 3539
+        A select with one left join and one inner join with the last join
+        before the first one may be missing the null values in the result
+        set.
+
+ 4452
+        Equi-join support for native databases with unsigned data types with a non unique
+        key are not supported.
+
+ 4597
+        Executing a select statement when the database is not open returns "table not
+        found" error instead of "database not open".
+
+ 4679
+        The number of affected rows reported by "DELETE FROM table" may include cascade
+        deleted rows, which is not clear from the tool output.
+
+
+Area: ODBC
+
+ 4421
+        When retrieving rows from a table with no indexed columns, Microsoft Access does
+        not necessarily display the retrieved rows in the order of any of the included
+        columns.
+
+        Workaround: Click on the header of the column they wish to sort the result rows by
+        and choose "Sort Smallest to Largest" or "Sort Largest to Smallest."
+
+
+Area: Objective-C
+
+ 4732
+        Using multidimensional uint8_t arrays to store binary data is not supported.
+
+
+Area: Replication
+
+ 4246
+        Replication to 3rd party database systems and RDM Server does not support
+        recursive sets.
+
+ 4246
+        Replication to 3rd party database systems and RDM Server does not support
+        sets where record A owns B and B owns A through a different set.
+
+ 4514
+        Replication and mirroring will not work properly unless "@[hostname/IP Address]"
+        is specified after the master database name when calling dbget.
+
+ 4637
+        Circular tables are currently not supported with replication.
+
+
+Area: Utilties
+
+ 2929
+        The utility dbimp and the dbimp_main() function is not reentrant.
+
+ 3060
+        The utility dbrev and the dbrev_main() function is not reentrant.
+
+ 4683
+        On Linux, servers will not shut down unless all active connections are
+        disconnected first.
+
+        Workaround: Ensure that all connections are disconnected from the server after
+        sending a ctrl-c to the process.
+
+ 4750
+        The utility dbrev will not correctly set the docroot.
+
+
+3 - Other Notes and Changes
+--------------------------------------------------------------------
+
+- The '-daemon' option when starting RDM servers on Unix has been replaced with '-start'.
+- The TFS type can now be selected at runtime. In addition, the multiple TFS libraries
+  have been consolidated into a single library.
+- Significant changes have been made to the SQL Virtual Tables API. Please read the
+  chapter "Using Virtual Tables to Access Any Data" in the SQL User's Guide for details.

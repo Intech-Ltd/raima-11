@@ -1,0 +1,175 @@
+<?xml version="1.0" encoding="utf-8"?>
+<!DOCTYPE html PUBLIC "-//W3C//DTD XHTML 1.0 Strict//EN" "http://www.w3.org/TR/xhtml1/DTD/xhtml1-strict.dtd">
+<html xmlns:MadCap="http://www.madcapsoftware.com/Schemas/MadCap.xsd" MadCap:tocPath="Utility Programs|Interactive Database Access Utility" MadCap:InPreviewMode="false" MadCap:PreloadImages="false" MadCap:RuntimeFileType="Topic" MadCap:TargetType="WebHelp" lang="en-us" xml:lang="en-us" class="" MadCap:PathToHelpSystem="../../../" MadCap:HelpSystemFileName="Default.xml" MadCap:SearchType="Stem">
+    <head>
+        <meta http-equiv="Content-Type" content="text/html; charset=utf-8" /><title>The ida Utility </title>
+        <link rel="icon" type="image/png" href="http://docs.raima.com/favicon.png" />
+        <link href="../../SkinSupport/MadCap.css" rel="stylesheet" />
+        <link href="../../Resources/TableStyles/TwoColNoLines.css" rel="stylesheet" />
+        <link href="../../Resources/Stylesheets/raima.css" rel="stylesheet" />
+        <script src="../../SkinSupport/MadCapAll.js" type="text/javascript">
+        </script>
+    </head>
+    <body>
+        <p class="MCWebHelpFramesetLink MCWebHelpFramesetLinkTop" style="display: none;"><a href="../../../Default_CSH.htm#util/ida/Chapter1.htm" style="">Open topic with navigation</a>
+        </p>
+        <div class="MCBreadcrumbsBox_0"><span class="MCBreadcrumbsPrefix">You are here: </span><a class="MCBreadcrumbsLink" href="../../dbUTIL.htm">Utility Programs</a><span class="MCBreadcrumbsDivider"> &gt; </span><span class="MCBreadcrumbsSelf">Interactive Database Access Utility</span><span class="MCBreadcrumbsDivider"> &gt; </span><span class="MCBreadcrumbs">The ida Utility</span>
+        </div>
+        <h1 class="firstHeading">The ida Utility </h1>
+        <p>The Interactive Database Access utility (ida) is a tool for manipulating <span class="MyVariablesProductShortName">RDM</span> databases. It is a full-screen, non-graphical, menu-driven utility that allows you to: </p>
+        <ul>
+            <li style="font-family: Arial;font-size: 11pt;" value="1">Maintain an existing database </li>
+            <li style="font-family: Arial;font-size: 11pt;" value="2">Access data stored in the database </li>
+            <li style="font-family: Arial;font-size: 11pt;" value="3">Test a database design </li>
+            <li style="font-family: Arial;font-size: 11pt;" value="4">Create and modify data </li>
+            <li style="font-family: Arial;font-size: 11pt;" value="5">Learn to use <span class="MyVariablesProductShortName">RDM</span> <![CDATA[     ]]></li>
+        </ul>
+        <p>The <code>ida</code> utility has been designed for application developers and database administrators and therefore is not suitable for most non-technical users. </p>
+        <p class="Notes">Although <code>ida</code> was originally designed and developed in the 1980's, it remains familiar to many long-term Raima developers. More modern database browsing tools will also be provided as soon as they are available. The form factor of 80 characters wide and 24 characters high comes from its once state-of-the-art legacy.</p>
+        <h2>1.1 Accessing ida </h2>
+        <p>To access the <code>ida</code> program, start up a command prompt and set up the environment to include a path the <span class="MyVariablesProductShortName">RDM</span> <![CDATA[ ]]><code>bin</code> directory. Then just run the command, <code>ida</code>. When the <code>ida</code> title page appears, press any key to bring up the <code>ida</code> main menu. </p>
+        <h2><a name="8.1.2"></a>1.2 The ida Main Menu </h2>
+        <p>Figure 8-1 shows the first <code>ida</code> menu, referred to as the main menu. This menu provides access to all other <code>ida</code> menus. </p><pre xml:space="preserve"><b>IDA - <span class="MyVariablesProductShortName">RDM</span> Interactive Database Access Utility</b>
+Open Access Initialize Close Parameters Quit
+Open an <span class="MyVariablesProductShortName">RDM</span> database</pre>
+        <p class="Caption"><b>Fig. 8-1. ida Main Menu</b>
+        </p>
+        <p>All <code>ida</code> menus use the top three lines of each screen. Each menu includes the following: </p>
+        <table style="border-collapse: collapse;mc-table-style: url('../../Resources/TableStyles/TwoColNoLines.css');margin-left: 0;margin-right: auto;" class="TableStyle-TwoColNoLines" cellspacing="0">
+            <col style="width: 150px;" class="Column-Column1" />
+            <col style="width: 796px;" class="Column-Column2" />
+            <tr class="Body-Body1">
+                <td class="BodyE-Column1-Body1">1st line </td>
+                <td class="BodyD-Column2-Body1">Menu title </td>
+            </tr>
+            <tr class="Body-Body1">
+                <td class="BodyE-Column1-Body1">2nd line </td>
+                <td class="BodyD-Column2-Body1">A list of available commands, one of which is highlighted </td>
+            </tr>
+            <tr class="Body-Body1">
+                <td class="BodyE-Column1-Body1">3rd line </td>
+                <td class="BodyD-Column2-Body1">A description of the highlighted command </td>
+            </tr>
+        </table>
+        <p>You can see what a command does by moving the highlight to that command. When a command is highlighted, the description of that command appears on the 3rd line. </p>
+        <h4 class="Heading4">Moving the Highlight on a Menu </h4>
+        <p>To move the highlight on a menu: </p>
+        <ul>
+            <li style="font-family: Arial;font-size: 11pt;" value="1">To move right, press either the &lt;Space&gt; or the &lt;Right-Arrow&gt; key. </li>
+            <li style="font-family: Arial;font-size: 11pt;" value="2">To move left, press the &lt;Left-Arrow&gt; key.     </li>
+        </ul>
+        <p>To leave the <code>ida</code> utility, you use the <code>Quit</code> command from the main menu. For more information about using the commands on the <code>ida</code> main menu, including the <code>Quit</code> command, see <a href="#8.2">Using the Main Menu Commands</a>. </p>
+        <h2>1.3 Using ida: Concepts and Procedures </h2>
+        <p>This section describes the concepts and procedures you will need in order to use the <code>ida</code> utility. These concepts and techniques include messages from <code>ida</code>, executing a command from an <code>ida</code> menu (from the 2nd line of the screen), choosing an option from a numbered list (displayed below the top three lines), moving the highlight on a numbered list, opening a database, accessing a submenu, exiting a submenu, and selecting a record to modify. </p>
+        <p class="Heading">Messages from ida</p>
+        <p>The last two lines of an <code>ida</code> screen may display a message from <code>ida.</code> A message may tell you that a command has been completed or that there has been an input error or database error. Messages are displayed in reverse video and require pressing a key to return to the menu. </p>
+        <p class="Heading">Executing a Command from a Menu </p>
+        <p>To execute a command from a menu: </p>
+        <ul>
+            <li value="1">Highlight the command and press &lt;Enter&gt; </li>
+        </ul>
+        <p>or  </p>
+        <ul>
+            <li value="1">Type the first letter of the command. </li>
+        </ul>
+        <p>Executing a command from an <code>ida</code> menu invokes a submenu, a numbered list, an ida/RDM function, or displays information. </p>
+        <p class="Heading">Choosing an Option from a Numbered List </p>
+        <p>Following the execution of commands such as <code>Scan</code> and <code>Find</code>, a numbered list of available databases, key fields, records, or sets will be displayed. The entry that was last selected will be highlighted or, initially, the first entry will be highlighted. </p>
+        <p>Figure 8-2 shows an example of a submenu that offers a numbered option list. </p><pre><b>Scan and view records based on database address</b>
+Scan First Last Next Previous X_exit
+Scan and view records on database address
+
+SELECT RECORD TYPE:
+ 
+    0. AUTHOR
+    1. INFO
+    2. BORROWER
+    3. INFOTEXT
+    4. KEY_WORD
+    5. INTERSECT
+    6. SYSTEM</pre>
+        <p class="Caption"><b>Fig. 8-2. Example Selection List</b>
+        </p>
+        <p>To choose an option from a numbered list do one of the following: </p>
+        <ul>
+            <li value="1"> Type the number of the option and press &lt;Enter&gt; </li>
+        </ul>
+        <p> or  </p>
+        <ul>
+            <li value="1"> Using the procedure for moving the highlight on a numbered list (described below), highlight the option and press &lt;Enter&gt;. </li>
+        </ul>
+        <p class="Heading">Moving the Highlight on a Numbered List </p>
+        <p>When moving the highlight on a numbered list, you use a different procedure than you do when you move the highlight on a menu. </p>
+        <p>To move the highlight on a numbered list: </p>
+        <ul>
+            <li value="1">To move down, type the &lt;d&gt; key or a down arrow. </li>
+            <li value="2">To move up, type the &lt;u&gt; key or an up arrow. </li>
+        </ul>
+        <p>Selection lists that extend beyond a single screen will either scroll or redisplay, depending on the position of the highlighted selection. </p>
+        <p class="Heading">Opening a Database </p>
+        <p>Although you can access <code>ida</code> and view the main menu, there is little you can do until you open a database. (You can execute the <code>Parameters</code>and <code>Quit</code> commands, but the <code>Access</code>, <code>Initialize</code>, and <code>Close</code> commands will not work without an open database.) If you are new to <code>ida</code>, you can use the sample tims database (provided with RDM) to learn any of the procedures described in this section. </p>
+        <p>To open a database: </p>
+        <ol>
+            <li value="1">From the <code>ida</code> main menu, highlight and execute the Open command. </li>
+            <li value="2">On the <code>Open an RDM database</code> submenu, execute the command for the type of user access you want.  (If you are just learning to use <code>ida,</code> use the <code>One_User</code> command.) </li>
+            <li value="3">Type the name of a database and press &lt;Enter&gt;.</li>
+        </ol>
+        <p class="Heading">Accessing a Submenu</p>
+        <p>To perform most database operations you will use the <code>Access</code> command on the main menu. Selecting the Access command displays the <code>Database Access Commands</code> submenu shown in Figure 8-3. </p><pre xml:space="preserve"><b>Database Access Commands</b>
+Record  Set  Currency  Transaction  Lock Free Miscellaneous  X_exit
+</pre>
+        <p class="Caption"><b>Fig. 8-3. Database Access Commands Menu</b>
+        </p>
+        <p class="Heading">Exiting a Submenu </p>
+        <p>When you exit a submenu, you go back to the previous menu. There are two ways to exit a submenu: </p>
+        <ul>
+            <li value="1">On the 2nd line of the submenu, highlight the <code>X_exit</code> command and press &lt;Enter&gt; </li>
+        </ul>
+        <p>or </p>
+        <ul>
+            <li value="1">Press the &lt;Esc&gt; key. </li>
+        </ul>
+        <p class="Heading">Selecting a Record </p>
+        <p>Using <code>ida</code>, you can find a record by using the <code>Keyscan</code> command to find a keyword or you can use the <code>Recscan</code> command to find a record by using a database address. The following procedure uses the <code>Recscan</code> command. </p>
+        <p>To select a record using Recscan: </p>
+        <blockquote>
+            <p>1. Access the <code>Database Access Commands</code> submenu (shown in Figure 8-3). </p>
+            <p>2. From that menu, highlight and execute the <code>Record</code> command. </p>
+        </blockquote>
+        <p>The <code>Record Manipulation Functions</code> submenu displays (shown in Figure 8-4). </p><pre xml:space="preserve"><b>Record Manipulation Functions</b> 
+Keyscan Get  Enter  Modify  Delete  Recscan  X_exit 
+Scan and view records based on key </pre>
+        <p class="Caption"><b>Fig. 8-4. Record Manipulation Functions Menu</b> <![CDATA[ ]]></p>
+        <blockquote>
+            <p>3. From the <code>Record Manipulation Functions</code> submenu, highlight and execute the <code>Recscan</code> command. </p>
+        </blockquote>
+        <p>The <code>Scan and view records based on database address</code> submenu appears (shown in Figure 8-2). </p>
+        <blockquote>
+            <p>4. From the <code>Scan and view records based on database address</code> submenu, highlight and execute the <code>Scan</code> command. </p>
+            <p>5. A numbered list titled SELECT RECORD TYPE displays. Type the number of the record type you want to select. </p>
+        </blockquote>
+        <p>The <code>Scan and View Records</code> submenu appears and displays a record (shown in Figure 8-5). </p><pre><b>Scan and View Records
+</b>Next&#160; First&#160; Select&#160; X_exit 
+Display next page of records 
+
+RECORD:&#160; AUTHOR&#160;&#160;&#160;&#160;&#160;&#160;&#160;&#160;&#160;&#160;&#160;&#160;&#160;&#160;&#160;&#160;&#160;&#160;&#160;&#160;&#160;&#160;&#160;&#160;&#160;&#160;&#160;&#160;&#160;&#160; Page:&#160; 1 
+
+RECORD CONTENTS: &#160;&#160; 
+    1.&#160;&#160; {"Martin, James"} &#160;&#160; 
+    2.&#160;&#160; {"Myers, G."}&#160;&#160;&#160; 
+    3.&#160;&#160; {"Teorey T. &amp; Fry, J."} </pre>
+        <p class="Caption"><b>Fig. 8-5. Scan and View Records Menu</b>
+        </p>
+        <blockquote>
+            <p>6. Highlight and enter the <code>Select</code> command. The highlight will move to the numbered list. </p>
+            <p>7. Choose an option from the numbered list. The record will be displayed in the <code>ida</code> screen </p>
+        </blockquote>
+        <hr MadCap:conditions="Default.ScreenOnly" width="100%" size="0" align="center" />
+        <p MadCap:conditions="Default.ScreenOnly" style="font-size: 8pt;"><span class="MyVariablesCopyright">Copyright © 2012, Raima Inc. All rights reserved.</span>
+        </p>
+        <script type="text/javascript" src="../../SkinSupport/MadCapBodyEnd.js">
+        </script>
+        <p class="MCWebHelpFramesetLink MCWebHelpFramesetLinkBottom" style="display: none;"><a href="../../../Default_CSH.htm#util/ida/Chapter1.htm" style="">Open topic with navigation</a>
+        </p>
+    </body>
+</html>

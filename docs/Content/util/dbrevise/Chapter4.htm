@@ -1,0 +1,798 @@
+<?xml version="1.0" encoding="utf-8"?>
+<!DOCTYPE html PUBLIC "-//W3C//DTD XHTML 1.0 Strict//EN" "http://www.w3.org/TR/xhtml1/DTD/xhtml1-strict.dtd">
+<html xmlns:MadCap="http://www.madcapsoftware.com/Schemas/MadCap.xsd" MadCap:tocPath="Utility Programs|DBRevise Utility" MadCap:InPreviewMode="false" MadCap:PreloadImages="false" MadCap:RuntimeFileType="Topic" MadCap:TargetType="WebHelp" lang="en-us" xml:lang="en-us" MadCap:PathToHelpSystem="../../../" MadCap:HelpSystemFileName="Default.xml" MadCap:SearchType="Stem">
+    <head>
+        <meta http-equiv="Content-Type" content="text/html; charset=utf-8" /><title>Chapter 4 Examples of Common Operations</title>
+        <link rel="icon" type="image/png" href="http://docs.raima.com/favicon.png" />
+        <link href="../../SkinSupport/MadCap.css" rel="stylesheet" />
+        <link href="../../Resources/Stylesheets/raima.css" rel="stylesheet" />
+        <script src="../../SkinSupport/MadCapAll.js" type="text/javascript">
+        </script>
+    </head>
+    <body>
+        <p class="MCWebHelpFramesetLink MCWebHelpFramesetLinkTop" style="display: none;"><a href="../../../Default_CSH.htm#util/dbrevise/Chapter4.htm" style="">Open topic with navigation</a>
+        </p>
+        <div class="MCBreadcrumbsBox_0"><span class="MCBreadcrumbsPrefix">You are here: </span><a class="MCBreadcrumbsLink" href="../../dbUTIL.htm">Utility Programs</a><span class="MCBreadcrumbsDivider"> &gt; </span><span class="MCBreadcrumbsSelf">DBRevise Utility</span><span class="MCBreadcrumbsDivider"> &gt; </span><span class="MCBreadcrumbs">Examples of Common Operations</span>
+        </div>
+        <h1 class="firstHeading"><a MadCap:generatedBookmark="TOC" name="Examples_of_Common_Operations"></a>Examples of Common Operations</h1>
+        <h2><a MadCap:generatedBookmark="TOC" name="4.1_Introduction"></a><a name="4.1"></a>4.1 Introduction </h2>
+        <p>This section demonstrates use of the more common db_REVISE features and discusses the motivations for the revisions that are performed.  The Technical Information Management System (tims) example, which is fully developed in the <a href="../../UG/Chapter5.htm">Database Design</a> section of the <span class="MyVariablesProductShortName">RDM</span> User's Guide, will be used as a case study. </p>
+        <p>For reference, the tims schema diagram is shown in Figure 4-1. <br /></p>
+        <p class="Caption">
+            <img src="../../Resources/Images/db_revise/02000021.jpg" class="img_1" />
+            <br />Figure 4-1.  tims Database Schema </p>
+        <h2 class="Heading2"><a MadCap:generatedBookmark="TOC" name="4.2_Minimizing_Database_Size"></a>4.2 Minimizing Database Size </h2>
+        <p>For our example, we will assume that you are the developer of tims and that you have sold copies of it to institutions across the country.  Your clients use PCs with disk drives of various sizes. </p>
+        <p>The tims application was one of your earlier database programs, and you had to release it before you fully understood what might happen to its size.  You had no idea how some of your decisions were impacting your customers until you received a phone call complaining about the database size.  "I had ample space left on my disk before I installed tims, but after three weeks of data entry by my librarian, there is no space left!" says the customer.  You politely request that he send the database to you for your analysis. </p>
+        <p>Below you will find a summary of the database size: </p><pre>File: tims.d01 
+Size: 1,025,024 bytes
+Contents:
+  12,500 INTERSECT records
+  7,500 KEY_WORD records
+
+File: tims.d02 
+Size: 7,681,024 bytes
+Contents:
+  4,500 AUTHOR records
+  6,500 INFO records
+ 18,000 TEXT records
+  1,000 BORROWER records
+
+File: tims.k01 
+Size: 172,032 bytes  
+
+File: tims.k02 
+Size: 364,544 bytes  
+
+Total database size: 9,242,624 bytes </pre>
+        <p>An analysis of the record sizes indicates that there is too much wasted space in the data files.  From the report, you can obtain the following record sizes and actual data file space requirements: </p><pre>Record type: AUTHOR 
+Record size: 62 bytes 
+Space requirements: 279,000 bytes 
+
+Record type: INFO 
+Record size: 220 bytes 
+Space requirements: 1,430,000 bytes 
+
+Record type: INTERSECT 
+Record size: 32 bytes 
+Space requirements: 400,000 bytes 
+
+Record type: KEY_WORD 
+Record size: 50 
+Space requirements: 375,000 bytes 
+
+Record type: TEXT 
+Record size: 98 bytes 
+Space requirements: 1,764,000 
+
+Total data file requirements: 4,248,000 bytes </pre>
+        <p>The total actual space used by the data files was 8,706,048 bytes, more than twice the record storage requirements.  We always expect some overhead in a database, but this amount is definitely too high. </p>
+        <p>In general, this application should favor the database size at the expense of performance.  The following two sections outline several changes you can make to this database that will decrease the database size.  Both sections suggest changes that require the use of db_REVISE, but the first section, 4.2.1, "<a href="#4.2.1">No Application Code Changes Required</a>," explains changes that do not affect your executable program. </p>
+        <h3 class="Heading3"><a MadCap:generatedBookmark="TOC" name="4.2.1_No_Application_Code_Changes_Required"></a><a name="4.2.1"></a>4.2.1 No Application Code Changes Required </h3>
+        <p>Two main categories of changes can usually be performed without changes to your application program: distributing of record types in different files and changing the file page sizes. </p>
+        <p>All record types are currently stored in two data files.  Since within each file all record slots are the same size, you need to check that there is not a big difference in record sizes within each file.  Looking at the example below, there appear to be significant differences. </p><pre>File: tims.d01 
+Page contents: 20 slots * 50 bytes/slot = 1000 bytes (20 wasted) 
+Slot contents:
+  INTERSECT record: 32 bytes (18 wasted)
+  KEY_WORD record:  50 bytes (0 wasted)
+  SYSTEM record:  30 bytes (20 wasted)  
+
+File: tims.d02 
+Page contents: 4 slots * 220 bytes/slot = 880 bytes (140 wasted) 
+Slot contents:
+  AUTHOR record:  62 bytes (158 wasted)
+  INFO record:   220 bytes (0 wasted)
+  BORROWER record:  70 bytes (150 wasted)
+  TEXT record:   98 bytes (122 wasted) </pre>
+        <ul>
+            <li value="1">The overhead per page is at least 4 bytes (for a last update timestamp).  The available slot space in the default page size of 1024 bytes is 1020 bytes. </li>
+            <li value="2">The slot size in a file is based on the largest record size stored in the file. </li>
+            <li value="3">An integral number of records must fit within one page.  Thus each page may have wasted space if the slot size does not evenly divide into the page size. </li>
+            <li value="4">Each file in the database has one page of overhead (page 0).  Since this is a fixed amount, its percentage decreases as the database size increases. </li>
+        </ul>
+        <p>The obvious mistake with this database design was the grouping of record types of widely different sizes in the same files.  As a general rule, the most frequent record type in a file should also be the largest. </p>
+        <p>It is not strictly necessary for each record type be placed in a separate file.  The system record, if it exists, should always be placed in a file with other records.  It will be a small record unless it is made the owner of many set types (12 bytes are reserved in the record for each set).  Note that increased overhead exists for each file in a database, both in file space and in execution time.  Also, by increasing the number of files in a database, the complexity of database maintenance increases. </p>
+        <p>By placing record types in different files, we will reduce (or eliminate) wasted slot space.  To eliminate wasted page space, it will be necessary to adjust the page sizes according to the sizes of the slots within them.  It is important to realize that a page can be made any size but that the most efficient sizes are multiples of the computer's block size.  To favor performance over disk size, use a page size like 2048.  To favor disk size, adjust the page sizes to be multiples of their record slot sizes. </p>
+        <p>You have decided to favor disk size, so you want to redistribute the record types as follows: </p><pre>File: tims.d01 
+Page contents: 66 slots * 62 bytes/slot = 4,092 bytes (0 wasted) 
+Page size: 4,092 + 4 = 4,096 bytes 
+Slot contents:
+  AUTHOR record: 62 bytes (0 wasted)  
+
+File: tims.d02 
+Page contents: 41 slots * 98 bytes/slot = 4,018 bytes (0 wasted) 
+Page size: 4,018 + 4 = 4,022 
+Slot contents:
+  TEXT record: 98 bytes (0 wasted)
+  BORROWER record: 70 bytes (28 wasted)
+
+File: tims.d03 
+Page contents: 127 slots * 32 bytes/slot = 4,064 bytes (0 wasted) 
+Page size: 4,064 + 4 = 4,068 
+Slot contents:
+  INTERSECT record: 32 bytes (0 wasted)
+
+File: tims.d04 
+Page contents: 81 slots * 50 bytes/slot = 4,050 bytes (0 wasted) 
+Page size: 4,050 + 4 = 4,054 
+Slot contents:
+  KEY_WORD record: 50 bytes (0 wasted)  
+
+File: tims.d05 
+Page contents: 18 slots * 220 bytes/slot = 3,960 bytes (0 wasted) 
+Page size: 3,960 + 4 = 3,964 
+Slot contents:
+  INFO record: 220 bytes (0 wasted) </pre>
+        <p>The pages were made large so that fewer page reads and writes would be necessary.  They were made nearly the same sizes because the <span class="MyVariablesProductShortName">RDM</span> cache is allocated according to the largest page size. </p>
+        <p>A similar analysis can be performed with the key files, but in this database the key files are a small percentage of the problem.  Note that the two combined keys, friend and word, are the same size, so there is very little that can be done to optimize the size of the key files.  We will, however, adjust the page sizes of the key file such that they are nearly the same size as the data file pages. </p>
+        <p>Now you are ready to perform a revision on the database to see if the size decrease is worth the trouble.  Create a new subdirectory called dest, and then copy tims.ddl, the destination schema file, into it. </p>
+        <p>The revision will consist of editing the data file lines in the destination schema file from: </p><pre>data file "tims.d01" contains system, key_word, intersect; <br />data file "tims.d02" contains author, borrower, info, text; <br />key  file "tims.k01" contains id_code; <br />key  file "tims.k02" contains friend, word; </pre>
+        <p>to: </p><pre>data file[4096] "tims.d01" contains author; 
+data file[4022] "tims.d02" contains text, borrower; 
+data file[4068] "tims.d03" contains system, intersect; 
+data file[4054] "tims.d04" contains key_word; 
+data file[3964] "tims.d05" contains info; 
+key  file[4092] "tims.k01" contains id_code; 
+key  file[4084] "tims.k02" contains friend, word; </pre>
+        <p>In the dest directory, you set up for the revision. </p><pre>ddlp tims.ddl 
+initdb tims </pre>
+        <p>Then you perform the revision itself. </p><pre>cd .. 
+dbrev -r tims dest\tims </pre>
+        <p>The results follow: </p><pre>File: tims.d01 Size: 286,720 bytes  
+File: tims.d02 Size: 1,870,230 bytes  
+File: tims.d03 Size: 406,800 bytes  
+File: tims.d04 Size: 381,076 bytes  
+File: tims.d05 Size: 1,438,932 bytes  
+File: tims.k01 Size: 175,956 bytes  
+File: tims.k02 Size: 363,476 bytes  
+Total database size: 4,923,190 bytes </pre>
+        <p>The changes have been a success; your database is now 53% of its original size, with a very low 16% overhead. </p>
+        <h3 class="Heading3"><a MadCap:generatedBookmark="TOC" name="4.2.2_Application_Code_Changes_Required"></a>4.2.2 Application Code Changes Required </h3>
+        <p>Further analysis of the data stored in a typical tims database reveals the following: </p>
+        <ol>
+            <li style="font-size: 11pt;font-family: Arial;" value="1">The name and friend fields, which contain people's names, are rarely more than 14 or 15 characters, so there is no reason to leave them at 32 characters. </li>
+            <li style="font-size: 11pt;font-family: Arial;" value="2">The largest word contents is actually 20 instead of the current maximum of 32. </li>
+            <li style="font-size: 11pt;font-family: Arial;" value="3">The info_title field could be 40 characters instead of 80. </li>
+            <li style="font-size: 11pt;font-family: Arial;" value="4">The int_type field in the intersect record seemed like a good idea when you designed the database, but you never used it and never removed it from the schema. </li>
+            <li style="font-size: 11pt;font-family: Arial;" value="5">Of the 1000 borrower records, only 180 were unique.  Would it be possible to reduce the number of borrower records? </li>
+            <li style="font-size: 11pt;font-family: Arial;" value="6">The pub_date field requires 12 characters, but dates are stored in 4-byte long fields in the borrower record, so you decide to convert to the same YYMMDD format.                           <![CDATA[ ]]></li>
+        </ol>
+        <p>The common factor in all of these changes is the need to recompile or recode your application program.  Items 1, 2, and 3 will not require recoding except where lengths are verified during input.  Since RDM generates record structure declarations, you will only need to recompile with the new definitions. </p>
+        <p>Item 4 is a field deletion, and will not require any recoding.  Recompilation will still be necessary for this item. </p>
+        <p>Items 5 and 6 are the most interesting of the changes.  It is indeed possible to revise the database in such a way that only unique borrower records are stored.  We will study these in detail after looking at the schema changes required for the first four. </p>
+        <p>The first four changes are field length changes and a field deletion.  You will need to edit the destination schema file as follows: </p>
+        <table>
+            <col style="width: 20%;" />
+            <col style="width: 70%;" />
+            <thead>
+                <tr>
+                    <th>Source</th>
+                    <th>Destination</th>
+                </tr>
+            </thead>
+            <tbody>
+                <tr>
+                    <td><pre>char name[32]; 
+unique key char word[32];
+char info_title[80];
+int int_type;</pre>
+                    </td>
+                    <td><pre>char name[16]; 
+unique key char word[20]; 
+char info_title[40];
+<i>(deleted)</i></pre>
+                    </td>
+                </tr>
+            </tbody>
+        </table>
+        <p>These changes will be incorporated by running db_REVISE and making the minor code changes.  The same destination DDL file should be used for these as was used in the <a href="#4.2.1">No Application Code Changes Required</a> section when the records were placed into different files. </p>
+        <p>Items 5 and 6 will both require RDL statements as well as changes in the destination DDL file. </p>
+        <p>To reduce the number of redundant borrower records, you will need to do a project of the borrower record into two record types.  The friend field will remain in the borrower record, and the date_borrowed and date_returned fields will be placed into a new record type, loan.  The friend field may now be a unique key.  A new set type, loan_rec, will have borrower as the owner and loan as the member.  To reduce the number of borrower records, we can normalize the loan_rec set.  The two sets that currently own the borrower record will be retained, but with the member record type changed to loan.  The following shows the schema changes: </p>
+        <br />
+        <table>
+            <caption>The schema diagram for this change is shown in Figure 4-2.</caption>
+            <col style="width: 20%;" />
+            <col style="width: 70%;" />
+            <thead>
+                <tr>
+                    <th>Source</th>
+                    <th>Destination</th>
+                </tr>
+            </thead>
+            <tbody>
+                <tr>
+                    <td><pre>
+record borrower {
+    key char friend[32];
+    long date_borrowed;
+    long date_returned;
+}
+set loaned_books {
+    order last;
+    owner info;
+    member borrower;
+}
+set loan_history {
+    order last;
+    owner system;
+    member borrower;
+}</pre>
+                    </td>
+                    <td><pre>
+record borrower {
+    unique key char friend[16];
+}
+record loan {
+    long date_borrowed;
+    long date_returned;
+}
+set loaned_books {
+    order last;
+    owner info;
+    member loan;
+}
+set loan_history {
+    order last;
+    owner system;
+    member loan;
+}
+set loan_rec {
+    order last;
+    owner borrower;
+    member loan;
+}</pre>
+                    </td>
+                </tr>
+            </tbody>
+        </table>
+        <p class="Caption">
+            <img src="../../Resources/Images/db_revise/02000022.jpg" class="img_1" />
+            <br />Figure 4-2.  Elimination of Redundant Records </p>
+        <p>The RDL statement that should be placed into an RDL file, for example tims.rdl, would have the following format: </p><pre>normalize set loan_rec;</pre>
+        <p>The conversion of pub_date from a character string containing a date into a long field type will require more capability than db_REVISE currently possesses.  But notice that a consistent format has been used in the data entry of the info records, so you can write your own convert function to perform the type conversion.  You will need to make the following change in the schema: </p>
+        <table>
+            <col style="width: 20%;" />
+            <col style="width: 70%;" />
+            <thead>
+                <tr>
+                    <th>Source</th>
+                    <th>Destination</th>
+                </tr>
+            </thead>
+            <tbody>
+                <tr>
+                    <td><pre>char pub_date[12];</pre>
+                    </td>
+                    <td><pre>long pub_date;</pre>
+                    </td>
+                </tr>
+            </tbody>
+        </table>
+        <p>Then add the following statement to tims.rdl: </p><pre>convert field pub_date using 1; </pre>
+        <p>Finally, you need to write case 1 in the convert function and link it into a new copy of the dbrev executable.  (See the convert field statement in the <a href="Chapter3.htm#3.4.2">Field Changes</a> section.) </p>
+        <p>The final revision will be performed by executing the following command: </p><pre>dbrev -r -s tims.rdl tims dest\tims </pre>
+        <p>If we do the calculations, the new database size is 4,268,166 bytes, only 46% of the original database size!   </p>
+        <h2 class="Heading2"><a MadCap:generatedBookmark="TOC" name="4.3_Adding_Application_Functionality"></a>4.3 Adding Application Functionality </h2>
+        <p>Your Technical Information Management System (tims) has been running at an increasing number of installations and you now have enough feedback from your clients to decide that it is time to create a new release of your software.  Because of the nature of the changes that will be made and the vast volume of existing data in your clients' databases, it will be necessary to revise each database as the new revision of software is installed. </p>
+        <p>You should plan on creating an installation diskette that will contain the following: </p>
+        <ol>
+            <li value="1">Your new application software. </li>
+            <li value="2">db_REVISE (containing your customized convert function). </li>
+            <li value="3">The RDL file, tims.rdl. </li>
+            <li value="4">An installation procedure. </li>
+        </ol>
+        <p>The installation procedure will have to perform at least the following steps: </p>
+        <ol>
+            <li value="1">Create a backup copy of the existing database. </li>
+            <li value="2">Create a working directory on the hard disk for db_REVISE where the dbrev executable and tims.rdl are copied. </li>
+            <li value="3">Run db_REVISE to create the modified database. </li>
+            <li value="4">Verify that the new database is correct. </li>
+            <li value="5">Remove the old database. </li>
+            <li value="6">Install the new tims software. </li>
+        </ol>
+        <p>When you decided to create a revision of your software, you received many enhancement requests (several from libraries).  You have condensed the requests into a list, and have decided to implement the following: </p>
+        <ol>
+            <li value="1">The addition of author records has been too slow.  This is because it is in a sorted set connected to the system record.  You can achieve the same results with greater performance if you make the author name a key and eliminate the set. </li>
+            <li value="2">It is of interest to larger libraries to store more information about people who are borrowing books.  They want to create reports listing overdue books along with the name, address, and phone number of the borrower.  You will need to add fields to the borrower record type. </li>
+            <li value="3">Some libraries own several copies of some publications which are distributed among more than one location.  Your greatest need is with a county library system consisting of three separate libraries.  You must add records and sets that will allow this information to be stored. </li>
+            <li value="4">Some libraries are interested in the purchase cost and depreciation of their books.  You will add fields to the info record to permit this. </li>
+            <li value="5">You will be able to save even more space in the future by creating an additional text record that is half as long as the original.  When the text stored in one record is less than 40 characters, you will use the shorter record. </li>
+            <li value="6">Some libraries want to perform queries and generate reports based on the publisher.  This is currently very time consuming because all info records must be searched and there are frequent mismatches in the ways that the same publisher names have been entered into different info records. </li>
+        </ol>
+        <p>The list includes many new program enhancements, but here we will look only at changes that must be made to the database.  We will analyze the enhancements one at a time. </p>
+        <h3 class="Heading3"><a MadCap:generatedBookmark="TOC" name="4.3.1_Replacing_a_System-owned_Set_with_a_Key"></a>4.3.1 Replacing a System-owned Set with a Key </h3>
+        <p>Any time the system record owns a sorted set, it can be replaced by a key on the field that was used for ordering.  The navigation that was performed with the <a href="../../RM/api/d_findfm.htm">d_findfm</a> and <a href="../../RM/api/d_findnm.htm">d_findnm</a> functions must be changed to use the <a href="../../RM/api/d_keyfrst.htm">d_keyfrst</a> and <a href="../../RM/api/d_keynext.htm">d_keynext</a> functions.  The schema changes are straightforward. </p>
+        <table>
+            <col style="width: 20%;" />
+            <col style="width: 70%;" />
+            <thead>
+                <tr>
+                    <th>Source</th>
+                    <th>Destination</th>
+                </tr>
+            </thead>
+            <tbody>
+                <tr>
+                    <td><pre>
+record author {
+    char name[16];
+}
+
+set author_list {
+    order ascending;
+    owner system;
+    member author by name;
+}</pre>
+                    </td>
+                    <td><pre xml:space="preserve">record author {
+  unique key char name[16];
+}</pre>
+                    </td>
+                </tr>
+            </tbody>
+        </table>
+        <p>There is a danger in making the name a unique key.  If any duplicate author names have been entered into the system, this will cause db_REVISE to abort.  The safer route would be to allow duplicates as shown in the previous schema changes. </p>
+        <h3 class="Heading3"><a MadCap:generatedBookmark="TOC" name="4.3.2_Adding_Information_to_Records"></a>4.3.2 Adding Information to Records </h3>
+        <p>The borrower record type needs two more field types: address and phone.  Add these fields to the borrower record as shown in the following example: </p>
+        <table>
+            <col style="width: 20%;" />
+            <col style="width: 70%;" />
+            <thead>
+                <tr>
+                    <th>Source</th>
+                    <th>Destination</th>
+                </tr>
+            </thead>
+            <tbody>
+                <tr>
+                    <td><pre>
+record borrower {
+    key char friend[16];
+}</pre>
+                    </td>
+                    <td><pre>
+record borrower {
+    key char friend[16];
+    char address[32]; 
+    char phone[12];
+}</pre>
+                    </td>
+                </tr>
+            </tbody>
+        </table>
+        <p>The fourth item (cost and depreciation information) will require the addition of fields to the info record type. </p>
+        <table>
+            <col style="width: 20%;" />
+            <col style="width: 70%;" />
+            <thead>
+                <tr>
+                    <th>Source</th>
+                    <th>Destination</th>
+                </tr>
+            </thead>
+            <tbody>
+                <tr>
+                    <td><pre>
+record info {
+    unique key char id_code[16];
+    char info_title[40];
+    char publisher[32];
+    long pub_date;
+    int info_type;
+}</pre>
+                    </td>
+                    <td><pre>
+record info {
+    unique key char id_code[16];
+    char info_title[40];
+    char publisher[32];
+    long pub_date;
+    int info_type;
+    float cost;
+    long purch_date;
+}</pre>
+                    </td>
+                </tr>
+            </tbody>
+        </table>
+        <p>Since there will be many existing borrower and info records that will not initially contain this information (the new software will handle all new records), and you are planning to print reports containing the borrower's addresses and phone numbers (possibly together with the book's current value), it will be best to initialize the fields to a known value.  To do this, the initialize field statement will be required.  The following lines will be included in the tims.rdl file: </p><pre>initialize field address = "**UNKNOWN**";
+initialize field phone = "**UNKNOWN**"; </pre>
+        <h3 class="newpage"><a MadCap:generatedBookmark="TOC" name="4.3.3_Adding_Record_and_Set_Types"></a>4.3.3 Adding Record and Set Types </h3>
+        <p>The capability of tracking multiple copies of the same publication among more than one site requires more record types than you currently have.  Two new record types will be required: one for each library location, and one for each publication copy.  The most logical usage of the new location record type is connected to the system record as a member, and connected to each publication copy as an owner.  Each copy record should be owned by an info record and a location record. </p>
+        <p>Currently, each info record may be connected to a loan record.  The new copy record type should be connected to the existing loan records, because the software will need to track the borrowing activity of each copy of a publication. </p>
+        <p>The current key_word and intersect structure should remain connected to the info records.  A subset of the schema is shown in Figure 4-3, highlighting the new record types and set structure. </p>
+        <p class="Caption">
+            <img src="../../Resources/Images/db_revise/02000023.jpg" class="img_1" />
+            <br />Figure 4-3.  Added Record and Set Types </p>
+        <p>Three new set types are used: copies, contents, and locations.  There will be no location information in the source database, so you won't expect any location records to exist immediately after the revision takes place.  It will be safe, however, to assume that one copy of each publication exists.  You can cause one copy record to be created for each info record by using the following project record statement (included in tims.rdl): </p><pre>project record info into info, copy; </pre>
+        <p>The cost and depreciation information can be stored in the copy record type.  The initial values may be set with the following statements: </p><pre>initialize field cost = "0.0";
+initialize field purch_date = "999999;" </pre>
+        <p>The following excerpts from the DDL files show the full set of required changes: <br /></p>
+        <p>
+            <table>
+                <col style="width: 20%;" />
+                <col style="width: 70%;" />
+                <thead>
+                    <tr>
+                        <th>Source</th>
+                        <th>Destination</th>
+                    </tr>
+                </thead>
+                <tbody>
+                    <tr>
+                        <td><pre>
+record info {
+   ...
+}
+record borrower {
+   ...
+}
+record loan {
+   ...
+}
+set loaned_books {
+    order last;
+    owner info;
+    member loan;
+}
+set loan_history {
+    order last;
+    owner system;
+    member loan;
+}</pre>
+                        </td>
+                        <td><pre>
+record location {
+    char site_name[32];
+    char site_addr[32];
+}
+record info {
+    ...
+}
+record copy {
+    float cost;
+    long purch_date;
+}
+record borrower {
+    ...
+}
+record loan {
+    ...
+}
+set loaned_books {
+    order last;
+    owner copy;
+    member loan;
+}
+set loan_history {
+    order first;
+    owner system;
+    member loan;
+}
+set loan_rec {
+    order last;
+    owner borrower;
+    member loan;
+}
+set copies {
+    order ascending;
+    owner info;
+    member copy by purch_date;
+}
+set locations {
+    order last;
+    owner system;
+    member location;
+}</pre>
+                        </td>
+                    </tr>
+                </tbody>
+            </table>
+        </p>
+        <h3 class="Heading3"><a MadCap:generatedBookmark="TOC" name="4.3.4_Using_Multiple_Sizes_of_Text_Records"></a>4.3.4 Using Multiple Sizes of Text Records </h3>
+        <p>Enhancement Item 5 was the addition of a new 40-character text record.  You want to have two text record types, one 40 and one 80 characters long.  The record types will be named text40 and text80. </p>
+        <p>The existing text record is named text and needs to have its name changed to text80.  This is a static change, which means you will edit and change the name in the source schema file.  Remember to change the reference to it in the abstract set type.  The field type line will also be statically changed to line80. </p>
+        <p>The new text40 record type will be added to the destination schema.  There will be no text40 records created during the revision, but the record type will be available for your new application software.  The schema changes are shown below. </p>
+        <table>
+            <col style="width: 20%;" />
+            <col style="width: 70%;" />
+            <thead>
+                <tr>
+                    <th>Source</th>
+                    <th>Destination</th>
+                </tr>
+            </thead>
+            <tbody>
+                <tr>
+                    <td><pre>
+record text80 {
+    char line80[80];
+}
+...
+set abstract {
+    order last;
+    owner info;
+    member text80;
+}</pre>
+                    </td>
+                    <td><pre>record text80 {
+    char line80[80];
+}
+...
+record text40 {
+    char line40[40];
+}
+...
+set abstract {
+    order last;
+    owner info;
+    member txt40;
+    member txt80;
+} </pre>
+                    </td>
+                </tr>
+            </tbody>
+        </table>
+        <h3 class="Heading3"><a MadCap:generatedBookmark="TOC" name="4.3.5_Field_Conversion"></a><a name="4.3.5"></a>4.3.5 Field Conversion </h3>
+        <p>The publisher field is currently using 32 characters in each info record.  Not only does this waste space, it also causes data entry problems.  Your revised software will maintain a list of publisher records, and the database will contain an integer pub_code in the info records instead.  The info records will be 30 bytes shorter, and your software will allow data entry operators to select from a list of pre-defined publishers. </p>
+        <p>Rather than throwing away all of the publisher information already in the database, it will be possible to write a special convert case that will store the names of all unique publishers and assign codes to them.  The codes will be assigned to the pub_code field in the info record.  We will study the details of the convert function below, following the discussion of the schema changes. </p>
+        <p>Since we are changing the field name from publisher to pub_code, this must be done statically in the source schema file.  Then the destination schema must include a new publisher record type.  The differences are shown below. </p>
+        <table>
+            <col style="width: 20%;" />
+            <col style="width: 70%;" />
+            <thead>
+                <tr>
+                    <th>Source</th>
+                    <th>Destination</th>
+                </tr>
+            </thead>
+            <tbody>
+                <tr>
+                    <td><pre>record info {
+    ...
+    char pub_code[32];
+    ...
+}</pre>
+                    </td>
+                    <td><pre>record info {
+    ...
+    int pub_code;
+    ...
+}
+record publisher {
+    unique key int pub_num;
+    char pub_name[32];
+}</pre>
+                    </td>
+                </tr>
+            </tbody>
+        </table>
+        <p>The convert function needs to be sophisticated.  It cannot create records in the destination database, nor can it know if it has been called for the first or last time.  Therefore, the conversion function needs to keep its list of known publisher names in a file that it will open and close each time it is called.  The function will either locate a known publisher name or add a new one to the list, then assign the code (just a counter, starting at 0) to the destination pub_code field. </p>
+        <p>After db_REVISE runs, a file will exist containing the names of all unique publishers.  They should be added to the database with a program that reads the file and creates a publisher record for each line. </p>
+        <p>Assuming that this is the second case in the convert function, the RDL statement would look like the following: </p><pre>convert field pub_code using 2; </pre>
+        <p>The code would appear as follows: </p><pre>
+case 2:
+{   
+    FILE *fp;   
+    int counter;   
+    char line[33];    
+
+    fp = fopen( "pub.lst", "r" );   
+    counter = 0;    
+    if ( fp ) {
+        while ( fgets( line, 33, fp ) != NULL ) {
+            /* eliminate the newline */     
+            line[strlen(line)-1] = '\0';
+            if ( strcmp( line, src_fld ) == 0 ) {
+                /* found a match */      
+                *dest_fld = counter;      
+                fclose(fp);      
+                return;     
+            }     
+            counter++;    
+        }    
+        /* no match found, add to bottom of file */    
+        fclose(fp);   
+    }    
+    fp = fopen( "pub.lst", "a" );   
+    fprintf( fp, "%s\n", src_fld );   
+    *dest_fld = counter;   
+    fclose(fp);   
+    return;  
+} </pre>
+        <p>While this may seem a bit clumsy, it is an example of how some special purpose functionality can be added to db_REVISE. </p>
+        <p>Be sure to include in your installation procedure the program that creates the publisher records. </p>
+        <h2 class="Heading2"><a MadCap:generatedBookmark="TOC" name="4.4_Conclusion"></a>4.4 Conclusion </h2>
+        <p>In this section we observed that revisions can be made to reduce database size and enhance the functionality of an application.  db_REVISE can be used to upgrade your database design, since you have evolving requirements and unforeseen obstacles. </p>
+        <p>As the database and application designer, you are required to carefully consider the revisions that must be made to a database, but your customers can be hidden from the details. </p>
+        <p>The tims database has been extensively changed in this section, and yet all existing data in customer databases will be retained during revisions.  To summarize the changes, the DDL specification, RDL file, revision report, and schema (Figure 4-4) are shown here. </p>
+        <h3 class="Heading3"><a MadCap:generatedBookmark="TOC" name="4.4.1_Final_DDL_Specification"></a>4.4.1 Final DDL Specification </h3>
+        <p>The following displays the contents of tims.ddl: </p><pre xml:space="preserve">/*----------------------------------------------------------------------  
+Technical Information Management System (TIMS) Database 
+----------------------------------------------------------------------*/  
+
+database tims {  
+    data file[4054] "tims.d01" contains author, loan;  
+    data file[4022] "tims.d02" contains text80;  
+    data file[4084] "tims.d03" contains system, intersect;  
+    data file[4022] "tims.d04" contains borrower, location;  
+    data file[3980] "tims.d05" contains info;
+    data file[4064] "tims.d06" contains text40;  
+    data file[4084] "tims.d07" contains key_word, copy, publisher;
+    key  file[4092] "tims.k01" contains id_code;  
+    key  file[4090] "tims.k02" contains friend, word, name;
+    key  file[4090] "tims.k03" contains pub_num;   
+
+    record author {   
+        unique key char name[16];  
+    }
+    record location {   
+        char site_name[32];   
+        char site_addr[32];  
+    }
+    record info {   
+        unique key char id_code[16];   
+        char info_title[40];   
+        int32_t pub_code;   
+        long pub_date;   
+        int32_t info_type;  
+    }
+    record publisher {   
+        unique key int pub_num;   
+        char pub_name[32];  
+    }
+    record copy {   
+        float cost;   
+        int64_t purch_date;  
+    }
+    record borrower { 
+        key char friend[16]; 
+        char address[32];
+        char phone[12]; 
+    }
+    record loan { 
+        long date_borrowed; 
+        long date_returned;
+    }
+    record text80 { 
+        char line80[80]; 
+    }
+    record text40 { 
+        char line40[40]; 
+    }
+    record key_word { 
+        unique key char word[20]; 
+    }
+    record intersect { 
+    }
+
+    set has_published { 
+        order ascending; 
+        owner author; 
+        member info by info_title; 
+    }
+    set articles { 
+        order last; 
+        owner info; 
+        member info; 
+    }
+    set loaned_books { 
+        order last; 
+        owner copy;     
+        member loan; 
+    }
+    set abstract { 
+        order last; 
+        owner info; 
+        member text80; 
+        member text40;
+    }
+    set key_to_info { 
+       order last;
+       owner key_word;
+       member intersect;
+    } 
+    set info_to_key { 
+        order last; 
+        owner info; 
+        member intersect; 
+    }
+    set loan_history { 
+        order last; 
+        owner system; 
+        member loan; 
+    }
+    set loan_rec { 
+        order last; 
+        owner borrower; 
+        member loan; 
+    }
+    set copies { 
+        order ascending; 
+        owner info; 
+        member copy by purch_date; 
+    } 
+    set locations { 
+        order last; 
+        owner system;
+        member location; 
+    }
+} </pre>
+        <h3 class="Heading3"><a MadCap:generatedBookmark="TOC" name="4.4.2_Final_Revision_Definition_Language_File"></a>4.4.2 Final Revision Definition Language File </h3>
+        <p>The following displays the contents of tims.rdl: </p><pre>normalize set loan_rec; 
+convert field pub_date using 1; 
+initialize field address = "**UNKNOWN**"; 
+initialize field phone = "**UNKNOWN**"; 
+project record info into info, copy; 
+initialize field cost = "0.0"; 
+initialize field purch_date = "999999"; 
+convert field pub_code using 2; </pre>
+        <h3 class="Heading3"><a MadCap:generatedBookmark="TOC" name="4.4.3_Revision_Report"></a>4.4.3 Revision Report </h3>
+        <p>The following displays the contents of the tims.rep file, generated as a result of selecting the -r option: </p><pre xml:space="preserve">Database Restructure Program 
+<span class="MyVariablesProductName">Raima Database Manager</span>    <![CDATA[ ]]><span class="MyVariablesCommandLineVersion">11.0.0 Build 412 [2-15-2012]</span> http://www.raima.com 
+<span class="MyVariablesCopyright">Copyright © 2012, Raima Inc. All rights reserved.</span>
+
+
+Restructure Definition Language statements: 
+normalize set loan_rec; convert field pub_date using 1; 
+initialize field address = "**UNKNOWN**"; 
+initialize field phone = "**UNKNOWN**"; 
+project record info into info, copy; 
+initialize field cost = "0.0"; 
+initialize field purch_date = "999999"; 
+convert field pub_code using 2; 
+dbrev compilation warning: field type INFO_TITLE is used in a 
+    'sorted by' clause, and should not be shortened 
+
+New record types: 
+    LOCATION 
+    PUBLISHER 
+    TEXT40
+Field type change(s): 
+    NAME key changed from none to unique 
+    NAME dimension 0 changed form 32 to 16 
+    INFO_TITLE dimension 0 changed from 80 to 40 
+    PUB_CODE changed from char to int 
+    PUB_CODE dimension 0 changed from 32 to 0 
+    PUB_DATE changed from char to long 
+    PUB_DATE dimension 0 changed from 12 to 0
+    FRIEND dimension 0 changed from 32 to 16 
+    WORD dimension 0 changed from 32 to 20
+
+Deleted field types: 
+
+    RECORD TYPE     FIELD TYPE 
+    -----------     ---------- 
+    INTERSECT 
+                    INT_TYPE 
+
+New set types: 
+    LOAN_REC 
+    COPIES 
+    LOCATIONS 
+
+Deleted set types. 
+    AUTHOR_LIST 
+
+Projects: 
+
+SOURCE         DESTINATION 
+------         ----------- 
+INFO 
+               INFO 
+               COPY 
+BORROWER 
+               BORROWER 
+               LOAN</pre>
+        <p class="Caption">
+            <img src="../../Resources/Images/db_revise/02000024.jpg" class="img_1" />
+            <br />Figure 4-4.  Final tims Database Schema </p>
+        <hr MadCap:conditions="Default.ScreenOnly" width="100%" size="0" align="center" />
+        <p MadCap:conditions="Default.ScreenOnly" style="font-size: 8pt;"><span class="MyVariablesCopyright">Copyright © 2012, Raima Inc. All rights reserved.</span>
+        </p>
+        <script type="text/javascript" src="../../SkinSupport/MadCapBodyEnd.js">
+        </script>
+        <p class="MCWebHelpFramesetLink MCWebHelpFramesetLinkBottom" style="display: none;"><a href="../../../Default_CSH.htm#util/dbrevise/Chapter4.htm" style="">Open topic with navigation</a>
+        </p>
+    </body>
+</html>

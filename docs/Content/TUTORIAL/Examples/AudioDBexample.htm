@@ -1,0 +1,115 @@
+<?xml version="1.0" encoding="utf-8"?>
+<!DOCTYPE html PUBLIC "-//W3C//DTD XHTML 1.0 Strict//EN" "http://www.w3.org/TR/xhtml1/DTD/xhtml1-strict.dtd">
+<html xmlns:MadCap="http://www.madcapsoftware.com/Schemas/MadCap.xsd" MadCap:tocPath="Examples and Tutorials" MadCap:InPreviewMode="false" MadCap:PreloadImages="false" MadCap:RuntimeFileType="Topic" MadCap:TargetType="WebHelp" lang="en-us" xml:lang="en-us" MadCap:PathToHelpSystem="../../../" MadCap:HelpSystemFileName="Default.xml" MadCap:SearchType="Stem">
+    <head>
+        <meta http-equiv="Content-Type" content="text/html; charset=utf-8" /><title>Audio Database Example</title>
+        <link rel="icon" type="image/png" href="http://docs.raima.com/favicon.png" />
+        <link href="../../SkinSupport/MadCap.css" rel="stylesheet" />
+        <link href="../../Resources/TableStyles/TwoColNoLines.css" rel="stylesheet" />
+        <link href="../../Resources/Stylesheets/raima.css" rel="stylesheet" />
+        <script src="../../SkinSupport/MadCapAll.js" type="text/javascript">
+        </script>
+    </head>
+    <body>
+        <p class="MCWebHelpFramesetLink MCWebHelpFramesetLinkTop" style="display: none;"><a href="../../../Default_CSH.htm#TUTORIAL/Examples/AudioDBexample.htm" style="">Open topic with navigation</a>
+        </p>
+        <div class="MCBreadcrumbsBox_0"><span class="MCBreadcrumbsPrefix">You are here: </span><a class="MCBreadcrumbsLink" href="../Examples.htm">Examples and Tutorials</a><span class="MCBreadcrumbsDivider"> &gt; </span><span class="MCBreadcrumbs">Audio Database Example</span>
+        </div>
+        <h2 MadCap:conditions="" class="newpage">Audio Database Example</h2>
+        <h3>Database Structure</h3>
+        <p>The test allows three different permutations of database structure, with different key (indexing) characteristics. All of the database permutations have the following record types (tables) and sets (one-to-many relationships):</p>
+        <p>There are 4 record types (tables)</p>
+        <ul>
+            <li value="1">Artist</li>
+            <li value="2">Album</li>
+            <li value="3">Genre</li>
+            <li value="4">Track</li>
+        </ul>
+        <p>Sets (one-to-many relationships) are defined as follows:</p>
+        <ul>
+            <li value="1">Artist to Album</li>
+            <li value="2">Album to Track</li>
+            <li value="3">Artist to Track</li>
+            <li value="4">Genre to Track</li>
+        </ul>
+        <p>The test data consists of 20,000 track records. There are 2,000 artist records, each with 10 track records associated with it. Each artist record has 0 to 4 album records associated with it, and the artist's tracks are distributed randomly between the albums, if there are any. There are 200 genre records, and the track records are distributed randomly between these.</p>
+        <h3>Execution</h3><pre xml:space="preserve">songsExample</pre>
+        <p>The menu displayed is:</p><pre xml:space="preserve">SONGS commands:
+   F - Use Full Keys (default)
+   P - Use Partial Keys
+   N - Use No Keys
+   p - Populate Database
+   t - Read All Tracks
+   i - Read All Tracks by ID
+   n - Read All Tracks by Name
+   a - Read All Tracks by Artist
+   g - Read All Tracks by Genre
+   r - Remove Database from RAM
+   q - Quit
+enter command:</pre>
+        <p class="Heading">How to use the example:</p>
+        <ol>
+            <li value="1">Select key style (Option:&#160;F, P, or N)</li>
+            <li value="2">Populate the database (Option:&#160;p)</li>
+        </ol>
+        <h3>Summary</h3>
+        <h4>Key Type Options</h4>
+        <table style="width: 100%;mc-table-style: url('../../Resources/TableStyles/TwoColNoLines.css');margin-left: 0;margin-right: auto;" class="TableStyle-TwoColNoLines" cellspacing="0">
+            <col class="Column-Column1" style="width: 170px;" />
+            <col class="Column-Column2" />
+            <tbody>
+                <tr class="Body-Body1">
+                    <td class="BodyE-Column1-Body1" style="font-weight: bold;">Full Keys</td>
+                    <td class="BodyD-Column2-Body1">There are 5 key fields (indexes) in this database:<ul><li value="1">Artist name (max 25 characters)</li><li value="2">Album name (max 35 characters)</li><li value="3">Genre name (max 25 characters)</li><li value="4">Track name (max 35 characters)</li><li value="5">Track id (max 8 characters)</li></ul><p>All key fields in this database are stored both in the records and in the indexes, so they are stored in duplicate.</p></td>
+                </tr>
+                <tr class="Body-Body1">
+                    <td class="BodyE-Column1-Body1" style="font-weight: bold;">Partial Keys</td>
+                    <td class="BodyD-Column2-Body1">The same 5 key fields are defined as for the "full key" database, but the key values are not stored in the indexes - only in the records. This reduces the size of the database, but increases the time required to access the keys.</td>
+                </tr>
+                <tr class="Body-Body1">
+                    <td class="BodyB-Column1-Body1" style="font-weight: bold;">No Keys</td>
+                    <td class="BodyA-Column2-Body1">No key fields are defined. No searching / sorting by key is possible, although the records still contain the same fields as in the other permutations. Inserting values into this database is faster than the other permutations, but reading the data is limited to unsorted access.<p>The tests should illustrate the cost of adding indexes, in terms of performance and database size.</p></td>
+                </tr>
+            </tbody>
+        </table>
+        <h4>Database Read Tests</h4>
+        <p>Five different patterns of read access are tested:</p>
+        <table style="width: 100%;mc-table-style: url('../../Resources/TableStyles/TwoColNoLines.css');margin-left: 0;margin-right: auto;" class="TableStyle-TwoColNoLines" cellspacing="0">
+            <col class="Column-Column1" style="width: 170px;" />
+            <col class="Column-Column2" />
+            <tbody>
+                <tr class="Body-Body1">
+                    <td class="BodyE-Column1-Body1" style="font-weight: bold;">Read all tracks</td>
+                    <td class="BodyD-Column2-Body1">This reads all 20,000 track records and the associated artist records. The tracks are read in the order they occur in the data file, in this case in creation order.</td>
+                </tr>
+                <tr class="Body-Body1">
+                    <td class="BodyE-Column1-Body1" style="font-weight: bold;">Read all tracks by ID</td>
+                    <td class="BodyD-Column2-Body1">Read all tracks by artist</td>
+                </tr>
+                <tr class="Body-Body1">
+                    <td class="BodyE-Column1-Body1" style="font-weight: bold;">Read all tracks by name</td>
+                    <td class="BodyD-Column2-Body1">Same as 1, but the tracks are read in order of track name.</td>
+                </tr>
+                <tr class="Body-Body1">
+                    <td class="BodyE-Column1-Body1" style="font-weight: bold;">Read all tracks by artist</td>
+                    <td class="BodyD-Column2-Body1">This reads all 2,000 artist records in order of artist name, and for each artist it reads all the associated track records.</td>
+                </tr>
+                <tr class="Body-Body1">
+                    <td class="BodyB-Column1-Body1" style="font-weight: bold;">Read all tracks by genre</td>
+                    <td class="BodyA-Column2-Body1">This reads all 200 genre records in order of genre name, and for each genre it reads all the associated track records.<p>If the database has no keys (3rd database permutation) then tests 2 to 5 are not supported, as these all require keys. Note that tests 4 and 5 could be implemented to read the artist / genre records in physical order (i.e. creation order) and then read the associated tracks.</p><p>Numerous other access patterns are possible - the tests are intended to indicate likely performance.</p></td>
+                </tr>
+            </tbody>
+        </table>
+        <h4>Database Removal</h4>
+        <p>This last option allows for the complete removal of the database from RAM.  It can be reloaded from disk if desired.</p>
+        <h4>Other Performance Issues</h4>
+        <p>The test program opens the database before each test and closes it after each test. This is generally not required, as a typical application would keep the database open throughout its execution time, which improves performance.</p>
+        <hr MadCap:conditions="Default.ScreenOnly" width="100%" size="0" align="center" />
+        <p MadCap:conditions="Default.ScreenOnly" style="font-size: 8pt;"><span class="MyVariablesCopyright">Copyright © 2012, Raima Inc. All rights reserved.</span>
+        </p>
+        <script type="text/javascript" src="../../SkinSupport/MadCapBodyEnd.js">
+        </script>
+        <p class="MCWebHelpFramesetLink MCWebHelpFramesetLinkBottom" style="display: none;"><a href="../../../Default_CSH.htm#TUTORIAL/Examples/AudioDBexample.htm" style="">Open topic with navigation</a>
+        </p>
+    </body>
+</html>

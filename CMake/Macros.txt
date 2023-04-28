@@ -1,0 +1,77 @@
+# RDM
+#
+# Copyright (c) 2010 Raima Inc.,  All rights reserved.
+#
+# Use of this software, whether in source code format, or in executable,
+# binary object code form, is governed by the Raima LICENSE which
+# is fully described in the LICENSE.TXT file, included within this
+# distribution of files.
+
+#
+# Include the Sys file and set the OS define
+#
+
+include ("${RDM_HOME}/CMake/Sys${CMAKE_SYSTEM_NAME}.txt")
+ADD_DEFINITIONS (-D${OS})
+
+#
+# We need to set up the native build directory to get this to work with cross compiling
+#
+
+set (NATIVE_BUILD_DIR "" CACHE PATH "Native build dir (needed when cross compiling)")
+if (NOT NATIVE_BUILD_DIR AND ENV{NATIVE_BUILD_DIR})
+    set(NATIVE_BUILD_DIR "$ENV{NATIVE_BUILD_DIR}")
+endif (NOT NATIVE_BUILD_DIR AND ENV{NATIVE_BUILD_DIR})
+
+if (NATIVE_BUILD_DIR)
+  set (RYACC_BUILD_DIR ${NATIVE_BUILD_DIR})
+  set (EMBEDFILE_BUILD_DIR ${NATIVE_BUILD_DIR})
+  find_package (NATIVE_BUILD)
+  find_package (RYACC_BUILD)
+  find_package (EMBEDFILE_BUILD)
+endif (NATIVE_BUILD_DIR)
+
+cmake_policy(SET CMP0011 OLD)
+cmake_policy(SET CMP0014 OLD)
+macro (subdirectories)
+  foreach (DIR ${ARGV})
+    if (IS_DIRECTORY ${CMAKE_CURRENT_SOURCE_DIR}/${DIR})
+      add_subdirectory (${DIR})
+    endif ()
+  endforeach (DIR)
+endmacro (subdirectories)
+
+include ("${RDM_HOME}/CMake/GenMacros.txt")
+
+#
+# Macro for generating def files
+#
+
+macro (def NAME)
+  if (WIN32)
+    add_custom_command (OUTPUT ${CMAKE_CURRENT_BINARY_DIR}/rdm${NAME}11.def
+        COMMAND perl ${PROJECT_SOURCE_DIR}/perl/gendef.pl -H${PROJECT_SOURCE_DIR} -s ${DEF_DEFINES} -t${OS} -lrdm${NAME}11 ${PROJECT_SOURCE_DIR}/source/def/${NAME}.tpl
+        DEPENDS ${PROJECT_SOURCE_DIR}/source/def/${NAME}.tpl ${PROJECT_SOURCE_DIR}/perl/gendef.pl
+        COMMENT "Generate def file ${CMAKE_CURRENT_BINARY_DIR}/rdm${NAME}}11.def")
+    set (SOURCE_FILES ${SOURCE_FILES} ${CMAKE_CURRENT_BINARY_DIR}/rdm${NAME}11.def)
+  endif ()
+endmacro(def NAME)
+
+#
+# source and library macros
+#
+
+macro (source)
+  set (SOURCE_FILES ${ARGV})
+endmacro (source)
+
+macro (library name)
+   add_library (name ${SOURCE_FILES})
+endmacro (library)
+
+add_custom_target(generate
+    perl perl/generate.pl
+    WORKING_DIRECTORY "${CMAKE_SOURCE_DIR}"
+    COMMENT "Generate build files"
+    VERBATIM
+)

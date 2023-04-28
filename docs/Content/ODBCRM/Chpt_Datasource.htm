@@ -1,0 +1,115 @@
+<?xml version="1.0" encoding="utf-8"?>
+<!DOCTYPE html PUBLIC "-//W3C//DTD XHTML 1.0 Strict//EN" "http://www.w3.org/TR/xhtml1/DTD/xhtml1-strict.dtd">
+<html xmlns:MadCap="http://www.madcapsoftware.com/Schemas/MadCap.xsd" MadCap:tocPath="SQL API|ODBC User's Guide" MadCap:InPreviewMode="false" MadCap:PreloadImages="false" MadCap:RuntimeFileType="Topic" MadCap:TargetType="WebHelp" lang="en-us" xml:lang="en-us" MadCap:PathToHelpSystem="../../" MadCap:HelpSystemFileName="Default.xml" MadCap:SearchType="Stem">
+    <head>
+        <meta http-equiv="Content-Type" content="text/html; charset=utf-8" /><title>Connecting to a Data Source</title>
+        <link rel="icon" type="image/png" href="http://docs.raima.com/favicon.png" />
+        <link href="../SkinSupport/MadCap.css" rel="stylesheet" />
+        <link href="../Resources/Stylesheets/raima.css" rel="stylesheet" />
+        <script src="../SkinSupport/MadCapAll.js" type="text/javascript">
+        </script>
+    </head>
+    <body>
+        <p class="MCWebHelpFramesetLink MCWebHelpFramesetLinkTop" style="display: none;"><a href="../../Default_CSH.htm#ODBCRM/Chpt_Datasource.htm" style="">Open topic with navigation</a>
+        </p>
+        <div class="MCBreadcrumbsBox_0"><span class="MCBreadcrumbsPrefix">You are here: </span><a class="MCBreadcrumbsLink" href="../dbRSQL.htm">SQL API</a><span class="MCBreadcrumbsDivider"> &gt; </span><a class="MCBreadcrumbsLink" href="dbODBCUG.htm">ODBC User's Guide</a><span class="MCBreadcrumbsDivider"> &gt; </span><span class="MCBreadcrumbs">Connecting to a Data Source</span>
+        </div>
+        <h2 class="newpage"><a MadCap:generatedBookmark="TOC" name="Connecting_to_a_Data_Source"></a><a name="top"></a>Connecting to a Data Source</h2>
+        <p>An application will use the connection handle it allocated in order to connect to an <span class="MyVariablesProductShortName">RDM</span> data source, by calling <code>SQLConnect</code>. In <span class="MyVariablesProductShortName">RDM</span> ODBC, an <span class="MyVariablesProductShortName">RDM</span> data source can be a transaction file server (TFServer) or a remote server process (RDMSQLServer) that accesses the TFServer. A connection to a TFServer is called "local" connection, where the <span class="MyVariablesProductShortName">RDM</span> ODBC Driver uses the local <span class="MyVariablesRSQLName">RDM SQL</span> engine directly linked to it in order to interact with the target TFServer. A connection to an RDMSQLServer is called "remote" connection as the <span class="MyVariablesProductShortName">RDM</span> ODBC Driver uses its remote procedure call (RPC) layer to talk to an RDMSQLServer over TCP/IP, which has its own <span class="MyVariablesRSQLName">RDM SQL</span> engine that in turn communicates with the target TFServer. </p>
+        <p>A typical <span class="MyVariablesProductShortName">RDM</span> ODBC&#160;application is illustrated in Figure 1 below. The application will connect to the default TFS&#160;and the SQL&#160;processing will be performed within the application process.</p>
+        <p class="Caption" style="text-align: center;">
+            <img src="../Resources/Images/localODBCDatasource.png" />
+            <br />Figure 1. Local Data Source</p>
+        <p>The same <span class="MyVariablesProductShortName">RDM</span> ODBC&#160;application can connect to an external <span class="MyVariablesRSQLName">RDM SQL</span>&#160;engine by providing the remote connection attributes. The SQL&#160;processing will be performed within the <a href="../util/rdmsqlserver.htm">RDMSQLServer</a> process and the results returned to the application. This client/server configuration would be used in configurations where:&#160;1)&#160;the network speed is too slow for performing SQL&#160;engine access to the database; or, 2)&#160;the TFServer is supporting a database on a hardware architecture that is binary incompatible with the <span class="MyVariablesProductShortName">RDM</span> ODBC API&#160;application hardware architecture (e.g., database running on a PowerPC&#160;device being accessed by a remote Windows desktop).</p>
+        <p class="Caption" style="text-align: center;">
+            <img src="../Resources/Images/remoteODBCDatasource.png" />
+            <br />Figure 2. Remote Data Source</p>
+        <p>See the <a href="../util/rdmsqlserver.htm"><span class="MyVariablesUrdmsqlserver">rdmsqlserver</span></a> section for more information.</p>
+        <h3><a MadCap:generatedBookmark="TOC" name="Choosing_the_Connection_Type"></a>Choosing the Connection Type</h3>
+        <p>An application can choose the type of connection it uses in two ways. First, it can explicitly set the connection type by setting the <code>SQL_ATTR_RDM_CONN_TYPE</code> connection attribute with a call to <code>SQLSetConnectAttr</code> before calling <code>SQLConnect</code>. If the application specifies <code>SQL_CT_LOCAL</code>, the <span class="MyVariablesProductShortName">RDM</span> ODBC Driver will attempt to establish a local connection. If <code>SQL_CT_REMOTE</code> is specified, the <span class="MyVariablesProductShortName">RDM</span> ODBC Driver will use a remote connection.</p>
+        <p>Alternatively, an application can let the <span class="MyVariablesProductShortName">RDM</span> ODBC Driver choose the connection type implicitly by specifying the value for the two connection attributes: <code>SQL_ATTR_RDM_REMOTE_NAME</code> and <code>SQL_ATTR_RDM_TFS_NAME</code>.</p>
+        <p>If the <code>SQL_ATTR_RDM_REMOTE_NAME</code> attribute is set to a non-null, non-empty value, the <span class="MyVariablesProductShortName">RDM</span> ODBC Driver will use a remote connection.</p>
+        <p>If the <code>SQL_ATTR_RDM_REMOTE_NAME</code> attribute is not set or set to an empty string, and if the <code>SQL_ATTR_RDM_TFS_NAME</code> attribute is set to a non-null, non-empty string, the <span class="MyVariablesProductShortName">RDM</span> ODBC Driver will use a local connection.</p>
+        <p>If neither the <code>SQL_ATTR_RDM_REMOTE_NAME</code> nor the <code>SQL_ATTR_RDM_TFS_NAME</code> attribute is set (and the connection type is not explicitly set with the <code>SQL_ATTR_RDM_CONN_TYPE</code> attribute), the <span class="MyVariablesProductShortName">RDM</span> ODBC Driver will rely upon the value specified for the first argument of <code>SQLConnect</code>. In that case, if the value is a non-null, non-empty string, the <span class="MyVariablesProductShortName">RDM</span> ODBC Driver will use a remote connection. Otherwise, a local connection will be used.</p>
+        <p>The <code>SQL_ATTR_RDM_REMOTE_NAME</code> and <code>SQL_ATTR_TFS_NAME</code> attributes are set to <code>NULL</code> by default. The <code>SQL_ATTR_RDM_CONN_TYPE</code> attribute is set to <code>SQL_CT_UNKNOWN</code> by default.</p>
+        <h3><a MadCap:generatedBookmark="TOC" name="Setting_the_Data_Source_Name"></a>Setting the Data Source Name</h3>
+        <p>In <span class="MyVariablesProductShortName">RDM</span> ODBC, a data source name is the hostname of the computer where the target TFServer (for a local connection) or the RDMSQLServer (for a remote connection) is running.</p>
+        <p>If the connection type is explicitly set to remote (that is, by setting the <code>SQL_ATTR_RDM_CONN_TYPE</code> connection attribute to <code>SQL_CT_REMOTE</code>), the value stored in the <code>SQL_ATTR_RDM_REMOTE_NAME</code> connection attribute will be used as the data source name. If the value in the <code>SQL_ATTR_RDM_REMOTE_NAME</code> attribute is not set, the default name ("localhost") will be used.</p>
+        <p>If the connection type is explicitly set to local (that is, by setting the <code>SQL_ATTR_RDM_CONN_TYPE</code> connection attribute to <code>SQL_CT_LOCAL</code>), the value stored in the <code>SQL_ATTR_RDM_TFS_NAME</code> connection attribute will be used as the data source name. If the value in the <code>SQL_ATTR_RDM_TFS_NAME</code> attribute is not set, the default name ("localhost") will be used.</p>
+        <p>If the connection type is not explicitly set (that is, the <code>SQL_ATTR_RDM_CONN_TYPE</code> attribute is set to <code>SQL_CT_UNKNOWN</code>), the value stored in the <code>SQL_ATTR_RDM_REMOTE_NAME</code> attribute will be used as the remote data source name. If the <code>SQL_ATTR_RDM_REMOTE_NAME</code> attribute is not set, the value stored in the <code>SQL_ATTR_RDM_TFS_NAME</code> attribute will be used as the local data source name. If neither value is set, the value specified for the first argument of <code>SQLConnect</code> will be used as the remote data source name. If that value is not set, "localhost" will be used as the local data source name.</p>
+        <h3><a MadCap:generatedBookmark="TOC" name="Establishing_a_Connection"></a>Establishing a Connection</h3>
+        <p>An application calls <code>SQLConnect</code> to establish a connection to an <span class="MyVariablesProductShortName">RDM</span> data source. <code>SQLConnect</code> returns <code>SQL_SUCCESS</code> to let the application know a connection to the specified data source has been successfully established. <code>SQLConnect</code> returns <code>SQL_ERROR</code> when an error occurs, or <code>SQL_SUCCESS_WITH_INFO</code> if the operation succeeds but the <span class="MyVariablesProductShortName">RDM</span> ODBC Driver returned diagnostic information that may include warnings. If <code>SQLConnect</code> returns a value other than <code>SQL_SUCCESS</code>, an application can call <code>SQLGetDiagRec</code> to retrieve the details of the diagnostics.</p>
+        <p>The following examples illustrate how an application can establish a connection to a data source.</p>
+        <p class="Caption">Example 2 Setting a remote connection</p><pre xml:space="preserve">#include "sqlrext.h" /* RDM extension SQL header file */
+
+SQLRETURN connectToDataSource(
+    SQLHDBC hDbc)
+{
+    SQLRETURN rc;
+
+    /* Set connection type to remote */
+    rc = SQLSetConnectAttr(hDbc, SQL_ATTR_RDM_CONN_TYPE,
+            (SQLPOINTER) SQL_CT_REMOTE, SQL_IS_UINTEGER);
+    if (SQL_SUCCEEDED(rc)) {
+        /* Since SQL_ATTR_RDM_REMOTE_NAME is not set, "localhost"
+           will be used as the remote data source name. In this
+           case, RDMSQLServer is running on the same computer
+           as the application. */
+        rc = SQLConnect(hDbc, NULL, 0, NULL, 0, NULL, 0);
+    }
+
+    return rc;
+}
+</pre>
+        <p class="Caption">Example 3 Using SQL_ATTR_RDM_REMOTE_NAME</p><pre xml:space="preserve">#include "sqlrext.h" /* RDM extension SQL header file */
+
+SQLRETURN connectToDataSource(
+    SQLHDBC hDbc)
+{
+    SQLRETURN rc;
+
+    /* This implicitly sets the connection type as local */
+    rc = SQLSetConnectAttr(hDbc, SQL_ATTR_RDM_TFS_NAME,
+            (SQLPOINTER) "david-lnx", SQL_NTS);
+    if (SQL_SUCCEEDED(rc)) {
+        /* Since SQL_ATTR_RDM_CONN_TYPE is not set, "david-lnx"
+           will be used as the local data source name. In this
+           case, the TFServer is running on the computer whose
+           hostname is "david-lnx" */
+        rc = SQLConnect(hDbc, NULL, 0, NULL, 0, NULL, 0);
+    }
+
+    return rc;
+}
+</pre>
+        <p class="Caption">Example 4 Using SQLConnect</p><pre xml:space="preserve">#include "sqlrext.h" /* RDM extension SQL header file */
+
+SQLRETURN connectToDataSource(
+    SQLHDBC hDbc)
+{
+    SQLRETURN rc;
+    
+    /* Neither SQL_ATTR_RDM_CONN_TYPE, nor       
+       SQL_ATTR_RDM_REMOTE_NAME nor SQL_ATTR_TFS_NAME is set,
+       the driver will use the value specified in the first
+       argument of SQLConnect to determine the connection type
+       and data source name. In this case, "tom-mac" will be
+       used as the remote data source name, where the
+       RDMSQLServer is running on the computer whose hostname
+       is "tom-mac" */
+    rc = SQLConnect(hDbc, (SQLCHAR *) "tom-mac", SQL_NTS,
+            NULL, 0, NULL, 0);
+ 
+    return rc;
+}
+</pre>
+        <p>An application can also establish a connection to a data source by using <code>SQLDriverConnect</code>. <code>SQLDriverConnect</code> accepts a connection string that may have the values for <code>SQL_ATTR_RDM_REMOTE_NAME</code> and <code>SQL_ATTR_RDM_TFS_NAME</code> embedded together.  For details, see <code>SQLDriverConnect</code> in the ODBC API Function Reference section.</p>
+        <hr MadCap:conditions="Default.ScreenOnly" width="100%" size="0" align="center" />
+        <p MadCap:conditions="Default.ScreenOnly" style="font-size: 8pt;"><span class="MyVariablesCopyright">Copyright © 2012, Raima Inc. All rights reserved.</span>
+        </p>
+        <script type="text/javascript" src="../SkinSupport/MadCapBodyEnd.js">
+        </script>
+        <p class="MCWebHelpFramesetLink MCWebHelpFramesetLinkBottom" style="display: none;"><a href="../../Default_CSH.htm#ODBCRM/Chpt_Datasource.htm" style="">Open topic with navigation</a>
+        </p>
+    </body>
+</html>

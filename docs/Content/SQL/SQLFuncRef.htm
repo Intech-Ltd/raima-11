@@ -1,0 +1,359 @@
+<?xml version="1.0" encoding="utf-8"?>
+<!DOCTYPE html PUBLIC "-//W3C//DTD XHTML 1.0 Strict//EN" "http://www.w3.org/TR/xhtml1/DTD/xhtml1-strict.dtd">
+<html xmlns:MadCap="http://www.madcapsoftware.com/Schemas/MadCap.xsd" MadCap:tocPath="SQL API|SQL Language Guide|Reference Guide" MadCap:InPreviewMode="false" MadCap:PreloadImages="false" MadCap:RuntimeFileType="Topic" MadCap:TargetType="WebHelp" lang="en-us" xml:lang="en-us" MadCap:PathToHelpSystem="../../" MadCap:HelpSystemFileName="Default.xml" MadCap:SearchType="Stem">
+    <head>
+        <meta http-equiv="Content-Type" content="text/html; charset=utf-8" /><title>SQL Built-In Function Reference</title>
+        <link rel="icon" type="image/png" href="http://docs.raima.com/favicon.png" />
+        <link href="../SkinSupport/MadCap.css" rel="stylesheet" />
+        <link href="../Resources/TableStyles/fncSummary.css" rel="stylesheet" />
+        <link href="../Resources/Stylesheets/raima.css" rel="stylesheet" />
+        <script src="../SkinSupport/MadCapAll.js" type="text/javascript">
+        </script>
+    </head>
+    <body>
+        <p class="MCWebHelpFramesetLink MCWebHelpFramesetLinkTop" style="display: none;"><a href="../../Default_CSH.htm#SQL/SQLFuncRef.htm" style="">Open topic with navigation</a>
+        </p>
+        <div class="MCBreadcrumbsBox_0"><span class="MCBreadcrumbsPrefix">You are here: </span><a class="MCBreadcrumbsLink" href="../dbRSQL.htm">SQL API</a><span class="MCBreadcrumbsDivider"> &gt; </span><a class="MCBreadcrumbsLink" href="dbSQL.htm">SQL Language Guide</a><span class="MCBreadcrumbsDivider"> &gt; </span><a class="MCBreadcrumbsLink" href="SQLStmtRef.htm">Reference Guide</a><span class="MCBreadcrumbsDivider"> &gt; </span><span class="MCBreadcrumbs">SQL Built-In Function Reference</span>
+        </div>
+        <h1><a MadCap:generatedBookmark="TOC" name="SQL_Built-In_Function_Reference"></a>SQL Built-In Function Reference</h1>
+        <p><span class="MyVariablesProductShortName">RDM</span> provides many built-in functions that you can use in queries to return data or perform operations on data.</p>
+        <h2><a MadCap:generatedBookmark="TOC" name="Aggregate_Functions"></a>Aggregate Functions</h2>
+        <p>Aggregate functions perform a calculation on a set of values and return a single value. Except for COUNT, aggregate functions ignore null values. Aggregate functions are frequently used with the GROUP BY clause of the SELECT statement.</p>
+        <table style="caption-side: top;mc-table-style: url('../Resources/TableStyles/fncSummary.css');margin-left: 0;margin-right: auto;" class="TableStyle-fncSummary" cellspacing="0">
+            <caption>Table 10. Built-in Aggregate Functions</caption>
+            <col class="Column-Column1" />
+            <col class="Column-Column2" />
+            <thead>
+                <tr class="Head-Header1">
+                    <th class="HeadE-Column1-Header1">Function</th>
+                    <th class="HeadD-Column2-Header1">Description</th>
+                </tr>
+            </thead>
+            <tbody>
+                <tr class="Body-Body1">
+                    <td class="BodyE-Column1-Body1"><a href="FNC/count.htm">count</a>
+                    </td>
+                    <td class="BodyD-Column2-Body1">Returns the number (distinct) of rows in the aggregate.</td>
+                </tr>
+                <tr class="Body-Body1">
+                    <td class="BodyE-Column1-Body1"><a href="FNC/sum.htm">sum</a>
+                    </td>
+                    <td class="BodyD-Column2-Body1">Returns the sum of the (distinct) values of expression in the aggregate.</td>
+                </tr>
+                <tr class="Body-Body1">
+                    <td class="BodyE-Column1-Body1"><a href="FNC/avg.htm">avg</a>
+                    </td>
+                    <td class="BodyD-Column2-Body1">Returns the average of the (distinct) values of expression in the aggregate.</td>
+                </tr>
+                <tr class="Body-Body1">
+                    <td class="BodyE-Column1-Body1"><a href="FNC/min.htm">min</a>
+                    </td>
+                    <td class="BodyD-Column2-Body1">Returns the minimum expression value in the aggregate.</td>
+                </tr>
+                <tr class="Body-Body1">
+                    <td class="BodyB-Column1-Body1"><a href="FNC/max.htm">max</a>
+                    </td>
+                    <td class="BodyA-Column2-Body1">Returns the maximum expression value in the aggregate.</td>
+                </tr>
+            </tbody>
+        </table>
+        <h2><a MadCap:generatedBookmark="TOC" name="Scalar_Functions"></a>Scalar Functions</h2>
+        <h3><a MadCap:generatedBookmark="TOC" name="Mathematical_Functions"></a>Mathematical Functions</h3>
+        <p>The following scalar functions perform a calculation, usually based on input values that are provided as arguments, and return a numeric value:</p>
+        <table style="caption-side: top;margin-left: 0;margin-right: auto;mc-table-style: url('../Resources/TableStyles/fncSummary.css');" class="TableStyle-fncSummary" cellspacing="0">
+            <caption><a name="Table6"></a>Table 6. Built-in Numeric Functions</caption>
+            <col class="Column-Column1" />
+            <col class="Column-Column2" />
+            <thead>
+                <tr class="Head-Header1">
+                    <th class="HeadE-Column1-Header1">Function</th>
+                    <th class="HeadD-Column2-Header1">Description</th>
+                </tr>
+            </thead>
+            <tbody>
+                <tr class="Body-Body1">
+                    <td class="BodyE-Column1-Body1"><a href="FNC/Math/abs.htm">abs</a>
+                    </td>
+                    <td class="BodyD-Column2-Body1">Returns the absolute value of an expression.</td>
+                </tr>
+                <tr class="Body-Body1">
+                    <td class="BodyE-Column1-Body1"><a href="FNC/Math/acos.htm">acos</a>
+                    </td>
+                    <td class="BodyD-Column2-Body1">Returns the arccosine of an expression.</td>
+                </tr>
+                <tr class="Body-Body1">
+                    <td class="BodyE-Column1-Body1"><a href="FNC/Math/asin.htm">asin</a>
+                    </td>
+                    <td class="BodyD-Column2-Body1">Returns the arcsine of an expression.</td>
+                </tr>
+                <tr class="Body-Body1">
+                    <td class="BodyE-Column1-Body1"><a href="FNC/Math/atan.htm">atan</a>
+                    </td>
+                    <td class="BodyD-Column2-Body1">Returns the arctangent of an expression.</td>
+                </tr>
+                <tr class="Body-Body1">
+                    <td class="BodyE-Column1-Body1"><a href="FNC/Math/atan2.htm">atan2</a>
+                    </td>
+                    <td class="BodyD-Column2-Body1">Returns the arctangent of an x-y coordinate pair.</td>
+                </tr>
+                <tr class="Body-Body1">
+                    <td class="BodyE-Column1-Body1"><a href="FNC/Math/ceiling.htm">ceil | ceiling</a>
+                    </td>
+                    <td class="BodyD-Column2-Body1">Finds the upper bound for an expression.</td>
+                </tr>
+                <tr class="Body-Body1">
+                    <td class="BodyE-Column1-Body1"><a href="FNC/Math/cos.htm">cos</a>
+                    </td>
+                    <td class="BodyD-Column2-Body1">Returns the cosine of an angle.</td>
+                </tr>
+                <tr class="Body-Body1">
+                    <td class="BodyE-Column1-Body1"><a href="FNC/Math/cot.htm">cot</a>
+                    </td>
+                    <td class="BodyD-Column2-Body1">Returns the cotangent of an angle.</td>
+                </tr>
+                <tr class="Body-Body1">
+                    <td class="BodyE-Column1-Body1"><a href="FNC/Math/exp.htm">exp</a>
+                    </td>
+                    <td class="BodyD-Column2-Body1">Returns the value of an exponential function.</td>
+                </tr>
+                <tr class="Body-Body1">
+                    <td class="BodyE-Column1-Body1"><a href="FNC/Math/floor.htm">floor</a>
+                    </td>
+                    <td class="BodyD-Column2-Body1">Finds the lower bound for an expression.</td>
+                </tr>
+                <tr class="Body-Body1">
+                    <td class="BodyE-Column1-Body1"><a href="FNC/Math/log.htm">ln | log</a>
+                    </td>
+                    <td class="BodyD-Column2-Body1">Returns the natural logarithm of an expression.</td>
+                </tr>
+                <tr class="Body-Body1">
+                    <td class="BodyE-Column1-Body1"><a href="FNC/Math/mod.htm">mod</a>
+                    </td>
+                    <td class="BodyD-Column2-Body1">Returns the remainder of arith_expr1/arith_expr2.</td>
+                </tr>
+                <tr class="Body-Body1">
+                    <td class="BodyE-Column1-Body1"><a href="FNC/Math/pi.htm">pi</a>
+                    </td>
+                    <td class="BodyD-Column2-Body1">Returns the value of pi.</td>
+                </tr>
+                <tr class="Body-Body1">
+                    <td class="BodyE-Column1-Body1"><a href="FNC/Math/rand.htm">rand</a>
+                    </td>
+                    <td class="BodyD-Column2-Body1">Returns next random floating-point number.  Non-zero num is seed.</td>
+                </tr>
+                <tr class="Body-Body1">
+                    <td class="BodyE-Column1-Body1"><a href="FNC/Math/sign.htm">sign</a>
+                    </td>
+                    <td class="BodyD-Column2-Body1">Returns the sign of an expression (-1, 0, +1).</td>
+                </tr>
+                <tr class="Body-Body1">
+                    <td class="BodyE-Column1-Body1"><a href="FNC/Math/sin.htm">sin</a>
+                    </td>
+                    <td class="BodyD-Column2-Body1">Returns the sine of an angle.</td>
+                </tr>
+                <tr class="Body-Body1">
+                    <td class="BodyE-Column1-Body1"><a href="FNC/Math/sqrt.htm">sqrt</a>
+                    </td>
+                    <td class="BodyD-Column2-Body1">Returns the square root of an expression.</td>
+                </tr>
+                <tr class="Body-Body1">
+                    <td class="BodyB-Column1-Body1"><a href="FNC/Math/tan.htm">tan</a>
+                    </td>
+                    <td class="BodyA-Column2-Body1">Returns the tangent of an angle.</td>
+                </tr>
+            </tbody>
+        </table>
+        <h3><a MadCap:generatedBookmark="TOC" name="Date_and_Time_Functions"></a>Date and Time Functions</h3>
+        <p class="Notes">The data type 'date' assumes the Gregorian calendar even for dates prior to the introduction of the Gregorian calendar. This means that databases that store historical dates prior to the introduction of the Gregorian calendar may not compute <b>select</b> with date ranges, <b>dayofweek</b>, and <b>week</b> correctly.</p>
+        <table style="width: 100%;mc-table-style: url('../Resources/TableStyles/fncSummary.css');margin-left: 0;margin-right: auto;" class="TableStyle-fncSummary" cellspacing="0">
+            <caption>Table 7. Date/Time Functions</caption>
+            <col class="Column-Column1" />
+            <col class="Column-Column2" />
+            <thead>
+                <tr class="Head-Header1">
+                    <th class="HeadE-Column1-Header1">Function</th>
+                    <th class="HeadD-Column2-Header1">Description</th>
+                </tr>
+            </thead>
+            <tbody>
+                <tr class="Body-Body1">
+                    <td class="BodyE-Column1-Body1"><a href="FNC/DateTime/age.htm">age</a>
+                    </td>
+                    <td class="BodyD-Column2-Body1">Calculate number of whole years from date_expr to current date</td>
+                </tr>
+                <tr class="Body-Body1">
+                    <td class="BodyE-Column1-Body1"><a href="FNC/DateTime/curdate.htm">curdate</a>
+                    </td>
+                    <td class="BodyD-Column2-Body1">Retrieve the current date</td>
+                </tr>
+                <tr class="Body-Body1">
+                    <td class="BodyE-Column1-Body1"><a href="FNC/DateTime/curtime.htm">curtime</a>
+                    </td>
+                    <td class="BodyD-Column2-Body1">Retrieve the current time</td>
+                </tr>
+                <tr class="Body-Body1">
+                    <td class="BodyE-Column1-Body1"><a href="FNC/DateTime/dayofmonth.htm">dayofmonth</a>
+                    </td>
+                    <td class="BodyD-Column2-Body1">Retrieve the day of the month</td>
+                </tr>
+                <tr class="Body-Body1">
+                    <td class="BodyE-Column1-Body1"><a href="FNC/DateTime/dayofweek.htm">dayofweek</a>
+                    </td>
+                    <td class="BodyD-Column2-Body1">Retrieve the day of the week</td>
+                </tr>
+                <tr class="Body-Body1">
+                    <td class="BodyE-Column1-Body1"><a href="FNC/DateTime/dayofyear.htm">dayofyear</a>
+                    </td>
+                    <td class="BodyD-Column2-Body1">Retrieve the day of the year</td>
+                </tr>
+                <tr class="Body-Body1">
+                    <td class="BodyE-Column1-Body1"><a href="FNC/DateTime/hour.htm">hour</a>
+                    </td>
+                    <td class="BodyD-Column2-Body1">Retrieve the hour</td>
+                </tr>
+                <tr class="Body-Body1">
+                    <td class="BodyE-Column1-Body1"><a href="FNC/DateTime/minute.htm">minute</a>
+                    </td>
+                    <td class="BodyD-Column2-Body1">Retrieve the minute</td>
+                </tr>
+                <tr class="Body-Body1">
+                    <td class="BodyE-Column1-Body1"><a href="FNC/DateTime/month.htm">month</a>
+                    </td>
+                    <td class="BodyD-Column2-Body1">Retrieve the month</td>
+                </tr>
+                <tr class="Body-Body1">
+                    <td class="BodyE-Column1-Body1"><a href="FNC/DateTime/quarter.htm">quarter</a>
+                    </td>
+                    <td class="BodyD-Column2-Body1">Retrieve the quarter</td>
+                </tr>
+                <tr class="Body-Body1">
+                    <td class="BodyE-Column1-Body1"><a href="FNC/DateTime/second.htm">second</a>
+                    </td>
+                    <td class="BodyD-Column2-Body1">Retrieve the second</td>
+                </tr>
+                <tr class="Body-Body1">
+                    <td class="BodyE-Column1-Body1"><a href="FNC/DateTime/week.htm">week</a>
+                    </td>
+                    <td class="BodyD-Column2-Body1">Retrieve the week</td>
+                </tr>
+                <tr class="Body-Body1">
+                    <td class="BodyB-Column1-Body1"><a href="FNC/DateTime/year.htm">year</a>
+                    </td>
+                    <td class="BodyA-Column2-Body1">Retrieve the year</td>
+                </tr>
+            </tbody>
+        </table>
+        <h3><a MadCap:generatedBookmark="TOC" name="String_Functions"></a>String Functions</h3>
+        <p>The following scalar functions perform an operation on a string input value and return a string or numeric value:</p>
+        <table style="caption-side: top;margin-left: 0;margin-right: auto;mc-table-style: url('../Resources/TableStyles/fncSummary.css');" class="TableStyle-fncSummary" cellspacing="0">
+            <caption><a name="Table8"></a>Table 8. Built-in String Functions</caption>
+            <col class="Column-Column1" />
+            <col class="Column-Column2" />
+            <thead>
+                <tr class="Head-Header1">
+                    <th class="HeadE-Column1-Header1">Function</th>
+                    <th class="HeadD-Column2-Header1">Description</th>
+                </tr>
+            </thead>
+            <tbody>
+                <tr class="Body-Body1">
+                    <td class="BodyE-Column1-Body1"><a href="FNC/String/ascii.htm">ascii</a>
+                    </td>
+                    <td class="BodyD-Column2-Body1">Returns the numeric ASCII value of a character</td>
+                </tr>
+                <tr class="Body-Body1">
+                    <td class="BodyE-Column1-Body1"><a href="FNC/String/char.htm">char</a>
+                    </td>
+                    <td class="BodyD-Column2-Body1">Returns the ASCII character with numeric value <i>num</i></td>
+                </tr>
+                <tr class="Body-Body1">
+                    <td class="BodyE-Column1-Body1"><a href="FNC/String/concat.htm">concat</a>
+                    </td>
+                    <td class="BodyD-Column2-Body1">Concatenates two strings</td>
+                </tr>
+                <tr class="Body-Body1">
+                    <td class="BodyE-Column1-Body1"><a href="FNC/convert.htm">convert</a>
+                    </td>
+                    <td class="BodyD-Column2-Body1">Convert an expression to a data type or a character string</td>
+                </tr>
+                <tr class="Body-Body1">
+                    <td class="BodyE-Column1-Body1"><a href="FNC/String/insstr.htm">insstr</a>
+                    </td>
+                    <td class="BodyD-Column2-Body1">Replace <i>num2</i> chars from string_expr2 in string_expr1 beginning at position <i>num1</i> (1st position is 1 not 0)</td>
+                </tr>
+                <tr class="Body-Body1">
+                    <td class="BodyE-Column1-Body1"><a href="FNC/String/lcase.htm">lcase</a>
+                    </td>
+                    <td class="BodyD-Column2-Body1">Converts a string to lowercase</td>
+                </tr>
+                <tr class="Body-Body1">
+                    <td class="BodyE-Column1-Body1"><a href="FNC/String/left.htm">left</a>
+                    </td>
+                    <td class="BodyD-Column2-Body1">Returns the leftmost <i>num</i> characters from the string</td>
+                </tr>
+                <tr class="Body-Body1">
+                    <td class="BodyE-Column1-Body1"><a href="FNC/String/length.htm">length</a>
+                    </td>
+                    <td class="BodyD-Column2-Body1">Returns the length of the string</td>
+                </tr>
+                <tr class="Body-Body1">
+                    <td class="BodyE-Column1-Body1"><a href="FNC/String/locate.htm">locate</a>
+                    </td>
+                    <td class="BodyD-Column2-Body1">Locate string_expr1 from position <i>num</i> in string_expr2</td>
+                </tr>
+                <tr class="Body-Body1">
+                    <td class="BodyE-Column1-Body1"><a href="FNC/String/ltrim.htm">ltrim</a>
+                    </td>
+                    <td class="BodyD-Column2-Body1">Removes all leading spaces from string</td>
+                </tr>
+                <tr class="Body-Body1">
+                    <td class="BodyE-Column1-Body1"><a href="FNC/String/repeat.htm">repeat</a>
+                    </td>
+                    <td class="BodyD-Column2-Body1">Repeats string <i>num</i> times</td>
+                </tr>
+                <tr class="Body-Body1">
+                    <td class="BodyE-Column1-Body1"><a href="FNC/String/replace.htm">replace</a>
+                    </td>
+                    <td class="BodyD-Column2-Body1">Replace string_expr2 with string_expr3 in string_expr1</td>
+                </tr>
+                <tr class="Body-Body1">
+                    <td class="BodyE-Column1-Body1"><a href="FNC/String/right.htm">right</a>
+                    </td>
+                    <td class="BodyD-Column2-Body1">Returns the rightmost <i>num</i> characters from string</td>
+                </tr>
+                <tr class="Body-Body1">
+                    <td class="BodyE-Column1-Body1"><a href="FNC/String/rtrim.htm">rtrim</a>
+                    </td>
+                    <td class="BodyD-Column2-Body1">Removes all trailing spaces from string</td>
+                </tr>
+                <tr class="Body-Body1">
+                    <td class="BodyE-Column1-Body1"><a href="FNC/String/substring.htm">substring</a>
+                    </td>
+                    <td class="BodyD-Column2-Body1">Returns <i>num2</i> characters from string_expr beginning at position <i>num1</i>.</td>
+                </tr>
+                <tr class="Body-Body1">
+                    <td class="BodyE-Column1-Body1"><a href="FNC/String/ucase.htm">ucase</a>
+                    </td>
+                    <td class="BodyD-Column2-Body1">Convert string to uppercase</td>
+                </tr>
+                <tr class="Body-Body1">
+                    <td class="BodyE-Column1-Body1"><a href="FNC/String/unicode.htm">unicode</a>
+                    </td>
+                    <td class="BodyD-Column2-Body1">Returns the numeric Unicode value of a character</td>
+                </tr>
+                <tr class="Body-Body1" MadCap:conditions="">
+                    <td class="BodyB-Column1-Body1"><a href="FNC/String/wchar.htm">wchar(num)</a>
+                    </td>
+                    <td class="BodyA-Column2-Body1">Returns a Unicode character with numeric value <i>num</i>.</td>
+                </tr>
+            </tbody>
+        </table>
+        <hr MadCap:conditions="Default.ScreenOnly" width="100%" size="0" align="center" />
+        <p MadCap:conditions="Default.ScreenOnly" style="font-size: 8pt;"><span class="MyVariablesCopyright">Copyright © 2012, Raima Inc. All rights reserved.</span>
+        </p>
+        <script type="text/javascript" src="../SkinSupport/MadCapBodyEnd.js">
+        </script>
+        <p class="MCWebHelpFramesetLink MCWebHelpFramesetLinkBottom" style="display: none;"><a href="../../Default_CSH.htm#SQL/SQLFuncRef.htm" style="">Open topic with navigation</a>
+        </p>
+    </body>
+</html>

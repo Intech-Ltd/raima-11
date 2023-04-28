@@ -1,0 +1,431 @@
+<?xml version="1.0" encoding="utf-8"?>
+<!DOCTYPE html PUBLIC "-//W3C//DTD XHTML 1.0 Strict//EN" "http://www.w3.org/TR/xhtml1/DTD/xhtml1-strict.dtd">
+<html xmlns:MadCap="http://www.madcapsoftware.com/Schemas/MadCap.xsd" MadCap:tocPath="SQL API|ODBC User's Guide|ODBC API&#160;Reference" MadCap:InPreviewMode="false" MadCap:PreloadImages="false" MadCap:RuntimeFileType="Topic" MadCap:TargetType="WebHelp" lang="en-us" xml:lang="en-us" MadCap:PathToHelpSystem="../../../" MadCap:HelpSystemFileName="Default.xml" MadCap:SearchType="Stem">
+    <head>
+        <meta http-equiv="Content-Type" content="text/html; charset=utf-8" /><title>SQLSetStmtAttr</title>
+        <link rel="icon" type="image/png" href="http://docs.raima.com/favicon.png" />
+        <link href="../../SkinSupport/MadCap.css" rel="stylesheet" />
+        <link href="../../Resources/TableStyles/ODBCTable.css" rel="stylesheet" />
+        <link href="../../Resources/TableStyles/FunctionArgs.css" rel="stylesheet" />
+        <link href="../../Resources/TableStyles/ODBCErrorCodes.css" rel="stylesheet" />
+        <link href="../../Resources/Stylesheets/raima.css" rel="stylesheet" />
+        <script src="../../SkinSupport/MadCapAll.js">
+        </script>
+    </head>
+    <body>
+        <p class="MCWebHelpFramesetLink MCWebHelpFramesetLinkTop" style="display: none;"><a href="../../../Default_CSH.htm#ODBCRM/api/SQLSetStmtAttr.htm" style="">Open topic with navigation</a>
+        </p>
+        <div class="MCBreadcrumbsBox_0"><span class="MCBreadcrumbsPrefix">You are here: </span><a class="MCBreadcrumbsLink" href="../../dbRSQL.htm">SQL API</a><span class="MCBreadcrumbsDivider"> &gt; </span><a class="MCBreadcrumbsLink" href="../dbODBCUG.htm">ODBC User's Guide</a><span class="MCBreadcrumbsDivider"> &gt; </span><a class="MCBreadcrumbsLink" href="../ODBCCore.htm">ODBC API&#160;Reference</a><span class="MCBreadcrumbsDivider"> &gt; </span><span class="MCBreadcrumbs">SQLSetStmtAttr</span>
+        </div>
+        <h3 class="newpage"><a name="kanchor395"></a>SQLSetStmtAttr&#160; </h3>
+        <p>Sets attributes related to a statement </p>
+        <p class="Heading">Conformance</p>
+        <p>Version Introduced: ODBC 3.0 Standards Compliance: ISO 92</p>
+        <p class="Heading">Syntax</p><pre>SQLRETURN SQLSetStmtAttr(&#160; 
+	SQLHSTMT StatementHandle,&#160; 
+	SQLINTEGER Attribute,&#160; 
+	SQLPOINTER ValuePtr,&#160; 
+	SQLINTEGER StringLength)</pre>
+        <p class="Heading">Arguments</p>
+        <table style="width: 100%;mc-table-style: url('../../Resources/TableStyles/FunctionArgs.css');margin-left: 0;margin-right: auto;" class="TableStyle-FunctionArgs" cellspacing="0">
+            <col style="width: 140px;" class="Column-Column1" />
+            <col style="width: 80px;" class="Column-Column3" />
+            <col class="Column-Column2" />
+            <tbody>
+                <tr class="Body-Body1">
+                    <td style="" class="BodyE-Column1-Body1">StatementHandle     </td>
+                    <td style="" class="BodyE-Column3-Body1">(input)</td>
+                    <td style="" class="BodyD-Column2-Body1">Statement handle.
+
+</td>
+                </tr>
+                <tr class="Body-Body1">
+                    <td class="BodyE-Column1-Body1">Attribute</td>
+                    <td class="BodyE-Column3-Body1">(input)</td>
+                    <td class="BodyD-Column2-Body1">Specifies the statement option type. Possible values are described in "Comments"&#160;below.</td>
+                </tr>
+                <tr class="Body-Body1">
+                    <td style="" class="BodyE-Column1-Body1">ValuePtr</td>
+                    <td style="" class="BodyE-Column3-Body1">(input)</td>
+                    <td style="" class="BodyD-Column2-Body1">Pointer to the value to be associated with <code>Attribute</code>. Depending on the value of <code>Attribute</code>, <code>ValuePtr</code> will be a 32-bit unsigned integer value, or will point to a null-terminated character string.</td>
+                </tr>
+                <tr class="Body-Body1">
+                    <td class="BodyB-Column1-Body1">StringLength</td>
+                    <td class="BodyB-Column3-Body1">(input)</td>
+                    <td class="BodyA-Column2-Body1">If Attribute is an ODBC-defined attribute and <code>ValuePtr</code> points to a character string or a binary buffer, this argument should be the length of <code>*ValuePtr</code>. If <code>Attribute</code> is an ODBC-defined attribute and <code>ValuePtr</code> is an integer, <code>StringLength</code> is ignored.
+
+</td>
+                </tr>
+            </tbody>
+        </table>
+        <p class="Heading">Required Headers</p><pre xml:space="preserve">#include "sql.h"</pre>
+        <p class="Heading">Libraries</p>
+        <table style="width: 100%; margin-left: 0; margin-right: auto;">
+            <col style="width: 200px;">
+            </col>
+            <col>
+            </col>
+            <thead>
+                <tr>
+                    <th>Library Name</th>
+                    <th>Description</th>
+                </tr>
+            </thead>
+            <tbody>
+                <tr>
+                    <td><code>rdmrdbc<span class="MyVariablesLibraryVersion">11</span></code>
+                    </td>
+                    <td><span class="MyVariablesProductShortName">RDM</span>&#160;ODBC&#160;API Library</td>
+                </tr>
+            </tbody>
+        </table>
+        <p>See <a href="../../GS/distrib.htm#Library">Library Naming Conventions</a> section for full library name and a list of library dependencies.</p>
+        <p class="Heading">Returns</p>
+        <table class="TableStyle-ODBCErrorCodes" cellspacing="0" style="margin-left: 0;margin-right: auto;mc-table-style: url('../../Resources/TableStyles/ODBCErrorCodes.css');">
+            <col class="Column-Column1" />
+            <col class="Column-Column2" />
+            <tbody>
+                <tr class="Body-Body1">
+                    <th class="BodyB-Column1-Body1" style="font-weight: bold;">Return Code</th>
+                    <th class="BodyA-Column2-Body1" style="font-weight: bold;">Description</th>
+                </tr>
+            </tbody>
+        </table>
+        <table class="TableStyle-ODBCErrorCodes" cellspacing="0" style="mc-table-style: url('../../Resources/TableStyles/ODBCErrorCodes.css');">
+            <col class="Column-Column1" />
+            <col class="Column-Column2" />
+            <tbody>
+                <tr class="Body-Body1">
+                    <td class="BodyB-Column1-Body1">SQL_SUCCESS</td>
+                    <td class="BodyA-Column2-Body1">Function completed successfully. The application calls <code>SQLGetDiagField</code> to retrieve additional information from the header record.
+</td>
+                </tr>
+            </tbody>
+        </table>
+        <table class="TableStyle-ODBCErrorCodes" cellspacing="0" style="mc-table-style: url('../../Resources/TableStyles/ODBCErrorCodes.css');">
+            <col class="Column-Column1" />
+            <col class="Column-Column2" />
+            <tbody>
+                <tr class="Body-Body1">
+                    <td class="BodyB-Column1-Body1">SQL_SUCCESS_WITH_INFO</td>
+                    <td class="BodyA-Column2-Body1">Function completed successfully, possibly with a nonfatal error (warning). The application calls <code>SQLGetDiagRec</code> or <code>SQLGetDiagField</code> to retrieve additional information.
+</td>
+                </tr>
+            </tbody>
+        </table>
+        <table class="TableStyle-ODBCErrorCodes" cellspacing="0" style="mc-table-style: url('../../Resources/TableStyles/ODBCErrorCodes.css');">
+            <col class="Column-Column1" />
+            <col class="Column-Column2" />
+            <tbody>
+                <tr class="Body-Body1">
+                    <td class="BodyB-Column1-Body1">SQL_ERROR</td>
+                    <td class="BodyA-Column2-Body1">Function failed. The application calls <code>SQLGetDiagRec</code> or <code>SQLGetDiagField</code> to retrieve additional information. The contents of any output arguments to the function are undefined.
+</td>
+                </tr>
+            </tbody>
+        </table>
+        <table class="TableStyle-ODBCErrorCodes" cellspacing="0" style="mc-table-style: url('../../Resources/TableStyles/ODBCErrorCodes.css');">
+            <col class="Column-Column1" />
+            <col class="Column-Column2" />
+            <tbody>
+                <tr class="Body-Body1">
+                    <td class="BodyB-Column1-Body1">SQL_INVALID_HANDLE</td>
+                    <td class="BodyA-Column2-Body1">Function failed due to an invalid environment, connection, statement, or descriptor handle. This indicates a programming error. No additional information is available from <code>SQLGetDiagRec</code> or <code>SQLGetDiagField</code>. This code is returned only when the handle is a null pointer or is the wrong type, such as when a statement handle is passed for an argument that requires a connection handle.
+</td>
+                </tr>
+            </tbody>
+        </table>
+        <p class="Heading">Comments</p>
+        <p><b style="font-style: italic;">Attributes</b> and <b style="font-style: italic;">ValuePtr</b></p>
+        <p><span class="MyVariablesProductShortName">RDM</span> accepts the following attribute values.</p>
+        <table style="mc-table-style: url('../../Resources/TableStyles/ODBCTable.css');margin-left: 0;margin-right: auto;" class="TableStyle-ODBCTable" cellspacing="0">
+            <col class="Column-Column1" />
+            <col class="Column-Column2" />
+            <col class="Column-Column3" />
+            <thead>
+                <tr class="Head-Header1">
+                    <th class="HeadE-Column1-Header1">Attribute</th>
+                    <th class="HeadE-Column2-Header1">ODBC</th>
+                    <th class="HeadD-Column3-Header1">ValuePtr contents</th>
+                </tr>
+            </thead>
+            <tbody>
+                <tr class="Body-Body1">
+                    <td class="BodyE-Column1-Body1">SQL_ATTR_APP_PARAM_DESC</td>
+                    <td class="BodyE-Column2-Body1">3.0</td>
+                    <td class="BodyD-Column3-Body1">The handle to the APD. The handle will replace the handle currently associated with the APD. <code>SQL_NULL_DESC</code> can be specified to dissociate the current handle from the APD; in that case, the APD will revert to the implicitly allocated internal handle.<br /><br />This attribute cannot be set to an implicitly allocated handle except for the handle that was originally implicitly allocated for this APD.</td>
+                </tr>
+                <tr class="Body-Body1">
+                    <td class="BodyE-Column1-Body1">SQL_ATTR_APP_ROW_DESC</td>
+                    <td class="BodyE-Column2-Body1">3.0</td>
+                    <td class="BodyD-Column3-Body1">The handle to the ARD. The handle will replace the handle currently associated with the APD. <code>SQL_NULL_DESC</code> can be specified to dissociate the current handle from the APD; in that case, the ARD will revert to the implicitly allocated internal handle.<br /><br />This attribute cannot be set to an implicitly allocated handle except for the handle that was originally implicitly allocated for this ARD.</td>
+                </tr>
+                <tr class="Body-Body1">
+                    <td class="BodyE-Column1-Body1">SQL_ATTR_ASYNC_ENABLE</td>
+                    <td class="BodyE-Column2-Body1">3.0</td>
+                    <td class="BodyD-Column3-Body1">An <code>SQLULEN</code> value that specifies whether functions on this statement handle are executed asynchronously. The possible values are:<br /><br /><code>SQL_ASYNC_ENABLE_OFF</code> = Disable statement-level asynchronous execution support (default).<br /><br />The following values are not supported:<br /><br /><code>SQL_ASYNC_ENABLE_ON</code></td>
+                </tr>
+                <tr class="Body-Body1">
+                    <td class="BodyE-Column1-Body1">SQL_ATTR_CONCURRENCY</td>
+                    <td class="BodyE-Column2-Body1">2.0</td>
+                    <td class="BodyD-Column3-Body1">
+                        <p>A <code>SQLULEN</code> value that specifies the cursor concurrency. The possible values are:</p>
+                        <p><code>SQL_CONCUR_READ_ONLY</code> = Cursor is read-only; updates are not allowed (default).</p>
+                        <p><code>SQL_CONCUR_LOCK</code> = Cursor uses the lowest-level locking necessary to perform updates.</p>
+                        <p>The following values are not supported:</p>
+                        <p><code>SQL_CONCUR_ROWVER</code>
+                            <br /><code>SQL_CONCUR_VALUES</code>
+                        </p>
+                        <p>If an unsupported value is specified, <code>SQLSetStmtAttr</code> substitutes <code>SQL_CONCUR_LOCK</code> for it and returns 01S02 ("option value changed") at execution time.</p>
+                    </td>
+                </tr>
+                <tr class="Body-Body1">
+                    <td class="BodyE-Column1-Body1">SQL_ATTR_CURSOR_SCROLLABLE</td>
+                    <td class="BodyE-Column2-Body1">3.0</td>
+                    <td class="BodyD-Column3-Body1">
+                        <p>An <code>SQLULEN</code> value that specifies whether the cursor is scrollable. The possible values are:</p>
+                        <p><code>SQL_NONSCROLLABLE</code> = The cursor is not scrollable (default). Only <code>SQL_FETCH_NEXT</code> is supported for <code>SQLFetchScroll</code>.</p>
+                        <p>The following values are not supported:</p>
+                        <p><code>SQL_SCROLLABLE</code>
+                        </p>
+                    </td>
+                </tr>
+                <tr class="Body-Body1">
+                    <td class="BodyE-Column1-Body1">SQL_ATTR_CURSOR_SENSITIVITY</td>
+                    <td class="BodyE-Column2-Body1">&#160;</td>
+                    <td class="BodyD-Column3-Body1">
+                        <p>An <code>SQLULEN</code> value that specifies whether the cursors on the statement handle makes visible the changes made to a result set by another cursor. The possible values are:</p>
+                        <p><code>SQL_UNSPECIFIED</code> = Whether the cursors on the statement handle makes visible the changes made to a result set by another cursor is unspecified (default).</p>
+                        <p>The following values are not supported:</p>
+                        <p><code>SQL_INSENSITIVE</code>
+                            <br /><code>SQL_SENSITIVE</code>
+                        </p>
+                    </td>
+                </tr>
+                <tr class="Body-Body1">
+                    <td class="BodyE-Column1-Body1">SQL_ATTR_CURSOR_TYPE</td>
+                    <td class="BodyE-Column2-Body1">2.0</td>
+                    <td class="BodyD-Column3-Body1">
+                        <p>An <code>SQLULEN</code> value that specifies the cursor type. The possible values are:</p>
+                        <p><code>SQL_CURSOR_FORWARD_ONLY</code> = The cursor scrolls forward-only (default).</p>
+                        <p>The following values are not supported:</p>
+                        <p><code>SQL_CURSOR_STATIC</code>
+                            <br /><code>SQL_CURSOR_KEYSET_DRIVEN</code>
+                            <br /><code>SQL_CURSOR_DYNAMIC</code>
+                        </p>
+                        <p><span class="MyVariablesProductShortName">RDM</span> ODBC only supports forward-only cursors.</p>
+                    </td>
+                </tr>
+                <tr class="Body-Body1">
+                    <td class="BodyE-Column1-Body1">SQL_ATTR_ENABLE_AUTO_IPD</td>
+                    <td class="BodyE-Column2-Body1">3.0</td>
+                    <td class="BodyD-Column3-Body1">
+                        <p>An <code>SQLULEN</code> value that specifies whether the IPD is populated automatically. The possible values are:</p>
+                        <p><code>SQL_TRUE</code> = The IPD is automatically populated after <code>SQLPrepare</code>.</p>
+                        <p><code>SQL_FALSE</code> = The IPD is not automatically populated after <code>SQLPrepare</code>(). The application should call <code>SQLDescribeParam</code> to obtain the IPD information (default).</p>
+                    </td>
+                </tr>
+                <tr class="Body-Body1">
+                    <td class="BodyE-Column1-Body1">SQL_ATTR_FETCH_BOOKMARK_PTR</td>
+                    <td class="BodyE-Column2-Body1">3.0</td>
+                    <td class="BodyD-Column3-Body1">Not supported. Setting this attribute has no effect.</td>
+                </tr>
+                <tr class="Body-Body1">
+                    <td class="BodyE-Column1-Body1">SQL_ATTR_IMP_PARAM_DESC</td>
+                    <td class="BodyE-Column2-Body1">3.0</td>
+                    <td class="BodyD-Column3-Body1">The handle to the IPD. This is a read-only attribute. The application can call <code>SQLGetStmtAttr</code> to retrieve the value of the attribute.</td>
+                </tr>
+                <tr class="Body-Body1">
+                    <td class="BodyE-Column1-Body1">SQL_ATTR_IMP_ROW_DESC</td>
+                    <td class="BodyE-Column2-Body1">3.0</td>
+                    <td class="BodyD-Column3-Body1">The handle to the IRD. This is a read-only attribute. The application can call <code>SQLGetStmtAttr</code> to retrieve the value of the attribute.</td>
+                </tr>
+                <tr class="Body-Body1">
+                    <td class="BodyE-Column1-Body1">SQL_ATTR_KEYSET_SIZE</td>
+                    <td class="BodyE-Column2-Body1">2.0</td>
+                    <td class="BodyD-Column3-Body1">An <code>SQLULEN</code> value that specifies the number of rows in the keyset for a keyset-driven cursor.<span class="MyVariablesProductShortName">RDM</span> does not support this attribute. Setting this attribute has no effect.</td>
+                </tr>
+                <tr class="Body-Body1">
+                    <td class="BodyE-Column1-Body1">SQL_ATTR_MAX_LENGTH</td>
+                    <td class="BodyE-Column2-Body1">1.0</td>
+                    <td class="BodyD-Column3-Body1">
+                        <p>An <code>SQLULEN</code> value that specifies the maximum amount of data the <span class="MyVariablesProductShortName">RDM</span> ODBC driver returns from a binary or character column.</p>
+                        <p>The default value is 0. In that case, <span class="MyVariablesProductShortName">RDM</span> ODBC Driver attempts to return all available data.</p>
+                        <p>If the specified length is less than the length of the available data, the data is truncated and <code>SQL_SUCCESS</code> is returned.</p>
+                    </td>
+                </tr>
+                <tr class="Body-Body1">
+                    <td class="BodyE-Column1-Body1">SQL_ATTR_MAX_ROWS</td>
+                    <td class="BodyE-Column2-Body1">1.0</td>
+                    <td class="BodyD-Column3-Body1">
+                        <p>An <code>SQLULEN</code> value that specifies the maximum number of rows returned by a <b>select</b> statement.</p>
+                        <p>The default value is 0. In that case, <span class="MyVariablesProductShortName">RDM</span> ODBC Driver attempts to return all rows.</p>
+                        <p>If set to non-zero, this value sets the maximum value for the cursor row count.</p>
+                    </td>
+                </tr>
+                <tr class="Body-Body1">
+                    <td class="BodyE-Column1-Body1">SQL_ATTR_METADATA_ID</td>
+                    <td class="BodyE-Column2-Body1">3.0</td>
+                    <td class="BodyD-Column3-Body1">
+                        <p>An SQLULEN value that specifies how the string arguments of catalog functions are treated. The possible values are:</p>
+                        <p>SQL_FALSE = the string arguments of catalog functions are not treated as identifiers. Arguments are case-sensitive and may contain a string search pattern (default).</p>
+                        <p>The following values are not supported:</p>
+                        <p>SQL_TRUE</p>
+                    </td>
+                </tr>
+                <tr class="Body-Body1">
+                    <td class="BodyE-Column1-Body1">SQL_ATTR_NOSCAN</td>
+                    <td class="BodyE-Column2-Body1">1.0</td>
+                    <td class="BodyD-Column3-Body1">
+                        <p>An <code>SQLULEN</code> value that indicates whether the <span class="MyVariablesProductShortName">RDM</span> ODBC Driver should scan SQL strings for escape sequences. The possible values are:</p>
+                        <p><code>SQL_NOSCAN_OFF</code> = SQL strings are scanned for escape sequences (default).</p>
+                        <p><code>SQL_NOSCAN_ON</code> = SQL strings are not scanned for escape sequences. They are passed directly to the data source.</p>
+                    </td>
+                </tr>
+                <tr class="Body-Body1">
+                    <td class="BodyE-Column1-Body1">SQL_ATTR_PARAM_BIND_OFFSET_PTR</td>
+                    <td class="BodyE-Column2-Body1">3.0</td>
+                    <td class="BodyD-Column3-Body1">
+                        <p>An <code>SQLULEN</code> pointer that points to an offset value added to pointers to change dynamic parameter binding. If non-null, the pointer will be dereferenced, and the value contained will be added to each of the dereferenced fields in the APD. The affected fields are:</p>
+                        <p><code>SQL_DESC_DATA_PTR</code>
+                            <br /><code>SQL_DESC_INDICATOR_PTR</code>
+                            <br /><code>SQL_DESC_OCTET_LENGTH_PTR</code>
+                        </p>
+                        <p>The default value is <code>NULL</code>.</p>
+                    </td>
+                </tr>
+                <tr class="Body-Body1">
+                    <td class="BodyE-Column1-Body1">SQL_ATTR_PARAM_BIND_TYPE</td>
+                    <td class="BodyE-Column2-Body1">3.0</td>
+                    <td class="BodyD-Column3-Body1">
+                        <p>An <code>SQLULEN</code> value that specifies the binding orientation to be used for dynamic parameters. The possible values are:</p>
+                        <p><code>SQL_PARAM_BIND_BY_COLUMN</code> = Perform column-wise binding (default).</p>
+                        <p>Row-wise binding is not supported.</p>
+                    </td>
+                </tr>
+                <tr class="Body-Body1">
+                    <td class="BodyE-Column1-Body1">SQL_ATTR_PARAM_OPERATION_PTR</td>
+                    <td class="BodyE-Column2-Body1">3.0</td>
+                    <td class="BodyD-Column3-Body1">Not supported. Setting this attribute has no effect.</td>
+                </tr>
+                <tr class="Body-Body1">
+                    <td class="BodyE-Column1-Body1">SQL_ATTR_PARAM_STATUS_PTR</td>
+                    <td class="BodyE-Column2-Body1">3.0</td>
+                    <td class="BodyD-Column3-Body1">Not supported. Setting this attribute has no effect.</td>
+                </tr>
+                <tr class="Body-Body1">
+                    <td class="BodyE-Column1-Body1">SQL_ATTR_PARAMS_PROCESSED_PTR</td>
+                    <td class="BodyE-Column2-Body1">3.0</td>
+                    <td class="BodyD-Column3-Body1">Not supported. Setting this attribute has no effect.</td>
+                </tr>
+                <tr class="Body-Body1">
+                    <td class="BodyE-Column1-Body1">SQL_ATTR_PARMSET_SIZE</td>
+                    <td class="BodyE-Column2-Body1">3.0</td>
+                    <td class="BodyD-Column3-Body1">Not supported. Setting this attribute has no effect.</td>
+                </tr>
+                <tr class="Body-Body1">
+                    <td class="BodyE-Column1-Body1">SQL_ATTR_QUERY_TIMEOUT<span class="MCTextPopup"><span class="MCTextPopupBody_0" style="display: none; ">Although SQL_ATTR_QUERY_TIMEOUT is a statement attribute, the value is effective on the connection level in RDM ODBC. Changing the value of this attribute on one statement handle will affect all the other statement handles allocated from the same connection handle.</span><a href="javascript:void(0);" class="popupHead_1" onclick="FMCTextPopup( event, this ); return false;" style="font-size: 0.9em; vertical-align: super">1</a></span></td>
+                    <td class="BodyE-Column2-Body1">1.0</td>
+                    <td class="BodyD-Column3-Body1">An <code>SQLULEN</code> value that specifies the number of seconds <span class="MyVariablesRSQLName">RDM SQL</span> uses in requesting locks on databases for statement execution. If locking is not granted within the specified timeout period, the statement execution returns with a "timeout expired " error (SQLSTATE "HYT00").<br /><br />The default value for this attribute is 10 (seconds). It is different from the default value (0, or no timeout) specified by ODBC.
+</td>
+                </tr>
+                <tr class="Body-Body1">
+                    <td class="BodyE-Column1-Body1">SQL_ATTR_RETRIEVE_DATA</td>
+                    <td class="BodyE-Column2-Body1">2.0</td>
+                    <td class="BodyD-Column3-Body1">
+                        <p>An <code>SQULEN</code> value that specifies whether <code>SQLFetch</code> and <code>SQLFetchScroll</code> retrieve data after it positions the cursor. The possible values are:</p>
+                        <p><code>SQL_RD_ON</code> = Data are retrieved (default).</p>
+                        <p>The following values are not supported:</p>
+                        <p><code>SQL_RD_OFF</code>
+                        </p>
+                    </td>
+                </tr>
+                <tr class="Body-Body1">
+                    <td class="BodyE-Column1-Body1">SQL_ATTR_ROW_ARRAY_SIZE</td>
+                    <td class="BodyE-Column2-Body1">3.0</td>
+                    <td class="BodyD-Column3-Body1">An <code>SQLULEN</code> value that specifies the number of rows returned by each call to <code>SQLFetch</code> or <code>SQLFetchScroll</code>. The default value is 1.</td>
+                </tr>
+                <tr class="Body-Body1">
+                    <td class="BodyE-Column1-Body1">SQL_ATTR_ROW_BIND_OFFSET_PTR</td>
+                    <td class="BodyE-Column2-Body1">3.0</td>
+                    <td class="BodyD-Column3-Body1">
+                        <p>An <code>SQLULEN</code> pointer that points to an offset value added to pointers to change column binding. If non-null, the pointer will be dereferenced, and the value contained will be added to each of the dereferenced fields in the ARD. The affected fields are:</p>
+                        <p><code>SQL_DESC_DATA_PTR</code>
+                            <br /><code>SQL_DESC_INDICATOR_PTR</code>
+                            <br /><code>SQL_DESC_OCTET_LENGTH_PTR</code>
+                        </p>
+                        <p>The default value is <code>NULL</code>.</p>
+                    </td>
+                </tr>
+                <tr class="Body-Body1">
+                    <td class="BodyE-Column1-Body1">SQL_ATTR_ROW_BIND_TYPE</td>
+                    <td class="BodyE-Column2-Body1">1.0</td>
+                    <td class="BodyD-Column3-Body1">
+                        <p>An <code>SQLULEN</code> value that specifies the binding orientation to be used for column binding The possible values are:</p>
+                        <p><code>SQL_BIND_BY_COLUMN</code> = Perform column-wise binding (default).</p>
+                        <p>Row-wise binding is not supported.</p>
+                    </td>
+                </tr>
+                <tr class="Body-Body1">
+                    <td class="BodyE-Column1-Body1">SQL_ATTR_ROW_NUMBER</td>
+                    <td class="BodyE-Column2-Body1">2.0</td>
+                    <td class="BodyD-Column3-Body1">
+                        <p>An <code>SQLULEN</code> value that indicates the number of the current row in the entire result set. If the value cannot be determined or there is no current row, 0 will be returned.</p>
+                        <p>This is a read-only attribute. The application can call <code>SQLGetStmtAttr</code> to retrieve the value of the attribute.</p>
+                    </td>
+                </tr>
+                <tr class="Body-Body1">
+                    <td class="BodyE-Column1-Body1">SQL_ATTR_ROW_OPERATION_PTR</td>
+                    <td class="BodyE-Column2-Body1">3.0</td>
+                    <td class="BodyD-Column3-Body1">Not supported. Setting this attribute has no effect.</td>
+                </tr>
+                <tr class="Body-Body1">
+                    <td class="BodyE-Column1-Body1">SQL_ATTR_ROW_STATUS_PTR</td>
+                    <td class="BodyE-Column2-Body1">3.0</td>
+                    <td class="BodyD-Column3-Body1">
+                        <p>An <code>SQLUSMALLINT</code> pointer that points to an array of <code>SQLUSMALLINT</code> values that will contain the row status values after <code>SQLFetch</code> or <code>SQLFetchScroll</code> was called. The array has the same number of elements as the number of rows in the rowset.</p>
+                        <p>The default value of this attribute is <code>NULL</code>. In that case, row status values will not be returned to the application.</p>
+                    </td>
+                </tr>
+                <tr class="Body-Body1">
+                    <td class="BodyE-Column1-Body1">SQL_ATTR_ROWS_FETCHED_PTR</td>
+                    <td class="BodyE-Column2-Body1">3.0</td>
+                    <td class="BodyD-Column3-Body1">
+                        <p>An <code>SQLULEN</code> pointer that points to a buffer in which the number of rows fetched by <code>SQLFetch</code> or <code>SQLFetchScroll</code> is stored.</p>
+                        <p>The default value of this attribute is <code>NULL</code>. In that case, the number of result rows will not be returned to the application.</p>
+                    </td>
+                </tr>
+                <tr class="Body-Body1">
+                    <td class="BodyE-Column1-Body1">SQL_ATTR_SIMULATE_CURSOR</td>
+                    <td class="BodyE-Column2-Body1">2.0</td>
+                    <td class="BodyD-Column3-Body1">
+                        <p>An <code>SQLULEN</code> value that specifies whether <span class="MyVariablesProductShortName">RDM</span> ODBC Driver guarantees positioned update and delete statements affect only one row. The possible values are:</p>
+                        <p><code>SQL_SC_NON_UNIQUE</code> = The driver does not guarantee that simulated positioned update and delete statements affect only one row.</p>
+                        <p><code>SQL_SC_TRY_UNIQUE</code> = The driver tries to guarantee that simulated positioned update and delete statements affect only one row.</p>
+                        <p><code>SQL_SC_UNIQUE</code> = The driver guarantees that simulated positioned update and delete statements affect only one row (default).</p>
+                        <p><code>SQL_SC_UNIQUE</code> is the default value for <span class="MyVariablesProductShortName">RDM</span> ODBC since <span class="MyVariablesProductShortName">RDM</span> provides the native SQL support that guarantees that simulated positioned update and delete statements affect only one row. Specifying <code>SQL_SC_TRY_UNIQUE</code> or <code>SQL_SC_NON_UNIQUE</code> will return <code>SQL_SUCCESS_WITH_INFO</code> ("01S02").</p>
+                    </td>
+                </tr>
+                <tr class="Body-Body1">
+                    <td class="BodyB-Column1-Body1">SQL_ATTR_USE_BOOKMARKS</td>
+                    <td class="BodyB-Column2-Body1">2.0</td>
+                    <td class="BodyA-Column3-Body1">
+                        <p>An <code>SQLULEN</code> value that specifies whether bookmarks are used with a cursor. The possible values are:</p>
+                        <p><code>SQL_UB_OFF</code> = Off (default).</p>
+                        <p>The following values are not supported: </p>
+                        <p><code>SQL_UB_ON</code>
+                        </p>
+                    </td>
+                </tr>
+            </tbody>
+        </table>
+        <p>For more information, reference MSDN&#160;documentation for <a href="http://msdn.microsoft.com/en-us/library/ms712631(v=VS.85).aspx" target="_blank">SQLSetStmtAttr.</a></p>
+        <hr MadCap:conditions="Default.ScreenOnly" width="100%" size="0" align="center" />
+        <p MadCap:conditions="Default.ScreenOnly" style="font-size: 8pt;"><span class="MyVariablesCopyright">Copyright © 2012, Raima Inc. All rights reserved.</span>
+        </p>
+        <script type="text/javascript" src="../../SkinSupport/MadCapBodyEnd.js">
+        </script>
+        <p class="MCWebHelpFramesetLink MCWebHelpFramesetLinkBottom" style="display: none;"><a href="../../../Default_CSH.htm#ODBCRM/api/SQLSetStmtAttr.htm" style="">Open topic with navigation</a>
+        </p>
+    </body>
+</html>

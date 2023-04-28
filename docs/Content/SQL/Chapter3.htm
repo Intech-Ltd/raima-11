@@ -1,0 +1,384 @@
+<?xml version="1.0" encoding="utf-8"?>
+<!DOCTYPE html PUBLIC "-//W3C//DTD XHTML 1.0 Strict//EN" "http://www.w3.org/TR/xhtml1/DTD/xhtml1-strict.dtd">
+<html xmlns:MadCap="http://www.madcapsoftware.com/Schemas/MadCap.xsd" MadCap:tocPath="SQL API|SQL Language Guide|User's Guide" MadCap:InPreviewMode="false" MadCap:PreloadImages="false" MadCap:RuntimeFileType="Topic" MadCap:TargetType="WebHelp" lang="en-us" xml:lang="en-us" MadCap:PathToHelpSystem="../../" MadCap:HelpSystemFileName="Default.xml" MadCap:SearchType="Stem">
+    <head>
+        <meta http-equiv="Content-Type" content="text/html; charset=utf-8" /><title>A Simple Interactive SQL Scripting Utility</title>
+        <link rel="icon" type="image/png" href="http://docs.raima.com/favicon.png" />
+        <link href="../SkinSupport/MadCap.css" rel="stylesheet" />
+        <link href="../Resources/TableStyles/fncSummary.css" rel="stylesheet" />
+        <link href="../Resources/Stylesheets/raima.css" rel="stylesheet" />
+        <script src="../SkinSupport/MadCapAll.js" type="text/javascript">
+        </script>
+    </head>
+    <body>
+        <p class="MCWebHelpFramesetLink MCWebHelpFramesetLinkTop" style="display: none;"><a href="../../Default_CSH.htm#SQL/Chapter3.htm" style="">Open topic with navigation</a>
+        </p>
+        <div class="MCBreadcrumbsBox_0"><span class="MCBreadcrumbsPrefix">You are here: </span><a class="MCBreadcrumbsLink" href="../dbRSQL.htm">SQL API</a><span class="MCBreadcrumbsDivider"> &gt; </span><a class="MCBreadcrumbsLink" href="dbSQL.htm">SQL Language Guide</a><span class="MCBreadcrumbsDivider"> &gt; </span><a class="MCBreadcrumbsLink" href="Chapter1.htm">User's Guide</a><span class="MCBreadcrumbsDivider"> &gt; </span><span class="MCBreadcrumbs">A Simple Interactive SQL Scripting Utility</span>
+        </div>
+        <h1><a MadCap:generatedBookmark="TOC" name="A_Simple_Interactive_SQL_Scripting_Utility"></a>A Simple Interactive SQL Scripting Utility</h1>
+        <p class="Quotation">Beauty of style and harmony</p>
+        <p class="Quotation">and grace and good rhythm</p>
+        <p class="Quotation">depends on simplicity.</p>
+        <p class="QuoteAuthor">- Plato</p>
+        <p>Okay, I know that this is the world of point-and-click, easy-to-use applications.  In fact, many abound for doing just that with SQL.  So what value can there possibly be in providing a text-based, command-line-oriented, interactive SQL scripting utility? Well, for one thing, you can keep both hands on the keyboard and never have to touch the mouse!  Novel concept isn't it?   It also has provided us here at <span class="MyVariablesShortCompanyName">Raima</span> with something that was easy to write and is easily ported to any platform.  Hence, the interface works identically on all platforms.  It also provides us (and, presumably, you as well) with the ability to generate test cases that can be easily and automatically executed. You will more effectively learn how to properly formulate SQL statements by actually typing them in than by simply pointing to icons that do the job for you.</p>
+        <p>The name of this program is <code><span class="MyVariablesUrdmsql">rdmsql</span></code>.  To start <code><span class="MyVariablesUrdmsql">rdmsql</span></code>, open an OS command window and enter a command that conforms to the following syntax.</p><pre xml:space="preserve">
+            <span class="MyVariablesUrdmsql">rdmsql</span>
+        </pre>
+        <p>When started <code><span class="MyVariablesUrdmsql">rdmsql</span></code> will display its startup banner (unless the –B option was specified) and an input prompt.</p><pre xml:space="preserve">Enter ? for list of interface commands.
+
+001 <span class="MyVariablesUrdmsql">rdmsql</span>:</pre>
+        <p>The number in the command prompt above (<code>001 <span class="MyVariablesUrdmsql">rdmsql</span>:</code>) is a SQL&#160;statement number which is incremented for each SQL&#160;statement executed.</p>
+        <h2><a MadCap:generatedBookmark="TOC" name="Interface_and_Scripting_Commands"></a><a name="Interfac"></a>Interface and Scripting Commands</h2>
+        <p>The list of <code><span class="MyVariablesUrdmsql">rdmsql</span></code> interface commands are given in the following table.</p>
+        <table style="width: 100%;margin-left: 0;margin-right: auto;mc-table-style: url('../Resources/TableStyles/fncSummary.css');" class="TableStyle-fncSummary" cellspacing="0">
+            <col class="Column-Column1" />
+            <col class="Column-Column2" />
+            <thead>
+                <tr class="Head-Header1">
+                    <th class="HeadE-Column1-Header1">Command</th>
+                    <th class="HeadD-Column2-Header1">Description</th>
+                </tr>
+            </thead>
+            <tbody>
+                <tr class="Body-Body1">
+                    <td class="BodyE-Column1-Body1">?</td>
+                    <td class="BodyD-Column2-Body1">Display the list of commands available.</td>
+                </tr>
+                <tr class="Body-Body1">
+                    <td class="BodyE-Column1-Body1">--</td>
+                    <td class="BodyD-Column2-Body1">
+                        <p>Comment delimiter. Lines beginning with "--"&#160;will be ignored.</p><pre xml:space="preserve">-- Script File Example<br />-- Open bookshop database and wait for input<br />.c 1<br />open bookshop;</pre>
+                        <p>Running the above script will open the bookshop database and then wait for input.</p>
+                    </td>
+                </tr>
+                <tr class="Body-Body1">
+                    <td class="BodyE-Column1-Body1">.c [n srv port]</td>
+                    <td class="BodyD-Column2-Body1">
+                        <p>Select connection handle "n". By default there are 5 connection handles available. If "n" is not provided, the current connection information is displayed.</p>
+                        <p>If the remote connection option is selected on the command line, the "srv"&#160;parameter specifies the host name where <a href="../util/rdmsqlserver.htm"><span class="MyVariablesUrdmsqlserver">rdmsqlserver</span></a> is running and "port"&#160;specifies the anchor port number (default is port&#160;number <span class="MyVariablesDefaultPort">21553</span>),</p>
+                    </td>
+                </tr>
+                <tr class="Body-Body1">
+                    <td class="BodyE-Column1-Body1">.d *&#160;|&#160;n [,n]</td>
+                    <td class="BodyD-Column2-Body1">Disconnect all connections (*)&#160;or specific connections by connection number.</td>
+                </tr>
+                <tr class="Body-Body1">
+                    <td class="BodyE-Column1-Body1">.q</td>
+                    <td class="BodyD-Column2-Body1">Exit the <b><span class="MyVariablesUrdmsql">rdmsql</span></b> utility. The process of exiting will rollback any uncommitted transactions and disconnect connections before exiting.</td>
+                </tr>
+                <tr class="Body-Body1">
+                    <td class="BodyE-Column1-Body1">.r filespec</td>
+                    <td class="BodyD-Column2-Body1">Read and execute statements from <code>filespec</code>.</td>
+                </tr>
+                <tr class="Body-Body1">
+                    <td class="BodyE-Column1-Body1">!oscmd</td>
+                    <td class="BodyD-Column2-Body1">
+                        <p>Execute the specified OS&#160;command. For example, the following shows executing a "dir"&#160;command:</p><pre xml:space="preserve">001 <span class="MyVariablesUrdmsql">rdmsql</span>: <b>!dir *.txt /b</b>
+acctmgrs.txt
+authors.txt
+bnotelines.txt
+bnotes.txt
+bookgens.txt
+books.txt
+booksubs.txt
+genres.txt
+names.txt
+patrons.txt
+pnotelines.txt
+pnotes.txt
+sales.txt
+subjects.txt
+001 <span class="MyVariablesUrdmsql">rdmsql</span>:</pre>
+                    </td>
+                </tr>
+                <tr class="Body-Body1">
+                    <td class="BodyE-Column1-Body1">&lt;return&gt;</td>
+                    <td class="BodyD-Column2-Body1">Display the current statement.</td>
+                </tr>
+                <tr class="Body-Body1">
+                    <td class="BodyE-Column1-Body1">;</td>
+                    <td class="BodyD-Column2-Body1">Resubmit current statement.</td>
+                </tr>
+                <tr class="Body-Body1">
+                    <td class="BodyE-Column1-Body1">*</td>
+                    <td class="BodyD-Column2-Body1">Display statement history (default 25).</td>
+                </tr>
+                <tr class="Body-Body1">
+                    <td class="BodyE-Column1-Body1">-[n]</td>
+                    <td class="BodyD-Column2-Body1">Retreat current statement n lines (default 1)</td>
+                </tr>
+                <tr class="Body-Body1">
+                    <td class="BodyE-Column1-Body1">+[n]</td>
+                    <td class="BodyD-Column2-Body1">Advance current statement n lines (default 1)</td>
+                </tr>
+                <tr class="Body-Body1">
+                    <td class="BodyE-Column1-Body1">#n</td>
+                    <td class="BodyD-Column2-Body1">Make statement number n the current statement.</td>
+                </tr>
+                <tr class="Body-Body1">
+                    <td class="BodyE-Column1-Body1">/old/new/[g]</td>
+                    <td class="BodyD-Column2-Body1">
+                        <p>Substitute 'new' for 'old' in current statement. Specify 'g' to replace all occurrences.</p>
+                        <p>In the example below, the current statement is statement 002. The substitution command (<code>/091/081/</code>) replaces the matching text in the calculation and redisplays the modified statement. The modified current statement is then resubmitted using the ";" command.</p><pre xml:space="preserve">002 <span class="MyVariablesUrdmsql">rdmsql</span>:&#160;<b>select bookid, price, price*0.091 tax from book where bookid like "carl%";</b>
+bookid                           price                     tax
+carlyle01                          125                  11.375
+carlyle02                         1385                 126.035
+carlyle03                          995                  90.545
+carlyle04                         3750                  341.25
+carlyle05                         5750                  523.25
+003 <span class="MyVariablesUrdmsql">rdmsql</span>: <b>/091/081/</b>    <![CDATA[
+]]><span class="MyVariablesUrdmsql">rdmsql</span>: select bookid, price, price*0.081 tax from book where bookid like "carl%"
++ 003 <span class="MyVariablesUrdmsql">rdmsql</span>: <b>;</b>
+
+bookid                           price                     tax
+carlyle01                          125                  10.125
+carlyle02                         1385                 112.185
+carlyle03                          995                  80.595
+carlyle04                         3750                  303.75
+carlyle05                         5750                  465.75
+004 <span class="MyVariablesUrdmsql">rdmsql</span>:</pre>
+                    </td>
+                </tr>
+                <tr class="Body-Body1">
+                    <td class="BodyE-Column1-Body1">.T&#160;[start|stop]</td>
+                    <td class="BodyD-Column2-Body1">Start / stop timer. Displays elapsed time between start and stop in seconds and outputs to <code>stdout</code>.</td>
+                </tr>
+                <tr class="Body-Body1">
+                    <td class="BodyE-Column1-Body1">.e [on|off]</td>
+                    <td class="BodyD-Column2-Body1">Turn on/off echo of executing statements. If on/off is not specified, the current echo mode is displayed.</td>
+                </tr>
+                <tr class="Body-Body1">
+                    <td class="BodyE-Column1-Body1">.t [on|off]</td>
+                    <td class="BodyD-Column2-Body1">Turn on/off table display mode. If on/off is not specified, the current table display mode is displayed.</td>
+                </tr>
+                <tr class="Body-Body1">
+                    <td class="BodyE-Column1-Body1">.n</td>
+                    <td class="BodyD-Column2-Body1">
+                        <p>Display next row if table display mode is off.</p>
+                        <p>The example below shows the usage of the display table mode:</p><pre xml:space="preserve">116 <span class="MyVariablesUrdmsql">rdmsql</span>: <b>.t on</b>
+*** table mode is on
+116 <span class="MyVariablesUrdmsql">rdmsql</span>: <b>select name, age(hire_date) from acctmgr where age(hire_date) = 12;</b>
+
+name                     age(hire_date)
+Fox, Joe                             12
+Kelly, Kathleen                      12
+117 <span class="MyVariablesUrdmsql">rdmsql</span>: <b>.t off</b>
+*** table mode is off
+117 <span class="MyVariablesUrdmsql">rdmsql</span>: <b>select name, age(hire_date) from acctmgr where age(hire_date) = 12;</b>
+name            : Fox, Joe
+age(hire_date)  : 12
+118 <span class="MyVariablesUrdmsql">rdmsql</span>: <b>.n</b>
+name            : Kelly, Kathleen
+age(hire_date)  : 12
+118 <span class="MyVariablesUrdmsql">rdmsql</span>: <b>.n</b>
+*** no more rows
+118 <span class="MyVariablesUrdmsql">rdmsql</span>:</pre>
+                    </td>
+                </tr>
+                <tr class="Body-Body1">
+                    <td class="BodyE-Column1-Body1">.l [n]</td>
+                    <td class="BodyD-Column2-Body1">Set output page length to <code>n</code> lines. If n is not specified, the current page length is displayed. (default 50)</td>
+                </tr>
+                <tr class="Body-Body1">
+                    <td class="BodyE-Column1-Body1">.w [n]</td>
+                    <td class="BodyD-Column2-Body1">Set output page width to <code>n</code> columns. If n is not specified, the current page width is displayed. (default 4096)</td>
+                </tr>
+                <tr class="Body-Body1">
+                    <td class="BodyE-Column1-Body1">.C</td>
+                    <td class="BodyD-Column2-Body1">Execute commit (alternative to "<b>commit</b>;").</td>
+                </tr>
+                <tr class="Body-Body1">
+                    <td class="BodyE-Column1-Body1">.R</td>
+                    <td class="BodyD-Column2-Body1">
+                        <p>Execute rollback (alternative to "<b>rollback</b>;").</p><pre xml:space="preserve">005 <span class="MyVariablesUrdmsql">rdmsql</span>: <b>select avg(price) from book;</b>
+
+             avg(price)
+       7200.48012232416
+006 <span class="MyVariablesUrdmsql">rdmsql</span>: <b>update book set price = 100;</b>
+
+*** 327 rows affected
+007 <span class="MyVariablesUrdmsql">rdmsql</span>: <b>select avg(price) from book;</b>
+
+             avg(price)
+                    100
+008 <span class="MyVariablesUrdmsql">rdmsql</span>: <b>.R</b>
+008 <span class="MyVariablesUrdmsql">rdmsql</span>: <b>select avg(price) from book;</b>
+
+             avg(price)
+       7200.48012232416</pre>
+                    </td>
+                </tr>
+                <tr class="Body-Body1">
+                    <td class="BodyE-Column1-Body1">.i</td>
+                    <td class="BodyD-Column2-Body1">Display current transaction status.</td>
+                </tr>
+                <tr class="Body-Body1">
+                    <td class="BodyE-Column1-Body1">.m message</td>
+                    <td class="BodyD-Column2-Body1">Display <code>message</code> on <code>stdout</code>.</td>
+                </tr>
+                <tr class="Body-Body1">
+                    <td class="BodyE-Column1-Body1">.y [on|off]</td>
+                    <td class="BodyD-Column2-Body1">
+                        <p>Set prepare only mode. If on/off is not supplied, the current mode is displayed. (default off)</p>
+                        <p>The example below shows the preparation of a statement requiring one parameter, assigning the parameter and then executing the statement.</p><pre xml:space="preserve">016 <span class="MyVariablesUrdmsql">rdmsql</span>: <b>.y on</b>
+*** prepare only mode is on
+016 <span class="MyVariablesUrdmsql">rdmsql</span>: <b>select bookid, price, price*? as tax from book where bookid like "ca%";</b>
+017 <span class="MyVariablesUrdmsql">rdmsql</span>: <b>.p1 0.091</b>
+017 <span class="MyVariablesUrdmsql">rdmsql</span>: <b>.x</b>
+
+bookid                           price                     tax
+carlyle01                          125                  11.375
+carlyle02                         1385                 126.035
+carlyle03                          995                  90.545
+carlyle04                         3750                  341.25
+carlyle05                         5750                  523.25
+carroll01                         4500                   409.5
+carroll02                         2000                     182
+carroll03                           75                   6.825
+cather01                          7500                   682.5
+cather02                          5450                  495.95
+cather03                          5895                 536.445
+cather04                          1550                  141.05
+cather05                           850                   77.35
+cather06                           475                  43.225
+cather07                           335                  30.485
+cather08                           250                   22.75
+017 <span class="MyVariablesUrdmsql">rdmsql</span>:</pre>
+                        <p>The parameter value can be changed and the current statement re-executed:</p><pre xml:space="preserve">017 <span class="MyVariablesUrdmsql">rdmsql</span>: .p1 0.092
+017 <span class="MyVariablesUrdmsql">rdmsql</span>: .x</pre>
+                    </td>
+                </tr>
+                <tr class="Body-Body1">
+                    <td class="BodyE-Column1-Body1">.o [on|off]</td>
+                    <td class="BodyD-Column2-Body1">Set autocommit mode. If on/off not specified, the current mode will be displayed. (default off)</td>
+                </tr>
+                <tr class="Body-Body1">
+                    <td class="BodyE-Column1-Body1">.s filespec</td>
+                    <td class="BodyD-Column2-Body1">Save entered commands to <code>filespec</code>. File will be saved and closed on exit.</td>
+                </tr>
+                <tr class="Body-Body1">
+                    <td class="BodyB-Column1-Body1">.f getcursor</td>
+                    <td class="BodyA-Column2-Body1">
+                        <p>Get the a cursor name associated with the current statement handle.</p>
+                        <p>The following example illustrates using a cursor to update a specific row in a table.</p><pre xml:space="preserve">002 <span class="MyVariablesUrdmsql">rdmsql</span>: <b>.t off</b>
+*** table mode is off
+002 <span class="MyVariablesUrdmsql">rdmsql</span>: <b>select bookid, price from book for update;</b>
+bookid          : alcott01
+price           : 1200
+003 <span class="MyVariablesUrdmsql">rdmsql</span>: <b>.n</b>
+bookid          : alcott02
+price           : 1075
+003 <span class="MyVariablesUrdmsql">rdmsql</span>: <b>.f getcursor</b>
+*** cursor = SQL_CUR_2108_41d8
+003 <span class="MyVariablesUrdmsql">rdmsql</span>: <b>.h 2</b>
+*** using statement handle 2 of connection 1
+003 <span class="MyVariablesUrdmsql">rdmsql</span>: <b>update book set price=1076 where current of SQL_CUR_2108_41d8;</b>
+
+*** 1 rows affected
+004 <span class="MyVariablesUrdmsql">rdmsql</span>: <b>select bookid, price from book;</b>
+bookid          : alcott01
+price           : 1200
+005 <span class="MyVariablesUrdmsql">rdmsql</span>: <b>.n</b>
+bookid          : alcott02
+price           : 1076
+005 <span class="MyVariablesUrdmsql">rdmsql</span>:</pre>
+                    </td>
+                </tr>
+            </tbody>
+        </table>
+        <p>Once a connection has been opened, you can submit SQL statements by simply typing in the statement from the command prompt.  Statements can span multiple input lines and are terminated with a semicolon (";").   At this point, <code><span class="MyVariablesUrdmsql">rdmsql</span></code> will compile and execute the statement.  Any errors detected during compilation or execution will be displayed.  If the statement was a <b>select</b> statement then the result set will be displayed and paginated according to the <code>.l</code> and <code>.w</code> settings.  A sample session is shown below.  User input is shown in bold-faced text.</p><pre xml:space="preserve">RDMSQL Utility
+Raima Database Manager <span class="MyVariablesCommandLineVersion">11.0.0 Build 412 [2-15-2012]</span> http://www.raima.com/
+<span class="MyVariablesCopyright">Copyright © 2012, Raima Inc. All rights reserved.</span>
+
+Enter ? for list of interface commands.
+
+001 <span class="MyVariablesUrdmsql">rdmsql</span>: <b>.c 1</b>
+*** using statement handle 1 of connection 1
+001 <span class="MyVariablesUrdmsql">rdmsql</span>: <b>.l 50</b>
+*** lines per page = 50
+001 <span class="MyVariablesUrdmsql">rdmsql</span>: <b>.w 132</b>
+*** columns per page = 132
+001 <span class="MyVariablesUrdmsql">rdmsql</span>: <b>open bookshop;</b>
+002 <span class="MyVariablesUrdmsql">rdmsql</span>: <b>select full_name, gender, yr_born, yr_died from author;</b>
+FULL_NAME                           GENDER YR_BORN YR_DIED
+Alcott, Louisa May                  M         1832    1888
+Austen, Jane                        F         1775    1817
+Bacon, Francis                      M         1561    1626
+Barrie, J. M. (James Matthew)       M         1860    1937
+Baum, L. Frank (Lyman Frank)        M         1856    1919
+Bronte, Charlotte                   F         1816    1855
+Bronte, Emily                       F         1818    1848
+Burns, Robert                       M         1759    1796
+Burroughs, Edgar Rice               M         1875    1950
+Carlyle, Thomas                     M         1795    1881
+Carroll, Lewis                      M         1832    1898
+Cather, Willa                       F         1873    1947
+Chaucer, Geoffrey                   M         1343    1400
+Chesterton, G. K. (Gilbert Keith)   M         1874    1936
+Coleridge, Samuel Taylor            M         1772    1834
+Conrad, Joseph                      M         1857    1924
+Cooper, James Fenimore              M         1789    1851
+Crane, Stephen                      M         1871    1900
+Descartes, Rene                     M         1596    1650
+Defoe, Daniel                       M         1661    1731
+Dickens, Charles                    M         1812    1870
+Dostoyevsky, Fyodor                 M         1821    1881
+Doyle, Arthur Conan, Sir            M         1859    1930
+Dumas, Alexandre                    M         1802    1870
+Eliot, George                       F         1819    1880
+Faulkner, William                   M         1897    1962
+Ferber, Edna                        F         1887    1968
+Franklin, Benjamin                  M         1706    1790
+Gaskell, Elizabeth Cleghorn         F         1810    1865
+Hardy, Thomas                       M         1840    1928
+Hawthorne, Nathaniel                M         1804    1864
+Hemingway, Ernest                   M         1899    1961
+Hobbes, Thomas                      M         1588    1679
+Hugo, Victor                        M         1802    1885
+Irving, Washington                  M         1783    1859
+James, Henry                        M         1843    1916
+Flaubert, Gustave                   M         1821    1880
+Johnson, Samuel                     M         1709    1784
+Kipling, Rudyard                    M         1865    1936
+Lewis, Sinclair                     M         1885    1951
+London, Jack                        M         1876    1916
+Longfellow, Henry Wadsworth         M         1807    1882
+Milton, John                        M         1608    1674
+Muir, John                          M         1838    1914
+Paine, Thomas                       M         1737    1809
+Poe, Edgar Allan                    M         1809    1849
+Potter, Beatrix                     F         1866    1943
+Raleigh, Walter, Sir                M         1552    1618
+Scott, Walter, Sir                  M         1771    1832
+Shakespeare, William                M         1564    1616
+**** press &lt;enter&gt; to continue or s to stop here
+FULL_NAME                           GENDER YR_BORN YR_DIED
+Shelley, Mary Wollstonecraft        F         1797    1851
+Sinclair, Upton                     M         1878    1968
+Steinbeck, John                     M         1902    1968
+Stevenson, Robert Louis             M         1850    1894
+Stowe, Harriet Beecher              F         1811    1896
+Swift, Jonathan                     M         1667    1745
+Tennyson, Alfred, Baron             M         1809    1892
+Thoreau, Henry David                M         1817    1862
+Tolstoy, Leo                        M         1828    1910
+Trollope, Anthony                   M         1815    1882
+Twain, Mark                         M         1835    1910
+Verne, Jules                        M         1828    1905
+Wells, H. G. (Herbert George)       M         1866    1946
+Wharton, Edith                      F         1862    1937
+Whitman, Walt                       M         1819    1892
+Wilde, Oscar                        M         1854    1900
+Woolf, Virginia                     F         1882    1941
+003 <span class="MyVariablesUrdmsql">rdmsql</span>: <b>.q</b></pre>
+        <p>The <code>–b <i>startupfile</i></code> command line option can be used to run the script file <code style="font-style: italic;">startupfile</code> in batch mode in which <code><span class="MyVariablesUrdmsql">rdmsql</span></code> will automatically open a connection and process each statements in order.  When the last one has been executed <code><span class="MyVariablesUrdmsql">rdmsql</span></code> will automatically compile and execute a <b>commit</b> statement to ensure that all of the work has completed and data stored and then the program will terminate. Error messages associated with any errors that are encountered will be output to <code>stdout</code>.</p>
+        <p>This option is useful for processing files containing a SQL DDL specification.  It is also good to use when importing data into database tables.</p>
+        <hr MadCap:conditions="Default.ScreenOnly" width="100%" size="0" align="center" />
+        <p MadCap:conditions="Default.ScreenOnly" style="font-size: 8pt;"><span class="MyVariablesCopyright">Copyright © 2012, Raima Inc. All rights reserved.</span>
+        </p>
+        <script type="text/javascript" src="../SkinSupport/MadCapBodyEnd.js">
+        </script>
+        <p class="MCWebHelpFramesetLink MCWebHelpFramesetLinkBottom" style="display: none;"><a href="../../Default_CSH.htm#SQL/Chapter3.htm" style="">Open topic with navigation</a>
+        </p>
+    </body>
+</html>

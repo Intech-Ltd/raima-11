@@ -1,0 +1,338 @@
+<?xml version="1.0" encoding="utf-8"?>
+<!DOCTYPE html PUBLIC "-//W3C//DTD XHTML 1.0 Strict//EN" "http://www.w3.org/TR/xhtml1/DTD/xhtml1-strict.dtd">
+<html xmlns:MadCap="http://www.madcapsoftware.com/Schemas/MadCap.xsd" MadCap:tocPath="Utility Programs|Interactive Database Access Utility" MadCap:InPreviewMode="false" MadCap:PreloadImages="false" MadCap:RuntimeFileType="Topic" MadCap:TargetType="WebHelp" lang="en-us" xml:lang="en-us" class="" MadCap:PathToHelpSystem="../../../" MadCap:HelpSystemFileName="Default.xml" MadCap:SearchType="Stem">
+    <head>
+        <meta http-equiv="Content-Type" content="text/html; charset=utf-8" /><title>Using the Access Menu Commands</title>
+        <link rel="icon" type="image/png" href="http://docs.raima.com/favicon.png" />
+        <link href="../../SkinSupport/MadCap.css" rel="stylesheet" />
+        <link href="../../Resources/TableStyles/TwoColNoLines.css" rel="stylesheet" />
+        <link href="../../Resources/Stylesheets/raima.css" rel="stylesheet" />
+        <script src="../../SkinSupport/MadCapAll.js" type="text/javascript">
+        </script>
+    </head>
+    <body>
+        <p class="MCWebHelpFramesetLink MCWebHelpFramesetLinkTop" style="display: none;"><a href="../../../Default_CSH.htm#util/ida/Chapter4.htm" style="">Open topic with navigation</a>
+        </p>
+        <div class="MCBreadcrumbsBox_0"><span class="MCBreadcrumbsPrefix">You are here: </span><a class="MCBreadcrumbsLink" href="../../dbUTIL.htm">Utility Programs</a><span class="MCBreadcrumbsDivider"> &gt; </span><span class="MCBreadcrumbsSelf">Interactive Database Access Utility</span><span class="MCBreadcrumbsDivider"> &gt; </span><span class="MCBreadcrumbs">Using the Access Menu Commands</span>
+        </div>
+        <h1 class="firstHeading">Using the Access Menu Commands</h1>
+        <p>This section describes all of the database access commands that are available when you select the Access command from the main menu, shown in Figure 8-1. Selecting the Access command from the main menu accesses the <code>Database Access Commands</code> submenu, shown earlier in Figure 8-3. </p>
+        <p>The commands on <code>Database Access Commands</code> submenu are described in the following sections of this section: </p>
+        <table style="border-collapse: collapse;mc-table-style: url('../../Resources/TableStyles/TwoColNoLines.css');margin-left: 0;margin-right: auto;" class="TableStyle-TwoColNoLines" cellspacing="0">
+            <col class="Column-Column1" />
+            <tr class="Body-Body1">
+                <td class="BodyD-Column1-Body1">
+                    <p>Record command </p>
+                </td>
+            </tr>
+            <tr class="Body-Body1">
+                <td class="BodyD-Column1-Body1">
+                    <p>Set command </p>
+                </td>
+            </tr>
+            <tr class="Body-Body1">
+                <td class="BodyD-Column1-Body1">
+                    <p>Currency command </p>
+                </td>
+            </tr>
+            <tr class="Body-Body1">
+                <td class="BodyD-Column1-Body1">
+                    <p>Transaction command </p>
+                </td>
+            </tr>
+            <tr class="Body-Body1">
+                <td class="BodyD-Column1-Body1">
+                    <p>Lock command </p>
+                </td>
+            </tr>
+            <tr class="Body-Body1">
+                <td class="BodyD-Column1-Body1">
+                    <p>Free command </p>
+                </td>
+            </tr>
+            <tr class="Body-Body1">
+                <td class="BodyD-Column1-Body1">
+                    <p>Miscellaneous command </p>
+                </td>
+            </tr>
+        </table>
+        <h2>4.1 Using the Access Record Commands </h2>
+        <p>The <code>Record</code> command, selected from the <code>Database Access Commands</code> submenu, accesses the <code>Record Manipulation Functions</code> submenu, from which you can select a set of additional commands and submenus for managing records. This submenu is shown in Figure 8-9, followed by a description of each of its commands and their submenus. </p><pre xml:space="preserve"><b>Record Manipulation Functions</b>
+Keyscan  Get  Enter  Modify  Delete  Recscan  X_exit </pre>
+        <p class="Caption">Fig. 8-9. Record Manipulation Functions Submenu</p>
+        <h3>4.1.1 Keyscan command </h3>
+        <p>Selecting the <code>Keyscan</code> command accesses the <code>Scan and View Record Based on Key</code> submenu, from which you can choose how to locate a record based on a key. This submenu is shown in Figure 8-10, followed by a description of its commands. </p><pre xml:space="preserve"><b>Scan and View Record Based on Key</b>
+Scan  Keyfind  First  Last  Next  Previous  X_exit </pre>
+        <p class="Caption">Fig. 8-10. Scan and View Record Based on Key Submenu</p>
+        <p class="Heading">Scan </p>
+        <p>Scans records based on a key field. A list of all key field names will be displayed, from which you should select the field to be scanned. You will then be prompted to enter the value of the key where the scan will begin. If you press "Enter" instead of a key value, the scanning will begin from the first key. </p>
+        <p>The records located by the scan will be paged and displayed in a horizontal packed format. This is similar to the format that would result if the struct variable corresponding to the record were statically initialized in a C program. That is, it would be enclosed in braces, { }, with each sub-field grouping separated by commas. For more information about the display of various <span class="MyVariablesProductShortName">RDM</span> data types, see <a href="#8.3.3">Editing a Data Field</a>. </p>
+        <p>Figure 8-11 shows a sample record scan display. </p><pre xml:space="preserve">Record: EMPLOYEE      Key: EMP_ID      Page: 1
+ 
+ENTRY    RECORD CONTENTS 
+   1.    {"7901",{"Pfeil","Carl","L."},"MGR1"} 
+   2.    {"7902",{"Rogers","Jim",""}, "MGR1"} 
+   3.    {"7903",{"Fleagle","Jenifer","C."},"MGR2"} 
+   4.    {"7904",{"Smith","Stephen","P."},"MGR1"} 
+   5.    {"7906",{"Warren","Wayne","L."},"MGR1"} 
+   6.    {"7907",{"Merilatt","Randall","L."},"MGR1"} 
+   7.    {"8001",{"Bryant","John","W."},"MGR2"} 
+   8.    {"8002",{"Willis","Kirt","L."},"MGR2"} 
+   9.    {"8003",{"Charles","Thomas",""}, "ENGR"} 
+  10.    {"8101",{"Temple","Anita","J."}, "ADMN"} 
+  11.    {"8102",{"Rodovsky","Eliska",""}, "ENGR"} 
+  12.    {"8102",{"Marsh","Kyle","G."}, "ENGR"} 
+  13.    {"8103",{"Carlson","Bob","C."}, "MGR1"} 
+  14.    {"8104",{"Bustamante","Tina","L."}, "ENGR"} </pre>
+        <p class="Caption">Fig. 8-11. A Sample Keyscan/Scan Display</p>
+        <p class="Heading">Keyfind </p>
+        <p>Quickly finds and displays one record. When you select a key field from the displayed list and enter a value, this command displays either the record associated with the specified key value, or if the key is not found, the record associated with the next key. Compound key and struct fields must be enclosed by braces ({ }). Character strings do not need to be delimited by quotation marks except when included as part of a struct field. </p>
+        <p class="Heading">First </p>
+        <p>Finds and displays the record associated with the first key in the key file. </p>
+        <p class="Heading">Last </p>
+        <p>Finds and displays the record associated with the last key in the key file. </p>
+        <p class="Heading">Next </p>
+        <p>Finds and displays the record associated with the next key in the key file. If a Next command causes a "no more keys" message at the end of a file, a subsequent Next command will return the first key. </p>
+        <p class="Heading">Previous </p>
+        <p>Finds and displays the record associated with the previous key in the key file. If a Previous command causes a "no more keys" message at the end of a file, the next Previous command will return the last key. </p>
+        <h3>4.1.2 Get command </h3><pre>Displays the record located at a specified database address. 
+When prompted for the database address, enter it as: 
+
+<code>enter database address: [<i>f</i>:<i>r</i>]</code></pre>
+        <p>where<i> f</i> is the file number and <i>r</i> is the record number.   </p>
+        <h3>4.1.3 Enter command </h3>
+        <p>Enters new records into the database. From the displayed list, select the record type to be entered. The <code>Display/Edit Record</code> submenu is then invoked. "Using the Access Record Commands" shows the <code>Display/Edit Record</code> submenu and describes its functions in detail. </p>
+        <h3>4.1.4 Modify command </h3>
+        <p>Invokes the <code>Display/Edit Record</code> submenu, which provides a set of tools for modifying the current record, which may be selected in a variety of ways. For detailed information, about the <code>Display/Edit Record</code> submenu, see <a href="#8.3.2">Using the Display/Edit Record Submenu Commands</a>. </p>
+        <h3>4.1.5 Delete command </h3>
+        <p>Deletes the current record from the database. The record must have been previously disconnected from all sets of which it was an owner or a member. </p>
+        <h3>4.1.6 Recscan command </h3>
+        <p>Invokes the <code>Scan and View Record Based on Database Address</code> command submenu. The commands in this submenu use the <code>d_recfrst</code>, <code>d_recnext</code>, <code>d_reclast</code> and <code>d_recprev</code> functions to locate the records, instead of the key traversal functions. </p><pre xml:space="preserve"><b>Scan and View Record Based on Database Address</b> 
+Scan  First  Last  Next  Previous  X_exit </pre>
+        <p class="Caption">Fig. 8-12. Scan and View Record Based on Database Address Submenu </p>
+        <p class="Heading">Scan </p>
+        <p>Scans records based on their database address (their order is determined by their physical appearance in a data file). A list of all record type names will be displayed, from which you should select the type to be scanned. </p>
+        <p>The records located by the scan will be paged and displayed in the same horizontal packed format as the <code>Keyscan</code> command. For more information about the display of various <span class="MyVariablesProductShortName">RDM</span> data types, see <a href="#8.3.3">Editing a Data Field</a>. </p>
+        <p class="Heading">First </p>
+        <p>Finds and displays the first record of the selected type in the data file. </p>
+        <p class="Heading">Last </p>
+        <p>Finds and displays the last record of the selected type in the data file. </p>
+        <p class="Heading">Next </p>
+        <p>Finds and displays the next record in the data file. When it reaches the end of the file, it displays a "no more records" message. A subsequent <code>Next</code> command will begin with the first record. </p>
+        <p class="Heading">Previous </p>
+        <p>Finds and displays the previous record in the data file. When it reaches the top of the file, it displays a "no more records" message. A subsequent <code>Previous</code> command will begin with the last record. </p>
+        <h2>4.2 Using the Access Set Commands </h2>
+        <p>Selecting the <code>Set</code> command from the <code>Database Access Commands</code> submenu, accesses the <code>Set Manipulation Functions</code> submenu, which provides a set of tools for managing sets. This submenu is shown in Figure 8-13, followed by a description of its functions. </p><pre xml:space="preserve"><b>Set Manipulation Functions</b>
+Scan Owner First Next Last Previous Connect Disconnect Total X_exit</pre>
+        <p class="Caption"><b>13. Set Manipulation Functions Submenu</b>
+        </p>
+        <p class="Heading">Scan command </p>
+        <p>Scans and displays all member records connected to the current owner of a set. The set to be scanned is selected from the displayed list of set names. </p>
+        <p>The records located by the scan will be paged and displayed in a horizontal packed format. This is similar to the format that would result if the struct variable corresponding to the record were statically initialized in a C program. That is, it would be enclosed in braces, { }, with each sub-field grouping separated by commas. For more information about the display of various <span class="MyVariablesProductShortName">RDM</span> data types, see <a href="#8.3.3">Editing a Data Field</a>. </p>
+        <p class="Heading">Owner command </p>
+        <p>Finds the owner of the current record, through the set selected from the displayed list of set names. Note that this function serves a different purpose than the Owner function under the Display/Edit Record submenu. </p>
+        <p class="Heading">First command </p>
+        <p>Finds the first member connected to the current owner of the set selected from the displayed list of set names. </p>
+        <p class="Heading">Next command </p>
+        <p>Finds the next member of a set. The first time (or after a "no more records" message), Next displays the first member of the set. </p>
+        <p class="Heading">Last command </p>
+        <p>Finds the last member connected to the current owner of the set selected from the displayed list of set names. </p>
+        <p class="Heading">Previous command </p>
+        <p>Finds the previous member of a set. The first time (or after a "no more records" message), Previous displays the last member of the set. A Last or Next command must have preceded the call to Previous. </p>
+        <p class="Heading">Connect command </p>
+        <p>Connects the current record to the current owner of the set selected from the displayed list of set names. </p>
+        <p class="Heading">Disconnect command </p>
+        <p>Disconnects the current record from the set selected from the displayed list of set names. </p>
+        <p class="Heading">Total command </p>
+        <p>Displays a count of the members connected to the current owner of the set selected from the displayed list of set names. </p>
+        <h2>4.3 Using the Access Currency Commands </h2>
+        <p>The <code>Currency</code> command, selected from the <code>Database Access Commands</code> submenu, accesses the <code>Currency Table Manipulation Functions</code> submenu (shown in Figure 8-14 and followed by a description of its functions). </p><pre xml:space="preserve"><b>Currency Table Manipulation Functions</b>
+Owner  Member  Record  Auto_set  Display  X_exit </pre>
+        <p class="Caption">Fig. 8-14. Currency Table Manipulation Functions Submenu</p>
+        <h3>4.3.1 Owner command </h3>
+        <p>Sets the current owner of the set selected from the displayed list of set names. This function then invokes the Change Current Owner of Set submenu, from which you select the record you wish to be made current. The submenu is shown in Figure 8-15, followed by a description of its functions. </p><pre xml:space="preserve"><b>Change Current Owner of Set</b>
+Record  Owner  Member  Change  X_exit </pre>
+        <p class="Caption">Fig. 8-15. Change Current Owner of Set Submenu</p>
+        <p class="Heading">Record </p>
+        <p>Changes the current owner of the selected set to the current record. </p>
+        <p class="Heading">Owner </p>
+        <p>Changes the current owner of the previously selected set to the current owner of the set selected from the displayed list of sets. </p>
+        <p class="Heading">Member </p>
+        <p>Changes the current owner of the previously selected set to the current member of the set selected from the displayed list of sets. </p>
+        <p class="Heading">Change </p>
+        <p>Changes the current owner of the selected set to the database address entered in response to the prompt: </p><pre>enter database address: [<i>f</i> :<i>r</i>] </pre>
+        <p>where <i>f</i> is the file number and <i>r</i> is the record number.</p>
+        <h3>4.3.2 Member command </h3>
+        <p>Sets the current member of the set selected from the displayed list of set names. It then invokes the <code>Change Current Member of Set</code> submenu, shown in Figure 8-16, to determine the record to be made current. </p><pre xml:space="preserve"><b>Change Current Member of Set</b> 
+Record  Owner  Member  Change  X_exit </pre>
+        <p class="Caption">Fig. 8-16. Change Current Member of Set Submenu</p>
+        <p class="Heading">Record </p>
+        <p>Changes the current member of the selected set to the current record. </p>
+        <p class="Heading">Owner </p>
+        <p>Changes the current member of the previously selected set to the current owner of the set selected from the displayed list of sets. </p>
+        <p class="Heading">Member </p>
+        <p>Changes the current member of the previously selected set to the current member of the set selected from the displayed list of sets. </p>
+        <p class="Heading">Change </p>
+        <p>Changes the current member of the selected set to the database address entered in response to the prompt: </p><pre>enter database address: [<b style="font-style: italic;">f</b>:<i>r</i>] </pre>
+        <p>where <i>f </i>is the file number and <i>r</i> is the record number. </p>
+        <h3>4.3.3 Record command </h3>
+        <p>Changes the current record. This selection invokes the <code>Change Current Record</code> submenu, shown in Figure 8-17, to determine the record to be made current. </p><pre xml:space="preserve"><b>Change Current Record</b> 
+Owner  Member  Change  X_exit </pre>
+        <p class="Caption">Fig. 8-17. Change Current Record Submenu</p>
+        <p class="Heading">Owner </p>
+        <p>Changes the current record to the current owner of the set selected from the displayed list of set names. </p>
+        <p class="Heading">Member </p>
+        <p>Changes the current record to the current member of the set selected from the displayed list of set names. </p>
+        <p class="Heading">Change </p>
+        <p>Changes the current record to the database address entered in response to the prompt: </p><pre>enter database address: [<b style="font-style: italic;">f</b>:<i>r</i>]  </pre>
+        <p>where<i> f</i> is the file number and<i> r</i> is the record number. </p>
+        <h3>4.3.4 Auto_set command </h3>
+        <p>Toggles the automatic set connection flag within <code>ida.</code> When turned on, this flag causes newly entered records to be connected automatically to the current owners of the sets for which they are members. </p>
+        <h3>4.3.5 Display command </h3>
+        <p>Displays the currency tables showing the record type and database addresses of the current record and, for each set, the current owner and current member of that set. It also indicates whether automatic set connection is enabled. </p>
+        <h2>4.4 Using the Access Transaction Commands </h2>
+        <p>The Transaction command, selected from the Database Access Commands submenu, controls the initiation and termination of transactions. It invokes the Transaction Processing Functions submenu, shown below, from which a transaction can be started (Begin), ended (End), or aborted (Abort). </p><pre xml:space="preserve"><b>Transaction Processing Functions</b>
+Begin  End  Abort  X_exit </pre>
+        <p class="Caption">Fig. 8-19. Transaction Processing Functions Submenu</p>
+        <p class="Heading">Begin command </p>
+        <p>Starts a transaction. You are prompted to enter the transaction identifier. </p>
+        <p class="Heading">End command </p>
+        <p>Stops a transaction. It applies to the database files all changes made since the beginning of the transaction. </p>
+        <p class="Heading">Abort command </p>
+        <p>Aborts the current transaction. It discards all changes made since the beginning of the transaction. </p>
+        <h2>4.5 Using the Access Lock Commands </h2>
+        <p>The <code>Lock</code> command, selected from the <code>Database Access Commands</code> submenu, is used to lock set types, record types, and key types. It invokes the <code>Multiuser Set/Record Lock Functions</code> submenu, shown in Fig. 8-20, from which you select either record, set or key locks. You then select the record, set, or key to be locked from the displayed list of record, set, or key names defined in the database. </p><pre xml:space="preserve"><b>Multiuser Set/Record Lock Functions</b>
+Record  Set  Key  Timeout  Display  X_exit </pre>
+        <p class="Caption">Fig. 8-20. Multiuser Set/Record Lock Functions Submenu</p>
+        <p class="Heading">Record command </p>
+        <p>Places a lock on the record type selected from the displayed list of records. A selection list of lock types will be displayed, from which you should select the desired lock type. This command can only be executed when the database is opened for shared access. </p>
+        <p class="Heading">Set command </p>
+        <p>Places a lock on the set type selected from the displayed list of sets. A selection list of lock types will be displayed, from which you should select the desired lock type. This command can only be executed when the database is opened for shared access. </p>
+        <p class="Heading">Key command </p>
+        <p>Places a lock on the key type selected from the displayed list of keys. A selection list of lock types will be displayed, from which you should select the desired lock type. This command can only be executed when the database is opened for shared access. </p>
+        <p class="Heading">Timeout command </p>
+        <p>Sets the lock timeout value. Default value is 10 seconds.</p>
+        <p class="Heading">Display command </p>
+        <p>Displays the lock status for each set, record, and key type, indicating whether it is read-locked, read-locked with keep, write-locked, exclusively locked, or free. This command can only be executed when the database is opened for shared access. </p>
+        <h2>4.6 Using the Access Free Commands </h2>
+        <p>The <code>Free</code> command, selected from the <code>Database Access Commands</code> submenu, is used to free locked record, set, and key types. Free invokes the <code>Multi-user Set/Record Free Locks Functions</code> submenu, shown in Figure 8-21. From here you select which locks you want freed. If you are freeing a set, record, or key lock, select the correct one from the displayed list of names defined in the database. </p><pre xml:space="preserve"><b>Multi-user Set/Record Free Locks Functions</b>
+Record  Set  Key  All  X_exit </pre>
+        <p class="Caption">Fig. 8-21. Multi-user Set/Record Free Locks Functions Submenu</p>
+        <p class="Heading">Record command </p>
+        <p>Frees the lock for the record type selected from the displayed list of record types. This command can only be executed when the database is opened for shared access and when no transaction is active. </p>
+        <p class="Heading">Set command </p>
+        <p>Frees the lock for the set type selected from the displayed list of set types. This command can only be executed when the database is opened for shared access and when no transaction is active. </p>
+        <p class="Heading">Key command </p>
+        <p>Frees the lock for the key type selected from the displayed list of key types. This command can only be executed when the database is opened for shared access and when no transaction is active. </p>
+        <p class="Heading">All command </p>
+        <p>Frees all set, record and key locks. It can only be executed when the database is opened for shared access and when no transaction is active. </p>
+        <h2>4.7 Using the Access Miscellaneous Commands </h2>
+        <p>The Miscellaneous command, selected from the Database Access Commands submenu, invokes the Miscellaneous <code>ida</code> Functions submenu, shown in Figure 8-22, for displaying current database file and lock statuses. </p><pre xml:space="preserve"><b>Miscellaneous ida Functions</b>
+Files  Locks  X_exit </pre>
+        <p class="Caption">Fig. 8-22. Miscellaneous ida Functions Submenu</p>
+        <p class="Heading">Files command </p>
+        <p>Displays status information pertaining to the database and all database files, as shown in Table 8-4. </p>
+        <table style="caption-side: top;border-left-style: solid;border-left-width: 1px;border-left-color: #c0c0c0;border-right-style: solid;border-right-width: 1px;border-right-color: #c0c0c0;border-top-style: solid;border-top-width: 1px;border-top-color: #c0c0c0;border-bottom-style: solid;border-bottom-width: 1px;border-bottom-color: #c0c0c0;border-collapse: collapse;margin-left: 0;margin-right: auto;">
+            <caption>Table 8-4. File Status Information (From the Misc Files Command)</caption>
+            <col style="width: 125px;" />
+            <col />
+            <tr>
+                <th>
+                    <p>Item Name </p>
+                </th>
+                <th>
+                    <p>Description </p>
+                </th>
+            </tr>
+            <tr>
+                <td>
+                    <p>Database name </p>
+                </td>
+                <td>
+                    <p>The name of the database currently being accessed. </p>
+                </td>
+            </tr>
+            <tr>
+                <td>
+                    <p>Access type </p>
+                </td>
+                <td>
+                    <p>Exclusive, shared, or one_user access. </p>
+                </td>
+            </tr>
+            <tr>
+                <td>
+                    <p>Transaction </p>
+                </td>
+                <td>
+                    <p>The identifier of the active transaction. </p>
+                </td>
+            </tr>
+            <tr>
+                <td>
+                    <p>FILE </p>
+                </td>
+                <td>
+                    <p>The file number of the listed file. </p>
+                </td>
+            </tr>
+            <tr>
+                <td>
+                    <p>SLOTS </p>
+                </td>
+                <td>
+                    <p>The total number of allocated file slots (if data file) or pages (if key file). </p>
+                </td>
+            </tr>
+            <tr>
+                <td>
+                    <p>TYPE </p>
+                </td>
+                <td>
+                    <p>The file type: "data", "vardata", "blob"&#160;or "key". </p>
+                </td>
+            </tr>
+            <tr>
+                <td>
+                    <p>STATUS </p>
+                </td>
+                <td>
+                    <p>File status: "opened" or "closed", "locked" or "free." </p>
+                </td>
+            </tr>
+            <tr>
+                <td>
+                    <p>RW </p>
+                </td>
+                <td>
+                    <p>The total number of read locks on the file within this application. A file may be locked from different set/record locks. This value gives the current total. It is displayed only when the database is opened for shared access. A value of -1 indicates that the file is write-locked. </p>
+                </td>
+            </tr>
+            <tr>
+                <td>
+                    <p>EX </p>
+                </td>
+                <td>
+                    <p>The total number of exclusive locks on the file. A file may be exclusively locked from different set/record locks. This value gives the current total. It is displayed only when the database is opened for shared access. </p>
+                </td>
+            </tr>
+            <tr>
+                <td>
+                    <p>NAME </p>
+                </td>
+                <td>
+                    <p>The name of the file including any current path names. </p>
+                </td>
+            </tr>
+        </table>
+        <p class="Heading">Locks command</p>
+        <p>Displays the lock status for each set, record, and key type, indicating whether it is read-locked, read-locked with keep, write-locked, exclusively locked, or free. This command can only be executed when the database is opened for shared access. </p>
+        <hr MadCap:conditions="Default.ScreenOnly" width="100%" size="0" align="center" />
+        <p MadCap:conditions="Default.ScreenOnly" style="font-size: 8pt;"><span class="MyVariablesCopyright">Copyright © 2012, Raima Inc. All rights reserved.</span>
+        </p>
+        <script type="text/javascript" src="../../SkinSupport/MadCapBodyEnd.js">
+        </script>
+        <p class="MCWebHelpFramesetLink MCWebHelpFramesetLinkBottom" style="display: none;"><a href="../../../Default_CSH.htm#util/ida/Chapter4.htm" style="">Open topic with navigation</a>
+        </p>
+    </body>
+</html>

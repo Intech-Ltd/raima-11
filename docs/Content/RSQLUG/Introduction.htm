@@ -1,0 +1,280 @@
+<?xml version="1.0" encoding="utf-8"?>
+<!DOCTYPE html PUBLIC "-//W3C//DTD XHTML 1.0 Strict//EN" "http://www.w3.org/TR/xhtml1/DTD/xhtml1-strict.dtd">
+<html xmlns:MadCap="http://www.madcapsoftware.com/Schemas/MadCap.xsd" MadCap:tocPath="SQL API|RSQL User's Guide" MadCap:InPreviewMode="false" MadCap:PreloadImages="false" MadCap:RuntimeFileType="Topic" MadCap:TargetType="WebHelp" lang="en-us" xml:lang="en-us" class="" MadCap:PathToHelpSystem="../../" MadCap:HelpSystemFileName="Default.xml" MadCap:SearchType="Stem">
+    <head>
+        <meta http-equiv="Content-Type" content="text/html; charset=utf-8" /><title>Introduction</title>
+        <link rel="icon" type="image/png" href="http://docs.raima.com/favicon.png" />
+        <link href="../SkinSupport/MadCap.css" rel="stylesheet" />
+        <link href="../Resources/TableStyles/ParamStruct.css" rel="stylesheet" />
+        <link href="../Resources/Stylesheets/raima.css" rel="stylesheet" />
+        <script src="../SkinSupport/MadCapAll.js" type="text/javascript">
+        </script>
+    </head>
+    <body>
+        <p class="MCWebHelpFramesetLink MCWebHelpFramesetLinkTop" style="display: none;"><a href="../../Default_CSH.htm#RSQLUG/Introduction.htm" style="">Open topic with navigation</a>
+        </p>
+        <div class="MCBreadcrumbsBox_0"><span class="MCBreadcrumbsPrefix">You are here: </span><a class="MCBreadcrumbsLink" href="../dbRSQL.htm">SQL API</a><span class="MCBreadcrumbsDivider"> &gt; </span><a class="MCBreadcrumbsLink" href="dbSQLUG.htm">RSQL User's Guide</a><span class="MCBreadcrumbsDivider"> &gt; </span><span class="MCBreadcrumbs">Introduction</span>
+        </div>
+        <h1><a MadCap:generatedBookmark="TOC" name="Introduction_..7"></a>Introduction</h1>
+        <p>The <span class="MyVariablesRSQLName">RDM SQL</span> native application programming interface (API) presents a small-footprint, efficient and easy-to-use C language interface for performing database operations using the <span class="MyVariablesRSQLName">RDM SQL</span> language.   The API has been designed to be similar to ODBC (Open Data Base Connectivity) but without the complexities that ODBC introduces due to the DBMS-independence the ODBC standard is intended to provide.  As such, this API and associated SQL Language is proprietary and doesn’t conform to the ODBC standard.  Applications written using this SQL API are directly linked to the <span class="MyVariablesProductShortName">RDM</span> database engine.</p>
+        <p>All of the functions are prefixed with "rsql".  Many use special data types provided in the standard header file: <code>rsql.h</code>.  These are described in detail in <a href="../SQL/Chapter11.htm">Using SQL in an Application</a> section.</p>
+        <h3><a MadCap:generatedBookmark="TOC" name="Comparing_the_ODBC_API_with_the_Native_RSQL_API_..8"></a>Comparing the ODBC API with the Native RSQL API</h3>
+        <p>The following table provides a mapping of the ODBC API functions with the RSQL API functions.  Not all ODBC functions have an equivalent RSQL API function.  Some, (e.g., <code>SQLTables</code>, <code>SQLColumns</code>, etc) are implemented in the <span class="MyVariablesProductShortName">RDM</span> ODBC layer as <b>select</b> statements on built-in virtual system catalog tables which are described later in this section.   Also note that those functions that do have a RSQL API equivalent do not have the same function arguments.  However, the basic operational approach (e.g., function calling sequence) that is used in an ODBC application is also needed in a RSQL application.   ODBC API&#160;functions that are not listed do not have a RSQL API counterpart.</p>
+        <table style="margin-left: 0;margin-right: auto;caption-side: top;mc-table-style: url('../Resources/TableStyles/ParamStruct.css');" class="TableStyle-ParamStruct" cellspacing="0">
+            <caption>Table 2.  ODBC to <span class="MyVariablesRSQLName">RDM SQL</span> API Function Mapping</caption>
+            <col class="Column-Column1" style="width: 150px;" />
+            <col class="Column-Column2" style="width: 150px;" />
+            <col class="Column-Column3" />
+            <thead>
+                <tr class="Head-Header1">
+                    <th class="HeadE-Column1-Header1">ODBC&#160;API&#160;Function</th>
+                    <th class="HeadE-Column2-Header1">RSQL Function</th>
+                    <th class="HeadD-Column3-Header1">Comments</th>
+                </tr>
+            </thead>
+            <tbody>
+                <tr class="Body-Body1">
+                    <td class="BodyE-Column1-Body1" style="font-family: monospace;">SQLAllocHandle</td>
+                    <td class="BodyE-Column2-Body1" style="font-family: monospace;">rsqlAllocConn<br />rsqlAllocStmt</td>
+                    <td class="BodyD-Column3-Body1">Allocation of connection and statement handles are made through separated functions.  There is no environment handle.</td>
+                </tr>
+                <tr class="Body-Body1">
+                    <td class="BodyE-Column1-Body1" style="font-family: monospace;">SQLBindCol</td>
+                    <td class="BodyE-Column2-Body1" style="font-family: monospace;">n/a</td>
+                    <td class="BodyD-Column3-Body1">Column result values are not bound but are returned by <code>rsqlFetch</code> or <code>rsqlGetData</code>.</td>
+                </tr>
+                <tr class="Body-Body1">
+                    <td class="BodyE-Column1-Body1" style="font-family: monospace;">SQLBindParameter</td>
+                    <td class="BodyE-Column2-Body1" style="font-family: monospace;">rsqlBindParam</td>
+                    <td class="BodyD-Column3-Body1">&#160;</td>
+                </tr>
+                <tr class="Body-Body1">
+                    <td class="BodyE-Column1-Body1" style="font-family: monospace;">SQLCancel</td>
+                    <td class="BodyE-Column2-Body1" style="font-family: monospace;">n/a</td>
+                    <td class="BodyD-Column3-Body1">Call <code>rsqlCloseStmt</code> to cancel statement processing.</td>
+                </tr>
+                <tr class="Body-Body1">
+                    <td class="BodyE-Column1-Body1" style="font-family: monospace;">SQLCloseCursor</td>
+                    <td class="BodyE-Column2-Body1" style="font-family: monospace;">rsqlCloseStmt</td>
+                    <td class="BodyD-Column3-Body1">&#160;</td>
+                </tr>
+                <tr class="Body-Body1">
+                    <td class="BodyE-Column1-Body1" style="font-family: monospace;">SQLColAttribute</td>
+                    <td class="BodyE-Column2-Body1" style="font-family: monospace;">rsqlGetColDescr</td>
+                    <td class="BodyD-Column3-Body1">&#160;</td>
+                </tr>
+                <tr class="Body-Body1">
+                    <td class="BodyE-Column1-Body1" style="font-family: monospace;">SQLColumns</td>
+                    <td class="BodyE-Column2-Body1" style="font-family: monospace;">n/a</td>
+                    <td class="BodyD-Column3-Body1">Database meta-data information is available by executing select statements on the appropriate <code>syscat</code> virtual tables.</td>
+                </tr>
+                <tr class="Body-Body1">
+                    <td class="BodyE-Column1-Body1" style="font-family: monospace;">SQLConnect</td>
+                    <td class="BodyE-Column2-Body1" style="font-family: monospace;">n/a</td>
+                    <td class="BodyD-Column3-Body1">Connections are initiated when <code>rsqlAllocConn</code> is called.  Databases are opened through calls to <code>rsqlOpenDB</code> or <code>rsqlOpenCat</code>.</td>
+                </tr>
+                <tr class="Body-Body1">
+                    <td class="BodyE-Column1-Body1" style="font-family: monospace;">SQLDescribeCol</td>
+                    <td class="BodyE-Column2-Body1" style="font-family: monospace;">rsqlGetColDescr</td>
+                    <td class="BodyD-Column3-Body1">&#160;</td>
+                </tr>
+                <tr class="Body-Body1">
+                    <td class="BodyE-Column1-Body1" style="font-family: monospace;">SQLDescribeParam</td>
+                    <td class="BodyE-Column2-Body1" style="font-family: monospace;">rsqlGetParamDescr</td>
+                    <td class="BodyD-Column3-Body1">&#160;</td>
+                </tr>
+                <tr class="Body-Body1">
+                    <td class="BodyE-Column1-Body1" style="font-family: monospace;">SQLDescribeStmt</td>
+                    <td class="BodyE-Column2-Body1" style="font-family: monospace;">rsqlGetStmtDescr</td>
+                    <td class="BodyD-Column3-Body1"><code>SQLDescribeStmt</code> is a <span class="MyVariablesCompanyName">Raima Inc.</span> extension.</td>
+                </tr>
+                <tr class="Body-Body1">
+                    <td class="BodyE-Column1-Body1" style="font-family: monospace;">SQLDisconnect</td>
+                    <td class="BodyE-Column2-Body1" style="font-family: monospace;">n/a</td>
+                    <td class="BodyD-Column3-Body1">Connections are closed when <code>rsqlFreeConn</code> is called.</td>
+                </tr>
+                <tr class="Body-Body1">
+                    <td class="BodyE-Column1-Body1" style="font-family: monospace;">SQLEndTran</td>
+                    <td class="BodyE-Column2-Body1" style="font-family: monospace;">rsqlTransCommit</td>
+                    <td class="BodyD-Column3-Body1">&#160;</td>
+                </tr>
+                <tr class="Body-Body1">
+                    <td class="BodyE-Column1-Body1" style="font-family: monospace;">rsqlTransRollback</td>
+                    <td class="BodyE-Column2-Body1" style="font-family: monospace;">&#160;</td>
+                    <td class="BodyD-Column3-Body1">&#160;</td>
+                </tr>
+                <tr class="Body-Body1">
+                    <td class="BodyE-Column1-Body1" style="font-family: monospace;">SQLExecDirect</td>
+                    <td class="BodyE-Column2-Body1" style="font-family: monospace;">rsqlExecDirect</td>
+                    <td class="BodyD-Column3-Body1">&#160;</td>
+                </tr>
+                <tr class="Body-Body1">
+                    <td class="BodyE-Column1-Body1" style="font-family: monospace;">SQLExecute</td>
+                    <td class="BodyE-Column2-Body1" style="font-family: monospace;">rsqlExecute</td>
+                    <td class="BodyD-Column3-Body1">&#160;</td>
+                </tr>
+                <tr class="Body-Body1">
+                    <td class="BodyE-Column1-Body1" style="font-family: monospace;">SQLExtendedTran</td>
+                    <td class="BodyE-Column2-Body1" style="font-family: monospace;">rsqlTransStart<br />rsqlTransSavepoint<br />rsqlTransRelease<br />rsqlTransCommit<br />rsqlTransRollback</td>
+                    <td class="BodyD-Column3-Body1">We believe that separate calls represent a better API design than a single call with a control variable</td>
+                </tr>
+                <tr class="Body-Body1">
+                    <td class="BodyE-Column1-Body1" style="font-family: monospace;">SQLFetch</td>
+                    <td class="BodyE-Column2-Body1" style="font-family: monospace;">rsqlFetch</td>
+                    <td class="BodyD-Column3-Body1">Note that the <code>rsqlFetch</code> returns the column result values-no bound columns.</td>
+                </tr>
+                <tr class="Body-Body1">
+                    <td class="BodyE-Column1-Body1" style="font-family: monospace;">SQLForeignKeys</td>
+                    <td class="BodyE-Column2-Body1" style="font-family: monospace;">n/a</td>
+                    <td class="BodyD-Column3-Body1">Database meta-data information is available by executing select statements on the appropriate <code>syscat</code> virtual tables.</td>
+                </tr>
+                <tr class="Body-Body1">
+                    <td class="BodyE-Column1-Body1" style="font-family: monospace;">SQLFreeHandle</td>
+                    <td class="BodyE-Column2-Body1" style="font-family: monospace;">rsqlFreeConn<br />rsqlFreeStmt</td>
+                    <td class="BodyD-Column3-Body1">&#160;</td>
+                </tr>
+                <tr class="Body-Body1">
+                    <td class="BodyE-Column1-Body1" style="font-family: monospace;">SQLGetConnectAttr</td>
+                    <td class="BodyE-Column2-Body1" style="font-family: monospace;">rsqlGetAutoCommit<br />rsqlGetDateFormat<br />rsqlGetDateSeparator<br />rsqlGetDeferBlobMode<br />rsqlGetReadOnlyTrmode</td>
+                    <td class="BodyD-Column3-Body1">Not all ODBC connection attributes have a <span class="MyVariablesProductShortName">RDM</span> equivalent.  Not all <span class="MyVariablesProductShortName">RDM</span> connection attributes have an ODBC equivalent.</td>
+                </tr>
+                <tr class="Body-Body1">
+                    <td class="BodyE-Column1-Body1" style="font-family: monospace;">SQLGetCursorName</td>
+                    <td class="BodyE-Column2-Body1" style="font-family: monospace;">rsqlGetCursorName</td>
+                    <td class="BodyD-Column3-Body1">&#160;</td>
+                </tr>
+                <tr class="Body-Body1">
+                    <td class="BodyE-Column1-Body1" style="font-family: monospace;">SQLGetData</td>
+                    <td class="BodyE-Column2-Body1" style="font-family: monospace;">rsqlGetData</td>
+                    <td class="BodyD-Column3-Body1">&#160;</td>
+                </tr>
+                <tr class="Body-Body1">
+                    <td class="BodyE-Column1-Body1" style="font-family: monospace;">SQLMoreResults</td>
+                    <td class="BodyE-Column2-Body1" style="font-family: monospace;">rsqlMoreResults</td>
+                    <td class="BodyD-Column3-Body1">&#160;</td>
+                </tr>
+                <tr class="Body-Body1">
+                    <td class="BodyE-Column1-Body1" style="font-family: monospace;">SQLNumParams</td>
+                    <td class="BodyE-Column2-Body1" style="font-family: monospace;">rsqlGetNumParams</td>
+                    <td class="BodyD-Column3-Body1">&#160;</td>
+                </tr>
+                <tr class="Body-Body1">
+                    <td class="BodyE-Column1-Body1" style="font-family: monospace;">SQLNumResultCols</td>
+                    <td class="BodyE-Column2-Body1" style="font-family: monospace;">rsqlGetNumResultCols</td>
+                    <td class="BodyD-Column3-Body1">&#160;</td>
+                </tr>
+                <tr class="Body-Body1">
+                    <td class="BodyE-Column1-Body1" style="font-family: monospace;">SQLPrepare</td>
+                    <td class="BodyE-Column2-Body1" style="font-family: monospace;">rsqlPrepare</td>
+                    <td class="BodyD-Column3-Body1">&#160;</td>
+                </tr>
+                <tr class="Body-Body1">
+                    <td class="BodyE-Column1-Body1" style="font-family: monospace;">SQLPrimaryKeys</td>
+                    <td class="BodyE-Column2-Body1" style="font-family: monospace;">n/a</td>
+                    <td class="BodyD-Column3-Body1">Database meta-data information is available by executing <b>select</b> statements on the appropriate <code>syscat</code> virtual tables.</td>
+                </tr>
+                <tr class="Body-Body1">
+                    <td class="BodyE-Column1-Body1" style="font-family: monospace;">SQLProcedures</td>
+                    <td class="BodyE-Column2-Body1" style="font-family: monospace;">n/a</td>
+                    <td class="BodyD-Column3-Body1">Database meta-data information is available by executing <b>select</b> statements on the appropriate <code>syscat</code> virtual tables.</td>
+                </tr>
+                <tr class="Body-Body1">
+                    <td class="BodyE-Column1-Body1" style="font-family: monospace;">SQLPutData</td>
+                    <td class="BodyE-Column2-Body1" style="font-family: monospace;">rsqlPutData</td>
+                    <td class="BodyD-Column3-Body1">&#160;</td>
+                </tr>
+                <tr class="Body-Body1">
+                    <td class="BodyE-Column1-Body1" style="font-family: monospace;">SQLRowCount</td>
+                    <td class="BodyE-Column2-Body1" style="font-family: monospace;">rsqlGetRowCount</td>
+                    <td class="BodyD-Column3-Body1">&#160;</td>
+                </tr>
+                <tr class="Body-Body1">
+                    <td class="BodyE-Column1-Body1" style="font-family: monospace;">SQLSetConnectAttr</td>
+                    <td class="BodyE-Column2-Body1" style="font-family: monospace;">rsqlSetAutoCommit<br />rsqlSetDateFormat<br />rsqlSetDateSeparator<br />rsqlSetDeferBlobMode<br />rsqlSetReadOnlyTrmode</td>
+                    <td class="BodyD-Column3-Body1">Not all ODBC connection attributes have a <span class="MyVariablesProductShortName">RDM</span> equivalent.  Not all <span class="MyVariablesProductShortName">RDM</span> connection attributes have an ODBC equivalent.</td>
+                </tr>
+                <tr class="Body-Body1">
+                    <td class="BodyE-Column1-Body1" style="font-family: monospace;">SQLSetCursorName</td>
+                    <td class="BodyE-Column2-Body1" style="font-family: monospace;">rsqlSetCursorName</td>
+                    <td class="BodyD-Column3-Body1">&#160;</td>
+                </tr>
+                <tr class="Body-Body1">
+                    <td class="BodyE-Column1-Body1" style="font-family: monospace;">SQLSetError</td>
+                    <td class="BodyE-Column2-Body1" style="font-family: monospace;">rsqlSetErrorCallback</td>
+                    <td class="BodyD-Column3-Body1"><b>SQLSetError</b> is a <span class="MyVariablesCompanyName">Raima Inc.</span> extension.</td>
+                </tr>
+                <tr class="Body-Body1">
+                    <td class="BodyE-Column1-Body1" style="font-family: monospace;">SQLSpecialColumns</td>
+                    <td class="BodyE-Column2-Body1" style="font-family: monospace;">n/a</td>
+                    <td class="BodyD-Column3-Body1">Database meta-data information is available by executing select statements on the appropriate <code>syscat</code> virtual tables.</td>
+                </tr>
+                <tr class="Body-Body1">
+                    <td class="BodyE-Column1-Body1" style="font-family: monospace;">SQLTables</td>
+                    <td class="BodyE-Column2-Body1" style="font-family: monospace;">n/a</td>
+                    <td class="BodyD-Column3-Body1">Database meta-data information is available by executing select statements on the appropriate <code>syscat</code> virtual tables.</td>
+                </tr>
+                <tr class="Body-Body1">
+                    <td class="BodyB-Column1-Body1" style="font-family: monospace;">SQLTransactStatus</td>
+                    <td class="BodyB-Column2-Body1" style="font-family: monospace;">rsqlTransStatus</td>
+                    <td class="BodyA-Column3-Body1">&#160;</td>
+                </tr>
+            </tbody>
+        </table>
+        <p>The advantage of using the native API instead of ODBC is that it is simpler and more efficient with a smaller footprint.  However, ODBC is available  and can certainly be used if DBMS independence and/or use of a standard SQL API is needed.</p>
+        <h2><a MadCap:generatedBookmark="TOC" name="Basic_RDM&#160;RSQL&#160;Application_Steps"></a>Basic <span class="MyVariablesProductShortName">RDM</span>&#160;RSQL&#160;Application Steps</h2>
+        <p>A basic ODBC&#160;application will:</p>
+        <ol>
+            <li value="1">Open the database;</li>
+            <li value="2">Process one or more SQL&#160;statements;</li>
+            <li value="3">Close the database when finished.</li>
+        </ol>
+        <p>The following example illustrates the general flow of an <span class="MyVariablesProductShortName">RDM</span> RSQL&#160;application:</p>
+        <p class="Heading">Hello World!</p>
+        <p>The most basic of the above steps are illustrated below in an <span class="MyVariablesRSQLName">RDM SQL</span> version of the ubiquitous "Hello World!" C program.  Now, granted, this is a little bit more complex than a simple <code>printf</code> statement.  But it should serve well to show the basic approach needed to use the <span class="MyVariablesRSQLName">RDM SQL</span> API.</p>
+        <p>In this version of the program, the return values from the SQL API functions are mostly ignored.  This is perfectly okay in this case because I know what I'm doing and I know that there are no errors or unusual statuses that are going to be returned (of course, if you take this code and try it yourself and get errors then I am going to be really embarrassed!).</p><pre xml:space="preserve">#include "rsql.h"
+
+int main()
+{
+    RSQL_VALUE   *row;
+    HCONN         hdbc;
+    HSTMT         hstmt;
+    
+    rsqlAllocConn(&amp;hdbc);
+    rsqlAllocStmt(hdbc, &amp;hstmt);
+
+    /* create the database */
+    rsqlExecDirect(hstmt, "create database hellodb");
+    rsqlExecDirect(hstmt, "create table hellotab(txtln char(24))");
+    stat = rsqlTransCommit(hdbc);
+    if ( stat != errSUCCESS ) {
+        printf("*** unable to connect to TFS\n");
+        exit((int)stat);
+    }
+    
+    /* insert a couple of rows into hellotab */
+    rsqlExecDirect(hstmt, "insert into hellotab values \"Hello\"");
+    rsqlExecDirect(hstmt, "insert into hellotab values \"World!\"");
+    rsqlTransCommit(hdbc);
+
+    /* retrieve and display the rows */
+    rsqlExecDirect(hstmt, "select txtln from hellotab");
+    while ( rsqlFetch(hstmt, &amp;row, NULL) == errSUCCESS )
+        printf("%s\n", row-&gt;vt.cv);
+        
+    rsqlFreeStmt(hstmt);
+    rsqlFreeConn(hdbc);
+}
+</pre>
+        <p>Executing this program will produce the following output:</p><pre xml:space="preserve">Hello
+World!
+</pre>
+        <p>For more general information on developing <span class="MyVariablesRSQLName">RDM SQL</span>&#160;applications, please see <a href="../SQL/Chapter11.htm">Using RSQL in an Application</a>.</p>
+        <hr MadCap:conditions="Default.ScreenOnly" width="100%" size="0" align="center" />
+        <p MadCap:conditions="Default.ScreenOnly" style="font-size: 8pt;"><span class="MyVariablesCopyright">Copyright © 2012, Raima Inc. All rights reserved.</span>
+        </p>
+        <script type="text/javascript" src="../SkinSupport/MadCapBodyEnd.js">
+        </script>
+        <p class="MCWebHelpFramesetLink MCWebHelpFramesetLinkBottom" style="display: none;"><a href="../../Default_CSH.htm#RSQLUG/Introduction.htm" style="">Open topic with navigation</a>
+        </p>
+    </body>
+</html>

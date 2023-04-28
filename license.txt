@@ -1,0 +1,150 @@
+THIS IS A BINDING AGREEMENT ("AGREEMENT") FOR THE ACCOMPANYING RAIMA 
+INC. ("RAIMA") SOFTWARE PRODUCT(S) AND ACCOMPANYING DOCUMENTATION, 
+INCLUDING ON-LINE, READ-ME OR HELP FILES,  IF ANY (COLLECTIVELY, THE 
+"PRODUCT").  BY DOWNLOADING OR INSTALLING THE PRODUCT, YOU AGREE ON 
+BEHALF OF YOURSELF AND YOUR EMPLOYER, IF ANY, TO BE BOUND BY THE TERMS 
+AND CONDITIONS OF THIS AGREEMENT. 
+
+IF YOU DO NOT ACCEPT THE TERMS AND CONDITIONS OF THIS AGREEMENT, YOU MAY 
+NOT INSTALL, DOWNLOAD OR USE THE PRODUCT AND SHOULD CLICK "DO NOT 
+ACCEPT." 
+
+BY ACCEPTING THIS AGREEMENT, YOU REPRESENT AND WARRANT THAT YOU HAVE 
+BEEN SO AUTHORIZED BY YOUR EMPLOYER, IF ANY, HAVE READ AND UNDERSTOOD 
+THIS AGREEMENT, AND HAVE SOUGHT OR WAIVED THE RIGHT TO SEEK LEGAL 
+COUNSEL PRIOR TO ACCEPTING THIS AGREEMENT.
+
+Hereinafter "You" shall mean you and your employer, if any.
+
+1. Limited License: Subject to the terms and conditions of this 
+Agreement, Raima grants You a nonexclusive, nontransferable, non-
+assignable, non-sublicensable, limited right and license to install, 
+download and execute the object code only of the Product for internal 
+use and development purposes only, provided that such internal use and 
+development will be restricted to support the development of  Your 
+Application(s) (as defined below) and that the Product will not be used 
+or disclosed for production, sale or distribution to third parties.  You 
+may (i) install the Product on one (1) computer only, (ii) make one (1) 
+copy of the Product for back-up and archival purposes, provided that all 
+Raima proprietary and other legal notices are reproduced in such copy 
+and (iii) physically transfer the Product from one computer to another, 
+provided that the Product is installed on only one (1) computer at a 
+time and retains all proprietary and legal notices.
+
+2.  Licensed Application(s): The Application(s) may not be a database 
+management system product, a database query product, or a database 
+revision product, in each case that could be used to commercially 
+compete with any Raima product.
+
+3. Restrictions:  You may not reproduce, market, sell or distribute the 
+executable components of the Product, with or without modifications, to 
+any third parties, either alone or as an embedded component of the 
+Application(s), without first executing a separate written royalty or 
+fee bearing license agreement with Raima upon mutually agreeable terms 
+and conditions.  You may not, and You agree that you will prohibit Your 
+employees, contractors and agents from: (i) selling, transferring, 
+assigning or distributing the Product; (ii) modifying the Product; (iii) 
+reverse engineering, disassembling, or decompiling the Product, or 
+otherwise attempting to discover the source code thereof; (iv) 
+sublicensing the Product or using the Product for commercial time-
+sharing or service bureau use, or otherwise renting or leasing the 
+Product; (v) removing, obscuring or altering any copyright, trademark or 
+other proprietary or legal notices on or in the Product; and (vi) 
+disclosing the results of any performance or benchmark tests run on the 
+Product without Raima's prior written consent.  You may obtain and 
+modify the source code of the Product only by executing a separate 
+internal development agreement with Raima.
+
+4. No Technical Support: Raima is not obligated under this Agreement to 
+provide any technical support, phone support, updates or upgrades to You 
+for the Product.  Technical support for the Product may be available 
+from Raima under a separate support agreement.
+
+5. Updates and Duplicate Copies: If the Product is identified by Raima 
+as an "Update," You will promptly replace all existing copies of the 
+prior version of the Product being updated with such Update and destroy 
+all copies so replaced.  
+
+6. DISCLAIMER OF WARRANTY.  RAIMA AND ITS THIRD PARTY SUPPLIERS,IF ANY, 
+PROVIDE THE PRODUCT "AS IS" WITHOUT WARRANTY OF ANY KIND EITHER EXPRESS, 
+IMPLIED OR STATUTORY, INCLUDING BUT NOT LIMITED TO RAIMA THE IMPLIED 
+WARRANTIES OF MERCHANTABILITY, FITNESS FOR A PARTICULAR PURPOSE, TITLE 
+AND NONINFRINGEMENT.  RAIMA WILL NOT BE LIABLE OR IN ANY WAY RESPONSIBLE 
+FOR THE COMMERCIAL SUCCESS OR FAILURE OF THE APPLICATION(S), OR OF ANY 
+ENHANCEMENT THEREOF.  RAIMA MAKES NO WARRANTIES CONCERNING ANY THIRD 
+PARTY PRODUCT.
+Should the Product prove defective, You, and not Raima, assume the 
+entire cost of any service and repair.  This disclaimer of warranty 
+constitutes an essential part of this agreement. 
+
+7. LIMITATION OF REMEDIES.  IN NO EVENT WILL RAIMA OR ITS THIRD PARTY 
+SUPPLIERS, IF ANY, BE LIABLE FOR ANY DIRECT OR INDIRECT DAMAGES OR OTHER 
+RELIEF ARISING OUT OF YOUR USE OR INABILITY TO USE THE PRODUCT 
+INCLUDING, BY WAY OF ILLUSTRATION AND NOT LIMITATION, LOST PROFITS, LOST 
+BUSINESS OR LOST OPPORTUNITY, OR ANY DIRECT, INDIRECT, SPECIAL, 
+INCIDENTAL OR CONSEQUENTIAL OR EXEMPLARY DAMAGES, INCLUDING LEGAL FEES, 
+ARISING OUT OF SUCH USE OR INABILITY TO USE THE PRODUCT, EVEN IF RAIMA, 
+ITS THIRD PARTY SUPPLIERS OR AN AUTHORIZED LICENSOR, DEALER, DISTRIBUTOR 
+OR SUPPLIER HAS BEEN ADVISED OF THE POSSIBILITY OF SUCH DAMAGES, OR FOR 
+ANY CLAIM BY ANY OTHER PARTY.
+
+8. Indemnity: You agrees to defend, indemnify and hold Raima and its 
+directors, officers, shareholders, employees and agents harmless from 
+and against any and all penalties, damages, costs, judgments and any 
+other expenses including, but not limited to, reasonable attorneys' 
+fees, in-house counsel costs and appellate fees incurred in connection 
+with Your sale, distribution or use of the Product.
+
+9. Proprietary Rights: Your rights in the Product are limited to those 
+specifically granted in this Agreement.  Raima and Raima's third party 
+suppliers, as is the case, shall at all times own all of the 
+intellectual and other proprietary rights associated with the Product, 
+and retain sole right, title, and interest therein.
+
+10. Term and Termination: This Agreement will continue in full force and 
+effect unless and until sooner terminated pursuant to the terms hereof.  
+This Agreement will automatically terminate if You breach any material 
+obligation under this Agreement.  Either Raima or You may terminate this 
+Agreement upon written notice to the other party effective upon receipt 
+of such notice.  Upon termination of this Agreement: (i) all rights and 
+licenses granted to You herein will automatically and immediately 
+terminate and You will immediately cease using the Product; and (ii) You 
+will promptly destroy any copies of the Product, including back-up 
+copies. 
+
+11. Disputes: This Agreement will be governed by the laws of the State 
+of Washington, without reference to conflicts of laws principles. The 
+United Nations Convention on Contracts for the International Sale of 
+Goods will not apply to this Agreement.  Any dispute arising out of or 
+related to this Agreement will be subject to the exclusive jurisdiction 
+and venue of the Washington State courts of King County, Washington (or, 
+in case of federal jurisdiction, the United States District Court 
+located in the State of Washington).
+
+12. Export Restrictions: You agree to observe and obey all export 
+regulations and rules relating to the export of the Product.  
+
+13. U.S. Government End Users.  The Product is a "commercial item," as 
+that term is defined at 48 C.F.R. 2.101 (Oct. 1995), consisting of 
+"commercial computer software" and "commercial computer software 
+documentation," as such terms are used in 48 C.F.R. 12.212 (Sept. 1995).  
+Consistent with 48 C.F.R. 12.212 and 48 C.F.R. 227.7202-1 through 
+227.7202-4 (June 1995), all U.S. Government End Users acquire only those 
+rights in the Product that are provided by this Agreement
+
+14. Entire Agreement: This Agreement sets forth the entire agreement 
+between Raima and You with respect to the subject matter hereof and 
+supersedes all prior agreements, understandings and representations 
+between the parties concerning the subject matter hereof
+
+15. Miscellaneous: The terms of this Agreement may not be amended or 
+modified, and no Addendum may be executed, except in a writing executed 
+by an authorized representative of each party.  In the event that any 
+provision of this Agreement is held to be invalid or is waived, all 
+other provisions of this Agreement will be deemed severable and 
+enforced.  You may not assign, transfer, or delegate any of Your rights 
+or obligations under this Agreement, whether by merger, acquisition, 
+operation of law or otherwise, without the prior written consent of 
+Raima.
+
+--Revised: June, 2010
